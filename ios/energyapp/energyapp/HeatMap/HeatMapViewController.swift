@@ -1,5 +1,5 @@
 //
-//  FirstViewController.swift
+//  SecondViewController.swift
 //  energyapp
 //
 //  Created by energyapp on 10/16/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FirstViewController: UIViewController {
+class HeatMapViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
