@@ -23,6 +23,7 @@ out/
 .gradle
 .gradle/
 gradle
+# ^ Might remove
 build/
 
 # Signing files
@@ -64,6 +65,8 @@ obj/
 /out/
 
 # User-specific configurations
+.idea
+# ^ Might remove
 .idea/libraries/
 .idea/workspace.xml
 .idea/tasks.xml
