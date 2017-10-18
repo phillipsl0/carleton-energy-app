@@ -9,6 +9,8 @@ import edu.carleton.energyapp.Fragments.Tab1
 import edu.carleton.energyapp.Fragments.Tab2
 import edu.carleton.energyapp.Fragments.Tab3
 
+import edu.carleton.energyapp.buildingCards.BuildingMainActivity
+
 /**
  * Created by Martin on 10/13/17
  */

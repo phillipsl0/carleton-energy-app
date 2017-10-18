@@ -18,6 +18,8 @@ class Tab3 : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
+        // return BuildingMainActivity somehow?
+
         return inflater!!.inflate(R.layout.tab3, container, false)
     }
 }
