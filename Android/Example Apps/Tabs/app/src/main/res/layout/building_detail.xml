@@ -32,7 +32,7 @@
 
     </LinearLayout>
 
-    <include layout="@layout/toolbar_detail" />
+    <include layout="@layout/building_toolbar_detail" />
 
   </FrameLayout>
 

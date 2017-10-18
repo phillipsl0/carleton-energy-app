@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.support.v4.util.Pair
+import android.view.Window
 import edu.carleton.energyapp.R
 import kotlinx.android.synthetic.main.building_main.*
 import kotlinx.android.synthetic.main.building_toolbar.*
@@ -25,45 +26,45 @@ class BuildingMainActivity : AppCompatActivity() {
     private val onItemClickListener = object: TravelListAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
 
-//            // 1
-//            val transitionIntent = DetailActivity.newIntent(this@MainActivity, position)
-//            val placeImage = view.findViewById<ImageView>(R.id.placeImage)
-//            val placeNameHolder = view.findViewById<LinearLayout>(R.id.placeNameHolder)
-//
-//            // 2
-//            val navigationBar = findViewById<View>(android.R.id.navigationBarBackground)
-//            val statusBar = findViewById<View>(android.R.id.statusBarBackground)
-//
-//            val imagePair = Pair.create(placeImage as View, "tImage")
-//            val holderPair = Pair.create(placeNameHolder as View, "tNameHolder")
-//
-//            // 3
-//            val navPair = Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME)
-//            val statusPair = Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME)
-//            val toolbarPair = Pair.create(toolbar as View, "tActionBar")
-//
-//            // 4
-//            val pairs = mutableListOf(imagePair, holderPair, statusPair, toolbarPair)
-//            if (navigationBar != null && navPair != null) {
-//                pairs += navPair
-//            }
-//
-//            // 5
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity,
-//                    *pairs.toTypedArray())
-//            ActivityCompat.startActivity(this@MainActivity, transitionIntent, options.toBundle())
-
-
-            val intent = BuildingDetailActivity.newIntent(this@BuildingMainActivity, position)
-
+            // 1
+            val transitionIntent = BuildingDetailActivity.newIntent(this@BuildingMainActivity, position)
             val placeImage = view.findViewById<ImageView>(R.id.placeImage)
             val placeNameHolder = view.findViewById<LinearLayout>(R.id.placeNameHolder)
+
+            // 2
+            val navigationBar = findViewById<View>(android.R.id.navigationBarBackground)
+            val statusBar = findViewById<View>(android.R.id.statusBarBackground)
 
             val imagePair = Pair.create(placeImage as View, "tImage")
             val holderPair = Pair.create(placeNameHolder as View, "tNameHolder")
 
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@BuildingMainActivity, imagePair, holderPair)
-            ActivityCompat.startActivity(this@BuildingMainActivity, intent, options.toBundle())
+            // 3
+            val navPair = Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME)
+            val statusPair = Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME)
+            val toolbarPair = Pair.create(toolbar as View, "tActionBar")
+
+            // 4
+            val pairs = mutableListOf(imagePair, holderPair, statusPair, toolbarPair)
+            if (navigationBar != null && navPair != null) {
+                pairs += navPair
+            }
+
+            // 5
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@BuildingMainActivity,
+                    *pairs.toTypedArray())
+            ActivityCompat.startActivity(this@BuildingMainActivity, transitionIntent, options.toBundle())
+
+
+//            val intent = BuildingDetailActivity.newIntent(this@BuildingMainActivity, position)
+//
+//            val placeImage = view.findViewById<ImageView>(R.id.placeImage)
+//            val placeNameHolder = view.findViewById<LinearLayout>(R.id.placeNameHolder)
+//
+//            val imagePair = Pair.create(placeImage as View, "tImage")
+//            val holderPair = Pair.create(placeNameHolder as View, "tNameHolder")
+//
+//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@BuildingMainActivity, imagePair, holderPair)
+//            ActivityCompat.startActivity(this@BuildingMainActivity, intent, options.toBundle())
 
             // startActivity(DetailActivity.newIntent(this@MainActivity, position))
             // Toast.makeText(this@MainActivity, "Clicked " + position, Toast.LENGTH_SHORT).show()

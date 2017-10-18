@@ -5,7 +5,7 @@
   android:orientation="vertical"
   tools:context=".MainActivity">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/building_toolbar" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
