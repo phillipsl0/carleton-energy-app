@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import edu.carleton.energyapp.R
 
 /**
- * Created by Martin on 10/13/17.
+ * Created by Martin on 10/13/17
  */
 
 class Tab3 : Fragment() {
