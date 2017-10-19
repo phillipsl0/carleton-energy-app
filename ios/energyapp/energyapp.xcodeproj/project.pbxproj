@@ -13,13 +13,13 @@
 		1AD8510D1F9547BE006FBB61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AD8510C1F9547BE006FBB61 /* Assets.xcassets */; };
 		1AD851101F9547BE006FBB61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AD8510E1F9547BE006FBB61 /* LaunchScreen.storyboard */; };
 		1AD851181F9551FB006FBB61 /* BuildingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD851171F9551FB006FBB61 /* BuildingsViewController.swift */; };
-		1AD8511E1F9556F0006FBB61 /* Buildings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AD8511D1F9556F0006FBB61 /* Buildings.storyboard */; };
 		1AD851201F955757006FBB61 /* Overview.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AD8511F1F955757006FBB61 /* Overview.storyboard */; };
 		1AD851241F9558E4006FBB61 /* OverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD851231F9558E4006FBB61 /* OverviewViewController.swift */; };
 		1AD851271F955B84006FBB61 /* HeatMap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AD851251F955B84006FBB61 /* HeatMap.storyboard */; };
 		1AD8512A1F9560B7006FBB61 /* IndividualBuildingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD851291F9560B7006FBB61 /* IndividualBuildingViewController.swift */; };
 		1AD8512C1F956636006FBB61 /* BuildingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD8512B1F956636006FBB61 /* BuildingData.swift */; };
 		3A5F28DF1F981F5200CE6A45 /* BuildingListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5F28DE1F981F5200CE6A45 /* BuildingListTableViewController.swift */; };
+		3AC869E21F983B9D0089F0FA /* Buildings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AC869E11F983B9D0089F0FA /* Buildings.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,13 +31,13 @@
 		1AD8510F1F9547BE006FBB61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1AD851111F9547BE006FBB61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AD851171F9551FB006FBB61 /* BuildingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingsViewController.swift; sourceTree = "<group>"; };
-		1AD8511D1F9556F0006FBB61 /* Buildings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Buildings.storyboard; sourceTree = "<group>"; };
 		1AD8511F1F955757006FBB61 /* Overview.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Overview.storyboard; sourceTree = "<group>"; };
 		1AD851231F9558E4006FBB61 /* OverviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewViewController.swift; sourceTree = "<group>"; };
 		1AD851261F955B84006FBB61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = energyapp/Base.lproj/HeatMap.storyboard; sourceTree = "<group>"; };
 		1AD851291F9560B7006FBB61 /* IndividualBuildingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualBuildingViewController.swift; sourceTree = "<group>"; };
 		1AD8512B1F956636006FBB61 /* BuildingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingData.swift; sourceTree = "<group>"; };
 		3A5F28DE1F981F5200CE6A45 /* BuildingListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingListTableViewController.swift; sourceTree = "<group>"; };
+		3AC869E11F983B9D0089F0FA /* Buildings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Buildings.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,11 +70,11 @@
 		1AD851021F9547BE006FBB61 /* energyapp */ = {
 			isa = PBXGroup;
 			children = (
-				1AD851281F955B8C006FBB61 /* HeatMap */,
-				1AD851221F955845006FBB61 /* Overview */,
 				1AD851031F9547BE006FBB61 /* AppDelegate.swift */,
 				1AD851091F9547BE006FBB61 /* Main.storyboard */,
 				1AD8511C1F95539E006FBB61 /* Buildings */,
+				1AD851281F955B8C006FBB61 /* HeatMap */,
+				1AD851221F955845006FBB61 /* Overview */,
 				1AD8510C1F9547BE006FBB61 /* Assets.xcassets */,
 				1AD8510E1F9547BE006FBB61 /* LaunchScreen.storyboard */,
 				1AD851111F9547BE006FBB61 /* Info.plist */,
@@ -85,7 +85,7 @@
 		1AD8511C1F95539E006FBB61 /* Buildings */ = {
 			isa = PBXGroup;
 			children = (
-				1AD8511D1F9556F0006FBB61 /* Buildings.storyboard */,
+				3AC869E11F983B9D0089F0FA /* Buildings.storyboard */,
 				3A5F28DE1F981F5200CE6A45 /* BuildingListTableViewController.swift */,
 				1AD851171F9551FB006FBB61 /* BuildingsViewController.swift */,
 				1AD851291F9560B7006FBB61 /* IndividualBuildingViewController.swift */,
@@ -171,9 +171,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AD8511E1F9556F0006FBB61 /* Buildings.storyboard in Resources */,
 				1AD851271F955B84006FBB61 /* HeatMap.storyboard in Resources */,
 				1AD851101F9547BE006FBB61 /* LaunchScreen.storyboard in Resources */,
+				3AC869E21F983B9D0089F0FA /* Buildings.storyboard in Resources */,
 				1AD8510D1F9547BE006FBB61 /* Assets.xcassets in Resources */,
 				1AD851201F955757006FBB61 /* Overview.storyboard in Resources */,
 				1AD8510B1F9547BE006FBB61 /* Main.storyboard in Resources */,

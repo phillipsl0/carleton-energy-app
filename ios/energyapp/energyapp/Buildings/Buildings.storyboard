@@ -1,59 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="v40-i7-3oR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="a03-XS-RTp">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Building List Table View Controller-->
-        <scene sceneID="e1f-wr-G6I">
+        <!--Item-->
+        <scene sceneID="Yzc-D8-gjm">
             <objects>
-                <tableViewController id="v40-i7-3oR" customClass="BuildingListTableViewController" customModule="energyapp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Zsc-Yg-WiI">
+                <tableViewController id="a03-XS-RTp" customClass="BuildingListTableViewController" customModule="energyapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="viq-29-hkK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="buildingCard" id="reM-sm-PTj">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="buildingCard" id="yMO-vz-YVN">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="reM-sm-PTj" id="0o6-Sj-zfh">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yMO-vz-YVN" id="ne7-Pz-aJA">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="v40-i7-3oR" id="i9P-mt-Z8w"/>
-                            <outlet property="delegate" destination="v40-i7-3oR" id="Vyw-zQ-Nv2"/>
+                            <outlet property="dataSource" destination="a03-XS-RTp" id="Okl-7Z-XWV"/>
+                            <outlet property="delegate" destination="a03-XS-RTp" id="Cll-Ns-f6F"/>
                         </connections>
                     </tableView>
-                    <connections>
-                        <segue destination="F1k-R4-lPp" kind="show" identifier="showBuildingDetail" id="fs7-c6-bQ4"/>
-                    </connections>
+                    <tabBarItem key="tabBarItem" title="Item" id="9qV-1D-LFk"/>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="OpG-0l-Bv8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3HS-Wk-Px0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1290" y="150"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="pk3-To-eky">
-            <objects>
-                <viewController id="F1k-R4-lPp" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="9tU-4h-9ch">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <viewLayoutGuide key="safeArea" id="btB-YB-gCa"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="WbG-cB-mMn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-318" y="150"/>
+            <point key="canvasLocation" x="470" y="-17"/>
         </scene>
     </scenes>
 </document>

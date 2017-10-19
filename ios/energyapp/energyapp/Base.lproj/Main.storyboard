@@ -19,23 +19,13 @@
                     </tabBar>
                     <connections>
                         <segue destination="h9d-Rx-J2y" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
-                        <segue destination="7fB-Xa-jVq" kind="relationship" relationship="viewControllers" id="Q9n-Es-o6l"/>
                         <segue destination="Mt7-mj-5nm" kind="relationship" relationship="viewControllers" id="bbu-JF-InF"/>
+                        <segue destination="Sba-KT-K7y" kind="relationship" relationship="viewControllers" id="KAi-AR-HEU"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="0.0" y="0.0"/>
-        </scene>
-        <!--Buildings-->
-        <scene sceneID="ihJ-kO-a15">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Buildings" id="7fB-Xa-jVq" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Buildings" image="buildings1" id="RAx-kn-7G5"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="NXI-Kg-enp" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1505" y="0.0"/>
         </scene>
         <!--HeatMap-->
         <scene sceneID="K1V-oA-Obd">
@@ -57,9 +47,18 @@
             </objects>
             <point key="canvasLocation" x="750" y="360"/>
         </scene>
+        <!--Buildings-->
+        <scene sceneID="Hwt-8W-r0W">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Buildings" id="Sba-KT-K7y" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="YPr-ZV-bIQ"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9Bn-Xv-fne" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1314" y="0.0"/>
+        </scene>
     </scenes>
     <resources>
-        <image name="buildings1" width="25" height="25"/>
         <image name="map1" width="25" height="25"/>
         <image name="overview" width="25" height="25"/>
     </resources>
