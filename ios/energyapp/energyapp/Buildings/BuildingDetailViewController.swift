@@ -11,12 +11,14 @@ import UIKit
 class BuildingDetailViewController: UIViewController {
 
     @IBOutlet weak var buildingDetailImage: UIImageView!
-    
     @IBOutlet weak var buildingDetailTitle: UILabel!
+    @IBOutlet weak var buildingDetailDesc: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        buildingDetailTitle.text = buildingList[idx]
+        buildingDetailDesc.text = buildingDescList[idx]
         // Do any additional setup after loading the view.
     }
 

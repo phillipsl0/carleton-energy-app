@@ -18,6 +18,7 @@
 		1AD851271F955B84006FBB61 /* HeatMap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AD851251F955B84006FBB61 /* HeatMap.storyboard */; };
 		1AD8512A1F9560B7006FBB61 /* IndividualBuildingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD851291F9560B7006FBB61 /* IndividualBuildingViewController.swift */; };
 		1AD8512C1F956636006FBB61 /* BuildingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD8512B1F956636006FBB61 /* BuildingData.swift */; };
+		3A4FA4DD1F98F32A0086CFBF /* BuildingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4FA4DC1F98F32A0086CFBF /* BuildingDetailViewController.swift */; };
 		3A5F28DF1F981F5200CE6A45 /* BuildingListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5F28DE1F981F5200CE6A45 /* BuildingListTableViewController.swift */; };
 		3AC869E21F983B9D0089F0FA /* Buildings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AC869E11F983B9D0089F0FA /* Buildings.storyboard */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		1AD851261F955B84006FBB61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = energyapp/Base.lproj/HeatMap.storyboard; sourceTree = "<group>"; };
 		1AD851291F9560B7006FBB61 /* IndividualBuildingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualBuildingViewController.swift; sourceTree = "<group>"; };
 		1AD8512B1F956636006FBB61 /* BuildingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingData.swift; sourceTree = "<group>"; };
+		3A4FA4DC1F98F32A0086CFBF /* BuildingDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingDetailViewController.swift; sourceTree = "<group>"; };
 		3A5F28DE1F981F5200CE6A45 /* BuildingListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingListTableViewController.swift; sourceTree = "<group>"; };
 		3AC869E11F983B9D0089F0FA /* Buildings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Buildings.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,6 +89,7 @@
 			children = (
 				3AC869E11F983B9D0089F0FA /* Buildings.storyboard */,
 				3A5F28DE1F981F5200CE6A45 /* BuildingListTableViewController.swift */,
+				3A4FA4DC1F98F32A0086CFBF /* BuildingDetailViewController.swift */,
 				1AD851171F9551FB006FBB61 /* BuildingsViewController.swift */,
 				1AD851291F9560B7006FBB61 /* IndividualBuildingViewController.swift */,
 				1AD8512B1F956636006FBB61 /* BuildingData.swift */,
@@ -188,6 +191,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AD8512A1F9560B7006FBB61 /* IndividualBuildingViewController.swift in Sources */,
+				3A4FA4DD1F98F32A0086CFBF /* BuildingDetailViewController.swift in Sources */,
 				1AD851181F9551FB006FBB61 /* BuildingsViewController.swift in Sources */,
 				1AD851081F9547BE006FBB61 /* HeatMapViewController.swift in Sources */,
 				1AD8512C1F956636006FBB61 /* BuildingData.swift in Sources */,
