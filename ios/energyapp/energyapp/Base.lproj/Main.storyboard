@@ -27,11 +27,11 @@
             </objects>
             <point key="canvasLocation" x="0.0" y="0.0"/>
         </scene>
-        <!--HeatMap-->
+        <!--Buildings-->
         <scene sceneID="K1V-oA-Obd">
             <objects>
-                <viewControllerPlaceholder storyboardName="HeatMap" id="Mt7-mj-5nm" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Heat Map" image="map1" id="UEG-un-gA5"/>
+                <viewControllerPlaceholder storyboardName="Buildings" id="Mt7-mj-5nm" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Buildings" image="buildings1" id="UEG-un-gA5"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EfB-CW-9Yv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -47,11 +47,11 @@
             </objects>
             <point key="canvasLocation" x="750" y="360"/>
         </scene>
-        <!--Buildings-->
+        <!--HeatMap-->
         <scene sceneID="Hwt-8W-r0W">
             <objects>
-                <viewControllerPlaceholder storyboardName="Buildings" id="Sba-KT-K7y" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Buildings" image="buildings1" id="YPr-ZV-bIQ"/>
+                <viewControllerPlaceholder storyboardName="HeatMap" id="Sba-KT-K7y" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Heat Map" image="map1" id="YPr-ZV-bIQ"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Bn-Xv-fne" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

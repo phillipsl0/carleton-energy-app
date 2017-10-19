@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -32,10 +33,28 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Buildings" image="buildings1" id="9qV-1D-LFk"/>
+                    <connections>
+                        <segue destination="MuW-O9-KEm" kind="show" identifier="showBuildingDetail" id="qgc-IT-CHh"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3HS-Wk-Px0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="470" y="-17"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="kGJ-ip-sgZ">
+            <objects>
+                <viewController id="MuW-O9-KEm" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5Qc-K6-fHD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="Zsx-G8-3iJ"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SD6-CJ-Xkh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1468" y="-18"/>
         </scene>
     </scenes>
     <resources>
