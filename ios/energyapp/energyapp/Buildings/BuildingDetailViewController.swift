@@ -16,10 +16,11 @@ class BuildingDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        buildingDetailImage.image = UIImage(named: "sayles.jpg")
         buildingDetailTitle.text = buildingList[idx]
         buildingDetailDesc.text = buildingDescList[idx]
-        // Do any additional setup after loading the view.
+    
     }
 
     override func didReceiveMemoryWarning() {
