@@ -17,7 +17,7 @@ class BuildingDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        buildingDetailImage.image = UIImage(named: "sayles.jpg")
+        buildingDetailImage.image = UIImage(named: buildingList[idx]+".jpg")
         buildingDetailTitle.text = buildingList[idx]
         buildingDetailDesc.text = buildingDescList[idx]
     
