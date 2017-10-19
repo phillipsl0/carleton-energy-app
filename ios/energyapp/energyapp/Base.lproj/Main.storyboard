@@ -51,7 +51,7 @@
         <scene sceneID="Hwt-8W-r0W">
             <objects>
                 <viewControllerPlaceholder storyboardName="Buildings" id="Sba-KT-K7y" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="YPr-ZV-bIQ"/>
+                    <tabBarItem key="tabBarItem" title="Buildings" image="buildings1" id="YPr-ZV-bIQ"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Bn-Xv-fne" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -59,6 +59,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="buildings1" width="25" height="25"/>
         <image name="map1" width="25" height="25"/>
         <image name="overview" width="25" height="25"/>
     </resources>

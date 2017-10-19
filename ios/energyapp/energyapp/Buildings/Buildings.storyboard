@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item-->
+        <!--Buildings-->
         <scene sceneID="Yzc-D8-gjm">
             <objects>
                 <tableViewController id="a03-XS-RTp" customClass="BuildingListTableViewController" customModule="energyapp" customModuleProvider="target" sceneMemberID="viewController">
@@ -31,11 +31,14 @@
                             <outlet property="delegate" destination="a03-XS-RTp" id="Cll-Ns-f6F"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Item" id="9qV-1D-LFk"/>
+                    <tabBarItem key="tabBarItem" title="Buildings" image="buildings1" id="9qV-1D-LFk"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3HS-Wk-Px0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="470" y="-17"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="buildings1" width="25" height="25"/>
+    </resources>
 </document>
