@@ -10,32 +10,11 @@ import UIKit
 
 var buildingList = ["Burton","CMC","Willis"]
 var buildingDescList = ["Burton is a residence hall.", "CMC is the place to be.", "Who uses Willis?"]
+var idx = 0
 
 class BuildingListTableViewController: UITableViewController {
 
-    /*
-     override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-     */
+    
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
@@ -50,7 +29,35 @@ class BuildingListTableViewController: UITableViewController {
 
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        idx = indexPath.row
+        performSegue(withIdentifier: "showBuildingDetail", sender: self)
+    }
  
+    /*
+     override func viewDidLoad() {
+     super.viewDidLoad()
+     
+     // Uncomment the following line to preserve selection between presentations
+     // self.clearsSelectionOnViewWillAppear = false
+     
+     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+     // self.navigationItem.rightBarButtonItem = self.editButtonItem
+     }
+     
+     override func didReceiveMemoryWarning() {
+     super.didReceiveMemoryWarning()
+     // Dispose of any resources that can be recreated.
+     }
+     
+     // MARK: - Table view data source
+     
+     override func numberOfSections(in tableView: UITableView) -> Int {
+     // #warning Incomplete implementation, return the number of sections
+     return 0
+     }
+     */
 
     /*
     // Override to support conditional editing of the table view.
