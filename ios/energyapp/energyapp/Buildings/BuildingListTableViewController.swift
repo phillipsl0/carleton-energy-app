@@ -46,7 +46,7 @@ class BuildingListTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "buildingCard", for: indexPath)
 
-        cell.textLabel?.text = buildingDescList[indexPath.row]
+        cell.textLabel?.text = buildingList[indexPath.row]
 
         return cell
     }
