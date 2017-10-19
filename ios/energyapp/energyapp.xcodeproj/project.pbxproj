@@ -19,6 +19,7 @@
 		1AD851271F955B84006FBB61 /* HeatMap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AD851251F955B84006FBB61 /* HeatMap.storyboard */; };
 		1AD8512A1F9560B7006FBB61 /* IndividualBuildingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD851291F9560B7006FBB61 /* IndividualBuildingViewController.swift */; };
 		1AD8512C1F956636006FBB61 /* BuildingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD8512B1F956636006FBB61 /* BuildingData.swift */; };
+		3A5F28DF1F981F5200CE6A45 /* BuildingListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5F28DE1F981F5200CE6A45 /* BuildingListTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		1AD851261F955B84006FBB61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = energyapp/Base.lproj/HeatMap.storyboard; sourceTree = "<group>"; };
 		1AD851291F9560B7006FBB61 /* IndividualBuildingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualBuildingViewController.swift; sourceTree = "<group>"; };
 		1AD8512B1F956636006FBB61 /* BuildingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingData.swift; sourceTree = "<group>"; };
+		3A5F28DE1F981F5200CE6A45 /* BuildingListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingListTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				1AD8511D1F9556F0006FBB61 /* Buildings.storyboard */,
+				3A5F28DE1F981F5200CE6A45 /* BuildingListTableViewController.swift */,
 				1AD851171F9551FB006FBB61 /* BuildingsViewController.swift */,
 				1AD851291F9560B7006FBB61 /* IndividualBuildingViewController.swift */,
 				1AD8512B1F956636006FBB61 /* BuildingData.swift */,
@@ -189,6 +192,7 @@
 				1AD851081F9547BE006FBB61 /* HeatMapViewController.swift in Sources */,
 				1AD8512C1F956636006FBB61 /* BuildingData.swift in Sources */,
 				1AD851241F9558E4006FBB61 /* OverviewViewController.swift in Sources */,
+				3A5F28DF1F981F5200CE6A45 /* BuildingListTableViewController.swift in Sources */,
 				1AD851041F9547BE006FBB61 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

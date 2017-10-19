@@ -31,31 +31,36 @@
         <scene sceneID="ihJ-kO-a15">
             <objects>
                 <viewControllerPlaceholder storyboardName="Buildings" id="7fB-Xa-jVq" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="RAx-kn-7G5"/>
+                    <tabBarItem key="tabBarItem" title="Buildings" image="buildings1" id="RAx-kn-7G5"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NXI-Kg-enp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1505" y="0.0"/>
         </scene>
-        <!--Overview-->
+        <!--HeatMap-->
         <scene sceneID="K1V-oA-Obd">
             <objects>
-                <viewControllerPlaceholder storyboardName="Overview" id="Mt7-mj-5nm" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="UEG-un-gA5"/>
+                <viewControllerPlaceholder storyboardName="HeatMap" id="Mt7-mj-5nm" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Heat Map" image="map1" id="UEG-un-gA5"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EfB-CW-9Yv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="750" y="-320"/>
         </scene>
-        <!--HeatMap-->
+        <!--Overview-->
         <scene sceneID="BZJ-b2-Iwf">
             <objects>
-                <viewControllerPlaceholder storyboardName="HeatMap" id="h9d-Rx-J2y" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="nzj-Xk-10x"/>
+                <viewControllerPlaceholder storyboardName="Overview" id="h9d-Rx-J2y" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Overview" image="overview" id="nzj-Xk-10x"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NhC-WI-TDG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="750" y="360"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="buildings1" width="25" height="25"/>
+        <image name="map1" width="25" height="25"/>
+        <image name="overview" width="25" height="25"/>
+    </resources>
 </document>
