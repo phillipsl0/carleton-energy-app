@@ -7,13 +7,13 @@
 //
 
 import UIKit
+import WebKit
 
-var buildingList = ["Burton","CMC","Willis"]
-var buildingDescList = ["Burton is a residence hall.", "CMC is the place to be.", "Who uses Willis?"]
+var buildingList = ["Burton", "Cassat", "CMC", "Davis", "Goodhue", "James", "Musser", "Myers", "Nourse", "Sevy", "Watson", "Willis"]
+var buildingDescList = ["Burton is a residence hall.", "Cassat is a fairly new residence hall.", "CMC is the place to be.", "Some people have a hard time finding Davis Hall.", "No one wants to live in Goodhue.", "James Hall is also known as 'Memo'.", "Musser is a residence hall. It looks just like Myers.", "Myers is a residence hall. It looks just like Musser.", "Sometimes Lyman the cat hangs out in Nourse.", "Andrew lives in Sevy.", "Watson is a very tall residence hall.", "Who uses Willis?"]
 var idx = 0
 
 class BuildingListTableViewController: UITableViewController {
-
     
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -23,8 +23,8 @@ class BuildingListTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "buildingCard", for: indexPath)
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "buildingCard", for: indexPath) as! buildingCellTableViewCell
+        
         cell.textLabel?.text = buildingList[indexPath.row]
 
         return cell

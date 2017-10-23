@@ -17,15 +17,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="32X-SU-D2S">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="32X-SU-D2S">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="32X-SU-D2S" secondAttribute="trailing" id="EqX-6A-b6C"/>
+                            <constraint firstItem="32X-SU-D2S" firstAttribute="bottom" secondItem="O1u-W8-tvY" secondAttribute="bottom" id="QhO-NE-wEu"/>
+                            <constraint firstItem="32X-SU-D2S" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leading" id="kfM-pJ-a9l"/>
+                            <constraint firstItem="32X-SU-D2S" firstAttribute="top" secondItem="QS5-Rx-YEW" secondAttribute="top" id="u6g-6h-fUv"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="O1u-W8-tvY"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Heat Map" image="map1" id="cPa-gy-q4n"/>
+                    <connections>
+                        <outlet property="mapView" destination="32X-SU-D2S" id="RkB-lP-S19"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
