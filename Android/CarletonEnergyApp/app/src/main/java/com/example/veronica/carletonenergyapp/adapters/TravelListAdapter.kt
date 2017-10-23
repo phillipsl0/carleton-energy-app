@@ -21,9 +21,7 @@ import kotlinx.android.synthetic.main.row_places.view.*
  */
 
 // 1
-class TravelListAdapter(
-        private var context: Context,
-        private val mListener: CardsFragment.OnListFragmentInteractionListener?) : RecyclerView.Adapter<TravelListAdapter.ViewHolder>() {
+class TravelListAdapter(private var context: Context) : RecyclerView.Adapter<TravelListAdapter.ViewHolder>() {
 
     lateinit var itemClickListener: OnItemClickListener
     override fun getItemCount() = PlaceData.placeList().size

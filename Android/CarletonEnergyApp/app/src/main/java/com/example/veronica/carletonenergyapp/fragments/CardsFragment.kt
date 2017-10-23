@@ -122,7 +122,7 @@ class CardsFragment : Fragment() {
                     1,StaggeredGridLayoutManager.VERTICAL)
             view.layoutManager = LinearLayoutManager(context)
 
-            view.adapter = TravelListAdapter(context, mListener)
+            view.adapter = TravelListAdapter(context)
             //adapter.setOnItemClickListener(onItemClickListener)
 
         }

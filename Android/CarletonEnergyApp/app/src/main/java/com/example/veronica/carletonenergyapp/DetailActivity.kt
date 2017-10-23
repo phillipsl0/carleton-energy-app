@@ -62,7 +62,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setupValues() {
-        Log.d("DETAIL_ACTIVITY", "Setting up values!")
         place = PlaceData.placeList()[intent.getIntExtra(EXTRA_PARAM_ID, 0)]
         addButton.setOnClickListener(this)
         defaultColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)

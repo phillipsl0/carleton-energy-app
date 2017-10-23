@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.veronica.carletonenergyapp.fragments.BlankFragment;
 import com.example.veronica.carletonenergyapp.fragments.BuildingFragment;
+import com.example.veronica.carletonenergyapp.fragments.CardFragment;
 import com.example.veronica.carletonenergyapp.fragments.CardsFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment fragment = null;
-                String tag = null;
+                String tag;
 
                 switch (item.getItemId()) {
                     case R.id.nav_bottom_home:
@@ -49,12 +50,12 @@ public class MainActivity extends AppCompatActivity
                     // Cards Fragment
                     case R.id.nav_bottom_cards:
                         mTextMessage.setText(R.string.title_dashboard);
-                        tag = CardsFragment.TAG;
+                        tag = CardFragment.TAG;
                         Log.d("FRAGMENT", "Tag fragment: " + tag);
                         fragment = getSupportFragmentManager().findFragmentByTag(tag);
                         if (fragment == null) {
                             Log.d("FRAGMENT", "Initializing: " + tag);
-                            fragment = new CardsFragment();
+                            fragment = new CardFragment();
                         }
                         break;
                     case R.id.bottom_nav_empty_frag:
