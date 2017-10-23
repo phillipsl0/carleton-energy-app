@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gFD-F6-Brg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="a03-XS-RTp">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,105 +10,114 @@
     </dependencies>
     <scenes>
         <!--Buildings-->
-        <scene sceneID="G3p-wU-WEZ">
+        <scene sceneID="Yzc-D8-gjm">
             <objects>
-                <tableViewController id="Eh1-uz-BLs" customClass="BuildingsViewController" customModule="energyapp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Yvu-94-EzU">
+                <tableViewController id="a03-XS-RTp" customClass="BuildingListTableViewController" customModule="energyapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="viq-29-hkK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell_building" textLabel="h0R-qp-5t9" style="IBUITableViewCellStyleDefault" id="4GX-uc-0ci">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="22" reuseIdentifier="buildingCard" id="yMO-vz-YVN" customClass="buildingCellTableViewCell" customModule="energyapp" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4GX-uc-0ci" id="O9G-kK-Qyl">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yMO-vz-YVN" id="ne7-Pz-aJA">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h0R-qp-5t9">
-                                            <rect key="frame" x="16" y="0.0" width="344" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IiP-X0-Nal">
-                                            <rect key="frame" x="0.0" y="-55" width="375" height="140"/>
+                                        <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vRd-dd-Na3">
+                                            <rect key="frame" x="97" y="8" width="191" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        </imageView>
+                                            <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <wkWebViewConfiguration key="configuration">
+                                                <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                                <wkPreferences key="preferences"/>
+                                            </wkWebViewConfiguration>
+                                        </wkWebView>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="l86-CV-uA0" kind="show" identifier="ShowBuildingDetails" id="3hf-Wc-KnB"/>
+                                    <outlet property="webView" destination="vRd-dd-Na3" id="2cr-Pa-LHF"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="Eh1-uz-BLs" id="xqQ-gj-udV"/>
-                            <outlet property="delegate" destination="Eh1-uz-BLs" id="ChE-43-P0y"/>
+                            <outlet property="dataSource" destination="a03-XS-RTp" id="Okl-7Z-XWV"/>
+                            <outlet property="delegate" destination="a03-XS-RTp" id="Cll-Ns-f6F"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Buildings" image="second" id="XEW-vG-fPr">
-                        <inset key="largeContentSizeImageInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
-                    </tabBarItem>
-                    <navigationItem key="navigationItem" title="Buildings" id="LFy-mN-3Y5"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kcK-Mj-8kM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-492" y="-56"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="iAg-KS-hN4">
-            <objects>
-                <navigationController id="gFD-F6-Brg" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="weq-dx-GTk">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
+                    <tabBarItem key="tabBarItem" title="Buildings" image="buildings1" id="9qV-1D-LFk"/>
                     <connections>
-                        <segue destination="Eh1-uz-BLs" kind="relationship" relationship="rootViewController" id="CjI-9l-q1O"/>
+                        <segue destination="MuW-O9-KEm" kind="show" identifier="showBuildingDetail" id="qgc-IT-CHh"/>
                     </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="BF3-Da-RFW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3HS-Wk-Px0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1631" y="-56"/>
+            <point key="canvasLocation" x="620" y="-18.440779610194905"/>
         </scene>
-        <!--Individual Building View Controller-->
-        <scene sceneID="YQI-pT-W7z">
+        <!--Building Detail View Controller-->
+        <scene sceneID="kGJ-ip-sgZ">
             <objects>
-                <viewController id="l86-CV-uA0" customClass="IndividualBuildingViewController" customModule="energyapp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="HHg-7U-mKi">
+                <viewController id="MuW-O9-KEm" customClass="BuildingDetailViewController" customModule="energyapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5Qc-K6-fHD">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="first" translatesAutoresizingMaskIntoConstraints="NO" id="mml-70-esq">
-                                <rect key="frame" x="67" y="106" width="240" height="240"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WYs-aa-pDp">
+                                <rect key="frame" x="0.0" y="66" width="375" height="174"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="174" id="90t-8b-UeE"/>
+                                </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Building Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ekE-Tx-nkc">
-                                <rect key="frame" x="132" y="20" width="111" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ouz-Nr-GXj">
+                                <rect key="frame" x="16" y="20" width="52" height="30"/>
+                                <state key="normal" title="☜ Back"/>
+                                <connections>
+                                    <segue destination="a03-XS-RTp" kind="show" id="9pu-ET-xzo"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9jP-j3-7zD">
+                                <rect key="frame" x="24" y="303" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dLQ-oU-rbg">
+                                <rect key="frame" x="16" y="248" width="71" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <viewLayoutGuide key="safeArea" id="aOe-sg-Nm7"/>
+                        <constraints>
+                            <constraint firstItem="WYs-aa-pDp" firstAttribute="top" secondItem="Ouz-Nr-GXj" secondAttribute="bottom" constant="16" id="0cY-me-rHb"/>
+                            <constraint firstItem="Ouz-Nr-GXj" firstAttribute="top" secondItem="Zsx-G8-3iJ" secondAttribute="top" id="6N5-D2-EfK"/>
+                            <constraint firstItem="dLQ-oU-rbg" firstAttribute="leading" secondItem="Zsx-G8-3iJ" secondAttribute="leading" constant="16" id="7rm-d2-3HF"/>
+                            <constraint firstItem="Ouz-Nr-GXj" firstAttribute="leading" secondItem="Zsx-G8-3iJ" secondAttribute="leading" constant="16" id="9C3-HZ-XrR"/>
+                            <constraint firstItem="9jP-j3-7zD" firstAttribute="leading" secondItem="Zsx-G8-3iJ" secondAttribute="leading" constant="24" id="Hc1-y4-h7A"/>
+                            <constraint firstItem="9jP-j3-7zD" firstAttribute="top" secondItem="dLQ-oU-rbg" secondAttribute="bottom" constant="19" id="M6v-KR-N6X"/>
+                            <constraint firstItem="dLQ-oU-rbg" firstAttribute="top" secondItem="WYs-aa-pDp" secondAttribute="bottom" constant="8" id="NhR-2R-D6W"/>
+                            <constraint firstItem="WYs-aa-pDp" firstAttribute="top" secondItem="5Qc-K6-fHD" secondAttribute="top" constant="66" id="VBO-XM-MTe"/>
+                            <constraint firstItem="WYs-aa-pDp" firstAttribute="leading" secondItem="Zsx-G8-3iJ" secondAttribute="leading" id="jP4-pA-6aL"/>
+                            <constraint firstItem="WYs-aa-pDp" firstAttribute="top" secondItem="Ouz-Nr-GXj" secondAttribute="bottom" constant="16" id="qhJ-H4-WZj"/>
+                            <constraint firstItem="WYs-aa-pDp" firstAttribute="trailing" secondItem="Zsx-G8-3iJ" secondAttribute="trailing" id="suQ-U9-OdR"/>
+                            <constraint firstItem="dLQ-oU-rbg" firstAttribute="top" secondItem="WYs-aa-pDp" secondAttribute="bottom" constant="8" id="xa7-bV-Dyp"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Zsx-G8-3iJ"/>
                     </view>
                     <connections>
-                        <outlet property="BuildingName" destination="ekE-Tx-nkc" id="6Dd-fl-dpk"/>
+                        <outlet property="buildingDetailDesc" destination="9jP-j3-7zD" id="RBp-zK-8fU"/>
+                        <outlet property="buildingDetailImage" destination="WYs-aa-pDp" id="4lu-8f-8nL"/>
+                        <outlet property="buildingDetailTitle" destination="dLQ-oU-rbg" id="MHW-Je-T97"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3tk-LU-b9B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SD6-CJ-Xkh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="556" y="-56"/>
+            <point key="canvasLocation" x="1468" y="-18.440779610194905"/>
         </scene>
     </scenes>
     <resources>
-        <image name="first" width="30" height="30"/>
-        <image name="second" width="30" height="30"/>
+        <image name="buildings1" width="25" height="25"/>
     </resources>
 </document>
