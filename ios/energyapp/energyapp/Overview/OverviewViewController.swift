@@ -1,5 +1,5 @@
 //
-//  SecondViewController.swift
+//  FirstViewController.swift
 //  energyapp
 //
 //  Created by energyapp on 10/16/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SecondViewController: UIViewController {
+class OverviewViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
