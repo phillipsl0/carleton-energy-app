@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { TabNavigator } from 'react-navigation';
+import { Button, Card, ListItem } from 'react-native-elements';
+import BuildingListView from './src/BuildingListView';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const OverviewScreen = () => (
@@ -10,9 +12,7 @@ const OverviewScreen = () => (
 );
 
 const BuildingsScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Buildings</Text>
-  </View>
+     <BuildingListView/>
 );
 
 const HeatMapScreen = () => (
