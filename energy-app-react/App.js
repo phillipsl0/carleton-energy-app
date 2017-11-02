@@ -28,12 +28,6 @@ const BuildingsScreen = () => (
 /*
 Using tutorial: https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/#
 */
-// const HeatMapScreen = () => (
-//   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//     <Text>Heat Map</Text>
-//   </View>
-// );
-
 const HeatMapScreen = () => (
   <View style={{ flex: 1 }}>
       <MapView
@@ -44,6 +38,7 @@ const HeatMapScreen = () => (
           // longitude: -122.4324,
           // latitudeDelta: 0.0922,
           // longitudeDelta: 0.0421,
+          // Carleton's coordinates
           latitude: 44.4613,
           longitude: -93.1561,
           latitudeDelta: 0.0072,
