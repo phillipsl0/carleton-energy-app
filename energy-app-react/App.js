@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, Platform, StatusBar, StyleSheet } from 'react-native';
 import { TabNavigator } from 'react-navigation';
+import { Button, Card, ListItem } from 'react-native-elements';
+import BuildingListView from './src/BuildingListView';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 //import GoogleMapReact from 'google-map-react';
@@ -20,9 +22,7 @@ const OverviewScreen = () => (
 );
 
 const BuildingsScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Buildings</Text>
-  </View>
+     <BuildingListView/>
 );
 
 /*
