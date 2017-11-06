@@ -3,6 +3,7 @@ import { View, Text, Platform, StatusBar, StyleSheet } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 import { Button, Card, ListItem } from 'react-native-elements';
 import BuildingListView from './src/BuildingListView';
+import HeatMapView from './src/HeatMapView'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 //import GoogleMapReact from 'google-map-react';
@@ -25,27 +26,8 @@ const BuildingsScreen = () => (
      <BuildingListView/>
 );
 
-/*
-Using tutorial: https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/#
-*/
 const HeatMapScreen = () => (
-  <View style={{ flex: 1 }}>
-      <MapView
-        style={styles.map}
-
-        initialRegion={{
-          // latitude: 37.78825,
-          // longitude: -122.4324,
-          // latitudeDelta: 0.0922,
-          // longitudeDelta: 0.0421,
-          // Carleton's coordinates
-          latitude: 44.4613,
-          longitude: -93.1561,
-          latitudeDelta: 0.0072,
-          longitudeDelta: 0.0051,
-      }}
-  />
-  </View>
+  <HeatMapView/>
 );
 
 const RootTabs = TabNavigator(
@@ -75,12 +57,12 @@ const RootTabs = TabNavigator(
     },
     HeatMap: {
         screen: HeatMapScreen,
-        // navigationOptions: {
-        //   tabBarLabel: 'Heat Map',
-        //   // tabBarIcon: ({ tintColor, focused }) => (
-        //   //   <FontAwesome name="fire" size={20} color={focused ? "#4F8EF7" : "#d3d3d3"} />
-        //   // ),
-        // },
+        navigationOptions: {
+          tabBarLabel: 'Heat Map',
+          tabBarIcon: ({ tintColor, focused }) => (
+            <FontAwesome name="fire" size={20} color={focused ? "#4F8EF7" : "#d3d3d3"} />
+          ),
+        },
       }
 });
 
@@ -104,6 +86,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   map: {
+    ...StyleSheet.absoluteFillObject,
     position: 'absolute',
     top: 0,
     left: 0,
