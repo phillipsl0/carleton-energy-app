@@ -61,16 +61,7 @@ class HeatMapView extends Component {
           loadingEnabled={true} // shows loading indicator while map loads
           region={this.state.region}
           onRegionChange={this.onRegionChange}
-        >
-          {this.state.polygons.map(polygon => 
-            (<MapView.Polygon
-              key={polygon.id}
-              coordinates={polygon.coordinates}
-              fillColor='red'
-              strokeColor='black'
-              />),
-            )}
-        </MapView>
+        />
         <View style={{ flex: 1 }}>
           <Text>
             Latitude: {this.state.region.latitude}{'\n'}
