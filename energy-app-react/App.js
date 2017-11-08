@@ -4,6 +4,7 @@ import { TabNavigator } from 'react-navigation';
 import { Button, Card, ListItem } from 'react-native-elements';
 import BuildingListView from './src/BuildingListView';
 import HeatMapView from './src/HeatMapView'
+import OverviewListView from './src/OverviewListView';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 //import GoogleMapReact from 'google-map-react';
@@ -17,9 +18,7 @@ AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 
 const OverviewScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Overview</Text>
-  </View>
+  <OverviewListView/>
 );
 
 const BuildingsScreen = () => (
@@ -30,14 +29,10 @@ const HeatMapScreen = () => (
   <HeatMapView/>
 );
 
+
+
 const RootTabs = TabNavigator(
-  {
-    Overview: {
-      headerStyle: {
-        height: 56 + StatusBar.currentHeight, // 56 = Header/Toolbar spec
-        paddingTop: StatusBar.currentHeight, // StatusBar height
-        backgroundColor: 'pink',
-      },
+  { Overview: {
       screen: OverviewScreen,
       navigationOptions: {
         tabBarLabel: 'Overview',
@@ -64,9 +59,14 @@ const RootTabs = TabNavigator(
           ),
         },
       }
-});
-
-export default RootTabs;
+  },
+   { tabBarOptions:
+        { style:
+            Platform.select({
+                android: {
+                    marginTop: 24
+                }
+            })}});
 
 const styles = StyleSheet.create({
   container: {
@@ -94,3 +94,4 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
 });
+export default RootTabs;

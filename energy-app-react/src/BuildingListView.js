@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
-import { List, Card, ListItem, Button } from 'react-native-elements'
+import { List, Card, ListItem, Button, Avatar } from 'react-native-elements'
 import buildings from './Buildings'
 
 class BuildingListView extends Component {
@@ -19,10 +19,14 @@ class BuildingListView extends Component {
              keyExtractor={item => item.name}
              renderItem={({ item }) => (
                <ListItem
-                 roundAvatar
+//                 style={styles.listItem}
                  onPress={() => this.props.navigation.navigate('IndividualBuilding', {item:item})}
                  title={item.name}
-                 avatar={{ uri: item.avatar }}
+                 avatar={<Avatar
+                            style={styles.listImg}
+                            source={ { uri: item.avatar }}
+                            containerStyle={{alignSelf: 'stretch'}}
+                            />}
                />
              )}
            />
@@ -61,7 +65,21 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   listItem: {
-    height: 40,
+    height: 50,
+    borderBottomColor: '#c8c7cc',
+    borderBottomWidth: 0.5,
+    paddingTop: 35,
+    paddingRight: 15,
+    paddingBottom: 55,
+  },
+  listImg: {
+    height: 30,
+    alignSelf: 'stretch',
+  },
+  listText: {
+    paddingLeft: 30,
+    marginLeft: 30,
+    fontSize: 24,
   },
   view: {
     alignItems: 'center',
