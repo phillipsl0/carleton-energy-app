@@ -1,26 +1,20 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image } from 'react-native'
+import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button } from 'react-native-elements'
 import OverviewCards from './OverviewCards'
+import Graph from './visualizations/Graph'
+import { VictoryContainer, VictoryChart } from "victory-native";
+import Svg from "react-native-svg";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+//import { scale, moderateScale, verticalScale} from './helpers/Scaling';
+
 
 class OverviewListView extends Component {
     static navigationOptions = {
         title: 'Overview'
     }
 
-    renderSeparator = () => {
-        return (
-          <View
-            style={{
-              height: 3,
-              width: "86%",
-              backgroundColor: "whitesmoke",
-              marginLeft: "0%"
-            }}
-          />
-        );
-      };
 
     render() {
         const {navigate} = this.props.navigation;
@@ -30,14 +24,23 @@ class OverviewListView extends Component {
            style={styles.list}>
            <FlatList
              data={OverviewCards}
-             ItemSeparatorComponent={this.renderSeparator}
              keyExtractor={item => item.title}
              renderItem={({ item }) => (
-               <ListItem
-                 style={styles.listItem}
-                 onPress={() => this.props.navigation.navigate('CardView', {item:item})}
-                 title={item.title}
-               />
+               <Card
+                 containerStyle={styles.cardContainer}
+                 title={item.title}>
+                 <Graph
+                    type={item.graphType}
+                    graphData={item.data}
+                 />
+                 <Button
+                    rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
+                    fontSize={20}
+                    title='More'
+                    style={styles.button}
+                    onPress={() => this.props.navigation.navigate('CardView', {item:item})}
+                 />
+               </Card>
              )}
            />
          </List>
@@ -49,8 +52,11 @@ class CardView extends Component {
     render() {
         const {state} = this.props.navigation;
         return (
-            <View style={styles.view}>
-                <Text>Hello</Text>
+            <View style={styles.container}>
+                 <Graph
+                    type={this.props.navigation.state.params.item.graphType}
+                    graphData={this.props.navigation.state.params.item.data}
+                 />
             </View>
         );
     }
@@ -67,13 +73,38 @@ const OverviewStack = StackNavigator({
 });
 
 const styles = StyleSheet.create({
-  card: {
-    paddingTop: 20,
+  container: {
+      flex: 0.8,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#F5FCFF',
+  },
+  cardContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    borderColor: '#e1e8ee',
+    borderWidth: 1,
+    borderRadius: 3,
+    padding: 15,
+    margin: 15,
+    marginBottom: 0,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'rgba(0,0,0, .2)',
+        shadowOffset: {height: 0, width: 0},
+        shadowOpacity: 1,
+        shadowRadius: 1
+      },
+      android: {
+        elevation: 1
+      }
+    })
   },
   list: {
-  marginLeft: '3%',
-  marginRight: '3%',
-  backgroundColor: 'white',
+      flex: 1,
+      marginLeft: '3%',
+      marginRight: '3%',
+      backgroundColor: 'white',
   },
   listItem: {
     height: 100,
@@ -85,6 +116,11 @@ const styles = StyleSheet.create({
   img: {
     alignSelf: 'stretch',
     height: 100,
+  },
+  button: {
+    paddingTop: 20,
+    paddingLeft: 30,
+    paddingRight: 30,
   },
 })
 
