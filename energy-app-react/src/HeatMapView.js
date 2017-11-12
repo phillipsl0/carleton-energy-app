@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StatusBar, StyleSheet, Dimensions } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 /*
 Google API Key:
 AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI 
@@ -22,8 +22,8 @@ class HeatMapView extends Component {
         // Carleton's coordinates
         latitude: 44.46107356,
         longitude: -93.1542989,
-        latitudeDelta: 0.00475503,
-        longitudeDelta: 0.004325397,
+        latitudeDelta: 0.003861, //0.00475503 previously
+        longitudeDelta: 0.003916, //0.004325397 previously
       }
     };
     // Holder for previous state to help control scrolling
@@ -32,14 +32,14 @@ class HeatMapView extends Component {
         // Carleton's coordinates
         latitude: 44.46107356,
         longitude: -93.1542989,
-        latitudeDelta: 0.00475503,
-        longitudeDelta: 0.004325397,
+        latitudeDelta: 0.003861, //0.00475503 previously
+        longitudeDelta: 0.003916, //0.004325397 previously
       }
     }
     this.onRegionChange = this.onRegionChange.bind(this);
   }
 
-  // Called when location/zoom are changed with new location/zoom
+  // Tracks map position as user scrolls and zooms
   onRegionChange(region) {
     // Check to make sure region is within bounds of Carleton
     if (((region.latitude <= 44.46316089) && (region.latitude >= 44.45690153)) && ((region.longitude <= -93.14903207) && (region.longitude >= -93.15727215))) {
@@ -53,22 +53,26 @@ class HeatMapView extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <MapView style={styles.map}
-          showsTraffic={false}
-          showsBuildings={true}
-          zoomEnabled={false} // stops user from zooming
-          loadingEnabled={true} // shows loading indicator while map loads
-          region={this.state.region}
-          onRegionChange={this.onRegionChange}
-        />
-        <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <View style={{ backgroundColor: 'white', height: 100, justifyContent: 'center', alignItems: 'center' }}>
           <Text>
             Latitude: {this.state.region.latitude}{'\n'}
             Longitude: {this.state.region.longitude}{'\n'}
             LatitudeDelta: {this.state.region.latitudeDelta}{'\n'}
             LongitudeDelta: {this.state.region.longitudeDelta}
           </Text>
+        </View>
+        <View style={styles.container}>
+          <MapView
+            provider = { PROVIDER_GOOGLE }
+            style={styles.map}
+            showsTraffic={false}
+            //showsBuildings={true}
+            zoomEnabled={false} // stops user from zooming
+            loadingEnabled={true} // shows loading indicator while map loads
+            region={this.state.region}
+            onRegionChange={this.onRegionChange}
+          /> 
         </View>
       </View>
     );
@@ -78,10 +82,10 @@ class HeatMapView extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    ...StyleSheet.absoluteFillObject,
+    top: 100,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   },
   map: {
     ...StyleSheet.absoluteFillObject,
