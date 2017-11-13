@@ -37,10 +37,10 @@ class HeatMapView extends Component {
       polygons: {
         polygon: {
           coordinates: [
-            {latitude: 44.461528, longitude: -93.153488},
             {latitude: 44.461520, longitude: -93.153344},
-            {latitude: 44.461371, longitude: -93.15344},
-            {latitude: 44.461528, longitude: -93.15344},
+            {latitude: 44.461528, longitude: -93.153488},
+            {latitude: 44.461251, longitude: -93.153488},
+            {latitude: 44.461245, longitude: -93.153342}
           ],
           id: "Music Hall"
         }
@@ -70,7 +70,7 @@ class HeatMapView extends Component {
   }
 
   render() {
-    //let coordinates = this.state.polygons.map(polygon => polygon.coordinates)
+    let coords = this.state.polygons.polygon.coordinates
     return (
       <View style={{ flex: 1 }}>
         <View style={{ backgroundColor: 'white', height: 100, justifyContent: 'center', alignItems: 'center' }}>
@@ -98,14 +98,15 @@ class HeatMapView extends Component {
               <MapView.Polygon
                 key="Old Music Hall"
                 coordinates={[
-                  {latitude: 44.461520, longitude: -93.153344},
-                  {latitude: 44.461528, longitude: -93.153488},
-                  {latitude: 44.461251, longitude: -93.153488},
-                  {latitude: 44.461247, longitude: -93.153342}
+                  {latitude: 44.461528, longitude: -93.153344}, // NE
+                  {latitude: 44.461528, longitude: -93.153509}, // NW
+                  {latitude: 44.461245, longitude: -93.153505}, // SW
+                  {latitude: 44.461245, longitude: -93.153342} // SE
                 ]}
+                //coordinates={ coords }
                 strokeWidth={5}
-                strokeColor="red"
-                fillColor="blue"
+                strokeColor="yellow"
+                fillColor="yellow"
               />
           </MapView> 
         </View>
