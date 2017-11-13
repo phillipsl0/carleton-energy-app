@@ -18,6 +18,12 @@ class HeatMapView extends Component {
     // Turn fixed regions into state
     this.state = {
       // Initial region is Carleton's coordinates
+      polygons: {
+        polygon: {
+          coordinates: [],
+          id: "Music Hall"
+        }
+      },
       region: {
         // Carleton's coordinates
         latitude: 44.46107356,
@@ -28,6 +34,17 @@ class HeatMapView extends Component {
     };
     // Holder for previous state to help control scrolling
     this.prev_state = {
+      polygons: {
+        polygon: {
+          coordinates: [
+            {latitude: 44.461528, longitude: -93.153488},
+            {latitude: 44.461520, longitude: -93.153344},
+            {latitude: 44.461371, longitude: -93.15344},
+            {latitude: 44.461528, longitude: -93.15344},
+          ],
+          id: "Music Hall"
+        }
+      },
       region: {
         // Carleton's coordinates
         latitude: 44.46107356,
@@ -47,11 +64,13 @@ class HeatMapView extends Component {
       this.prev_state.region = region;
     // Limits to previous state
     } else {
-      this.setState(this.prev_state.region);
+      this.refs.map.animateToRegion(this.prev_state.region);
+      //this.setState(this.prev_state.region);
     }
   }
 
   render() {
+    //let coordinates = this.state.polygons.map(polygon => polygon.coordinates)
     return (
       <View style={{ flex: 1 }}>
         <View style={{ backgroundColor: 'white', height: 100, justifyContent: 'center', alignItems: 'center' }}>
@@ -64,15 +83,31 @@ class HeatMapView extends Component {
         </View>
         <View style={styles.container}>
           <MapView
-            provider = { PROVIDER_GOOGLE }
+            ref="map"
+            provider = { PROVIDER_GOOGLE } // show buildings on OS
             style={styles.map}
             showsTraffic={false}
-            //showsBuildings={true}
-            zoomEnabled={false} // stops user from zooming
-            loadingEnabled={true} // shows loading indicator while map loads
+            //zoomEnabled={false} // stops user from zooming
+            
+            loadingEnabled // shows loading indicator while map loads
+            loadingIndicatorColor="#666666"
+            loadingBackgroundColor="#eeeeee"
+            
             region={this.state.region}
-            onRegionChange={this.onRegionChange}
-          /> 
+            onRegionChange={this.onRegionChange}>
+              <MapView.Polygon
+                key="Old Music Hall"
+                coordinates={[
+                  {latitude: 44.461520, longitude: -93.153344},
+                  {latitude: 44.461528, longitude: -93.153488},
+                  {latitude: 44.461251, longitude: -93.153488},
+                  {latitude: 44.461247, longitude: -93.153342}
+                ]}
+                strokeWidth={5}
+                strokeColor="red"
+                fillColor="blue"
+              />
+          </MapView> 
         </View>
       </View>
     );
