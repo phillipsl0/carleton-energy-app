@@ -17,23 +17,32 @@ class BuildingListView extends Component {
            <FlatList
              data={buildings}
              keyExtractor={item => item.name}
-             renderItem={({ item }) => (
-               <ListItem
-//                 style={styles.listItem}
-                 onPress={() => this.props.navigation.navigate('IndividualBuilding', {item:item})}
-                 title={item.name}
-                 avatar={<Avatar
-                            style={styles.listImg}
-                            source={ { uri: item.avatar }}
-                            containerStyle={{alignSelf: 'stretch'}}
-                            />}
-               />
-             )}
-           />
+             renderItem={({ item }) => this.flatListItem(item)}
+             />
          </List>
        );
      }
+     
+     flatListItem(item) {
+    return (
+        <ListItem
+            style={styles.listItem}
+            onPress={() => this.props.navigation.navigate('IndividualBuilding', {item:item})}
+            title={item.name}
+            avatar={<Avatar
+                        style={styles.listImg}
+                        source={ { uri: item.avatar }}
+                        containerStyle={{alignSelf: 'stretch'}}
+                    />}
+            subtitle = {"E: 44W, W: " + "33G"}
+            subtitleStyle = {styles.sublistData}
+            rightTitle={"Details"}>
+            <Text style={styles.listText}> {item.name} </Text>
+        </ListItem>
+    )
 }
+}
+
 
 class IndividualBuilding extends Component {
     render() {
@@ -45,7 +54,12 @@ class IndividualBuilding extends Component {
                 style = {styles.img}
                 source={{ uri: this.props.navigation.state.params.item.avatar }}
                 />
+            
+            <View style={styles.view}>
+                <Text> {"GRAPH HERE"} </Text>
             </View>
+            </View>
+            
         );
     }
 }
@@ -88,6 +102,11 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     height: 100,
   },
+  sublistData:{
+    paddingTop: 35,
+    paddingRight: 15,
+    paddingBottom: 55,
+  }    
 })
 
 export default BuildingStack;
