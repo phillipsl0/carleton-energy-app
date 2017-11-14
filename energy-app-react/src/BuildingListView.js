@@ -12,12 +12,12 @@ class BuildingListView extends Component {
     render() {
         const {navigate} = this.props.navigation;
 
-       return (
-         <List>
-           <FlatList
-             data={buildings}
-             keyExtractor={item => item.name}
-             renderItem={({ item }) => this.flatListItem(item)}
+    return (
+        <List>
+            <FlatList
+                 data={buildings}
+                 keyExtractor={item => item.name}
+                 renderItem={({ item }) => this.flatListItem(item)}
              />
          </List>
        );
