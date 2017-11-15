@@ -5,10 +5,10 @@ const buildings = [
         buildingID: 1,
         floors: 4,
         //API calls here
-        bfloor1: [12, 11, 100],
-        bfloor2: [30, 19, 22],
-        bfloor3: [144, 121, 100],
-        bfloor4: [111, 1101, 1010],
+        bfloor1: ['floor1', 12, 11, 100],
+        bfloor2: ['floor2', 30, 19, 22],
+        bfloor3: ['floor3', 144, 121, 100],
+        bfloor4: ['floor4', 111, 1101, 1010],
     },
     {
         name: 'Sayles',
@@ -16,8 +16,8 @@ const buildings = [
         buildingID: 2,
         floors: 2,
         //API calls here
-        sfloor1: [162, 151, 1400],
-        sfloor2: [302, 149, 252],
+        sfloor1: ['floor1', 162, 151, 1400],
+        sfloor2: ['floor2', 302, 149, 252],
     },
     {
        name: 'Severance',
@@ -25,9 +25,9 @@ const buildings = [
        buildingID: 3,
        floors: 3,  
        //API calls here
-       sefloor1: [102, 171, 10],
-       sefloor2: [350, 19, 22],
-       sefloor3: [144, 121, 100],
+       sefloor1: ['floor1', 102, 171, 10],
+       sefloor2: ['floor2',350, 19, 22],
+       sefloor3: ['floor3',144, 121, 100],
     },
     {
        name: 'Davis',
@@ -35,10 +35,10 @@ const buildings = [
        buildingID: 4,
        floors: 4,
        //API calls here
-       dfloor1: [12, 11, 100],
-       dfloor2: [30, 19, 22],
-       dfloor3: [144, 121, 100],
-       dfloor4: [111, 1101, 1010],
+       dfloor1: ['floor1', 12, 11, 100],
+       dfloor2: ['floor2', 30, 19, 22],
+       dfloor3: ['floor3', 144, 121, 100],
+       dfloor4: ['floor4', 111, 1101, 1010],
     },
     {
        name: 'Musser',
@@ -46,10 +46,10 @@ const buildings = [
        buildingID: 5,
        floors: 4,
        //API calls here
-       mfloor1: [12, 11, 100],
-       mfloor2: [30, 19, 22],
-       mfloor3: [144, 121, 100],
-       mfloor4: [111, 1101, 1010],
+       mfloor1: ['floor1', 12, 11, 100],
+       mfloor2: ['floor2', 30, 19, 22],
+       mfloor3: ['floor3', 144, 121, 100],
+       mfloor4: ['floor4', 111, 1101, 1010],
     },
     {
        name: 'Myers',
@@ -57,10 +57,10 @@ const buildings = [
        buildingID: 6,
        floors: 4,
        //API calls here
-       myfloor1: [12, 11, 100],
-       myfloor2: [30, 19, 22],
-       myfloor3: [144, 121, 100],
-       myfloor4: [111, 1101, 1010],
+       myfloor1: ['floor1', 12, 11, 100],
+       myfloor2: ['floor2', 30, 19, 22],
+       myfloor3: ['floor3', 144, 121, 100],
+       myfloor4: ['floor4', 111, 1101, 1010],
     },
     {
        name: 'Cassat',
@@ -68,10 +68,10 @@ const buildings = [
        buildingID: 7,
        floors: 4,
        //API calls here
-       cafloor1: [12, 11, 100],
-       cafloor2: [30, 19, 22],
-       cafloor3: [144, 121, 100],
-       cafloor4: [111, 1101, 1010],
+       cafloor1: ['floor1', 12, 11, 100],
+       cafloor2: ['floor2', 30, 19, 22],
+       cafloor3: ['floor3', 2234, 3431, 4123],
+       cafloor4: ['floor4', 742, 1101, 1010],
     },
     {
         name: 'Memo',
@@ -79,10 +79,10 @@ const buildings = [
         buildingID: 8,
         floors: 4,
         //API calls here
-        mefloor1: [12, 11, 100],
-        mefloor2: [30, 19, 22],
-        mefloor3: [144, 121, 100],
-        mefloor4: [111, 1101, 1010],
+        mefloor1: ['floor1', 1342, 1341, 11200],
+        mefloor2: ['floor2', 3420, 149, 2442],
+        mefloor3: ['floor3', 14244, 14121, 4100],
+        mefloor4: ['floor4', 11211, 11201, 14010],
     },
     {
         name: 'Nourse',
@@ -90,9 +90,9 @@ const buildings = [
         buildingID: 9,
         floors: 3,
         //API calls here
-        nfloor1: [12, 11, 100],
-        nfloor2: [30, 19, 22],
-        nfloor3: [144, 121, 100],
+        nfloor1: ['floor1', 14244, 14121, 3100],
+        nfloor2: ['floor2', 320, 119, 242],
+        nfloor3: ['floor3', 1454, 1231, 1010],
     },
     {
         name: 'Evans',
@@ -100,11 +100,11 @@ const buildings = [
         buildingID: 10,
         floors: 5,
         //API calls here
-        efloor1: [12, 11, 100],
-        efloor2: [30, 19, 22],
-        efloor3: [144, 121, 100],
-        efloor4: [111, 1101, 1010],
-        efloor5: [144, 121, 100],
+        efloor1: ['floor1', 12, 11, 100],
+        efloor2: ['floor2', 30, 19, 22],
+        efloor3: ['floor3', 144, 121, 100],
+        efloor4: ['floor4', 111, 1101, 1010],
+        efloor5: ['floor5', 144, 121, 100],
     },
     {
         name: 'Goodhue',
@@ -112,10 +112,10 @@ const buildings = [
         buildingID: 11,
         floors: 4,
         //API calls here
-        gfloor1: [12, 11, 100],
-        gfloor2: [30, 19, 22],
-        gfloor3: [144, 121, 100],
-        gfloor4: [111, 1101, 1010],
+        gfloor1: ['floor1', 12, 11, 100],
+        gfloor2: ['floor2', 30, 19, 22],
+        gfloor3: ['floor3', 144, 121, 100],
+        gfloor4: ['floor4', 111, 1101, 1010],
     },
     {
         name: 'Watson',
@@ -123,13 +123,13 @@ const buildings = [
         buildingID: 12,
         floors: 7,
         //API calls here
-        wfloor1: [12, 11, 100],
-        wfloor2: [30, 19, 22],
-        wfloor3: [144, 121, 100],
-        wfloor4: [111, 1101, 1010],
-        wfloor5: [30, 19, 22],
-        wfloor6: [144, 121, 100],
-        wfloor7: [111, 1101, 1010],
+        wfloor1: ['floor1', 12, 11, 100],
+        wfloor2: ['floor2', 30, 19, 22],
+        wfloor3: ['floor3', 144, 121, 100],
+        wfloor4: ['floor4', 111, 1101, 1010],
+        wfloor5: ['floor5', 30, 19, 22],
+        wfloor6: ['floor6', 144, 121, 100],
+        wfloor7: ['floor7', 111, 1101, 1010],
     },
     {
         name: 'Scoville',
@@ -137,8 +137,8 @@ const buildings = [
         buildingID: 11,
         floors: 2,
         //API calls here
-        scfloor1: [12, 11, 100],
-        scfloor2: [30, 19, 22],
+        scfloor1: ['floor1', 12, 11, 100],
+        scfloor2: ['floor2', 30, 19, 22],
     },
 ]
 

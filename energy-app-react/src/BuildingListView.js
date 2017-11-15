@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image } from 'react-native'
+import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
-import { List, Card, ListItem, Button, Avatar } from 'react-native-elements'
-import buildings from './Buildings'
+import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
+import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import buildings from './Buildings';
+
+
 
 class BuildingListView extends Component {
     static navigationOptions = {
@@ -19,7 +22,7 @@ class BuildingListView extends Component {
              keyExtractor={item => item.name}
              renderItem={({ item }) => (
                <ListItem
-//                 style={styles.listItem}
+                    style={styles.listItem}
                  onPress={() => this.props.navigation.navigate('IndividualBuilding', {item:item})}
                  title={item.name}
                  avatar={<Avatar
@@ -38,13 +41,41 @@ class BuildingListView extends Component {
 class IndividualBuilding extends Component {
     render() {
         const {state} = this.props.navigation;
+        const tableHead = [' ','Electric', 'Water', 'Gas'];
+        
+        const test = []
+        for (var key in this.props.navigation.state.params.item) { 
+          if (Array.isArray(this.props.navigation.state.params.item[key])) {
+            test.push(this.props.navigation.state.params.item[key])
+          }
+          
+        }
+        const num = (test.length - 1)
+        const tableData = [,
+        test[0], 
+        test[1], 
+        test[2],
+        test[3],
+        test[4],
+        test[5],
+        test[6],
+
+
+        ];
+
         return (
             <View style={styles.view}>
-                <Text>{this.props.navigation.state.params.item.name}</Text>
+                <Text style = {styles.bigyellow}>{this.props.navigation.state.params.item.name}</Text>
                 <Image
                 style = {styles.img}
                 source={{ uri: this.props.navigation.state.params.item.avatar }}
                 />
+                <Text style={styles.bigyellow}> INSERT GRAPH HERE </Text>
+                <Text>{'Energy Table'}</Text>
+                <Table style={styles.table}>
+                <Row data={tableHead} style={styles.head} textStyle={styles.text}/>
+                <Rows data={tableData} style={styles.row} textStyle={styles.text}/>
+              </Table>
             </View>
         );
     }
@@ -64,13 +95,39 @@ const styles = StyleSheet.create({
   card: {
     paddingTop: 20,
   },
+  bigyellow: {
+    color: 'green',
+    fontWeight: 'bold',
+    fontSize: 30
+    },
+  blue: {
+    color: 'blue',
+    fontWeight: 'bold',
+    },
+    head: {
+      backgroundColor: 'grey',
+    },
+  table: { 
+    width: 250,
+    marginLeft: 5, 
+    
+  },
+  text: { 
+    alignSelf: 'center',
+    marginLeft: 5, 
+    fontSize: 18,
+  },
   listItem: {
     height: 50,
+    backgroundColor: 'aqua',
     borderBottomColor: '#c8c7cc',
     borderBottomWidth: 0.5,
+    width: 300,
+    alignSelf: 'center',
     paddingTop: 35,
     paddingRight: 15,
     paddingBottom: 55,
+
   },
   listImg: {
     height: 30,
@@ -81,8 +138,12 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     fontSize: 24,
   },
+  row: {
+    backgroundColor: 'orange',
+  },
   view: {
     alignItems: 'center',
+    backgroundColor: 'yellow'
   },
   img: {
     alignSelf: 'stretch',
