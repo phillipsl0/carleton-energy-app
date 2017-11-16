@@ -15,15 +15,18 @@ Using tutorial: https://www.fullstackreact.com/articles/how-to-write-a-google-ma
 class HeatMapView extends Component {
   constructor(props) {
     super(props);
+    
+    let polygons = []
+    //      countries.forEach((country) =>{
+    //   country.polygons.forEach((p) => {
+    //     polygons.push(p) 
+    //   })
+    // })
+
     // Turn fixed regions into state
     this.state = {
       // Initial region is Carleton's coordinates
-      polygons: {
-        polygon: {
-          coordinates: [],
-          id: "Music Hall"
-        }
-      },
+      polygons: polygons,
       region: {
         // Carleton's coordinates
         latitude: 44.46107356,
@@ -69,8 +72,14 @@ class HeatMapView extends Component {
     }
   }
 
+  /* iOS Bug: onPress doesn't work if provider=... enabled!! */
+  // See issue: https://github.com/airbnb/react-native-maps/issues/1447
+  onPolygonPress(polygon) {
+    console.log('onPress');
+  }
+
   render() {
-    let coords = this.state.polygons.polygon.coordinates
+    //let coords = this.state.polygons.polygon.coordinates
     return (
       <View style={{ flex: 1 }}>
         <View style={{ backgroundColor: 'white', height: 100, justifyContent: 'center', alignItems: 'center' }}>
@@ -107,6 +116,7 @@ class HeatMapView extends Component {
                 strokeWidth={5}
                 strokeColor="yellow"
                 fillColor="yellow"
+                onPress={() => this.onPolygonPress(polygon)}
               />
           </MapView> 
         </View>
@@ -114,6 +124,7 @@ class HeatMapView extends Component {
     );
   }
 }
+
 
 
 const styles = StyleSheet.create({
