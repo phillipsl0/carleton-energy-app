@@ -1,44 +1,44 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View } from 'react-native'
-import { VictoryPie, VictoryArea, VictoryBar, VictoryChart, VictoryTheme, VictoryAxis } from "victory-native";
-//import customTheme from './CustomTheme';
+import { StyleSheet, View, Dimensions } from 'react-native'
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 
 
-const Graph = ({type, graphData}) => {
-//    setDimensions(event) {
-//        this.setState({
-//            width: event.nativeEvent.layout.width
-//        });
-//    }
-
-    if (type=='pie') {
-        return (
+class Graph extends Component {
+    render() {
+        if (this.props.type=='pie') {
+            return (
+                <View style={styles.container}>
+                <VictoryPie
+                    padding={{ top: 50, bottom: 50, left: 95, right: 85}}
+                    height={300}
+                    width={300}
+                    data={this.props.graphData}/>
+                </View>
+            )
+        } else if (this.props.type=='bar') {
+            return (
             <View style={styles.container}>
-            <VictoryPie
-                padding={{ top: 50, bottom: 50, left: 85, right: 75}}
-                height={verticalScale(300)}
-                width={moderateScale(300)}
-                data={graphData}
-            />
+                <VictoryChart
+                    height={300}
+                    width={300}
+                    padding={{ top: 20, bottom: 50, left: 60, right: 60}}
+                    domainPadding={15}>
+                    <VictoryBar
+                        data={this.props.graphData}/>
+                </VictoryChart>
+                </View>
+            )
+        } else {
+            return (
+            <View style={styles.container}>
+                <VictoryChart>
+                <VictoryBar/>
+                </VictoryChart>
             </View>
-        )
-    } else if (type=='bar') {
-//        const { width } = this.props;
-        return (
-        <View style={styles.container}>
-            <VictoryChart
-                height={verticalScale(300)}
-                width={moderateScale(300)}
-                padding={{ top: 20, bottom: 50, left: 50, right: 50}}
-                domainPadding={15}>
-                <VictoryBar
-                    data={graphData}
-                />
-            </VictoryChart>
-            </View>
-        )
+            )
+        }
     }
 }
 

@@ -1,74 +1,64 @@
-import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native'
-import { StackNavigator, SafeAreaView } from 'react-navigation';
-import { List, Card, ListItem, Button } from 'react-native-elements'
+import React from 'react';
+import { FlatList, StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native'
+import { StackNavigator } from 'react-navigation';
+import { List, Card, Button } from 'react-native-elements'
+import { VictoryContainer, VictoryChart } from "victory-native";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 import OverviewCards from './OverviewCards'
 import Graph from './visualizations/Graph'
-import { VictoryContainer, VictoryChart } from "victory-native";
-import Svg from "react-native-svg";
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-//import { scale, moderateScale, verticalScale} from './helpers/Scaling';
 
-
-class OverviewListView extends Component {
-    static navigationOptions = {
-        title: 'Overview'
-    }
-
-
-    render() {
-        const {navigate} = this.props.navigation;
-
-       return (
-         <List
-           style={styles.list}>
-           <FlatList
-             data={OverviewCards}
-             keyExtractor={item => item.title}
-             renderItem={({ item }) => (
-               <Card
-                 containerStyle={styles.cardContainer}
-                 title={item.title}>
-                 <Graph
-                    type={item.graphType}
-                    graphData={item.data}
-                 />
-                 <Button
-                    rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                    fontSize={20}
-                    title='More'
-                    style={styles.button}
-                    onPress={() => this.props.navigation.navigate('CardView', {item:item})}
-                 />
-               </Card>
-             )}
-           />
-         </List>
-       );
-     }
+const OverviewListView = ({navigation}) => {
+   return (
+     <List
+       style={styles.list}>
+       <FlatList
+         data={OverviewCards}
+         keyExtractor={item => item.title}
+         renderItem={({ item }) => (
+           <Card
+             containerStyle={styles.cardContainer}
+             title={item.title}>
+             <Graph
+                type={item.graphType}
+                graphData={item.data}/>
+             <Button
+                rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
+                fontSize={20}
+                title='More'
+                style={styles.button}
+                onPress={() => navigation.navigate('CardView',
+                                 {graphType:item.graphType, data:item.data, title: item.title})}/>
+           </Card>
+         )}
+       />
+     </List>
+   );
 }
 
-class CardView extends Component {
-    render() {
-        const {state} = this.props.navigation;
-        return (
-            <View style={styles.container}>
-                 <Graph
-                    type={this.props.navigation.state.params.item.graphType}
-                    graphData={this.props.navigation.state.params.item.data}
-                 />
-            </View>
-        );
-    }
+const CardView = ({ navigation }) => {
+    return (
+        <View style={styles.container}>
+          <Graph
+            type={navigation.state.params.graphType}
+            graphData={navigation.state.params.data}/>
+        </View>
+    );
 }
 
 const OverviewStack = StackNavigator({
     OverviewListView: {
         screen: OverviewListView,
+        navigationOptions: {
+            title: 'Overview',
+        }
     },
     CardView: {
         path: 'OverviewCards/:title',
         screen: CardView,
+        navigationOptions: ({ navigation }) => ({
+              title: `${navigation.state.params.title}`,
+            }),
     },
 });
 
@@ -105,17 +95,6 @@ const styles = StyleSheet.create({
       marginLeft: '3%',
       marginRight: '3%',
       backgroundColor: 'white',
-  },
-  listItem: {
-    height: 100,
-    paddingBottom: 20
-  },
-  view: {
-    alignItems: 'center',
-  },
-  img: {
-    alignSelf: 'stretch',
-    height: 100,
   },
   button: {
     paddingTop: 20,
