@@ -1,0 +1,2 @@
+to run exp publish: function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
+                    npm-do exp publish
