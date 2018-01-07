@@ -1,3 +1,25 @@
+# REACT
+#####
+.DS_STORE
+node_modules
+*~
+*.pyc
+.grunt
+_SpecRunner.html
+__benchmarks__
+remote-repo/
+coverage/
+.module-cache
+fixtures/dom/public/react-dom.js
+fixtures/dom/public/react.js
+test/the-files-to-test.generated.js
+*.log*
+chrome-user-data
+*.sublime-project
+*.sublime-workspace
+*.iml
+.vscode
+
 # XCODE
 #####
 # OS X temporary files that should never be committed
@@ -42,9 +64,6 @@ Builds/
 
 ####
 # Other Xcode files
-profile
-*.hmap
-*.ipa
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
@@ -102,7 +121,6 @@ out/
 
 # Gradle files
 .gradle/
-build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -120,8 +138,6 @@ proguard/
 captures/
 
 # Intellij
-*.iml
-.idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
 .idea/dictionaries
