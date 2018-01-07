@@ -19,6 +19,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "exp": "^47.3.17",
     "expo": "^22.0.0",
     "google-map-react": "^0.25.0",
     "lodash": "^4.17.4",
