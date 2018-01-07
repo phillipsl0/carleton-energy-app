@@ -1,4 +1,3 @@
-testing
 to run exp publish: (if exp is not installed) npm install exp
                     function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
                     npm-do exp publish
