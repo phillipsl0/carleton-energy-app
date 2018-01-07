@@ -1,0 +1,16 @@
+#!/bin/bash
+# go to repo & pull
+cd carleton-energy-app/energy-app-react
+
+response=$(git pull)
+
+echo "$(date + "%T"): $response" | test.txt
+
+# check if there have been changes
+if [ "$response" != "Already up-to-date." ]
+
+# if so, re-publish app
+then
+  function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
+  npm-do exp publish
+fi
