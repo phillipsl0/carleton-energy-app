@@ -1,5 +1,9 @@
 Readme.txt
 
+*Project Overview*
+A Carleton College CS department Comps with the goal of creating an engaging app
+detailing Carleton's energy usage.
+
 *Branch Overview*
 master - stable branch, need to be carefully code-reviewed before merging
 develop - need 1 person to code review before merging
