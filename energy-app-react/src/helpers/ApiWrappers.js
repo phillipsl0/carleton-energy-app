@@ -24,6 +24,18 @@ function getBuildingsList() {
     return buildings;
 }
 
+function getUtilitiesList() {
+    var utilities = ["electricity", "water"];
+
+    return utilities;
+}
+
+function getUnitsList() {
+    var units = {"electricity": "kWh", "water": "Gal"}
+
+    return units;
+}
+
 
 // -------------------- Electricity Generation -------------------------
 
@@ -38,7 +50,7 @@ function getEnergyGenerationOverTime(timeStart, timeEnd, timeScale) {
 
     var table = new Array(numberEntries);
     for (var i = numberEntries-1; i >= 0; i--) {
-        table[i] = [];
+        table[i] = {};
         table[i]["date"] = currentTime.toString();
         table[i]["wind"] = Math.random() * scaleFactorWind * timeframe;
         table[i]["solar"] = Math.random() * scaleFactorSolar * timeframe;
@@ -54,7 +66,7 @@ function getWindGenerationOverTime(timeStart, timeEnd, timeScale) {
     var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
     var table = [];
     for (var i = 0; i < totals.length; i++) {
-        table[i] = [];
+        table[i] = {};
         table[i]["date"] = totals[i]["date"];
         table[i]["wind"] = totals[i]["wind"];
     }
@@ -66,7 +78,7 @@ function getSolarGenerationOverTime(timeStart, timeEnd, timeScale) {
     var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
     var table = [];
     for (var i = 0; i < totals.length; i++) {
-        table[i] = [];
+        table[i] = {};
         table[i]["date"] = totals[i]["date"];
         table[i]["solar"] = totals[i]["solar"];
     }
@@ -74,8 +86,20 @@ function getSolarGenerationOverTime(timeStart, timeEnd, timeScale) {
     return table;
 }
 
+function getTotalGenerationOverTime(timeStart, timeEnd, timeScale) {
+    var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
+    var table = [];
+    for (var i = 0; i < totals.length; i++) {
+        table[i] = {};
+        table[i]["date"] = totals[i]["date"];
+        table[i]["total"] = totals[i]["total"];
+    }
 
-function getTotalEnergyGeneration(timeStart, timeEnd) {
+    return table;
+}
+
+
+function getEnergyGeneration(timeStart, timeEnd) {
     // return value of how much electricity we are generating from wind/solar, etc
     // /api/generation
 
@@ -96,11 +120,15 @@ function getTotalEnergyGeneration(timeStart, timeEnd) {
 }
 
 function getTotalWindGeneration(timeStart, timeEnd) {
-    return getTotalEnergyGeneration(timeStart, timeEnd)["wind"];
+    return getEnergyGeneration(timeStart, timeEnd)["wind"];
 }
 
 function getTotalSolarGeneration(timeStart, timeEnd) {
-    return getTotalEnergyGeneration(timeStart, timeEnd)["solar"];
+    return getEnergyGeneration(timeStart, timeEnd)["solar"];
+}
+
+function getTotalEnergyGeneration(timeStart, timeEnd) {
+    return getEnergyGeneration(timeStart, timeEnd)["total"];
 }
 
 function getCurrentWindGeneration() {
@@ -117,6 +145,14 @@ function getCurrentSolarGeneration() {
     var timeEnd = new Date();
 
     return getTotalSolarGeneration(timeStart, timeEnd);
+}
+
+function getCurrentEnergyGeneration() {
+    var timeStart = new Date();
+    timeStart.setMinutes(timeStart.getMinutes() - 15);
+    var timeEnd = new Date();
+
+    return getTotalEnergyGeneration(timeStart, timeEnd);
 }
 
 
@@ -144,7 +180,7 @@ function getBuildingUtilityConsumptionOverTime(building, utility, timeStart, tim
 
     var table = new Array(numberEntries);
     for (var i = numberEntries-1; i >= 0; i--) {
-        table[i] = [];
+        table[i] = {};
         table[i]["date"] = currentTime.toString();
         table[i][utility] = Math.random() * scaleFactor * timeframe;
 
@@ -216,7 +252,7 @@ function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd, timeSc
 
     var table = new Array(numberEntries);
     for (var i = numberEntries-1; i >= 0; i--) {
-        table[i] = [];
+        table[i] = {};
         table[i]["date"] = currentTime.toString();
         table[i][utility] = Math.random() * scaleFactor * timeframe;
 
@@ -250,5 +286,43 @@ function getCurrentCampusUtilityConsumption(utility) {
     var timeEnd = new Date();
 
     return getTotalCampusUtilityConsumption(utility, building, timeStart, timeEnd);
+}
+
+function getEveryBuildingUtilityConsumption(utility) {
+    var scaleFactor;
+
+    if (utility == "water") {
+        scaleFactor = 400;
+    } else if (utility == "electricity") {
+        scaleFactor = 12; 
+    }
+
+    var buildings = getBuildingsList();
+
+    var total = 0;
+    var table = new Array(buildings.length);
+    for (var i = 0; i < table.length; i++) {
+        table[i] = {};
+        table[i]["building"] = buildings[i];
+        table[i][utility] = Math.random() * scaleFactor;
+        total += table[i][utility];
+    }
+
+    for (var i = 0; i < table.length; i++) {
+        table[i]["percent"] = table[i][utility] / total;
+    }
+
+    table = sortByKey(table, "percent");
+
+    return table;
+}
+
+// Helper function to sory the building list (in descending order)
+function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; 
+        var y = b[key];
+        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+    });
 }
 
