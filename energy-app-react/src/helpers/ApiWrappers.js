@@ -5,36 +5,30 @@
 // 4) (eventually) Data over time to generate graphs
 
 
-function getBuildingUsageOverTime(building, utility, timeStart, timeEnd) {
-    /*
-        parameter   | object type
-        --------------------------
-        'building'  | String 
-        'utility'   | String (options for now: "electricity", "water")
-        'timeStart' | Date
-        'timeEnd'   | Date
-    */
+/* Naming Convention:
+ * getTotal: Returns one number which is the total sum
+ * getOverTime: Returns a table with the numbers divided up based on a given time scale
+ *
+ * Order of variables:
+ * building, utility, timeStart, timeEnd, timeScale
+ */
 
-    // Insert real API call here
 
-    /* RETURN DUMMY DATA (below) */
+function getBuildingsList() {
+    // return list of every building name with data (e.g. "Burton", "Sayles", etc.)
+    // /api/buildings/names
 
-    // different utilities have different "typical" amounts
-    var scaleFactor;
+    var buildings = ["Burton", "Sayles", "Severance", "Davis", "Musser", "Myers", "Cassat",
+                        "Memo", "Nourse", "Evans", "Goodhue", "Watson", "Scoville"];
 
-    if (utility == "water") {
-        scaleFactor = 400;
-    } else if (utility == "electricity") {
-        scaleFactor = 12; 
-    } 
-
-    // calculate number of 15-min chunks b/w 'timeStart' and 'timeEnd'
-    var timeframe = Math.abs(timeEnd - timeStart) / (60000 * 15); // 60,000ms per min * 15min
-
-    return Math.random() * scaleFactor * timeframe; 
-
+    return buildings;
 }
 
+
+// -------------------- Electricity Generation -------------------------
+
+// timeStart, timeEnd are Date objects. 
+// timeScale is the resolution of the data in minutes (e.g. 1 minute vs 15 minute increments)
 function getEnergyGenerationOverTime(timeStart, timeEnd, timeScale) {
     var scaleFactorWind = 400;
     var scaleFactorSolar = 2; 
@@ -125,24 +119,136 @@ function getCurrentSolarGeneration() {
     return getTotalSolarGeneration(timeStart, timeEnd);
 }
 
-function getBuildingsList() {
-    // return list of every building name with data (e.g. "Burton", "Sayles", etc.)
-    // /api/buildings/names
+
+// -------------------- Utility Consumption -------------------------
+
+function getBuildingUtilityConsumptionOverTime(building, utility, timeStart, timeEnd, timeScale) {
+
+    // different utilities have different "typical" amounts
+    var scaleFactor;
+
+    if (utility == "water") {
+        scaleFactor = 400;
+    } else if (utility == "electricity") {
+        scaleFactor = 12; 
+    }
+
+    var buildings = getBuildingsList();
+
+    if (buildings.indexOf(building) % 2 == 0) {
+        scaleFactor *= 2;
+    }
+
+    var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
+    var currentTime = new Date(timeEnd);
+
+    var table = new Array(numberEntries);
+    for (var i = numberEntries-1; i >= 0; i--) {
+        table[i] = [];
+        table[i]["date"] = currentTime.toString();
+        table[i][utility] = Math.random() * scaleFactor * timeframe;
+
+        currentTime.setMinutes(currentTime.getMinutes() - timeScale);
+    }
+
+    return table;
 }
 
-function getBuildingUtilityConsumption(utility, building, timeStart, timeEnd) {
+function getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEnd) {
+    /*
+        parameter   | object type
+        --------------------------
+        'building'  | String 
+        'utility'   | String (options for now: "electricity", "water")
+        'timeStart' | Date
+        'timeEnd'   | Date
+    */
+
     // return value of how much of a resource we have consumed at one building over a time frame
     // /api/buildings/usage/{buildingName}/current?utility={resource}
+
+    // Insert real API call here
+
+    /* RETURN DUMMY DATA (below) */
+
+    // different utilities have different "typical" amounts
+    var scaleFactor;
+
+    if (utility == "water") {
+        scaleFactor = 400;
+    } else if (utility == "electricity") {
+        scaleFactor = 12; 
+    } 
+
+    // calculate number of 15-min chunks b/w 'timeStart' and 'timeEnd'
+    var timeframe = Math.abs(timeEnd - timeStart) / (60000 * 15); // 60,000ms per min * 15min
+
+    return Math.random() * scaleFactor * timeframe; 
 }
 
-function getCurrentBuildingUtilityConsumption(utility, building) {
-    var diff = 15;  // 15 minutes
+function getCurrentBuildingUtilityConsumption(building, utility) {
     var timeStart = new Date();
-    timeStart.setMinutes(timeStart.getMinutes() - diff);
+    timeStart.setMinutes(timeStart.getMinutes() - 15);
+    var timeEnd = new Date();
 
-    return getBuildingUtilityConsumption(utility, building, timeStart, new Date(Date.UTC()));
+    return getTotalBuildingUtilityConsumption(utility, building, timeStart, timeEnd);
 }
 
-function getUtilityConsumption(utility, timeStart, timeEnd) {
+function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd, timeScale) {
+
+    // different utilities have different "typical" amounts
+    var scaleFactor;
+
+    if (utility == "water") {
+        scaleFactor = 1000;
+    } else if (utility == "electricity") {
+        scaleFactor = 120; 
+    }
+
+    var buildings = getBuildingsList();
+
+    if (buildings.indexOf(building) % 2 == 0) {
+        scaleFactor *= 2;
+    }
+
+    var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
+    var currentTime = new Date(timeEnd);
+
+    var table = new Array(numberEntries);
+    for (var i = numberEntries-1; i >= 0; i--) {
+        table[i] = [];
+        table[i]["date"] = currentTime.toString();
+        table[i][utility] = Math.random() * scaleFactor * timeframe;
+
+        currentTime.setMinutes(currentTime.getMinutes() - timeScale);
+    }
+
+    return table;
+}
+
+function getTotalCampusUtilityConsumption(utility, timeStart, timeEnd) {
     // return total campus consumption of utitlity over specified time frame
+
+    // different utilities have different "typical" amounts
+    var scaleFactor;
+
+    if (utility == "water") {
+        scaleFactor = 1000;
+    } else if (utility == "electricity") {
+        scaleFactor = 120; 
+    } 
+
+    // calculate number of 15-min chunks b/w 'timeStart' and 'timeEnd'
+    var timeframe = Math.abs(timeEnd - timeStart) / (60000 * 15); // 60,000ms per min * 15min
+
+    return Math.random() * scaleFactor * timeframe; 
 }
+
+function getCurrentCampusUtilityConsumption(utility) {
+    var timeStart = new Date();
+    timeStart.setMinutes(timeStart.getMinutes() - 15);
+    var timeEnd = new Date();
+
+    return getTotalCampusUtilityConsumption(utility, building, timeStart, timeEnd);
+}
+
