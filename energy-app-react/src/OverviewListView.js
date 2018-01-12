@@ -7,17 +7,21 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import OverviewCards from './OverviewCards'
 import Graph from './visualizations/Graph'
+import { GetStyle } from './styling/Themes'
+import CurrTheme from './styling/CurrentTheme'
 
 const OverviewListView = ({navigation}) => {
+    const themeStyles = GetStyle(CurrTheme);
+
    return (
      <List
-       style={styles.list}>
+       style={styles.list, themeStyles.listColoring}>
        <FlatList
          data={OverviewCards}
          keyExtractor={item => item.title}
          renderItem={({ item }) => (
            <Card
-             containerStyle={styles.cardContainer}
+             containerStyle={styles.cardContainer, themeStyles.cardContainerColoring}
              title={item.title}>
              <Graph
                 type={item.graphType}
@@ -37,8 +41,9 @@ const OverviewListView = ({navigation}) => {
 }
 
 const CardView = ({ navigation }) => {
+    const themeStyles = GetStyle(CurrTheme);
     return (
-        <View style={styles.container}>
+        <View style={themeStyles.containerColoring, styles.container}>
           <Graph
             type={navigation.state.params.graphType}
             graphData={navigation.state.params.data}/>
@@ -67,12 +72,9 @@ const styles = StyleSheet.create({
       flex: 0.8,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#F5FCFF',
   },
   cardContainer: {
     flex: 1,
-    backgroundColor: 'white',
-    borderColor: '#e1e8ee',
     borderWidth: 1,
     borderRadius: 3,
     padding: 15,
@@ -80,7 +82,6 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     ...Platform.select({
       ios: {
-        shadowColor: 'rgba(0,0,0, .2)',
         shadowOffset: {height: 0, width: 0},
         shadowOpacity: 1,
         shadowRadius: 1
@@ -94,7 +95,6 @@ const styles = StyleSheet.create({
       flex: 1,
       marginLeft: '3%',
       marginRight: '3%',
-      backgroundColor: 'white',
   },
   button: {
     paddingTop: 20,

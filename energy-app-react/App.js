@@ -10,26 +10,15 @@ import OverviewStack from './src/OverviewListView';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 
-
-//
-//export default StackNavigator({
-//    SplashScreen: {
-//        screen: SplashScreen,
-//    },
-//    MainNavigator: {
-//        screen: RootTabs,
-//    }
-//})
-
-const RootTabs = TabNavigator(
-  { Overview: {
+const RootTabs = TabNavigator({
+    Overview: {
       screen: OverviewStack,
-      navigationOptions: ({ navigation }) => ({
+      navigationOptions: {
         tabBarLabel: 'Overview',
         tabBarIcon: ({ tintColor, focused }) => (
           <FontAwesome name="tachometer" size={20} color={focused ? "#4F8EF7" : "#d3d3d3"} />
         ),
-      }),
+      },
     },
     Buildings: {
       screen: BuildingListView,
@@ -77,6 +66,5 @@ const RootTabs = TabNavigator(
          }
        })
 });
-
 
 export default RootTabs;
