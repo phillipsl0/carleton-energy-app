@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StatusBar, StyleSheet, Dimensions } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Polygon } from 'react-native-maps';
 /*
 Google API Key:
 AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI 
@@ -9,24 +9,72 @@ const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 var {screen_height, screen_width} = Dimensions.get('window');
 
 /*
-Using tutorial: https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/#
+Using tutorials:
+https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/#
+Polygon onPress: https://snack.expo.io/H1L9ClUGW
 */
 
 class HeatMapView extends Component {
   constructor(props) {
     super(props);
     
-    let polygons = []
-    //      countries.forEach((country) =>{
-    //   country.polygons.forEach((p) => {
-    //     polygons.push(p) 
-    //   })
-    // })
-
     // Turn fixed regions into state
     this.state = {
+      polygons: [
+        {
+          coordinates: [
+            {latitude: 44.461528, longitude: -93.153344}, // NE
+            {latitude: 44.461528, longitude: -93.153509}, // NW
+            {latitude: 44.461245, longitude: -93.153505}, // SW
+            {latitude: 44.461245, longitude: -93.153342} // SE
+          ],
+          id: "Old Music Hall",
+          open: false,
+          color: "yellow" // change based on data
+        },
+        {
+          coordinates: [
+            {latitude: 44.46012211, longitude: -93.15711826}, //NE
+            {latitude: 44.46012211, longitude: -93.15734357}, //NW
+            {latitude: 44.45973158, longitude: -93.15734357}, //SW
+            {latitude: 44.45973158, longitude: -93.15711826} //SE
+          ],
+          id: "Musser",
+          open: false,
+          color: "blue",
+        },
+        {
+          coordinates: [
+            {latitude: 44.46060358, longitude: -93.15181822}, //NE - lower theater
+            {latitude: 44.4606055, longitude: -93.15172836}, //SE - lower theater
+            {latitude: 44.46075865, longitude: -93.15172836}, //NE - upper theater
+            {latitude: 44.46075865, longitude: -93.1519644}, //NW - upper theater
+            {latitude: 44.46072993, longitude: -93.1519644}, //SW - lower theater
+            {latitude: 44.46072993, longitude: -93.15201804}, //NW - upper outer
+            {latitude: 44.46066484, longitude: -93.15201938}, //SW - upper outer
+            {latitude: 44.46066389, longitude: -93.1519644}, //NW - upper inner
+            {latitude: 44.4603997, longitude: -93.1519644}, //SW - lower inner
+            {latitude: 44.4603997, longitude: -93.15200865}, //NW - lower inner
+            {latitude: 44.46032408, longitude: -93.15200865}, //SW - lowest
+            {latitude: 44.46032408, longitude: -93.15181822} //SE - lowest
+          ],
+          id: "Norse",
+          open: false,
+          color: "lightgreen",
+        },
+        {
+          coordinates: [
+            {latitude: 44.45949419, longitude: -93.15014988}, //NE
+            {latitude: 44.45949419, longitude: -93.15048516}, //NW
+            {latitude: 44.45923, longitude: -93.15048516}, //SW
+            {latitude: 44.45923, longitude: -93.15014988} //SE
+          ],
+          id: "Watson",
+          open: false,
+          color: "lightblue",
+        },
+      ],
       // Initial region is Carleton's coordinates
-      polygons: polygons,
       region: {
         // Carleton's coordinates
         latitude: 44.46107356,
@@ -37,17 +85,6 @@ class HeatMapView extends Component {
     };
     // Holder for previous state to help control scrolling
     this.prev_state = {
-      polygons: {
-        polygon: {
-          coordinates: [
-            {latitude: 44.461520, longitude: -93.153344},
-            {latitude: 44.461528, longitude: -93.153488},
-            {latitude: 44.461251, longitude: -93.153488},
-            {latitude: 44.461245, longitude: -93.153342}
-          ],
-          id: "Music Hall"
-        }
-      },
       region: {
         // Carleton's coordinates
         latitude: 44.46107356,
@@ -64,8 +101,9 @@ class HeatMapView extends Component {
     // Check to make sure region is within bounds of Carleton
     if (((region.latitude <= 44.46316089) && (region.latitude >= 44.45690153)) && ((region.longitude <= -93.14903207) && (region.longitude >= -93.15727215))) {
       this.setState({ region });
+      // Update region if within bounds
       this.prev_state.region = region;
-    // Limits to previous state
+    // If user scrolls beyond Carleton's region, revert back to previous state
     } else {
       this.refs.map.animateToRegion(this.prev_state.region);
       //this.setState(this.prev_state.region);
@@ -76,6 +114,18 @@ class HeatMapView extends Component {
   // See issue: https://github.com/airbnb/react-native-maps/issues/1447
   onPolygonPress(polygon) {
     console.log('onPress');
+  }
+
+  toggle(polygon) {
+    console.log('onPress', polygon.id);
+
+    // if (polygon.open) {
+    //   polygon.marker.hideCallout();
+    // } else {
+    //   polygon.marker.showCallout();
+    // }
+
+    // polygon.open = !polygon.open;
   }
 
   render() {
@@ -90,6 +140,7 @@ class HeatMapView extends Component {
             LongitudeDelta: {this.state.region.longitudeDelta}
           </Text>
         </View>
+        
         <View style={styles.container}>
           <MapView
             ref="map"
@@ -104,27 +155,25 @@ class HeatMapView extends Component {
             
             region={this.state.region}
             onRegionChange={this.onRegionChange}>
-              <MapView.Polygon
-                key="Old Music Hall"
-                coordinates={[
-                  {latitude: 44.461528, longitude: -93.153344}, // NE
-                  {latitude: 44.461528, longitude: -93.153509}, // NW
-                  {latitude: 44.461245, longitude: -93.153505}, // SW
-                  {latitude: 44.461245, longitude: -93.153342} // SE
-                ]}
-                //coordinates={ coords }
-                strokeWidth={5}
-                strokeColor="yellow"
-                fillColor="yellow"
-                onPress={() => this.onPolygonPress(polygon)}
-              />
+              {this.state.polygons.map((polygon, index) => (
+                /* Renders polygons from list */
+                <View key={polygon.id}>
+                  <Polygon
+                    coordinates={polygon.coordinates}
+                    // sets color + fill + width
+                    strokeWidth={5}
+                    strokeColor={polygon.color}
+                    fillColor={polygon.color}
+                    onPress={() => this.toggle(polygon)}
+                  />
+                </View>
+              ))}
           </MapView> 
         </View>
       </View>
     );
   }
 }
-
 
 
 const styles = StyleSheet.create({
