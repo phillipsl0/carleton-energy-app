@@ -31,7 +31,7 @@
     "react-native": "^0.49.5",
     "react-native-elements": "^0.17.0",
     "react-native-maps": "^0.17.1",
-    "react-native-table-component": "^1.1.2",
+    "react-native-table-component": "^1.1.3",
     "react-native-vector-icons": "^4.4.2",
     "react-navigation": "1.0.0-beta.15",
     "victory-native": "^0.15.0"
