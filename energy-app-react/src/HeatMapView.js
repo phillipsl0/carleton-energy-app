@@ -22,6 +22,7 @@ class HeatMapView extends Component {
     // Get drawn polygon coordinates: http://www.birdtheme.org/useful/v3tool.html
     // Get exact point lat/long: http://www.mapcoordinates.net/en
     this.state = {
+      lastBuildingPressed: "No buildings have been pressed",
       polygons: [
         // {
         //   coordinates: [
@@ -337,20 +338,20 @@ class HeatMapView extends Component {
       // Initial region is Carleton's coordinates
       region: {
         // Carleton's coordinates
-        latitude: 44.46107356,
-        longitude: -93.1542989,
-        latitudeDelta: 0.003861, //0.00475503 previously
-        longitudeDelta: 0.003916, //0.004325397 previously
+        latitude: 44.4606925434,
+        longitude: -93.1533574685,
+        latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
+        longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
       }
     };
     // Holder for previous state to help control scrolling
     this.prev_state = {
       region: {
         // Carleton's coordinates
-        latitude: 44.46107356,
-        longitude: -93.1542989,
-        latitudeDelta: 0.003861, //0.00475503 previously
-        longitudeDelta: 0.003916, //0.004325397 previously
+        latitude: 44.4606925434,
+        longitude: -93.1533574685,
+        latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
+        longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
       }
     }
     this.onRegionChange = this.onRegionChange.bind(this);
@@ -370,14 +371,10 @@ class HeatMapView extends Component {
     }
   }
 
-  /* iOS Bug: onPress doesn't work if provider=... enabled!! */
-  // See issue: https://github.com/airbnb/react-native-maps/issues/1447
-  onPolygonPress(polygon) {
-    console.log('onPress');
-  }
-
+  // Called when a polygon is pressed
   toggle(polygon) {
     console.log('onPress', polygon.id);
+    this.setState({lastBuildingPressed: polygon.id})
 
     // if (polygon.open) {
     //   polygon.marker.hideCallout();
@@ -389,58 +386,55 @@ class HeatMapView extends Component {
   }
 
   render() {
-    //let coords = this.state.polygons.polygon.coordinates
     return (
-      <View style={{ flex: 1 }}>
-        <View style={{ backgroundColor: 'white', height: 100, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>
-            Latitude: {this.state.region.latitude}{'\n'}
-            Longitude: {this.state.region.longitude}{'\n'}
-            LatitudeDelta: {this.state.region.latitudeDelta}{'\n'}
-            LongitudeDelta: {this.state.region.longitudeDelta}
-          </Text>
-        </View>
-        
-        <View style={styles.container}>
-          <MapView
-            ref="map"
-            provider = { PROVIDER_GOOGLE } // show buildings on OS
-            style={styles.map}
-            showsTraffic={false}
-            //zoomEnabled={false} // stops user from zooming
-            
-            loadingEnabled // shows loading indicator while map loads
-            loadingIndicatorColor="#666666"
-            loadingBackgroundColor="#eeeeee"
-            
-            region={this.state.region}
-            onRegionChange={this.onRegionChange}>
-              {this.state.polygons.map((polygon, index) => (
-                /* Renders polygons from list */
-                <View key={polygon.id}>
-                  <Polygon
-                    coordinates={polygon.coordinates}
-                    // sets color + fill + width
-                    strokeWidth={5}
-                    strokeColor={polygon.color}
-                    fillColor={polygon.color}
-                    onPress={() => this.toggle(polygon)}
-                  />
-                </View>
-              ))}
-          </MapView> 
-        </View>
+      <View style={styles.container}>
+        <MapView
+          ref="map"
+          provider = { PROVIDER_GOOGLE } // show buildings on OS
+          style={styles.map}
+          showsTraffic={false}
+          //zoomEnabled={false} // stops user from zooming
+          
+          loadingEnabled // shows loading indicator while map loads
+          loadingIndicatorColor="#666666"
+          loadingBackgroundColor="#eeeeee"
+          
+          region={this.state.region}
+          onRegionChange={this.onRegionChange}>
+            {this.state.polygons.map((polygon, index) => (
+              /* Renders polygons from list */
+              <View key={polygon.id}>
+                <Polygon
+                  tappable={true} // enables onPress - default is false on iOS
+                  coordinates={polygon.coordinates}
+                  
+                  // sets color + fill + width
+                  strokeWidth={5}
+                  strokeColor={polygon.color}
+                  fillColor={polygon.color}
+                 
+                  onPress={() => this.toggle(polygon)}
+                />
+              </View>
+            ))}
+        </MapView> 
+        <Text style={{ position: 'absolute', bottom: 100 }}>
+          Latitude: {this.state.region.latitude}{'\n'}
+          Longitude: {this.state.region.longitude}{'\n'}
+          LatitudeDelta: {this.state.region.latitudeDelta}{'\n'}
+          LongitudeDelta: {this.state.region.longitudeDelta}{'\n'}
+          Last Building Pressed: {this.state.lastBuildingPressed}
+        </Text>
       </View>
     );
   }
 }
 
-
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    top: 100,
-    justifyContent: 'flex-end',
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center'
   },
   map: {
@@ -449,9 +443,9 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
-    width: screen_width,
-    height: screen_height
+    bottom: 300,
+    //width: screen_width,
+    //height: screen_height
   }
 });
 
