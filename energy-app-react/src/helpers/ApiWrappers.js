@@ -1,3 +1,8 @@
+import buildingsDetail from './BuildingsDetail';
+import news from '.SustainabilityNews';
+import events from '.SustainabilityEvents';
+
+
 // 1) For a given building, resource and timeframe, return (from API) 
 //      a single value (e.g. gal/week in Burton)
 // 2) Energy the windmill generated within a specified timeframe
@@ -24,6 +29,10 @@ function getBuildingsList() {
     return buildings;
 }
 
+function getBuildingsDetail() {
+    return buildingsDetail;
+}
+
 function getUtilitiesList() {
     var utilities = ["electricity", "water"];
 
@@ -34,6 +43,20 @@ function getUnitsList() {
     var units = {"electricity": "kWh", "water": "Gal"}
 
     return units;
+}
+
+function getSustainabilityNews() {
+    // https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton
+    // https://api.rss2json.com/v1/api.json?
+    //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fblogs%2Fsustaining_carleton
+    return news;
+}
+
+function getSustainabilityEvents() {
+    // https://apps.carleton.edu/sustainability/feeds/events
+    // https://api.rss2json.com/v1/api.json?
+    //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fevents
+    return events;
 }
 
 
