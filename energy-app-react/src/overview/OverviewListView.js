@@ -6,26 +6,29 @@ import { VictoryContainer, VictoryChart } from "victory-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import OverviewCards from './OverviewCards'
-import Graph from './visualizations/Graph'
-import { GetStyle } from './styling/Themes'
-import CurrTheme from './styling/CurrentTheme'
+import ExampleData from './OverviewExampleData'
+import Graph from './../visualizations/Graph'
+import { GetStyle } from './../styling/Themes'
+import CurrTheme from './../styling/CurrentTheme'
 
 const OverviewListView = ({navigation}) => {
     const themeStyles = GetStyle(CurrTheme);
 
-   return (
+    return (
      <List
-       style={styles.list, themeStyles.listColoring}>
+       style={[styles.list, themeStyles.listColoring]}>
        <FlatList
-         data={OverviewCards}
+         data={ExampleData}
          keyExtractor={item => item.title}
          renderItem={({ item }) => (
            <Card
-             containerStyle={styles.cardContainer, themeStyles.cardContainerColoring}
+             containerStyle={[styles.cardContainer, themeStyles.cardContainerColoring]}
              title={item.title}>
+             <View style={styles.container, themeStyles.containerColoring}>
              <Graph
                 type={item.graphType}
-                graphData={item.data}/>
+                graphData={item.data.day}/>
+             </View>
              <Button
                 rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                 fontSize={20}
@@ -40,17 +43,6 @@ const OverviewListView = ({navigation}) => {
    );
 }
 
-const CardView = ({ navigation }) => {
-    const themeStyles = GetStyle(CurrTheme);
-    return (
-        <View style={themeStyles.containerColoring, styles.container}>
-          <Graph
-            type={navigation.state.params.graphType}
-            graphData={navigation.state.params.data}/>
-        </View>
-    );
-}
-
 const OverviewStack = StackNavigator({
     OverviewListView: {
         screen: OverviewListView,
@@ -60,7 +52,7 @@ const OverviewStack = StackNavigator({
     },
     CardView: {
         path: 'OverviewCards/:title',
-        screen: CardView,
+        screen: OverviewCards,
         navigationOptions: ({ navigation }) => ({
               title: `${navigation.state.params.title}`,
             }),

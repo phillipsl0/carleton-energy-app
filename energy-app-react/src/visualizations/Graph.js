@@ -13,17 +13,14 @@ class Graph extends Component {
 
         if (this.props.type=='pie') {
             return (
-                <View style={styles.container, themeStyles.containerColoring}>
                 <VictoryPie
-                    padding={{ top: 50, bottom: 50, left: 95, right: 85}}
                     height={300}
                     width={300}
+                    padding={{ top: 50, bottom: 50, left: 95, right: 85 }}
                     data={this.props.graphData}/>
-                </View>
             )
         } else if (this.props.type=='bar') {
             return (
-            <View style={styles.container, themeStyles.containerColoring}>
                 <VictoryChart
                     height={300}
                     width={300}
@@ -32,15 +29,12 @@ class Graph extends Component {
                     <VictoryBar
                         data={this.props.graphData}/>
                 </VictoryChart>
-                </View>
             )
         } else {
             return (
-            <View style={styles.container, themeStyles.containerColoring}>
                 <VictoryChart>
                 <VictoryBar/>
                 </VictoryChart>
-            </View>
             )
         }
     }

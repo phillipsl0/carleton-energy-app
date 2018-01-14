@@ -6,7 +6,7 @@ import MapView from 'react-native-maps';
 
 import BuildingListView from './src/BuildingListView';
 import HeatMapView from './src/HeatMapView'
-import OverviewStack from './src/OverviewListView';
+import OverviewStack from './src/overview/OverviewListView';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 
