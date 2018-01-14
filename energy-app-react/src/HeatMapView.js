@@ -357,7 +357,7 @@ class HeatMapView extends Component {
     this.onRegionChange = this.onRegionChange.bind(this);
   }
 
-  // Tracks map position as user scrolls and zooms
+  // Called when location/zoom are changed with new location/zoom
   onRegionChange(region) {
     // Check to make sure region is within bounds of Carleton
     if (((region.latitude <= 44.46316089) && (region.latitude >= 44.45690153)) && ((region.longitude <= -93.14903207) && (region.longitude >= -93.15727215))) {
@@ -366,8 +366,7 @@ class HeatMapView extends Component {
       this.prev_state.region = region;
     // If user scrolls beyond Carleton's region, revert back to previous state
     } else {
-      this.refs.map.animateToRegion(this.prev_state.region);
-      //this.setState(this.prev_state.region);
+      this.setState(this.prev_state.region);
     }
   }
 
