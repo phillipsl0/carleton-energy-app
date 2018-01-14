@@ -23,17 +23,17 @@ class HeatMapView extends Component {
     // Get exact point lat/long: http://www.mapcoordinates.net/en
     this.state = {
       polygons: [
-        {
-          coordinates: [
-            {latitude: 44.461528, longitude: -93.153344}, // NE
-            {latitude: 44.461528, longitude: -93.153509}, // NW
-            {latitude: 44.461245, longitude: -93.153505}, // SW
-            {latitude: 44.461245, longitude: -93.153342} // SE
-          ],
-          id: "Old Music Hall",
-          open: false,
-          color: "yellow" // change based on data
-        },
+        // {
+        //   coordinates: [
+        //     {latitude: 44.461528, longitude: -93.153344}, // NE
+        //     {latitude: 44.461528, longitude: -93.153509}, // NW
+        //     {latitude: 44.461245, longitude: -93.153505}, // SW
+        //     {latitude: 44.461245, longitude: -93.153342} // SE
+        //   ],
+        //   id: "Old Music Hall",
+        //   open: false,
+        //   color: "yellow" // change based on data
+        // },
         {
           coordinates: [
             {latitude: 44.46012211, longitude: -93.15711826}, //NE
@@ -257,7 +257,7 @@ class HeatMapView extends Component {
           ],
           id: "Evans",
           open: false,
-          color: "green",
+          color: "yellow",
         },
         {
           coordinates: [
