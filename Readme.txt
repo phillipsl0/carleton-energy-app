@@ -11,3 +11,7 @@ feature/- branch for each feature, don't need to code review before merging to e
 
 *Style*
 naming: no more than 3 words, lower case, separated by dashes (i.e. building-cards)
+
+*Carleton Colors*
+Blue - #0B5091
+Maize - #F3B61D
