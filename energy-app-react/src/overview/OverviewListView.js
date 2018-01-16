@@ -27,13 +27,14 @@ const OverviewListView = ({navigation}) => {
              <View style={styles.container, themeStyles.containerColoring}>
              <Graph
                 type={item.graphType}
-                graphData={item.data.day}/>
+                graphData={item.data.day.graph}/>
              </View>
              <Button
                 rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                 fontSize={20}
                 title='More'
                 style={styles.button}
+                backgroundColor='#0B5091'
                 onPress={() => navigation.navigate('CardView',
                                  {graphType:item.graphType, data:item.data, title: item.title})}/>
            </Card>
@@ -42,12 +43,18 @@ const OverviewListView = ({navigation}) => {
      </List>
    );
 }
-
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    }
+})
 const OverviewStack = StackNavigator({
     OverviewListView: {
         screen: OverviewListView,
         navigationOptions: {
             title: 'Overview',
+            headerTintColor: 'white',
+            headerStyle: navStyles.header,
         }
     },
     CardView: {
@@ -55,9 +62,15 @@ const OverviewStack = StackNavigator({
         screen: OverviewCards,
         navigationOptions: ({ navigation }) => ({
               title: `${navigation.state.params.title}`,
+              headerTintColor: 'white',
+              headerStyle: navStyles.header,
             }),
-    },
-});
+    }},
+    {
+        headerTintColor: '#0B5091'
+
+    }
+);
 
 const styles = StyleSheet.create({
   container: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, StyleSheet  } from 'react-native';
 import { TabNavigator, NavigationActions } from 'react-navigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MapView from 'react-native-maps';
@@ -10,13 +10,23 @@ import OverviewStack from './src/overview/OverviewListView';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 
+const navStyle = StyleSheet.create({
+    header: {
+        ...Platform.select({
+           android: {
+           marginTop: 24
+           }
+        })
+    },
+})
+
 const RootTabs = TabNavigator({
     Overview: {
       screen: OverviewStack,
       navigationOptions: {
         tabBarLabel: 'Overview',
         tabBarIcon: ({ tintColor, focused }) => (
-          <FontAwesome name="tachometer" size={20} color={focused ? "#4F8EF7" : "#d3d3d3"} />
+          <FontAwesome name="tachometer" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
         ),
       },
     },
@@ -25,7 +35,7 @@ const RootTabs = TabNavigator({
       navigationOptions: {
         tabBarLabel: 'Buildings',
         tabBarIcon: ({ tintColor, focused }) => (
-          <FontAwesome name="building" size={20} color={focused ? "#4F8EF7" : "#d3d3d3"} />
+          <FontAwesome name="building" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
         ),
       },
     },
@@ -34,20 +44,14 @@ const RootTabs = TabNavigator({
         navigationOptions: {
           tabBarLabel: 'Heat Map',
           tabBarIcon: ({ tintColor, focused }) => (
-            <FontAwesome name="fire" size={20} color={focused ? "#4F8EF7" : "#d3d3d3"} />
+            <FontAwesome name="fire" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
           ),
         },
       }
   },
    { tabBarOptions:
         // fixes top margin error in android
-        { style:
-          Platform.select({
-           android: {
-           marginTop: 24
-           }
-         })
-         },
+        { style: navStyle.header},
      navigationOptions: ({ navigation }) => ({
          tabBarOnPress: (tab, jumpToIndex) => {
            // resets stack in tabs if their icon is tapped while focused
