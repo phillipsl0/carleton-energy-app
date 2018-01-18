@@ -3,23 +3,24 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Dimensions } from 'react-native'
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
+import { GetStyle } from './../styling/Themes'
+import CurrTheme from './../styling/CurrentTheme'
 
 
 class Graph extends Component {
     render() {
+        const themeStyles = GetStyle(CurrTheme);
+
         if (this.props.type=='pie') {
             return (
-                <View style={styles.container}>
                 <VictoryPie
-                    padding={{ top: 50, bottom: 50, left: 95, right: 85}}
                     height={300}
                     width={300}
+                    padding={{ top: 50, bottom: 50, left: 95, right: 85 }}
                     data={this.props.graphData}/>
-                </View>
             )
         } else if (this.props.type=='bar') {
             return (
-            <View style={styles.container}>
                 <VictoryChart
                     height={300}
                     width={300}
@@ -28,15 +29,12 @@ class Graph extends Component {
                     <VictoryBar
                         data={this.props.graphData}/>
                 </VictoryChart>
-                </View>
             )
         } else {
             return (
-            <View style={styles.container}>
                 <VictoryChart>
                 <VictoryBar/>
                 </VictoryChart>
-            </View>
             )
         }
     }
@@ -59,7 +57,6 @@ const styles = StyleSheet.create({
       flex: 0.8,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#F5FCFF',
   },
 })
 
