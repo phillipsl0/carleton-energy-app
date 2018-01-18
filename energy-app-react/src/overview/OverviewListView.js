@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native'
 import { StackNavigator } from 'react-navigation';
 import { List, Card, Button } from 'react-native-elements'
-import { VictoryContainer, VictoryChart } from "victory-native";
+import { VictoryContainer, VictoryChart, VictoryTheme } from "victory-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import OverviewCards from './OverviewCards'
@@ -16,24 +16,27 @@ const OverviewListView = ({navigation}) => {
 
     return (
      <List
-       style={[styles.list, themeStyles.listColoring]}>
+       style={[styles.list, themeStyles.list]}>
        <FlatList
          data={ExampleData}
          keyExtractor={item => item.title}
          renderItem={({ item }) => (
            <Card
-             containerStyle={[styles.cardContainer, themeStyles.cardContainerColoring]}
-             title={item.title}>
-             <View style={styles.container, themeStyles.containerColoring}>
+             containerStyle={[styles.card, themeStyles.card]}
+             title={item.title}
+             titleStyle={styles.title}>
+             <View style={styles.container, themeStyles.container}>
              <Graph
                 type={item.graphType}
-                graphData={item.data.day}/>
+                theme={VictoryTheme.grayscale}
+                graphData={item.data.current}/>
              </View>
              <Button
                 rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                 fontSize={20}
                 title='More'
-                style={styles.button}
+                containerViewStyle={styles.button}
+                backgroundColor='#0B5091'
                 onPress={() => navigation.navigate('CardView',
                                  {graphType:item.graphType, data:item.data, title: item.title})}/>
            </Card>
@@ -42,30 +45,45 @@ const OverviewListView = ({navigation}) => {
      </List>
    );
 }
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    }
+})
 
 const OverviewStack = StackNavigator({
     OverviewListView: {
         screen: OverviewListView,
-        navigationOptions: {
+        navigationOptions: ({ navigation }) => ({
             title: 'Overview',
-        }
+            headerTintColor: 'white',
+            headerStyle: navStyles.header,
+        }),
     },
     CardView: {
         path: 'OverviewCards/:title',
         screen: OverviewCards,
         navigationOptions: ({ navigation }) => ({
               title: `${navigation.state.params.title}`,
+              headerTintColor: 'white',
+              headerStyle: navStyles.header,
             }),
-    },
-});
+    }},
+    {
+        headerTintColor: '#0B5091'
+
+    }
+);
 
 const styles = StyleSheet.create({
+  title: {
+  },
   container: {
       flex: 0.8,
       justifyContent: 'center',
       alignItems: 'center',
   },
-  cardContainer: {
+  card: {
     flex: 1,
     borderWidth: 1,
     borderRadius: 3,
@@ -89,9 +107,7 @@ const styles = StyleSheet.create({
       marginRight: '3%',
   },
   button: {
-    paddingTop: 20,
-    paddingLeft: 30,
-    paddingRight: 30,
+    marginTop: '3%',
   },
 })
 

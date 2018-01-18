@@ -1,10 +1,10 @@
 import { StyleSheet, Platform } from 'react-native'
 
 const DefaultTheme = StyleSheet.create({
-    containerColoring: {
+    container: {
         backgroundColor: '#F5FCFF',
     },
-    cardContainerColoring: {
+    card: {
         backgroundColor: 'white',
         borderColor: '#e1e8ee',
         ...Platform.select({
@@ -12,10 +12,13 @@ const DefaultTheme = StyleSheet.create({
                 shadowColor: 'rgba(0,0,0, .2)',
               },})
     },
-    listColoring: {
+    cardFocused: {
+        backgroundColor: '#0B5091'
+    },
+    list: {
         backgroundColor: 'white',
     },
-    listItemColoring: {
+    listItem: {
         borderBottomColor: '#c8c7cc',
     }
 
