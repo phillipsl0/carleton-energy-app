@@ -5,7 +5,8 @@
     "sdkVersion": "22.0.0",
     "splash": {
       "image": "./src/assets/animated-splash.png",
-      "resizeMode": "cover"
+      "resizeMode": "cover",
+      "backgroundColor": "#0B5091"
     },
     "orientation": "portrait",
     "primaryColor": "#F3B61D",
