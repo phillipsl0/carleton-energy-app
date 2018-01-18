@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StatusBar, StyleSheet, Dimensions } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Polygon } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
 /*
 Google API Key:
 AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI 
@@ -12,7 +12,10 @@ var {screen_height, screen_width} = Dimensions.get('window');
 Using tutorials:
 https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/#
 Polygon onPress: https://snack.expo.io/H1L9ClUGW
+Animated region with scroll cards: https://codedaily.io/tutorials/9/Build-a-Map-with-Custom-Animated-Markers-and-Region-Focus-when-Content-is-Scrolled-in-React-Native
 */
+
+// ** if want to use user's location, set up geolocation in componentWillMount(): https://school.shoutem.com/lectures/geolocation-app-react-native/
 
 class HeatMapView extends Component {
   constructor(props) {
@@ -44,7 +47,7 @@ class HeatMapView extends Component {
           ],
           id: "Musser",
           open: false,
-          color: "blue",
+          color: "yellow",
         },
         {
           coordinates: [
@@ -63,7 +66,7 @@ class HeatMapView extends Component {
           ],
           id: "Nourse",
           open: false,
-          color: "lightgreen",
+          color: "red",
         },
         {
           coordinates: [
@@ -74,7 +77,7 @@ class HeatMapView extends Component {
           ],
           id: "Watson",
           open: false,
-          color: "lightblue",
+          color: "yellow",
         },
         {
           coordinates: [
@@ -101,7 +104,7 @@ class HeatMapView extends Component {
           ],
           id: "Burton",
           open: false,
-          color: "purple",
+          color: "lightgreen",
         },
         {
           coordinates: [
@@ -134,7 +137,7 @@ class HeatMapView extends Component {
           ],
           id: "Davis",
           open: false,
-          color: "red",
+          color: "yellow",
         },
         {
           coordinates: [
@@ -158,7 +161,7 @@ class HeatMapView extends Component {
           ],
           id: "Sayles",
           open: false,
-          color: "orange",
+          color: "yellow",
         },
         {
           coordinates: [
@@ -190,7 +193,7 @@ class HeatMapView extends Component {
           ],
           id: "Memo",
           open: false,
-          color: "pink",
+          color: "lightgreen",
         },
         {
           coordinates: [
@@ -234,7 +237,7 @@ class HeatMapView extends Component {
           ],
           id: "Cassat",
           open: false,
-          color: "green",
+          color: "lightgreen",
         },
         {
           coordinates: [
@@ -258,7 +261,7 @@ class HeatMapView extends Component {
           ],
           id: "Evans",
           open: false,
-          color: "yellow",
+          color: "lightgreen",
         },
         {
           coordinates: [
@@ -270,7 +273,7 @@ class HeatMapView extends Component {
           ],
           id: "Myers",
           open: false,
-          color: "magenta",
+          color: "yellow",
         },
         {
           coordinates: [
@@ -294,7 +297,7 @@ class HeatMapView extends Component {
           ],
           id: "Goodhue",
           open: false,
-          color: "violet",
+          color: "red",
         },
         {
           coordinates: [
@@ -310,7 +313,7 @@ class HeatMapView extends Component {
           ],
           id: "Scoville",
           open: false,
-          color: "cyan",
+          color: "lightgreen",
         },
         {
           coordinates: [
@@ -332,7 +335,7 @@ class HeatMapView extends Component {
           ],
           id: "Sevy",
           open: false,
-          color: "plum",
+          color: "red",
         },
       ],
       // Initial region is Carleton's coordinates
@@ -346,6 +349,13 @@ class HeatMapView extends Component {
     };
     // Holder for previous state to help control scrolling
     this.prev_state = {
+      // region: { Previous for when bottom @ 300
+      //   // Carleton's coordinates
+      //   latitude: 44.4606925434,
+      //   longitude: -93.1533574685,
+      //   latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
+      //   longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
+      // }
       region: {
         // Carleton's coordinates
         latitude: 44.4606925434,
@@ -375,13 +385,13 @@ class HeatMapView extends Component {
     console.log('onPress', polygon.id);
     this.setState({lastBuildingPressed: polygon.id})
 
-    // if (polygon.open) {
-    //   polygon.marker.hideCallout();
-    // } else {
-    //   polygon.marker.showCallout();
-    // }
+    if (polygon.open) {
+      polygon.marker.hideCallout();
+    } else {
+      polygon.marker.showCallout();
+    }
 
-    // polygon.open = !polygon.open;
+    polygon.open = !polygon.open;
   }
 
   render() {
@@ -414,10 +424,19 @@ class HeatMapView extends Component {
                  
                   onPress={() => this.toggle(polygon)}
                 />
+                  <Marker
+                   ref={ref => polygon.marker = ref}
+                   coordinate={polygon.coordinates[0]}
+                   opacity={0.0} //hides markers
+                  >
+                    <Callout>
+                      <Text> {this.state.lastBuildingPressed} </Text>
+                    </Callout>
+                  </Marker>
               </View>
             ))}
         </MapView> 
-        <Text style={{ position: 'absolute', bottom: 100 }}>
+        <Text style={{ position: 'absolute', bottom: 10 }}>
           Latitude: {this.state.region.latitude}{'\n'}
           Longitude: {this.state.region.longitude}{'\n'}
           LatitudeDelta: {this.state.region.latitudeDelta}{'\n'}
@@ -442,7 +461,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 300,
+    bottom: 125, // was 300
     //width: screen_width,
     //height: screen_height
   }
