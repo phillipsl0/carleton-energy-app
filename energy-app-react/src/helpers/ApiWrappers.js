@@ -1,6 +1,6 @@
 import buildingsDetail from './BuildingsDetail';
-import news from '.SustainabilityNews';
-import events from '.SustainabilityEvents';
+// import news from './SustainabilityNews';
+import events from './SustainabilityEvents';
 
 
 // 1) For a given building, resource and timeframe, return (from API) 
@@ -19,7 +19,7 @@ import events from '.SustainabilityEvents';
  */
 
 
-function getBuildingsList() {
+export function getBuildingsList() {
     // return list of every building name with data (e.g. "Burton", "Sayles", etc.)
     // /api/buildings/names
 
@@ -29,30 +29,30 @@ function getBuildingsList() {
     return buildings;
 }
 
-function getBuildingsDetail() {
+export function getBuildingsDetail() {
     return buildingsDetail;
 }
 
-function getUtilitiesList() {
+export function getUtilitiesList() {
     var utilities = ["electricity", "water"];
 
     return utilities;
 }
 
-function getUnitsList() {
+export function getUnitsList() {
     var units = {"electricity": "kWh", "water": "Gal"}
 
     return units;
 }
 
-function getSustainabilityNews() {
+export function getSustainabilityNews() {
     // https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton
     // https://api.rss2json.com/v1/api.json?
     //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fblogs%2Fsustaining_carleton
     return news;
 }
 
-function getSustainabilityEvents() {
+export function getSustainabilityEvents() {
     // https://apps.carleton.edu/sustainability/feeds/events
     // https://api.rss2json.com/v1/api.json?
     //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fevents
@@ -64,7 +64,7 @@ function getSustainabilityEvents() {
 
 // timeStart, timeEnd are Date objects. 
 // timeScale is the resolution of the data in minutes (e.g. 1 minute vs 15 minute increments)
-function getEnergyGenerationOverTime(timeStart, timeEnd, timeScale) {
+export function getEnergyGenerationOverTime(timeStart, timeEnd, timeScale) {
     var scaleFactorWind = 400;
     var scaleFactorSolar = 2; 
 
@@ -85,7 +85,7 @@ function getEnergyGenerationOverTime(timeStart, timeEnd, timeScale) {
     return table;
 }
 
-function getWindGenerationOverTime(timeStart, timeEnd, timeScale) {
+export function getWindGenerationOverTime(timeStart, timeEnd, timeScale) {
     var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
     var table = [];
     for (var i = 0; i < totals.length; i++) {
@@ -97,7 +97,7 @@ function getWindGenerationOverTime(timeStart, timeEnd, timeScale) {
     return table;
 }
 
-function getSolarGenerationOverTime(timeStart, timeEnd, timeScale) {
+export function getSolarGenerationOverTime(timeStart, timeEnd, timeScale) {
     var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
     var table = [];
     for (var i = 0; i < totals.length; i++) {
@@ -109,7 +109,7 @@ function getSolarGenerationOverTime(timeStart, timeEnd, timeScale) {
     return table;
 }
 
-function getTotalGenerationOverTime(timeStart, timeEnd, timeScale) {
+export function getTotalGenerationOverTime(timeStart, timeEnd, timeScale) {
     var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
     var table = [];
     for (var i = 0; i < totals.length; i++) {
@@ -122,7 +122,7 @@ function getTotalGenerationOverTime(timeStart, timeEnd, timeScale) {
 }
 
 
-function getEnergyGeneration(timeStart, timeEnd) {
+export function getEnergyGeneration(timeStart, timeEnd) {
     // return value of how much electricity we are generating from wind/solar, etc
     // /api/generation
 
@@ -142,19 +142,19 @@ function getEnergyGeneration(timeStart, timeEnd) {
     return table;
 }
 
-function getTotalWindGeneration(timeStart, timeEnd) {
+export function getTotalWindGeneration(timeStart, timeEnd) {
     return getEnergyGeneration(timeStart, timeEnd)["wind"];
 }
 
-function getTotalSolarGeneration(timeStart, timeEnd) {
+export function getTotalSolarGeneration(timeStart, timeEnd) {
     return getEnergyGeneration(timeStart, timeEnd)["solar"];
 }
 
-function getTotalEnergyGeneration(timeStart, timeEnd) {
+export function getTotalEnergyGeneration(timeStart, timeEnd) {
     return getEnergyGeneration(timeStart, timeEnd)["total"];
 }
 
-function getCurrentWindGeneration() {
+export function getCurrentWindGeneration() {
     var timeStart = new Date();
     timeStart.setMinutes(timeStart.getMinutes() - 15);
     var timeEnd = new Date();
@@ -162,7 +162,7 @@ function getCurrentWindGeneration() {
     return getTotalWindGeneration(timeStart, timeEnd);
 }
 
-function getCurrentSolarGeneration() {
+export function getCurrentSolarGeneration() {
     var timeStart = new Date();
     timeStart.setMinutes(timeStart.getMinutes() - 15);
     var timeEnd = new Date();
@@ -170,7 +170,7 @@ function getCurrentSolarGeneration() {
     return getTotalSolarGeneration(timeStart, timeEnd);
 }
 
-function getCurrentEnergyGeneration() {
+export function getCurrentEnergyGeneration() {
     var timeStart = new Date();
     timeStart.setMinutes(timeStart.getMinutes() - 15);
     var timeEnd = new Date();
@@ -181,7 +181,7 @@ function getCurrentEnergyGeneration() {
 
 // -------------------- Utility Consumption -------------------------
 
-function getBuildingUtilityConsumptionOverTime(building, utility, timeStart, timeEnd, timeScale) {
+export function getBuildingUtilityConsumptionOverTime(building, utility, timeStart, timeEnd, timeScale) {
 
     // different utilities have different "typical" amounts
     var scaleFactor;
@@ -213,7 +213,7 @@ function getBuildingUtilityConsumptionOverTime(building, utility, timeStart, tim
     return table;
 }
 
-function getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEnd) {
+export function getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEnd) {
     /*
         parameter   | object type
         --------------------------
@@ -231,7 +231,7 @@ function getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEn
     /* RETURN DUMMY DATA (below) */
 
     // different utilities have different "typical" amounts
-    var scaleFactor;
+    var scaleFactor = 2;
 
     if (utility == "water") {
         scaleFactor = 400;
@@ -242,18 +242,21 @@ function getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEn
     // calculate number of 15-min chunks b/w 'timeStart' and 'timeEnd'
     var timeframe = Math.abs(timeEnd - timeStart) / (60000 * 15); // 60,000ms per min * 15min
 
-    return Math.random() * scaleFactor * timeframe; 
+    var result = Math.random() * scaleFactor * timeframe;
+
+    return result;
+
 }
 
-function getCurrentBuildingUtilityConsumption(building, utility) {
+export function getCurrentBuildingUtilityConsumption(building, utility) {
     var timeStart = new Date();
     timeStart.setMinutes(timeStart.getMinutes() - 15);
     var timeEnd = new Date();
 
-    return getTotalBuildingUtilityConsumption(utility, building, timeStart, timeEnd);
+    return getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEnd);
 }
 
-function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd, timeScale) {
+export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd, timeScale) {
 
     // different utilities have different "typical" amounts
     var scaleFactor;
@@ -285,7 +288,7 @@ function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd, timeSc
     return table;
 }
 
-function getTotalCampusUtilityConsumption(utility, timeStart, timeEnd) {
+export function getTotalCampusUtilityConsumption(utility, timeStart, timeEnd) {
     // return total campus consumption of utitlity over specified time frame
 
     // different utilities have different "typical" amounts
@@ -303,7 +306,7 @@ function getTotalCampusUtilityConsumption(utility, timeStart, timeEnd) {
     return Math.random() * scaleFactor * timeframe; 
 }
 
-function getCurrentCampusUtilityConsumption(utility) {
+export function getCurrentCampusUtilityConsumption(utility) {
     var timeStart = new Date();
     timeStart.setMinutes(timeStart.getMinutes() - 15);
     var timeEnd = new Date();
@@ -311,7 +314,7 @@ function getCurrentCampusUtilityConsumption(utility) {
     return getTotalCampusUtilityConsumption(utility, building, timeStart, timeEnd);
 }
 
-function getEveryBuildingUtilityConsumption(utility) {
+export function getEveryBuildingUtilityConsumption(utility) {
     var scaleFactor;
 
     if (utility == "water") {
@@ -341,7 +344,7 @@ function getEveryBuildingUtilityConsumption(utility) {
 }
 
 // Helper function to sory the building list (in descending order)
-function sortByKey(array, key) {
+export function sortByKey(array, key) {
     return array.sort(function(a, b) {
         var x = a[key]; 
         var y = b[key];
