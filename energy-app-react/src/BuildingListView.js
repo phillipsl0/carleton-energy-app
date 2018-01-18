@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView } from 'react-native'
+import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, TouchableOpacity } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import buildings from './Buildings';
+
+import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js'
 
 
 
@@ -63,19 +65,29 @@ class IndividualBuilding extends Component {
 
         ];
 
+
+        var consuption = getCurrentBuildingUtilityConsumption("Burton", "water");
+
         return (
             <View style={styles.view}>
                 <Text style = {styles.bigyellow}>{this.props.navigation.state.params.item.name}</Text>
                 <Image
                 style = {styles.img}
-                source={{ uri: this.props.navigation.state.params.item.avatar }}
-                />
-                <Text style={styles.bigyellow}> INSERT GRAPH HERE </Text>
-                <Text>{'Energy Table'}</Text>
-                <Table style={styles.table}>
+                source={{ uri: this.props.navigation.state.params.item.avatar }} />
+
+
+                <Text style={styles.bigyellow}> GRAPH HERE </Text>
+                <Text>{'Current (past 15 min) consuption: '}</Text>
+                <Text style={{fontSize: 70}}>{ consuption }</Text>
+
+
+              {/*
+              <Table style={styles.table}>
                 <Row data={tableHead} style={styles.head} textStyle={styles.text}/>
                 <Rows data={tableData} style={styles.row} textStyle={styles.text}/>
               </Table>
+            */}
+                
             </View>
         );
     }
