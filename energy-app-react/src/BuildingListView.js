@@ -66,7 +66,7 @@ class IndividualBuilding extends Component {
         ];
 
 
-        var consuption = getCurrentBuildingUtilityConsumption("Burton", "water");
+        var consumption = (getCurrentBuildingUtilityConsumption("Burton", "water")/15).toFixed(2);
 
         return (
             <View style={styles.view}>
@@ -75,10 +75,10 @@ class IndividualBuilding extends Component {
                 style = {styles.img}
                 source={{ uri: this.props.navigation.state.params.item.avatar }} />
 
+                <Text style={{fontSize: 70}}>{ consumption }<Text style={{fontSize: 20}}>{'gal/min '}</Text></Text> 
 
                 <Text style={styles.bigyellow}> GRAPH HERE </Text>
-                <Text>{'Current (past 15 min) consuption: '}</Text>
-                <Text style={{fontSize: 70}}>{ consuption }</Text>
+
 
 
               {/*

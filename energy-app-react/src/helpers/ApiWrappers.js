@@ -231,7 +231,7 @@ export function getTotalBuildingUtilityConsumption(building, utility, timeStart,
     /* RETURN DUMMY DATA (below) */
 
     // different utilities have different "typical" amounts
-    var scaleFactor;
+    var scaleFactor = 2;
 
     if (utility == "water") {
         scaleFactor = 400;
@@ -242,8 +242,10 @@ export function getTotalBuildingUtilityConsumption(building, utility, timeStart,
     // calculate number of 15-min chunks b/w 'timeStart' and 'timeEnd'
     var timeframe = Math.abs(timeEnd - timeStart) / (60000 * 15); // 60,000ms per min * 15min
 
-    // return Math.random() * scaleFactor * timeframe;
-    return 12; 
+    var result = Math.random() * scaleFactor * timeframe;
+
+    return result;
+
 }
 
 export function getCurrentBuildingUtilityConsumption(building, utility) {
@@ -251,7 +253,7 @@ export function getCurrentBuildingUtilityConsumption(building, utility) {
     timeStart.setMinutes(timeStart.getMinutes() - 15);
     var timeEnd = new Date();
 
-    return getTotalBuildingUtilityConsumption(utility, building, timeStart, timeEnd);
+    return getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEnd);
 }
 
 export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd, timeScale) {
