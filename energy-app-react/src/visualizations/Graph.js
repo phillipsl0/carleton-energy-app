@@ -1,42 +1,60 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Dimensions } from 'react-native'
-import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryScatter } from "victory-native";
+
+
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
+import { GetStyle } from './../styling/Themes'
+import CurrTheme from './../styling/CurrentTheme'
+import { default as CustomThemes } from './GraphThemes'
 
 
 class Graph extends Component {
     render() {
+        const themeStyles = GetStyle(CurrTheme);
+
         if (this.props.type=='pie') {
             return (
-                <View style={styles.container}>
                 <VictoryPie
-                    padding={{ top: 50, bottom: 50, left: 95, right: 85}}
-                    height={300}
-                    width={300}
+                    theme={this.props.theme}
+                    height={this.props.height}
+                    width={this.props.width}
+                    padding={{ top: 50, bottom: 50, left: 95, right: 85 }}
                     data={this.props.graphData}/>
-                </View>
             )
         } else if (this.props.type=='bar') {
             return (
-            <View style={styles.container}>
                 <VictoryChart
-                    height={300}
-                    width={300}
+                    height={this.props.height}
+                    width={this.props.width}
+                    theme={this.props.theme}
                     padding={{ top: 20, bottom: 50, left: 60, right: 60}}
                     domainPadding={15}>
                     <VictoryBar
                         data={this.props.graphData}/>
                 </VictoryChart>
-                </View>
             )
+        } else if (this.props.type=='scatter'){
+            return (
+                <VictoryChart
+                    height={this.props.height}
+                    width={this.props.width}
+                    theme={this.props.theme}
+                    style={this.props.style}
+                    padding={{ top: 20, bottom: 50, left: 60, right: 50}}
+                    domainPadding={15}>
+                    <VictoryScatter
+                        size={5}
+                        data={this.props.graphData}/>
+                </VictoryChart>
+            )
+
         } else {
             return (
-            <View style={styles.container}>
                 <VictoryChart>
                 <VictoryBar/>
                 </VictoryChart>
-            </View>
             )
         }
     }
@@ -47,11 +65,17 @@ Graph.defaultProps = {
     graphData: [{y:  8, x: "Electricity"},
                  {y: 7, x: "Water"},
                  {y: 16, x: "Heat/AC"}],
+    theme: CustomThemes.grayscale,
+    height: 300,
+    width: 300
 }
 
 Graph.propTypes = {
     type: PropTypes.string,
     graphData: PropTypes.any,
+    theme: PropTypes.object,
+    height: PropTypes.number,
+    width: PropTypes.number
 }
 
 const styles = StyleSheet.create({
@@ -59,7 +83,6 @@ const styles = StyleSheet.create({
       flex: 0.8,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#F5FCFF',
   },
 })
 
