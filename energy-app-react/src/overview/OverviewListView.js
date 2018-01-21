@@ -16,16 +16,16 @@ const OverviewListView = ({navigation}) => {
 
     return (
      <List
-       style={[styles.list, themeStyles.list]}>
+       style={[styles.list, themeStyles.list, themeStyles.flex]}>
        <FlatList
          data={ExampleData}
          keyExtractor={item => item.title}
          renderItem={({ item }) => (
            <Card
-             containerStyle={[styles.card, themeStyles.card]}
+             containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}
              title={item.title}
              titleStyle={styles.title}>
-             <View style={styles.container, themeStyles.container}>
+             <View style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
              <Graph
                 type={item.graphType}
                 theme={VictoryTheme.grayscale}
@@ -76,33 +76,14 @@ const OverviewStack = StackNavigator({
 );
 
 const styles = StyleSheet.create({
-  title: {
-  },
-  container: {
-      flex: 0.8,
-      justifyContent: 'center',
-      alignItems: 'center',
-  },
   card: {
-    flex: 1,
     borderWidth: 1,
     borderRadius: 3,
     padding: 15,
     margin: 15,
     marginBottom: 0,
-    ...Platform.select({
-      ios: {
-        shadowOffset: {height: 0, width: 0},
-        shadowOpacity: 1,
-        shadowRadius: 1
-      },
-      android: {
-        elevation: 1
-      }
-    })
   },
   list: {
-      flex: 1,
       marginLeft: '3%',
       marginRight: '3%',
   },

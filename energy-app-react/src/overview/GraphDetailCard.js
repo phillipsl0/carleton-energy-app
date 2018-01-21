@@ -1,89 +1,76 @@
+import React, { Component } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 
-export default class GraphDetailCard extends Component {
+import { GetStyle } from './../styling/Themes';
+import CurrTheme from './../styling/CurrentTheme';
+import Graph from './../visualizations/Graph';
+import { default as CustomThemes } from './../visualizations/GraphThemes';
+import GraphButton from './GraphButton';
+
+
+export default class GraphDetail extends Component {
     constructor(props) {
             super(props);
+    }
 
-            this.state = {
-                view: 'day',
-                viewNumber: 7,
-                selectedCard: 1,
-            };
-        }
-    render()
-    getGraphScope = () => {
-            graphData = navigation.state.params.data.comparison;
+    sendToParent = (buttonView, buttonComparator, buttonIndex) => {
+        this.props.callback(buttonView, buttonComparator, buttonIndex);
+    }
 
-            if (this.state.view == 'day') {
-                return graphData.day.graph;
-            } else if (this.state.view == 'week') {
-                return graphData.week.graph;
-            } else if (this.state.view == 'month') {
-                return graphData.month.graph;
-            } else if (this.state.view == 'year') {
-                 return graphData.year.graph;
-            }
-        }
+    render() {
+        const themeStyles = GetStyle(CurrTheme);
+        return(
+            <View style={[themeStyles.singleView, themeStyles.shadowed]}>
+                <View style={[styles.graphContainer, themeStyles.centered,
+                              themeStyles.translucent]}>
+                 <Graph
+                     theme={CustomThemes.carleton}
+                     height={300}
+                     width={375}
+                     type={'scatter'}
+                     graphData={this.props.data}/>
+                </View>
 
-        getRanking = () => {
-            graphData = navigation.state.params.data.comparison;
+                <View style={[themeStyles.flexboxRow, themeStyles.translucent]}>
+                    <GraphButton title='D'
+                        view='day'
+                        comparator={7}
+                        index={1}
+                        callback={this.sendToParent}
+                        selected={this.props.selected}/>
 
-            if (this.state.view == 'day') {
-                return graphData.day.ranking;
-            } else if (this.state.view == 'week') {
-                return graphData.week.ranking;
-            } else if (this.state.view == 'month') {
-                return graphData.month.ranking;
-            } else if (this.state.view == 'year') {
-                 return graphData.year.ranking;
-            }
-        }
+                    <GraphButton title='W'
+                        view='week'
+                        comparator={4}
+                        index={2}
+                        callback={this.sendToParent}
+                        selected={this.props.selected}/>
 
+                    <GraphButton title='M'
+                        view='month'
+                        comparator={12}
+                        index={3}
+                        callback={this.sendToParent}
+                        selected={this.props.selected}/>
 
-<View style={styles.graphContainer}>
-                     <Graph
-                         theme={CustomThemes.carleton}
-                         height={300}
-                         width={375}
-                         type={'scatter'}
-                         graphData={data}/>
-                 </View>
-                 <View style={styles.flexbox}>
-                 <Button
-                     fontSize={10}
-                     title='D'
-                     borderRadius={10}
-                     color={this.state.view == 'day' ? 'white' : '#9E9E9E'}
-                     backgroundColor={this.state.view == 'day' ? '#0B5091' : 'white'}
-                     style={styles.button}
-                     onPress={()=> this.setState({ view: 'day', viewNumber: 7 })}
-                 />
-                 <Button
-                     fontSize={10}
-                     title='W'
-                     borderRadius={10}
-                     color={this.state.view == 'week' ? 'white' : '#9E9E9E'}
-                     backgroundColor={this.state.view == 'week' ? '#0B5091' : 'white'}
-                     style={styles.button}
-                     onPress={()=> this.setState({ view: 'week', viewNumber: 4 })}
-                 />
-                 <Button
-                     fontSize={10}
-                     title='M'
-                     borderRadius={10}
-                     color={this.state.view == 'month' ? 'white' : '#9E9E9E'}
-                     backgroundColor={this.state.view == 'month' ? '#0B5091' : 'white'}
-                     style={styles.button}
-                     onPress={()=> this.setState({ view: 'month', viewNumber: 12 })}
-                 />
-                 <Button
-                     fontSize={10}
-                     title='Y'
-                     borderRadius={10}
-                     color={this.state.view == 'year' ? 'white' : '#9E9E9E'}
-                     backgroundColor={this.state.view == 'year' ? '#0B5091' : 'white'}
-                     style={styles.button}
-                     onPress={()=> this.setState({ view: 'year', viewNumber: 5 })}
-                 />
+                    <GraphButton title='Y'
+                        view='year'
+                        comparator={5}
+                        index={4}
+                        callback={this.sendToParent}
+                        selected={this.props.selected}/>
 
-                 </View>
+               </View>
+            </View>);
+    }
 }
+
+const styles = StyleSheet.create({
+    graphContainer: {
+        marginTop: '3%',
+        marginBottom: '3%',
+        marginLeft: '3%',
+        marginRight: '3%',
+        borderRadius: 10,
+    },
+})
