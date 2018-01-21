@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Platform, StatusBar, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Platform, StatusBar, StyleSheet, Dimensions, Image } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
 /*
 Google API Key:
@@ -13,6 +13,8 @@ Using tutorials:
 https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/#
 Polygon onPress: https://snack.expo.io/H1L9ClUGW
 Animated region with scroll cards: https://codedaily.io/tutorials/9/Build-a-Map-with-Custom-Animated-Markers-and-Region-Focus-when-Content-is-Scrolled-in-React-Native
+
+Get lat/long: http://www.mapcoordinates.net/en
 */
 
 // ** if want to use user's location, set up geolocation in componentWillMount(): https://school.shoutem.com/lectures/geolocation-app-react-native/
@@ -45,6 +47,7 @@ class HeatMapView extends Component {
             {latitude: 44.45973158, longitude: -93.15734357}, //SW
             {latitude: 44.45973158, longitude: -93.15711826} //SE
           ],
+          marker_coordinate: {latitude: 44.45989813, longitude: -93.15723896}, // center for callout
           id: "Musser",
           open: false,
           color: "yellow",
@@ -64,6 +67,7 @@ class HeatMapView extends Component {
             {latitude: 44.46032408, longitude: -93.15200865}, //SW - lowest
             {latitude: 44.46032408, longitude: -93.15181822} //SE - lowest
           ],
+          marker_coordinate: {latitude: 44.46054218, longitude: -93.15189161}, 
           id: "Nourse",
           open: false,
           color: "red",
@@ -75,6 +79,7 @@ class HeatMapView extends Component {
             {latitude: 44.45923, longitude: -93.15048516}, //SW
             {latitude: 44.45923, longitude: -93.15014988} //SE
           ],
+          marker_coordinate: {latitude: 44.45935334, longitude: -93.1503252},
           id: "Watson",
           open: false,
           color: "yellow",
@@ -102,6 +107,7 @@ class HeatMapView extends Component {
             {latitude: 44.460587, longitude: -93.156818},
             {latitude: 44.460593, longitude: -93.156778}
           ],
+          marker_coordinate: {latitude: 44.46053452, longitude: -93.15672227}, 
           id: "Burton",
           open: false,
           color: "lightgreen",
@@ -135,6 +141,7 @@ class HeatMapView extends Component {
             {latitude: 44.460029, longitude: -93.156835},
             {latitude: 44.460136, longitude: -93.156832}
           ],
+          marker_coordinate: {latitude: 44.46009804, longitude: -93.15659352}, 
           id: "Davis",
           open: false,
           color: "yellow",
@@ -159,6 +166,7 @@ class HeatMapView extends Component {
           {latitude: 44.461299, longitude: -93.156228},
           {latitude: 44.461619, longitude: -93.156233}
           ],
+          marker_coordinate: {latitude: 44.4613041, longitude: -93.1560839}, 
           id: "Sayles",
           open: false,
           color: "yellow",
@@ -191,6 +199,7 @@ class HeatMapView extends Component {
             {latitude: 44.460122, longitude: -93.151968},
             {latitude: 44.460208, longitude: -93.151972}
           ],
+          marker_coordinate: {latitude: 44.46003104, longitude: -93.15181651}, 
           id: "Memo",
           open: false,
           color: "lightgreen",
@@ -235,6 +244,7 @@ class HeatMapView extends Component {
             {latitude: 44.460090, longitude: -93.151303},
             {latitude: 44.460128, longitude: -93.151298}
           ],
+          marker_coordinate: {latitude: 44.4600387, longitude: -93.15096893}, 
           id: "Cassat",
           open: false,
           color: "lightgreen",
@@ -259,6 +269,7 @@ class HeatMapView extends Component {
             {latitude: 44.460649, longitude: -93.149793},
             {latitude: 44.460762, longitude: -93.149796}
           ],
+          marker_coordinate: {latitude: 44.46054792, longitude: -93.14967878}, 
           id: "Evans",
           open: false,
           color: "lightgreen",
@@ -271,6 +282,7 @@ class HeatMapView extends Component {
             {latitude: 44.460478, longitude: -93.150804},
             {latitude: 44.460991, longitude: -93.150826}
           ],
+          marker_coordinate: {latitude: 44.4606781, longitude: -93.15070339}, 
           id: "Myers",
           open: false,
           color: "yellow",
@@ -295,6 +307,7 @@ class HeatMapView extends Component {
             {latitude: 44.462525, longitude: -93.150000},
             {latitude: 44.462706, longitude: -93.150166}
           ],
+          marker_coordinate: {latitude: 44.46243466, longitude: -93.14965099}, 
           id: "Goodhue",
           open: false,
           color: "red",
@@ -311,6 +324,7 @@ class HeatMapView extends Component {
             {latitude: 44.460026, longitude: -93.156222},
             {latitude: 44.460168, longitude: -93.156228}
           ],
+          marker_coordinate: {latitude: 44.46011336, longitude: -93.15605708}, 
           id: "Scoville",
           open: false,
           color: "lightgreen",
@@ -333,6 +347,7 @@ class HeatMapView extends Component {
             {latitude: 44.460926, longitude: -93.156874},
             {latitude: 44.461056, longitude: -93.156874}
           ],
+          marker_coordinate: {latitude: 44.46097292, longitude: -93.15653451}, 
           id: "Sevy",
           open: false,
           color: "red",
@@ -426,10 +441,18 @@ class HeatMapView extends Component {
                 />
                   <Marker
                    ref={ref => polygon.marker = ref}
-                   coordinate={polygon.coordinates[0]}
-                   opacity={0.0} //hides markers
+                   coordinate={polygon.marker_coordinate}
+                   opacity={4} // hides markers at 0
+                   key={polygon.id}
                   >
-                    <Callout>
+                    <Image
+                      source={require('./assets/mapMarker.png')}
+                      style={{ height:1, width:1 }}
+                    />
+                    <Callout
+                      style={styles.callout}
+                      name={polygon.id}
+                    >
                       <Text> {this.state.lastBuildingPressed} </Text>
                     </Callout>
                   </Marker>
@@ -464,6 +487,10 @@ const styles = StyleSheet.create({
     bottom: 125, // was 300
     //width: screen_width,
     //height: screen_height
+  },
+  callout: {
+    flex: 1,
+    position: 'relative'
   }
 });
 
