@@ -4,8 +4,9 @@ import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import buildings from './Buildings';
+import IndividualBuilding from './IndividualBuilding';
 
-import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js'
+
 
 
 
@@ -25,7 +26,7 @@ class BuildingListView extends Component {
              renderItem={({ item }) => (
                <ListItem
                     style={styles.listItem}
-                 onPress={() => this.props.navigation.navigate('IndividualBuilding', {item:item})}
+                 onPress={() => this.props.navigation.navigate('CardView', {item:item})}
                  title={item.name}
                  avatar={<Avatar
                             style={styles.listImg}
@@ -40,68 +41,32 @@ class BuildingListView extends Component {
      }
 }
 
-class IndividualBuilding extends Component {
-    render() {
-        const {state} = this.props.navigation;
-        const tableHead = [' ','Electric', 'Water', 'Gas'];
-        
-        const test = []
-        for (var key in this.props.navigation.state.params.item) { 
-          if (Array.isArray(this.props.navigation.state.params.item[key])) {
-            test.push(this.props.navigation.state.params.item[key])
-          }
-          
-        }
-        const num = (test.length - 1)
-        const tableData = [,
-        test[0], 
-        test[1], 
-        test[2],
-        test[3],
-        test[4],
-        test[5],
-        test[6],
-
-
-        ];
-
-
-        var consumption = (getCurrentBuildingUtilityConsumption("Burton", "water")/15).toFixed(2);
-
-        return (
-            <View style={styles.view}>
-                <Text style = {styles.bigyellow}>{this.props.navigation.state.params.item.name}</Text>
-                <Image
-                style = {styles.img}
-                source={{ uri: this.props.navigation.state.params.item.avatar }} />
-
-                <Text style={{fontSize: 70}}>{ consumption }<Text style={{fontSize: 20}}>{'gal/min '}</Text></Text> 
-
-                <Text style={styles.bigyellow}> GRAPH HERE </Text>
-
-
-
-              {/*
-              <Table style={styles.table}>
-                <Row data={tableHead} style={styles.head} textStyle={styles.text}/>
-                <Rows data={tableData} style={styles.row} textStyle={styles.text}/>
-              </Table>
-            */}
-                
-            </View>
-        );
-    }
-}
 
 const BuildingStack = StackNavigator({
     Buildings: {
         screen: BuildingListView,
     },
-    IndividualBuilding: {
-        path: 'buildings/:name',
+    CardView: {
         screen: IndividualBuilding,
+        path: 'buildings/:name',
+        navigationOptions: ({ navigation }) => ({
+              title: `${navigation.state.params.item.name}`,
+              headerTintColor: 'white',
+              headerStyle: navStyles.header,
+            }),
+
     },
+    // CardView: {
+    //   screen: IndividualBuilding,
+    //   // navigationOptions: 
+    // },
 });
+
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    }
+})
 
 const styles = StyleSheet.create({
   card: {
