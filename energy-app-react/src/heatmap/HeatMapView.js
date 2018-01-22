@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StatusBar, StyleSheet, Dimensions, Image } from 'react-native';
+import { StackNavigator } from 'react-navigation';
+import { Button } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
+import MapCallout from './MapCallout';
+import IndividualBuilding from './../IndividualBuilding'
+
 /*
 Google API Key:
 AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI 
@@ -29,17 +34,6 @@ class HeatMapView extends Component {
     this.state = {
       lastBuildingPressed: "No buildings have been pressed",
       polygons: [
-        // {
-        //   coordinates: [
-        //     {latitude: 44.461528, longitude: -93.153344}, // NE
-        //     {latitude: 44.461528, longitude: -93.153509}, // NW
-        //     {latitude: 44.461245, longitude: -93.153505}, // SW
-        //     {latitude: 44.461245, longitude: -93.153342} // SE
-        //   ],
-        //   id: "Old Music Hall",
-        //   open: false,
-        //   color: "yellow" // change based on data
-        // },
         {
           coordinates: [
             {latitude: 44.46012211, longitude: -93.15711826}, //NE
@@ -396,7 +390,7 @@ class HeatMapView extends Component {
   }
 
   // Called when a polygon is pressed
-  toggle(polygon) {
+  toggleCallout(polygon) {
     console.log('onPress', polygon.id);
     this.setState({lastBuildingPressed: polygon.id})
 
@@ -437,7 +431,7 @@ class HeatMapView extends Component {
                   strokeColor={polygon.color}
                   fillColor={polygon.color}
                  
-                  onPress={() => this.toggle(polygon)}
+                  onPress={() => this.toggleCallout(polygon)}
                 />
                   <Marker
                    ref={ref => polygon.marker = ref}
@@ -446,14 +440,19 @@ class HeatMapView extends Component {
                    key={polygon.id}
                   >
                     <Image
-                      source={require('./assets/mapMarker.png')}
+                      source={require('./../assets/mapMarker.png')}
                       style={{ height:1, width:1 }}
                     />
                     <Callout
+                      tooltip // enables customizable tooltip style
                       style={styles.callout}
-                      name={polygon.id}
-                    >
-                      <Text> {this.state.lastBuildingPressed} </Text>
+                      onPress={() => this.props.navigation.navigate('CardView', {item:polygon})}>
+
+                      <MapCallout
+                        name={polygon.id}
+                        image={'image'}
+                        number={'90'}/>
+
                     </Callout>
                   </Marker>
               </View>
@@ -470,6 +469,22 @@ class HeatMapView extends Component {
     );
   }
 }
+
+const HeatMapStack = StackNavigator({
+  HeatMapView: {
+    screen: HeatMapView,
+  },
+  CardView: {
+    screen: IndividualBuilding,
+    path: 'buildings/:name',
+    navigationOptions: ({ navigation }) => ({
+      title: `${navigation.state.params.title}`,
+      headerTintColor: 'white',
+      //headerStyle: navStyles.header,
+    }),
+  },
+});
+
 
 const styles = StyleSheet.create({
   container: {

@@ -5,7 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MapView from 'react-native-maps';
 
 import BuildingListView from './src/BuildingListView';
-import HeatMapView from './src/HeatMapView'
+import HeatMapView from './src/heatmap/HeatMapView'
 import OverviewStack from './src/overview/OverviewListView';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';

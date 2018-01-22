@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
-import {
-  Image,              // Renders images
-  StyleSheet,         // CSS-like styles
-  Text,               // Renders text
-  View,               // Container component
-} from 'react-native';
+import { Image, StyleSheet, Text, View, } from 'react-native';
+import { Button } from 'react-native-elements';
+
 
 //Callout styling tutorial: https://rationalappdev.com/santas-map-app-with-react-native/
+// Open source icons: https://material.io/icons/#ic_local_florist
 
-export default class Callout extends Component {
+
+export default class MapCallout extends Component {
   render() {
-    const { name, image } = this.props;
+    const { name, image, number } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.bubble}>
           <View>
             <Text style={styles.name}>{name}</Text>
+            <Text style={styles.number}>{number}</Text>
             <Image
-              style={styles.image}
-              source={{ uri: image }}
+              style={styles.infoIcon}
+              source={require('./../assets/infoCircleIcon.png')}
+            />
+            <Button
+              title='MORE INFO'
+              iconRight={{name: 'envira', type: 'font-awesome'}}
+              backgroundColor='#0B5091'
             />
           </View>
         </View>
@@ -62,14 +67,19 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: -0.5,
   },
-  // Character name
+  // Building name
   name: {
     fontSize: 16,
     marginBottom: 5,
+    fontWeight: 'bold',
   },
-  // Character image
-  image: {
-    width: 120,
-    height: 80,
+  // Building number
+  number: {
+    fontSize: 30,
+  },
+  // Info icon image
+  infoIcon: {
+    width: 20,
+    height: 20,
   },
 });
