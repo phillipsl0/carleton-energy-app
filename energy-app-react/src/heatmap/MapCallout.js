@@ -6,6 +6,12 @@ import { Button } from 'react-native-elements';
 //Callout styling tutorial: https://rationalappdev.com/santas-map-app-with-react-native/
 // Open source icons: https://material.io/icons/#ic_local_florist
 
+/*
+            <Image
+              style={styles.infoIcon}
+              source={require('./../assets/infoCircleIcon.png')}
+            />
+*/
 
 export default class MapCallout extends Component {
   render() {
@@ -16,10 +22,6 @@ export default class MapCallout extends Component {
           <View>
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.number}>{number}</Text>
-            <Image
-              style={styles.infoIcon}
-              source={require('./../assets/infoCircleIcon.png')}
-            />
             <Button
               title='MORE INFO'
               iconRight={{name: 'envira', type: 'font-awesome'}}
