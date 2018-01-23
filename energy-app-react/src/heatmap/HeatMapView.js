@@ -45,16 +45,16 @@ class HeatMapView extends Component {
       }
     };
     // Holder for previous state to help control scrolling
-    this.prev_state = {
-      region: {
-        // Carleton's coordinates
-        latitude: 44.4606925434,
-        longitude: -93.1533574685,
-        latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
-        longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
-      }
-    }
-    this.onRegionChange = this.onRegionChange.bind(this);
+    // this.prev_state = {
+    //   region: {
+    //     // Carleton's coordinates
+    //     latitude: 44.4606925434,
+    //     longitude: -93.1533574685,
+    //     latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
+    //     longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
+    //   }
+    // }
+    //this.onRegionChange = this.onRegionChange.bind(this);
   }
 
   // Assemble all of Carleton's buildings
@@ -77,7 +77,7 @@ class HeatMapView extends Component {
       this.setState({polygons: polygons})
       return polygons
     } catch(error) {
-      alert(error)
+      alert("This is embarrassing...:" + error)
     }
   }
 
@@ -128,8 +128,9 @@ class HeatMapView extends Component {
           loadingIndicatorColor="#666666"
           loadingBackgroundColor="#eeeeee"
           
-          region={this.state.region}
-          onRegionChange={this.onRegionChange}>
+          initialRegion={this.state.region}          
+          //onRegionChange={this.onRegionChange}
+          >
             {this.state.polygons.map((polygon, index) => (
               /* Renders polygons from list */
               <View key={polygon.name}>
@@ -157,7 +158,7 @@ class HeatMapView extends Component {
                     <Callout
                       tooltip // enables customizable tooltip style
                       style={styles.callout}
-                      onPress={() => this.props.navigation.navigate('CardView', {item:polygon})}>
+                      onPress={() => this.props.navigation.navigate('HeatBuildingView', {item:polygon})}>
 
                       <MapCallout
                         name={polygon.name}
@@ -169,6 +170,11 @@ class HeatMapView extends Component {
               </View>
             ))}
         </MapView> 
+      </View>
+    );
+  }
+}
+/*
         <Text style={{ position: 'absolute', bottom: 10 }}>
           Latitude: {this.state.region.latitude}{'\n'}
           Longitude: {this.state.region.longitude}{'\n'}
@@ -176,22 +182,20 @@ class HeatMapView extends Component {
           LongitudeDelta: {this.state.region.longitudeDelta}{'\n'}
           Last Building Pressed: {this.state.lastBuildingPressed}
         </Text>
-      </View>
-    );
-  }
-}
+*/
+
 
 const HeatMapStack = StackNavigator({
   HeatMapView: {
     screen: HeatMapView,
   },
-  CardView: {
+  HeatBuildingView: {
     screen: IndividualBuilding,
-    //path: 'buildings/:name',
+    path: 'buildings/:name',
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.item.name}`,
       headerTintColor: 'white',
-      //headerStyle: navStyles.header,
+      headerStyle: styles.header,
     }),
   },
 });
@@ -217,7 +221,10 @@ const styles = StyleSheet.create({
   callout: {
     flex: 1,
     position: 'relative'
+  },
+  header: {
+      backgroundColor: '#0B5091',
   }
 });
 
-export default HeatMapView;
+export default HeatMapStack;

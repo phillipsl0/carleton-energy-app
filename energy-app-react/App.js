@@ -5,7 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MapView from 'react-native-maps';
 
 import BuildingListView from './src/BuildingListView';
-import HeatMapView from './src/heatmap/HeatMapView'
+import HeatMapStack from './src/heatmap/HeatMapView'
 import OverviewStack from './src/overview/OverviewListView';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
@@ -40,7 +40,7 @@ const RootTabs = TabNavigator({
       },
     },
     HeatMap: {
-        screen: HeatMapView,
+        screen: HeatMapStack,
         navigationOptions: {
           tabBarLabel: 'Heat Map',
           tabBarIcon: ({ tintColor, focused }) => (
