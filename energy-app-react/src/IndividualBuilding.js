@@ -4,6 +4,9 @@ import { AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, Scrol
 import { GetStyle } from './styling/Themes';
 import CurrTheme from './styling/CurrentTheme';
 import GraphDetail from './overview/GraphDetailCard';
+import ExampleData from './overview/OverviewExampleData';
+import Utilities from './overview/UtilitiesMiniCards';
+
 
 
 
@@ -20,7 +23,6 @@ export default class IndividualBuilding extends Component {
     getHeader = () => {
         const themeStyles = GetStyle(CurrTheme);
 
-        // headerText = "H!";
         headerText = (getCurrentBuildingUtilityConsumption("Burton", "water")/15).toFixed(1);
         subheaderText = "gal/min";
 
@@ -37,10 +39,27 @@ export default class IndividualBuilding extends Component {
     }
 
 
+      getGraphScope = () => {
+        graphData = {ExampleData};
+
+
+        if (this.state.view == 'day') {
+            return graphData.day.graph;
+        } else if (this.state.view == 'week') {
+            return graphData.week.graph;
+        } else if (this.state.view == 'month') {
+            return graphData.month.graph;
+        } else if (this.state.view == 'year') {
+             return graphData.year.graph;
+        }
+    }
+
+
 
     render() {
         const themeStyles = GetStyle(CurrTheme);
         header = this.getHeader();
+        currData = this.getGraphScope();
 
         const {state} = this.props.navigation;
         const tableHead = [' ','Electric', 'Water', 'Gas'];
@@ -79,7 +98,15 @@ export default class IndividualBuilding extends Component {
 
                 <ScrollView style={themeStyles.lightBlueBackground}>
 
-                    <Text style={styles.bigyellow}> GRAPH HERE </Text>
+
+
+                    <GraphDetail data={currData}
+                        callback={this.scopeCallbackGraph}
+                        selected={this.state.selectedCard}/>
+
+                    <Utilities callback={this.scopeCallbackUtilities}
+                        selected={this.state.selectedCard}/>
+
 
                 </ScrollView>
 
