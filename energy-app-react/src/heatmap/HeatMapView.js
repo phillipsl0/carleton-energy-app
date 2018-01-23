@@ -3,9 +3,12 @@ import { View, Text, Platform, StatusBar, StyleSheet, Dimensions, Image } from '
 import { StackNavigator } from 'react-navigation';
 import { Button } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
+
 import MapCallout from './MapCallout';
 import IndividualBuilding from './../IndividualBuilding'
 import buildings from './../Buildings'
+import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
+
 
 /*
 Google API Key:
@@ -62,6 +65,15 @@ class HeatMapView extends Component {
     this.getBuildingData()
   }
 
+  // Algorithm to generate CSS hsl color code from [0, 1] value
+  determineBuildingColor(buildingName) {
+    var use = getCurrentBuildingUtilityConsumption(buildingName, "water").toFixed(1)
+    console.log(buildingName, use)
+    // algorithm based on 5 color heatmap: https://stackoverflow.com/questions/12875486/what-is-the-algorithm-to-create-colors-for-a-heatmap
+    var h = (1.0 - use) * 240
+    return "hsl(" + h + ", 100%, 50%)";
+  }
+
 
   // Get current building data
   async getBuildingData() {
@@ -70,14 +82,16 @@ class HeatMapView extends Component {
         return {
           coordinates: building.coordinates,
           name: building.name,
-          color: building.color,
-          marker_coordinate: building.marker_coordinate
+          color: this.determineBuildingColor(building.name),
+          marker_coordinate: building.marker_coordinate,
+          usage: getCurrentBuildingUtilityConsumption(building.name, "water").toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
         }
       })
       this.setState({polygons: polygons})
       return polygons
     } catch(error) {
-      alert("This is embarrassing...:" + error)
+      var introStr = "This is embarrassing...: "
+      alert(introStr.concat(error))
     }
   }
 
@@ -96,7 +110,7 @@ class HeatMapView extends Component {
   }
 
 
-  // Called when a polygon is pressed
+  // Show callout when building polygon is pressed
   toggleCallout(polygon) {
     console.log('onPress', polygon.name);
     this.setState({lastBuildingPressed: polygon.name})
@@ -110,9 +124,6 @@ class HeatMapView extends Component {
     polygon.open = !polygon.open;
   }
 
-  static navigationOptions = {
-    title: 'HeatMap'
-  }
 
   render() {
     return (
@@ -163,7 +174,7 @@ class HeatMapView extends Component {
                       <MapCallout
                         name={polygon.name}
                         image={'image'}
-                        number={'90'}/>
+                        number={polygon.usage}/>
 
                     </Callout>
                   </Marker>
@@ -184,10 +195,15 @@ class HeatMapView extends Component {
         </Text>
 */
 
-
+// Stack of HeatMap
 const HeatMapStack = StackNavigator({
   HeatMapView: {
     screen: HeatMapView,
+    navigationOptions: ({ navigation }) => ({
+      title: "Heat Map",
+      headerTintColor: 'white',
+      headerStyle: navStyles.header,
+    })
   },
   HeatBuildingView: {
     screen: IndividualBuilding,
@@ -195,11 +211,16 @@ const HeatMapStack = StackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.item.name}`,
       headerTintColor: 'white',
-      headerStyle: styles.header,
+      headerStyle: navStyles.header,
     }),
   },
 });
 
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    }
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -221,9 +242,6 @@ const styles = StyleSheet.create({
   callout: {
     flex: 1,
     position: 'relative'
-  },
-  header: {
-      backgroundColor: '#0B5091',
   }
 });
 
