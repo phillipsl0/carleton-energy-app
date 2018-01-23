@@ -10,6 +10,7 @@ import IndividualBuilding from './IndividualBuilding';
 
 
 
+
 class BuildingListView extends Component {
     static navigationOptions = {
         title: 'Buildings'
@@ -23,6 +24,7 @@ class BuildingListView extends Component {
            <FlatList
              data={buildings}
              keyExtractor={item => item.name}
+
              renderItem={({ item }) => (
                <ListItem
                     style={styles.listItem}
