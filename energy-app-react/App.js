@@ -4,7 +4,7 @@ import { TabNavigator, NavigationActions } from 'react-navigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MapView from 'react-native-maps';
 
-import BuildingListView from './src/BuildingListView';
+import BuildingStack from './src/BuildingListView';
 import HeatMapView from './src/HeatMapView'
 import OverviewStack from './src/overview/OverviewListView';
 
@@ -31,7 +31,7 @@ const RootTabs = TabNavigator({
       },
     },
     Buildings: {
-      screen: BuildingListView,
+      screen: BuildingStack,
       navigationOptions: {
         tabBarLabel: 'Buildings',
         tabBarIcon: ({ tintColor, focused }) => (

@@ -19,7 +19,7 @@ class BuildingListView extends Component {
         const {navigate} = this.props.navigation;
 
        return (
-         <List>
+         // <List>
            <FlatList
              data={buildings}
              keyExtractor={item => item.name}
@@ -28,6 +28,9 @@ class BuildingListView extends Component {
                     style={styles.listItem}
                  onPress={() => this.props.navigation.navigate('CardView', {item:item})}
                  title={item.name}
+                 subtitle={<View style={styles.subtitleView}>
+                            <Text>{item.buildingID}</Text>
+                          </View>}
                  avatar={<Avatar
                             style={styles.listImg}
                             source={ { uri: item.avatar }}
@@ -36,7 +39,7 @@ class BuildingListView extends Component {
                />
              )}
            />
-         </List>
+         // </List> 
        );
      }
 }
@@ -104,7 +107,11 @@ const styles = StyleSheet.create({
     paddingTop: 35,
     paddingRight: 15,
     paddingBottom: 55,
-
+  },
+  subtitleView: {
+    paddingTop: 35,
+    paddingRight: 40,
+    paddingLeft: 20
   },
   listImg: {
     height: 30,

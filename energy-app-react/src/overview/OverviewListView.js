@@ -15,8 +15,8 @@ const OverviewListView = ({navigation}) => {
     const themeStyles = GetStyle(CurrTheme);
 
     return (
-     <List
-       style={[styles.list, themeStyles.list, themeStyles.flex]}>
+     // <List
+     //   style={[styles.list, themeStyles.list, themeStyles.flex]}>
        <FlatList
          data={ExampleData}
          keyExtractor={item => item.title}
@@ -25,10 +25,10 @@ const OverviewListView = ({navigation}) => {
              containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}
              title={item.title}
              titleStyle={styles.title}>
-             <View style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
+             <View pointerEvents="none" style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
              <Graph
                 type={item.graphType}
-                theme={VictoryTheme.grayscale}
+                theme={VictoryTheme.grayscale} 
                 graphData={item.data.current}/>
              </View>
              <Button
@@ -42,7 +42,7 @@ const OverviewListView = ({navigation}) => {
            </Card>
          )}
        />
-     </List>
+     // </List>
    );
 }
 const navStyles = StyleSheet.create({
@@ -68,11 +68,9 @@ const OverviewStack = StackNavigator({
               headerTintColor: 'white',
               headerStyle: navStyles.header,
             }),
-    }},
-    {
-        headerTintColor: '#0B5091'
-
-    }
+    },
+  },
+  { headerTintColor: '#0B5091' }
 );
 
 const styles = StyleSheet.create({
