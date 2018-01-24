@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Platform, StatusBar, StyleSheet, Dimensions, Image } from 'react-native';
+import { View, Text, Platform, StatusBar, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Button } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
@@ -45,24 +45,36 @@ class HeatMapView extends Component {
         longitude: -93.1533574685,
         latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
         longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
+      },
+      northEast: {
+        latitude: 44.462039722138684,
+        longitude: -93.1505049392581
+      },
+      southWest: {
+        latitude: 44.4592961807,
+        longitude: -93.15502781429046
       }
     };
     // Holder for previous state to help control scrolling
-    // this.prev_state = {
-    //   region: {
-    //     // Carleton's coordinates
-    //     latitude: 44.4606925434,
-    //     longitude: -93.1533574685,
-    //     latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
-    //     longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
-    //   }
-    // }
+    this.prev_state = {
+      region: {
+        // Carleton's coordinates
+        latitude: 44.4606925434,
+        longitude: -93.1533574685,
+        latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
+        longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
+      }
+    }
+
     //this.onRegionChange = this.onRegionChange.bind(this);
+    // this.setMapBoundaries = this.setMapBoundaries.bind(this) ({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
   }
 
   // Assemble all of Carleton's buildings
   componentDidMount() {
-    this.getBuildingData()
+    this.getBuildingData();
+    // this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
+    console.log('Component mounted!');
   }
 
   // Algorithm to generate CSS hsl color code from [0, 1] value
@@ -97,17 +109,17 @@ class HeatMapView extends Component {
 
 
   // Called when location/zoom are changed with new location/zoom
-  onRegionChange(region) {
-    // Check to make sure region is within bounds of Carleton
-    if (((region.latitude <= 44.46316089) && (region.latitude >= 44.45690153)) && ((region.longitude <= -93.14903207) && (region.longitude >= -93.15727215))) {
-      this.setState({ region });
-      // Update region if within bounds
-      this.prev_state.region = region;
-    // If user scrolls beyond Carleton's region, revert back to previous state
-    } else {
-      this.setState(this.prev_state.region);
-    }
-  }
+  // onRegionChange(region) {
+  //   // Check to make sure region is within bounds of Carleton
+  //   if (((region.latitude <= 44.46316089) && (region.latitude >= 44.45690153)) && ((region.longitude <= -93.14903207) && (region.longitude >= -93.15727215))) {
+  //     this.setState({ region });
+  //     // Update region if within bounds
+  //     this.prev_state.region = region;
+  //   // If user scrolls beyond Carleton's region, revert back to previous state
+  //   } else {
+  //     this.setState(this.prev_state.region);
+  //   }
+  // }
 
 
   // Show callout when building polygon is pressed
@@ -124,6 +136,25 @@ class HeatMapView extends Component {
     polygon.open = !polygon.open;
   }
 
+  moveMaptoLocation(latlng) {
+    this.refs.map.animateToRegion({
+      latitudeDelta: 0.02,
+      longitudeDelta: 0.02,
+      ...latlng,
+    }, 3000);
+  }
+
+  setBoundaries() {
+    this.refs.map.setMapBoundaries(
+      {
+        latitude: 44.4592961807,
+        longitude: -93.15502781429046
+      }, {
+        latitude: 44.4592961807,
+        longitude: -93.15502781429046
+      });
+    //this.refs.mapsetMapBoundaries({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
+  }
 
   render() {
     return (
@@ -133,14 +164,21 @@ class HeatMapView extends Component {
           provider = { PROVIDER_GOOGLE } // show buildings on OS
           style={styles.map}
           showsTraffic={false}
-          //zoomEnabled={false} // stops user from zooming
+
+          //control zooming
+          minZoomLevel={5}
+          maxZoomLevel={20}
           
-          loadingEnabled // shows loading indicator while map loads
+          // show loading indicator while map loads
+          loadingEnabled={true}
           loadingIndicatorColor="#666666"
           loadingBackgroundColor="#eeeeee"
           
-          initialRegion={this.state.region}          
-          //onRegionChange={this.onRegionChange}
+          initialRegion={this.state.region}   
+
+          // set map boundaries, NE by SW
+          setMapBoundaries={ this.setMapBoundaries }       
+          //onRegionChange={ this.onRegionChange }
           >
             {this.state.polygons.map((polygon, index) => (
               /* Renders polygons from list */
@@ -173,14 +211,26 @@ class HeatMapView extends Component {
 
                       <MapCallout
                         name={polygon.name}
-                        image={'image'}
+                        image={'image'} // to be replaced with building image
                         number={polygon.usage}/>
 
                     </Callout>
                   </Marker>
               </View>
             ))}
-        </MapView> 
+        </MapView>
+        <TouchableOpacity style={styles.button}
+          onPress={() => this.setBoundaries()}>
+          <Text> Button </Text>
+        </TouchableOpacity>
+        
+        <Text style={{ position: 'absolute', bottom: 10 }}>
+          Latitude: {this.state.region.latitude}{'\n'}
+          Longitude: {this.state.region.longitude}{'\n'}
+          LatitudeDelta: {this.state.region.latitudeDelta}{'\n'}
+          LongitudeDelta: {this.state.region.longitudeDelta}{'\n'}
+          Last Building Pressed: {this.state.lastBuildingPressed}
+        </Text> 
       </View>
     );
   }
@@ -223,6 +273,13 @@ const navStyles = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: 'blue',
+    borderColor: 'red',
+    margin: 10,
+  },
   container: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
