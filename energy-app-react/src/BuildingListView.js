@@ -25,7 +25,8 @@ class BuildingListView extends Component {
                 style={styles.listItem}
                 title={item.item.name}
                 onPress={() => this.props.navigation.navigate('CardView', {item:item.item})}/>
-            <Text> {"Garbled"} </Text>
+            <Text> {item.item.place} </Text>
+            <Text> {item.item.train} </Text>
         </View>
     }
 
@@ -33,8 +34,8 @@ class BuildingListView extends Component {
         const {navigate} = this.props.navigation;
 
         var sectionData = [
-            {title: "Burton", data:[{name: "Burty", place: "Carleton"},{name: "Gurty"}]},
-            {title: "Davis", data:[{name: "Davy"}]}
+            {title: "Burton", data:[{name: "Burty", place: "Carleton", train: "Electric"},{name: "Gurty"}]},
+            {title: "Davis", data:[{name: "Davy", place:"Olaf", train:"Coal"}]}
         ]
 
         return (
