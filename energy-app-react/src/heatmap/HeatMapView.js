@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StatusBar, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { Button } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
 
 import MapCallout from './MapCallout';
@@ -79,6 +79,7 @@ class HeatMapView extends Component {
     if(this.state.ready) {
       setTimeout(() => this.refs.map.animateToRegion(region), 1);
     }
+    //this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
   }
 
   moveToCarleton() {
@@ -148,7 +149,7 @@ class HeatMapView extends Component {
       latitudeDelta: 0.02,
       longitudeDelta: 0.02,
       ...latlng,
-    }, 3000);
+    }, 10);
   }
 
   setBoundaries() {
@@ -167,28 +168,26 @@ class HeatMapView extends Component {
     return (
       <View style={styles.container}>
         <MapView
+          //control zooming
+          maxZoomLevel={5}
           ref="map"
           provider = { PROVIDER_GOOGLE } // show buildings on OS
           showsTraffic={false}
+          //control zooming
+          minZoomLevel={0.0}
+          maxZoomLevel={5}
           initialRegion={initialRegion}
           onMapReady={this.onMapReady}
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
           style={styles.map}
-
-
-          //control zooming
-          minZoomLevel={0}
-          maxZoomLevel={5}
-          
-          // show loading indicator while map loads
-          loadingEnabled={true}
-          loadingIndicatorColor="#666666"
-          loadingBackgroundColor="#eeeeee"
-          
+                  
 
           // set map boundaries, NE by SW
-          setMapBoundaries={ this.setBoundaries }       
+          //setMapBoundaries={ this.setBoundaries } 
+          loadingEnabled={true}
+          loadingIndicatorColor="#666666"
+          loadingBackgroundColor="#eeeeee"     
           >
             {this.state.polygons.map((polygon, index) => (
               /* Renders polygons from list */
@@ -230,8 +229,13 @@ class HeatMapView extends Component {
             ))}
         </MapView>
         <TouchableOpacity style={styles.button}
-          onPress={() => this.setBoundaries()}>
-          <Text> Button </Text>
+          onPress={() => this.moveMaptoLocation(initialRegion)}>
+          <Icon
+            // see: https://react-native-training.github.io/react-native-elements/API/icons/
+            name='home'
+            color='white'
+            type='material-community'
+          />
         </TouchableOpacity>
       </View>
     );
@@ -284,9 +288,13 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
     padding: 10,
-    backgroundColor: 'blue',
+    backgroundColor: '#0B5091',
     borderColor: 'red',
     margin: 10,
+    alignItems: 'center',
+    position: 'absolute',
+    right: 10,
+    bottom: 60,
   },
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -307,7 +315,7 @@ const styles = StyleSheet.create({
   callout: {
     flex: 1,
     position: 'relative'
-  }
+  },
 });
 
 export default HeatMapStack;

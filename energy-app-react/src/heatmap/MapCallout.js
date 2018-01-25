@@ -22,11 +22,6 @@ export default class MapCallout extends Component {
           <View>
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.number}>{number}</Text>
-            <Button
-              title='MORE INFO'
-              iconRight={{name: 'envira', type: 'font-awesome'}}
-              backgroundColor='#0B5091'
-            />
           </View>
         </View>
         <View style={styles.arrowBorder} />
