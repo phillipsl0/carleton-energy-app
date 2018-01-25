@@ -45,7 +45,7 @@ class SustainListView extends Component {
 
 
 const SustainStack = StackNavigator({
-    Buildings: {
+    Sustain: {
         screen: SustainListView,
     },
     // CardView: {
