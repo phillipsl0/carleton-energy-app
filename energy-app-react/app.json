@@ -10,6 +10,10 @@
     },
     "orientation": "portrait",
     "primaryColor": "#F3B61D",
-    "icon": "./src/assets/icon.png"
+    "icon": "./src/assets/icon.png",
+    "androidStatusBar": {
+      "backgroundColor": "#e1e8ee",
+      "barStyle": "light-content"
+    }
   }
 }

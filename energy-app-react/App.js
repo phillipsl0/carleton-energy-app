@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
-import { Platform, StyleSheet  } from 'react-native';
+import { AsyncStorage, Platform, StyleSheet  } from 'react-native';
 import { TabNavigator, NavigationActions } from 'react-navigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MapView from 'react-native-maps';
@@ -11,6 +11,7 @@ import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
 import CurrFont from './src/styling/CurrentFont';
+import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 
 const defaultFont = CurrFont+'-regular';
 const defaultFontBold = CurrFont+'-bold';
@@ -30,25 +31,40 @@ function cacheFonts(fonts) {
   return fonts.map(font => Font.loadAsync(font));
 }
 
-
 export default class App extends Component {
 
     state = {
         isReady: false,
     };
 
+//    async function cacheData() {
+//
+//    }
     async _cacheResourcesAsync() {
         const fontAssets = cacheFonts([FontAwesome.font,
             {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
             {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
         const imageAssets = cacheImages([require('./src/assets/windmill.png'),
             require('./src/assets/windmillHeader.png')]);
+        try {
+          const currConsumption = await getCurrentConsumptionGraphFormat();
+          await AsyncStorage.setItem('currentConsumption', JSON.stringify(currConsumption));
+
+          const currGeneration = await getCurrentGenerationGraphFormat();
+
+          await AsyncStorage.setItem('currentGeneration', JSON.stringify(currGeneration[0]));
+
+          var keys = await AsyncStorage.getAllKeys();
+          console.log(keys);
+        } catch (error) {
+          console.warn("Error fetching data");
+        }
 
         await Promise.all([...imageAssets, ...fontAssets]);
     }
 
     render() {
-        if ( !this.state.isReady) {
+        if (!this.state.isReady) {
             return(
                 <AppLoading
                     startAsync={this._cacheResourcesAsync}
@@ -68,7 +84,6 @@ const navStyle = StyleSheet.create({
     header: {
         ...Platform.select({
            android: {
-           marginTop: 24,
            backgroundColor: '#e1e8ee',
            }
         })
