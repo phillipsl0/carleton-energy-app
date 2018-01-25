@@ -28,6 +28,13 @@ Get lat/long: http://www.mapcoordinates.net/en
 
 // ** if want to use user's location, set up geolocation in componentWillMount(): https://school.shoutem.com/lectures/geolocation-app-react-native/
 
+const initialRegion = {
+  latitude: 44.4606925434,
+  longitude: -93.1533574685,
+  latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
+  longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
+}
+
 class HeatMapView extends Component {
   constructor(props) {
     super(props);
@@ -53,19 +60,9 @@ class HeatMapView extends Component {
       southWest: {
         latitude: 44.4592961807,
         longitude: -93.15502781429046
-      }
+      },
+      ready: true
     };
-    // Holder for previous state to help control scrolling
-    this.prev_state = {
-      region: {
-        // Carleton's coordinates
-        latitude: 44.4606925434,
-        longitude: -93.1533574685,
-        latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
-        longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
-      }
-    }
-
     //this.onRegionChange = this.onRegionChange.bind(this);
     // this.setMapBoundaries = this.setMapBoundaries.bind(this) ({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
   }
@@ -73,9 +70,34 @@ class HeatMapView extends Component {
   // Assemble all of Carleton's buildings
   componentDidMount() {
     this.getBuildingData();
+    this.moveToCarleton();
     // this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
-    console.log('Component mounted!');
+    console.log('Component did mount');
   }
+
+  setRegion(region) {
+    if(this.state.ready) {
+      setTimeout(() => this.refs.map.animateToRegion(region), 1);
+    }
+  }
+
+  moveToCarleton() {
+    this.setRegion(this.state.region);
+  }
+
+  onMapReady = (e) => {
+    if(!this.state.ready) {
+      this.setState({ready: true});
+    }
+  };
+
+  onRegionChange = (region) => {
+    console.log('onRegionChange', region);
+  };
+
+  onRegionChangeComplete = (region) => {
+    console.log('onRegionChangeComplete', region);
+  };
 
   // Algorithm to generate CSS hsl color code from [0, 1] value
   determineBuildingColor(buildingName) {
@@ -85,7 +107,6 @@ class HeatMapView extends Component {
     var h = (1.0 - use) * 240
     return "hsl(" + h + ", 100%, 50%)";
   }
-
 
   // Get current building data
   async getBuildingData() {
@@ -106,20 +127,6 @@ class HeatMapView extends Component {
       alert(introStr.concat(error))
     }
   }
-
-
-  // Called when location/zoom are changed with new location/zoom
-  // onRegionChange(region) {
-  //   // Check to make sure region is within bounds of Carleton
-  //   if (((region.latitude <= 44.46316089) && (region.latitude >= 44.45690153)) && ((region.longitude <= -93.14903207) && (region.longitude >= -93.15727215))) {
-  //     this.setState({ region });
-  //     // Update region if within bounds
-  //     this.prev_state.region = region;
-  //   // If user scrolls beyond Carleton's region, revert back to previous state
-  //   } else {
-  //     this.setState(this.prev_state.region);
-  //   }
-  // }
 
 
   // Show callout when building polygon is pressed
@@ -162,23 +169,26 @@ class HeatMapView extends Component {
         <MapView
           ref="map"
           provider = { PROVIDER_GOOGLE } // show buildings on OS
-          style={styles.map}
           showsTraffic={false}
+          initialRegion={initialRegion}
+          onMapReady={this.onMapReady}
+          onRegionChange={this.onRegionChange}
+          onRegionChangeComplete={this.onRegionChangeComplete}
+          style={styles.map}
+
 
           //control zooming
-          minZoomLevel={5}
-          maxZoomLevel={20}
+          minZoomLevel={0}
+          maxZoomLevel={5}
           
           // show loading indicator while map loads
           loadingEnabled={true}
           loadingIndicatorColor="#666666"
           loadingBackgroundColor="#eeeeee"
           
-          initialRegion={this.state.region}   
 
           // set map boundaries, NE by SW
-          setMapBoundaries={ this.setMapBoundaries }       
-          //onRegionChange={ this.onRegionChange }
+          setMapBoundaries={ this.setBoundaries }       
           >
             {this.state.polygons.map((polygon, index) => (
               /* Renders polygons from list */
@@ -223,19 +233,17 @@ class HeatMapView extends Component {
           onPress={() => this.setBoundaries()}>
           <Text> Button </Text>
         </TouchableOpacity>
-        
-        <Text style={{ position: 'absolute', bottom: 10 }}>
-          Latitude: {this.state.region.latitude}{'\n'}
-          Longitude: {this.state.region.longitude}{'\n'}
-          LatitudeDelta: {this.state.region.latitudeDelta}{'\n'}
-          LongitudeDelta: {this.state.region.longitudeDelta}{'\n'}
-          Last Building Pressed: {this.state.lastBuildingPressed}
-        </Text> 
       </View>
     );
   }
 }
 /*
+        <TouchableOpacity style={styles.button}
+          onPress={() => this.setBoundaries()}>
+          <Text> Button </Text>
+        </TouchableOpacity>
+
+
         <Text style={{ position: 'absolute', bottom: 10 }}>
           Latitude: {this.state.region.latitude}{'\n'}
           Longitude: {this.state.region.longitude}{'\n'}
