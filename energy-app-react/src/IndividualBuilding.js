@@ -42,7 +42,6 @@ export default class IndividualBuilding extends Component {
       getGraphScope = () => {
         graphData = {ExampleData};
 
-
         if (this.state.view == 'day') {
             return graphData.day.graph;
         } else if (this.state.view == 'week') {
@@ -54,6 +53,11 @@ export default class IndividualBuilding extends Component {
         }
     }
 
+    scopeCallbackGraph = ( buttonView, buttonComparator, buttonIndex ) => {
+        this.setState({ view: buttonView,
+            viewNumber: buttonComparator,
+            selectedCard: buttonIndex});
+    }
 
 
     render() {
@@ -98,14 +102,13 @@ export default class IndividualBuilding extends Component {
 
                 <ScrollView style={themeStyles.lightBlueBackground}>
 
-
-
                     <GraphDetail data={currData}
                         callback={this.scopeCallbackGraph}
                         selected={this.state.selectedCard}/>
 
-                    <Utilities callback={this.scopeCallbackUtilities}
-                        selected={this.state.selectedCard}/>
+                    {/*<Utilities callback={this.scopeCallbackUtilities}
+                        selected={this.state.selectedCard}/>*/}
+                    
 
 
                 </ScrollView>
