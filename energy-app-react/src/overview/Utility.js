@@ -4,6 +4,10 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
+import CurrFont from './../styling/CurrentFont';
+
+const defaultFont = CurrFont+'-regular';
+const defaultFontBold = CurrFont+'-bold';
 
 export default class Utility extends Component {
     constructor(props) {
@@ -33,8 +37,7 @@ export default class Utility extends Component {
 
                     <Text style={this.props.selected == this.props.index ?
                                  styles.subFocused : styles.sub}>
-                        {this.props.number}
-                        {this.props.unit}
+                        {this.props.number} {this.props.unit}
                     </Text>
 
                 </View>
@@ -61,22 +64,25 @@ const styles = StyleSheet.create({
 
     sub: {
         color: '#9E9E9E',
-        fontWeight: 'bold',
+        fontFamily: defaultFontBold,
         fontSize: 12,
     },
 
     subFocused: {
         color: 'white',
+        fontFamily: defaultFont,
         fontSize: 12,
     },
 
     text: {
         color: '#0B5091',
+        fontFamily: defaultFont,
         fontSize: 15,
     },
 
     textFocused: {
         color: 'white',
+        fontFamily: defaultFont,
         fontSize: 15,
     },
 })

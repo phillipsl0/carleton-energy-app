@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Font, AppLoading, Asset } from 'expo';
 import { Platform, StyleSheet  } from 'react-native';
 import { TabNavigator, NavigationActions } from 'react-navigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -7,17 +8,78 @@ import MapView from 'react-native-maps';
 import BuildingListView from './src/BuildingListView';
 import HeatMapStack from './src/heatmap/HeatMapView'
 import OverviewStack from './src/overview/OverviewListView';
+import { GetStyle } from './src/styling/Themes'
+import CurrTheme from './src/styling/CurrentTheme'
+import CurrFont from './src/styling/CurrentFont';
 
+const defaultFont = CurrFont+'-regular';
+const defaultFontBold = CurrFont+'-bold';
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
+
+function cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === 'string') {
+      return Image.prefetch(image);
+    } else {
+      return Asset.fromModule(image).downloadAsync();
+    }
+  });
+}
+
+function cacheFonts(fonts) {
+  return fonts.map(font => Font.loadAsync(font));
+}
+
+
+export default class App extends Component {
+
+    state = {
+        isReady: false,
+    };
+
+    async _cacheResourcesAsync() {
+        const fontAssets = cacheFonts([FontAwesome.font,
+            {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
+            {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
+        const imageAssets = cacheImages([require('./src/assets/windmill.png'),
+            require('./src/assets/windmillHeader.png')]);
+
+        await Promise.all([...imageAssets, ...fontAssets]);
+    }
+
+    render() {
+        if ( !this.state.isReady) {
+            return(
+                <AppLoading
+                    startAsync={this._cacheResourcesAsync}
+                    onFinish={() => this.setState({ isReady: true })}
+                    onError={console.warn}/>
+            );
+        }
+
+        return(
+            <RootTabs/>
+        );
+
+    }
+}
 
 const navStyle = StyleSheet.create({
     header: {
         ...Platform.select({
            android: {
-           marginTop: 24
+           marginTop: 24,
+           backgroundColor: '#e1e8ee',
            }
         })
     },
+    label: {
+        fontFamily: defaultFont,
+    },
+
+    indicator: {
+        backgroundColor: '#0B5091'
+    }
 })
 
 const RootTabs = TabNavigator({
@@ -51,7 +113,11 @@ const RootTabs = TabNavigator({
   },
    { tabBarOptions:
         // fixes top margin error in android
-        { style: navStyle.header},
+        { style: navStyle.header,
+          labelStyle: navStyle.label,
+          indicatorStyle: navStyle.indicator,
+          activeTintColor: '#0B5091',
+          inactiveTintColor: '#9E9E9E',},
      navigationOptions: ({ navigation }) => ({
          tabBarOnPress: (tab, jumpToIndex) => {
            // resets stack in tabs if their icon is tapped while focused
@@ -70,5 +136,3 @@ const RootTabs = TabNavigator({
          }
        })
 });
-
-export default RootTabs;
