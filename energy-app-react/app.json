@@ -4,7 +4,7 @@
     "slug": "cc-energy-app",
     "sdkVersion": "22.0.0",
     "splash": {
-      "image": "./src/assets/animated-splash.png",
+      "image": "./src/assets/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#0B5091"
     },

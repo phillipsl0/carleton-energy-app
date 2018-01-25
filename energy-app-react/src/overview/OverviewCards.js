@@ -5,17 +5,69 @@ import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './GraphDetailCard';
 import Utilities from './UtilitiesMiniCards';
+import { getTotal } from './../helpers/ApiWrappers';
 
 
 export default class OverviewCards extends Component {
     constructor(props) {
         super(props);
+        data = this.props.navigation.state.params.data.comparison;
+        //TODO: add when lastupdated
 
         this.state = {
             view: 'day',
             viewNumber: 7,
             selectedCard: 1,
+            dayData: data.day.graph,
+            weekData: data.week.graph,
+            monthData: data.month.graph,
+            yearData: data.year.graph,
         };
+    }
+
+    componentDidMount() {
+        currDate = new Date();
+
+        this.updateDay(currDate);
+        this.updateWeek(currDate);
+        this.updateMonth(currDate);
+        this.updateYear(currDate);
+    }
+
+    updateDay = ( currDate ) => {
+        comparisonDate = new Date();
+
+        comparisonDate.setDate(currDate.getDate()-7);
+        updatedDay = getTotal(comparisonDate, currDate, 1440);
+        this.setState({ dayData: updatedDay });
+    }
+
+    updateWeek = ( currDate ) => {
+        comparisonDate = new Date();
+
+        comparisonDate.setDate(currDate.getDate()-28);
+        updatedWeek = getTotal(comparisonDate, currDate, 10080);
+
+        for (var i = 0; i < updatedWeek.length; i++) {
+            console.log(updatedWeek[i]["x"] + " " + updatedWeek[i]["y"]);
+        }
+        this.setState({ weekData: updatedWeek });
+    }
+
+    updateMonth = ( currDate ) => {
+        comparisonDate = new Date();
+
+        comparisonDate.setMonth(currDate.getMonth()-11);
+        updatedMonth = getTotal(comparisonDate, currDate, 41760);
+        this.setState({ monthData: updatedMonth });
+    }
+
+    updateYear = ( currDate ) => {
+        comparisonDate = new Date();
+
+        comparisonDate.setYear(currDate.getFullYear()-5);
+        updatedYear = getTotal(comparisonDate, currDate, 525600);
+        this.setState({ yearData: updatedYear });
     }
 
     scopeCallbackGraph = ( buttonView, buttonComparator, buttonIndex ) => {
@@ -28,18 +80,17 @@ export default class OverviewCards extends Component {
         this.setState({ selectedCard: buttonIndex});
     }
 
-
     getGraphScope = () => {
         graphData = navigation.state.params.data.comparison;
 
         if (this.state.view == 'day') {
-            return graphData.day.graph;
+            return this.state.dayData["data"];
         } else if (this.state.view == 'week') {
-            return graphData.week.graph;
+            return this.state.weekData["data"];
         } else if (this.state.view == 'month') {
-            return graphData.month.graph;
+            return this.state.monthData["data"];
         } else if (this.state.view == 'year') {
-             return graphData.year.graph;
+             return this.state.yearData["data"];
         }
     }
 
@@ -47,13 +98,13 @@ export default class OverviewCards extends Component {
         graphData = navigation.state.params.data.comparison;
 
         if (this.state.view == 'day') {
-            return graphData.day.ranking;
+            return this.state.dayData["rank"];
         } else if (this.state.view == 'week') {
-            return graphData.week.ranking;
+            return this.state.weekData["rank"];
         } else if (this.state.view == 'month') {
-            return graphData.month.ranking;
+            return this.state.monthData["rank"];;
         } else if (this.state.view == 'year') {
-             return graphData.year.ranking;
+             return this.state.yearData["rank"];;
         }
     }
 
@@ -64,7 +115,14 @@ export default class OverviewCards extends Component {
             headerText = this.getRanking();
             viewNumber = this.state.viewNumber;
             view = this.state.view;
-            subheaderText = "in energy use compared to the past " + viewNumber
+
+            if (this.props.navigation.state.params.card == 1) {
+                verb = 'use';
+            } else {
+                verb = 'generation';
+            }
+
+            subheaderText = "in " + verb + " compared to the past " + viewNumber
                 + " " + view + "s";
 
         } else if (this.state.selectedCard == 5) {
@@ -86,7 +144,7 @@ export default class OverviewCards extends Component {
 
       return (
           <View style={[styles.textContainer, themeStyles.centered]}>
-             <Text style={[styles.number, themeStyles.translucentText]}>
+             <Text style={[styles.number, themeStyles.translucentText, themeStyles.fontBold]}>
                 {headerText}
              </Text>
 
@@ -106,7 +164,7 @@ export default class OverviewCards extends Component {
         return (
             <View style={[themeStyles.flex, themeStyles.list]}>
 
-            <Image source={require('./../assets/noskyWindmill.png')}
+            <Image source={require('./../assets/windmillHeader.png')}
                 style={themeStyles.header}/>
             <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
             {header}
