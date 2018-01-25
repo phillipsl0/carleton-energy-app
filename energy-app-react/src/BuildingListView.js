@@ -26,7 +26,7 @@ class BuildingListView extends Component {
              renderItem={({ item }) => (
                <ListItem
                     style={styles.listItem}
-                 onPress={() => this.props.navigation.navigate('CardView', {item:item})}
+                 onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item})}
                  title={item.name}
                  avatar={<Avatar
                             style={styles.listImg}
@@ -47,7 +47,7 @@ const BuildingStack = StackNavigator({
         screen: BuildingListView,
     },
 
-    CardView: {
+    BuildingCardView: {
         screen: IndividualBuilding,
         path: 'buildings/:name',
         navigationOptions: ({ navigation }) => ({

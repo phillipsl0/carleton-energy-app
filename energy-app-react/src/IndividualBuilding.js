@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js';
+import { getCurrentBuildingUtilityConsumption, getCampusUtilityConsumptionOverTime } from './helpers/ApiWrappers.js';
 import { AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, ScrollView } from 'react-native'
 import { GetStyle } from './styling/Themes';
 import CurrTheme from './styling/CurrentTheme';
 import GraphDetail from './overview/GraphDetailCard';
-import ExampleData from './overview/OverviewExampleData';
+// import ExampleData from './overview/OverviewExampleData';
 import Utilities from './overview/UtilitiesMiniCards';
 import OverviewCards from './overview/OverviewCards';
 
@@ -40,6 +40,7 @@ export default class IndividualBuilding extends Component {
 
 
       getGraphScope = () => {
+        // graphData = {ExampleData};
         graphData = {ExampleData};
 
         if (this.state.view == 'day') {
