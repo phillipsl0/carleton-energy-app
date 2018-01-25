@@ -293,8 +293,8 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: 'center',
     position: 'absolute',
-    right: 10,
-    bottom: 60,
+    right: 5,
+    bottom: 5,
   },
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -308,9 +308,9 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 125, // was 300
-    //width: screen_width,
-    //height: screen_height
+    bottom: 0,
+    width: screen_width,
+    height: screen_height
   },
   callout: {
     flex: 1,
