@@ -267,12 +267,6 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
         scaleFactor = 120; 
     }
 
-    var buildings = getBuildingsList();
-
-    if (buildings.indexOf(building) % 2 == 0) {
-        scaleFactor *= 2;
-    }
-
     var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
     var currentTime = new Date(timeEnd);
 
@@ -280,12 +274,39 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
     for (var i = numberEntries-1; i >= 0; i--) {
         table[i] = {};
         table[i]["date"] = currentTime.toString();
-        table[i][utility] = Math.random() * scaleFactor * timeframe;
+        table[i][utility] = Math.random() * scaleFactor * numberEntries;
 
         currentTime.setMinutes(currentTime.getMinutes() - timeScale);
     }
 
     return table;
+}
+
+// Added wrapper to get data the way I need it
+export function getTotal(timeStart, timeEnd, timeScale) {
+    var waterTable = getCampusUtilityConsumptionOverTime("water", timeStart, timeEnd, timeScale);
+    var electricityTable = getCampusUtilityConsumptionOverTime("electricity", timeStart, timeEnd, timeScale);
+    var combinedTable = new Array(waterTable.length);
+    var finalTable = {};
+    var currData = 0;
+    var rank = waterTable.length;
+
+    for (var i=waterTable.length-1; i >= 0; i--) {
+        combinedTable[i] = {};
+        combinedTable[i]["x"] = waterTable[i]["date"];
+        combinedTable[i]["y"] = (waterTable[i]["water"] + electricityTable[i]["electricity"])/1000;
+
+        if (i==waterTable.length-1) {
+            currData = combinedTable[i]["y"];
+        } else if (combinedTable[i]["y"] > currData) {
+            rank-=1;
+        }
+    }
+
+    finalTable["rank"] = rank;
+    finalTable["data"] = combinedTable;
+
+    return finalTable;
 }
 
 export function getTotalCampusUtilityConsumption(utility, timeStart, timeEnd) {

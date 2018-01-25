@@ -1,5 +1,7 @@
 import { assign } from "lodash";
 
+import CurrFont from './../styling/CurrentFont';
+
 // *
 // * Colors
 // *
@@ -14,10 +16,13 @@ const colors = [
 ];
 
 const carletonBlue = "#0B5091";
+
 // *
 // * Typography
 // *
 const sansSerif = "'Gill Sans', 'Gill Sans MT', 'Ser­avek', 'Trebuchet MS', sans-serif";
+const fontRegular = CurrFont+'-regular';
+const fontBold = CurrFont+'-bold';
 const letterSpacing = "normal";
 const fontSize = 14;
 // *
@@ -33,7 +38,7 @@ const baseProps = {
 // * Labels
 // *
 const baseLabelStyles = {
-  fontFamily: sansSerif,
+  fontFamily: fontRegular,
   fontSize: 10,
   letterSpacing: 90,
   padding: 0,
