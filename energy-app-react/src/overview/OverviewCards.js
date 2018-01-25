@@ -5,7 +5,7 @@ import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './GraphDetailCard';
 import Utilities from './UtilitiesMiniCards';
-import { getTotal } from './../helpers/ApiWrappers';
+import { getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './../helpers/ApiWrappers';
 
 
 export default class OverviewCards extends Component {
@@ -27,7 +27,7 @@ export default class OverviewCards extends Component {
 
     componentDidMount() {
         currDate = new Date();
-
+        
         this.updateDay(currDate);
         this.updateWeek(currDate);
         this.updateMonth(currDate);
@@ -36,37 +36,53 @@ export default class OverviewCards extends Component {
 
     updateDay = ( currDate ) => {
         comparisonDate = new Date();
-
         comparisonDate.setDate(currDate.getDate()-7);
-        updatedDay = getTotal(comparisonDate, currDate, 1440);
+        
+        if (this.props.navigation.state.params.card == 1) {
+            updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
+        } else {
+            updatedDay = getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
+        }
+        
         this.setState({ dayData: updatedDay });
     }
 
     updateWeek = ( currDate ) => {
         comparisonDate = new Date();
-
         comparisonDate.setDate(currDate.getDate()-28);
-        updatedWeek = getTotal(comparisonDate, currDate, 10080);
-
-        for (var i = 0; i < updatedWeek.length; i++) {
-            console.log(updatedWeek[i]["x"] + " " + updatedWeek[i]["y"]);
+        
+        if (this.props.navigation.state.params.card == 1) {
+            updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
+        } else {
+            updatedWeek = getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
         }
+        
         this.setState({ weekData: updatedWeek });
     }
 
     updateMonth = ( currDate ) => {
         comparisonDate = new Date();
-
         comparisonDate.setMonth(currDate.getMonth()-11);
-        updatedMonth = getTotal(comparisonDate, currDate, 41760);
+
+        if (this.props.navigation.state.params.card == 1) {
+            updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
+        } else {
+            updatedMonth = getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
+        }
+
         this.setState({ monthData: updatedMonth });
     }
 
     updateYear = ( currDate ) => {
         comparisonDate = new Date();
-
         comparisonDate.setYear(currDate.getFullYear()-5);
-        updatedYear = getTotal(comparisonDate, currDate, 525600);
+
+        if (this.props.navigation.state.params.card == 1) {
+            updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
+        } else {
+            updatedYear = getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
+        }
+
         this.setState({ yearData: updatedYear });
     }
 

@@ -40,7 +40,7 @@ export function getUtilitiesList() {
 }
 
 export function getUnitsList() {
-    var units = {"electricity": "kWh", "water": "Gal"}
+    var units = {"electricity": "kWh", "water": "gal"}
 
     return units;
 }
@@ -178,6 +178,45 @@ export function getCurrentEnergyGeneration() {
     return getTotalEnergyGeneration(timeStart, timeEnd);
 }
 
+// added function to get usage I need
+export function getCurrentGenerationGraphFormat() {
+    var totalSolar = getCurrentSolarGeneration();
+    var totalWind = getCurrentWindGeneration();
+
+    var data = new Array(3);
+
+    data[0] = {'x': 'Solar', 'y': totalSolar};
+    data[1] = {'x': 'Wind', 'y': totalWind};
+    data[2] = {'x': 'Total', 'y': totalSolar+totalWind};
+
+    return data;
+}
+
+export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale) {
+    var waterTable = getCampusUtilityConsumptionOverTime("water", timeStart, timeEnd, timeScale);
+    var electricityTable = getCampusUtilityConsumptionOverTime("electricity", timeStart, timeEnd, timeScale);
+    var combinedTable = new Array(waterTable.length);
+    var finalTable = {};
+    var currData = 0;
+    var rank = waterTable.length;
+
+    for (var i=waterTable.length-1; i >= 0; i--) {
+        combinedTable[i] = {};
+        combinedTable[i]["x"] = waterTable[i]["date"];
+        combinedTable[i]["y"] = (waterTable[i]["water"] + electricityTable[i]["electricity"])/1000;
+
+        if (i==waterTable.length-1) {
+            currData = combinedTable[i]["y"];
+        } else if (combinedTable[i]["y"] > currData) {
+            rank-=1;
+        }
+    }
+
+    finalTable["rank"] = rank;
+    finalTable["data"] = combinedTable;
+
+    return finalTable;
+}
 
 // -------------------- Utility Consumption -------------------------
 
@@ -256,6 +295,28 @@ export function getCurrentBuildingUtilityConsumption(building, utility) {
     return getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEnd);
 }
 
+// added function to get usage I need
+export function getCurrentConsumptionGraphFormat() {
+    var totalWater = 0;
+    var totalElectricity = 0;
+    var data = new Array(3);
+    var buildings = getBuildingsList();
+
+    buildings.forEach(function(building) {
+        totalWater += getCurrentBuildingUtilityConsumption(building, "water");
+        totalElectricity += getCurrentBuildingUtilityConsumption(building, "electricity");
+    });
+
+    data[0] = {'x': 'Water', 'y': totalWater};
+    data[1] = {'x': 'Electricity', 'y': totalElectricity};
+    data[2] = {'x': 'Total', 'y': totalWater+totalElectricity};
+//    data["Water"] = totalWater;
+//    data["Electricity"] = totalElectricity;
+//    data["Total"] = totalWater + totalElectricity;
+
+    return data;
+}
+
 export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd, timeScale) {
 
     // different utilities have different "typical" amounts
@@ -283,7 +344,7 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
 }
 
 // Added wrapper to get data the way I need it
-export function getTotal(timeStart, timeEnd, timeScale) {
+export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale) {
     var waterTable = getCampusUtilityConsumptionOverTime("water", timeStart, timeEnd, timeScale);
     var electricityTable = getCampusUtilityConsumptionOverTime("electricity", timeStart, timeEnd, timeScale);
     var combinedTable = new Array(waterTable.length);
