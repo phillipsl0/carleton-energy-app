@@ -285,17 +285,6 @@ const navStyles = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
-  button: {
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: '#0B5091',
-    borderColor: 'red',
-    margin: 10,
-    alignItems: 'center',
-    position: 'absolute',
-    right: 5,
-    bottom: 5,
-  },
   container: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
@@ -315,6 +304,18 @@ const styles = StyleSheet.create({
   callout: {
     flex: 1,
     position: 'relative'
+  },
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: '#0B5091',
+    borderColor: 'red',
+    margin: 10,
+    alignItems: 'center',
+    position: 'absolute',
+    right: 5,
+    bottom: 5,
+    justifyContent: 'center'
   },
 });
 
