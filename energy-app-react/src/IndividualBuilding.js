@@ -6,7 +6,7 @@ import CurrTheme from './styling/CurrentTheme';
 import GraphDetail from './overview/GraphDetailCard';
 import ExampleData from './overview/OverviewExampleData';
 import Utilities from './overview/UtilitiesMiniCards';
-
+import OverviewCards from './overview/OverviewCards';
 
 
 
@@ -43,7 +43,7 @@ export default class IndividualBuilding extends Component {
         graphData = {ExampleData};
 
         if (this.state.view == 'day') {
-            return graphData.day.graph;
+            return graphData[0].data.comparison.day.graph;
         } else if (this.state.view == 'week') {
             return graphData.week.graph;
         } else if (this.state.view == 'month') {
@@ -104,11 +104,7 @@ export default class IndividualBuilding extends Component {
 
                     <GraphDetail data={currData}
                         callback={this.scopeCallbackGraph}
-                        selected={this.state.selectedCard}/>
-
-                    {/*<Utilities callback={this.scopeCallbackUtilities}
-                        selected={this.state.selectedCard}/>*/}
-                    
+                        selected={this.state.selectedCard}/>                    
 
 
                 </ScrollView>
@@ -189,3 +185,4 @@ const styles = StyleSheet.create({
     marginTop: '-2%',
   },
 })
+
