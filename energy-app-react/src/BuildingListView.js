@@ -1,94 +1,119 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image } from 'react-native'
+import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, TouchableOpacity } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
-import { List, Card, ListItem, Button, Avatar } from 'react-native-elements'
-import buildings from './Buildings'
+import { List, Card, ListItem, Button, Avatar, Header } from 'react-native-elements';
+import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import buildings from './Buildings';
+import IndividualBuilding from './IndividualBuilding';
+
+
+
+
 
 class BuildingListView extends Component {
     static navigationOptions = {
         title: 'Buildings'
     }
 
-    render() {
-        const {navigate} = this.props.navigation;
-        
-        return (
-            <List>
-                <FlatList
-                     data={buildings}
-                     keyExtractor={item => item.name}
-                     renderItem={({ item }) => this.flatListItem(item)}
-                 />
-             </List>
-        );
-     }
-     
-    flatListItem(item) {
-        return (
+    renderHeader = (headerItem) => {
+        return <Text style={styles.header}>{headerItem.section.title}</Text>
+    }
+
+    renderItem = (item) => {
+        return <View>
             <ListItem
                 style={styles.listItem}
-                onPress={() => this.props.navigation.navigate('IndividualBuilding', {item:item})}
-                title={item.name}
-                avatar={<Avatar
-                            style={styles.listImg}
-                            source={ { uri: item.avatar }}
-                            containerStyle={{alignSelf: 'stretch'}}
-                        />}
-                subtitle = {item.floors + " 33G"}
-                subtitleStyle = {styles.sublistData}
-                rightTitle={"Details"}>
-                <Text style={styles.listText}> {item.name} </Text>
-            </ListItem>
-        )
+                title={item.item.name}
+                onPress={() => this.props.navigation.navigate('CardView', {item:item.item})}/>
+            <Text> {item.item.place} </Text>
+            <Text> {item.item.train} </Text>
+        </View>
     }
-}
 
-
-class IndividualBuilding extends Component {
     render() {
-        const {state} = this.props.navigation;
-        return (
-            <View>
-                <View 
-                    style={styles.view}>
-                    <Text>{this.props.navigation.state.params.item.name}</Text>
-                    <Image
-                    style = {styles.img}
-                    source={{ uri: this.props.navigation.state.params.item.avatar }}
-                />
-                </View>
+        const {navigate} = this.props.navigation;
 
-                <View style={styles.view}>
-                    <Text> {"Electricity Consumption"} </Text>
-                    <Text> {"GRAPH HERE"} </Text>
-                </View>
-            </View>
-            
-        );
+        var sectionData = [
+            {title: "Burton", data:[{name: "Burty", place: "Carleton", train: "Electric"},{name: "Gurty"}]},
+            {title: "Davis", data:[{name: "Davy", place:"Olaf", train:"Coal"}]}
+        ]
+
+        return (
+            <List>
+                <SectionList
+                    sections = {sectionData}
+                    renderSectionHeader={this.renderHeader}
+                    renderItem={this.renderItem}
+                    keyExtractor = {(item) => item.name}
+                />
+            </List>
+       );
     }
 }
+
 
 const BuildingStack = StackNavigator({
     Buildings: {
         screen: BuildingListView,
     },
-    IndividualBuilding: {
-        path: 'buildings/:name',
+    CardView: {
         screen: IndividualBuilding,
+        path: 'buildings/:name',
+        navigationOptions: ({ navigation }) => ({
+              title: `${navigation.state.params.item.name}`,
+              headerTintColor: 'white',
+              headerStyle: navStyles.header,
+            }),
+
     },
+    // CardView: {
+    //   screen: IndividualBuilding,
+    //   // navigationOptions:
+    // },
 });
+
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    }
+})
 
 const styles = StyleSheet.create({
   card: {
     paddingTop: 20,
   },
+  bigyellow: {
+    color: 'green',
+    fontWeight: 'bold',
+    fontSize: 30
+    },
+  blue: {
+    color: 'blue',
+    fontWeight: 'bold',
+    },
+    head: {
+      backgroundColor: 'grey',
+    },
+  table: {
+    width: 250,
+    marginLeft: 5,
+
+  },
+  text: {
+    alignSelf: 'center',
+    marginLeft: 5,
+    fontSize: 18,
+  },
   listItem: {
     height: 50,
     borderBottomColor: '#c8c7cc',
     borderBottomWidth: 0.5,
+    width: 300,
+    alignSelf: 'center',
     paddingTop: 35,
     paddingRight: 15,
     paddingBottom: 55,
+
   },
   listImg: {
     height: 30,
@@ -99,18 +124,20 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     fontSize: 24,
   },
+  row: {
+    backgroundColor: 'orange',
+  },
   view: {
     alignItems: 'center',
+    backgroundColor: 'yellow'
   },
   img: {
     alignSelf: 'stretch',
     height: 100,
   },
-  sublistData:{
-    paddingTop: 35,
-    paddingRight: 15,
-    paddingBottom: 55,
-  }    
+  header: {
+      fontSize: 20
+  }
 })
 
 export default BuildingStack;
