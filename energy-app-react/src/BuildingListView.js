@@ -6,7 +6,8 @@ import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-ta
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
 import OverviewCards from './overview/OverviewCards';
-
+import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './helpers/ApiWrappers';
+import ExampleData from './overview/OverviewExampleData'
 
 
 class BuildingListView extends Component {
@@ -15,17 +16,18 @@ class BuildingListView extends Component {
     }
 
     render() {
-        const {navigate} = this.props.navigation;
+       const {navigate} = this.props.navigation;
 
        return (
          <List>
            <FlatList
              data={buildings}
+             graphData = {ExampleData.data}
              keyExtractor={item => item.name}
 
              renderItem={({ item }) => (
                <ListItem
-                    style={styles.listItem}
+                 style={styles.listItem}
                  onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item})}
                  title={item.name}
                  avatar={<Avatar

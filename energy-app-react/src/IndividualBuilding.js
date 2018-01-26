@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getCurrentBuildingUtilityConsumption, getCampusUtilityConsumptionOverTime } from './helpers/ApiWrappers.js';
+import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './helpers/ApiWrappers';
 import { AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, ScrollView } from 'react-native'
 import { GetStyle } from './styling/Themes';
 import CurrTheme from './styling/CurrentTheme';
@@ -39,18 +39,79 @@ export default class IndividualBuilding extends Component {
     }
 
 
+    componentDidMount() {
+        currDate = new Date();
+        
+        this.updateDay(currDate);
+        this.updateWeek(currDate);
+        this.updateMonth(currDate);
+        this.updateYear(currDate);
+    }
+
+    updateDay = ( currDate ) => {
+        comparisonDate = new Date();
+        comparisonDate.setDate(currDate.getDate()-7);
+        
+        if (this.props.navigation.state.params.card == 1) {
+            updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
+        } else {
+            updatedDay = getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
+        }
+        
+        this.setState({ dayData: updatedDay });
+    }
+
+    updateWeek = ( currDate ) => {
+        comparisonDate = new Date();
+        comparisonDate.setDate(currDate.getDate()-28);
+        
+        if (this.props.navigation.state.params.card == 1) {
+            updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
+        } else {
+            updatedWeek = getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
+        }
+        
+        this.setState({ weekData: updatedWeek });
+    }
+
+    updateMonth = ( currDate ) => {
+        comparisonDate = new Date();
+        comparisonDate.setMonth(currDate.getMonth()-11);
+
+        if (this.props.navigation.state.params.card == 1) {
+            updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
+        } else {
+            updatedMonth = getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
+        }
+
+        this.setState({ monthData: updatedMonth });
+    }
+
+    updateYear = ( currDate ) => {
+        comparisonDate = new Date();
+        comparisonDate.setYear(currDate.getFullYear()-5);
+
+        if (this.props.navigation.state.params.card == 1) {
+            updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
+        } else {
+            updatedYear = getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
+        }
+
+        this.setState({ yearData: updatedYear });
+    }
+
+
       getGraphScope = () => {
-        // graphData = {ExampleData};
-        graphData = {ExampleData};
+        // graphData = navigation.data.comparison;
 
         if (this.state.view == 'day') {
-            return graphData[0].data.comparison.day.graph;
+            return this.state.dayData["data"];
         } else if (this.state.view == 'week') {
-            return graphData.week.graph;
+            return this.state.weekData["data"];
         } else if (this.state.view == 'month') {
-            return graphData.month.graph;
+            return this.state.monthData["data"];
         } else if (this.state.view == 'year') {
-             return graphData.year.graph;
+             return this.state.yearData["data"];
         }
     }
 
@@ -62,6 +123,7 @@ export default class IndividualBuilding extends Component {
 
 
     render() {
+        navigation = this.props.navigation;
         const themeStyles = GetStyle(CurrTheme);
         header = this.getHeader();
         currData = this.getGraphScope();
