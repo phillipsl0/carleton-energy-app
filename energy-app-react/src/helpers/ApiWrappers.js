@@ -75,8 +75,8 @@ export function getEnergyGenerationOverTime(timeStart, timeEnd, timeScale) {
     for (var i = numberEntries-1; i >= 0; i--) {
         table[i] = {};
         table[i]["date"] = currentTime.toString();
-        table[i]["wind"] = Math.random() * scaleFactorWind * timeframe;
-        table[i]["solar"] = Math.random() * scaleFactorSolar * timeframe;
+        table[i]["wind"] = Math.random() * scaleFactorWind * numberEntries;
+        table[i]["solar"] = Math.random() * scaleFactorSolar * numberEntries;
         table[i]["total"] = table[i]["wind"] + table[i]["solar"];
 
         currentTime.setMinutes(currentTime.getMinutes() - timeScale);
@@ -178,6 +178,46 @@ export function getCurrentEnergyGeneration() {
     return getTotalEnergyGeneration(timeStart, timeEnd);
 }
 
+
+export function getCurrentWindGenerationGraphFormat() {
+    var windTable = new Array(2);
+    windTable[0] = {};
+    windTable[1] = {};
+
+    windTable[0]["x"] = "Turbine One";
+    windTable[0]["y"] = getCurrentWindGeneration();
+
+    windTable[1]["x"] = "Turbine Two";
+    windTable[1]["y"] = getCurrentWindGeneration();
+
+    return windTable;
+}
+
+export function getTotalWindGenerationGraphFormat(timeStart, timeEnd, timeScale) {
+    var windTable = getWindGenerationOverTime(timeStart, timeEnd, timeScale);
+
+    var finalTable = {};
+    var dataTable = new Array(windTable.length);
+    var currData = 0;
+    var rank = windTable.length;
+
+    for (var i = windTable.length-1; i >= 0; i--) {
+        dataTable[i] = {};
+        dataTable[i]["x"] = windTable[i]["date"];
+        dataTable[i]["y"] = windTable[i]["wind"]/1000;
+
+        if (i==windTable.length-1) {
+            currData = dataTable[i]["y"];
+        } else if (dataTable[i]["y"] > currData) {
+            rank-=1;
+        }
+    }
+
+    finalTable["rank"] = rank;
+    finalTable["data"] = dataTable;
+    return finalTable
+}
+
 // added function to get usage I need
 export function getCurrentGenerationGraphFormat() {
     var totalSolar = getCurrentSolarGeneration();
@@ -193,19 +233,20 @@ export function getCurrentGenerationGraphFormat() {
 }
 
 export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale) {
-    var waterTable = getCampusUtilityConsumptionOverTime("water", timeStart, timeEnd, timeScale);
-    var electricityTable = getCampusUtilityConsumptionOverTime("electricity", timeStart, timeEnd, timeScale);
-    var combinedTable = new Array(waterTable.length);
+    var solarTable = getSolarGenerationOverTime(timeStart, timeEnd, timeScale);
+    var windTable = getWindGenerationOverTime(timeStart, timeEnd, timeScale);
+
+    var combinedTable = new Array(solarTable.length);
     var finalTable = {};
     var currData = 0;
-    var rank = waterTable.length;
+    var rank = solarTable.length;
 
-    for (var i=waterTable.length-1; i >= 0; i--) {
+    for (var i=solarTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
-        combinedTable[i]["x"] = waterTable[i]["date"];
-        combinedTable[i]["y"] = (waterTable[i]["water"] + electricityTable[i]["electricity"])/1000;
+        combinedTable[i]["x"] = solarTable[i]["date"];
+        combinedTable[i]["y"] = (solarTable[i]["solar"] + windTable[i]["wind"])/1000;
 
-        if (i==waterTable.length-1) {
+        if (i==solarTable.length-1) {
             currData = combinedTable[i]["y"];
         } else if (combinedTable[i]["y"] > currData) {
             rank-=1;
@@ -310,9 +351,6 @@ export function getCurrentConsumptionGraphFormat() {
     data[0] = {'x': 'Water', 'y': totalWater};
     data[1] = {'x': 'Electricity', 'y': totalElectricity};
     data[2] = {'x': 'Total', 'y': totalWater+totalElectricity};
-//    data["Water"] = totalWater;
-//    data["Electricity"] = totalElectricity;
-//    data["Total"] = totalWater + totalElectricity;
 
     return data;
 }
@@ -359,7 +397,7 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale) {
 
         if (i==waterTable.length-1) {
             currData = combinedTable[i]["y"];
-        } else if (combinedTable[i]["y"] > currData) {
+        } else if (combinedTable[i]["y"] < currData) {
             rank-=1;
         }
     }
@@ -434,3 +472,109 @@ export function sortByKey(array, key) {
     });
 }
 
+export function getAllHistoricalGraphData() {
+    var historicalData = {};
+    currDate = new Date();
+
+    var dayUsageData = getDayGraph(currDate, "usage");
+    var dayGenerationData = getDayGraph(currDate, "generation");
+    var dayTurbineData = getDayGraph(currDate, "turbine");
+
+    historicalData["dayUsage"] = dayUsageData;
+    historicalData["dayGeneration"] = dayGenerationData;
+    historicalData["dayTurbine"] = dayTurbineData;
+
+    var weekUsageData = getWeekGraph(currDate, "usage");
+    var weekGenerationData = getWeekGraph(currDate, "generation");
+    var weekTurbineData = getWeekGraph(currDate, "turbine");
+
+    historicalData["weekUsage"] = weekUsageData;
+    historicalData["weekGeneration"] = weekGenerationData;
+    historicalData["weekTurbine"] = weekTurbineData;
+
+    var monthUsageData = getMonthGraph(currDate, "usage");
+    var monthGenerationData = getMonthGraph(currDate, "generation");
+    var monthTurbineData = getMonthGraph(currDate, "turbine");
+
+    historicalData["monthUsage"] = monthUsageData;
+    historicalData["monthGeneration"] = monthGenerationData;
+    historicalData["monthTurbine"] = monthTurbineData;
+
+    var yearUsageData = getYearGraph(currDate, "usage");
+    var yearGenerationData = getYearGraph(currDate, "generation");
+    var yearTurbineData = getYearGraph(currDate, "turbine");
+
+    historicalData["yearUsage"] = yearUsageData;
+    historicalData["yearGeneration"] = yearGenerationData;
+    historicalData["yearTurbine"] = yearGenerationData;
+
+    return historicalData;
+}
+
+export function getAllCurrentGraphData() {
+    var currData = {};
+
+    var usage = getCurrentConsumptionGraphFormat();
+    var generation = getCurrentGenerationGraphFormat();
+    var turbine = getCurrentWindGenerationGraphFormat();
+
+    currData["usage"] = usage;
+    currData["generation"] = generation;
+    currData["turbine"] = turbine;
+
+    return currData;
+}
+
+function getDayGraph(currDate, type) {
+    comparisonDate = new Date();
+    comparisonDate.setDate(currDate.getDate()-7);
+
+    if (type === "usage") {
+        return getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
+    } else if (type === "generation") {
+         return getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
+    } else {
+        return getTotalWindGenerationGraphFormat(comparisonDate, currDate, 1440);
+    }
+
+}
+
+function getWeekGraph(currDate, type) {
+    comparisonDate = new Date();
+    comparisonDate.setDate(currDate.getDate()-28);
+
+    if (type === "usage") {
+        return getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
+    } else if (type === "generation") {
+        return getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
+    } else {
+        return getTotalWindGenerationGraphFormat(comparisonDate, currDate, 10080);
+    }
+
+}
+
+function getMonthGraph(currDate, type){
+    comparisonDate = new Date();
+    comparisonDate.setMonth(currDate.getMonth()-11);
+
+    if (type === "usage") {
+        return getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
+    } else if (type === "generation") {
+        return getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
+    } else {
+        return getTotalWindGenerationGraphFormat(comparisonDate, currDate, 41760);
+    }
+}
+
+function getYearGraph(currDate, type) {
+    comparisonDate = new Date();
+    comparisonDate.setYear(currDate.getFullYear()-5);
+
+    if (type === "usage") {
+        return getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
+    } else if (type === "generation") {
+        return getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
+    } else {
+        return getTotalWindGenerationGraphFormat(comparisonDate, currDate, 525600);
+    }
+}
