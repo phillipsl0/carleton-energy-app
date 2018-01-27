@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Dimensions } from 'react-native'
-import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryScatter } from "victory-native";
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme,
+         VictoryScatter, VictoryAxis } from "victory-native";
 
 
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
@@ -20,7 +21,7 @@ class Graph extends Component {
                     theme={this.props.theme}
                     height={this.props.height}
                     width={this.props.width}
-                    padding={{ top: 50, bottom: 50, left: 95, right: 85 }}
+                    padding={{ top: 50, bottom: 50, left: 70, right: 65 }}
                     data={this.props.graphData}/>
             )
         } else if (this.props.type=='bar') {
@@ -42,11 +43,13 @@ class Graph extends Component {
                     width={this.props.width}
                     theme={this.props.theme}
                     style={this.props.style}
-                    padding={{ top: 20, bottom: 50, left: 60, right: 50}}
-                    domainPadding={15}>
+                    padding={{ top: 20, bottom: 10, left: 60, right: 40}}
+                    domainPadding={10}>
                     <VictoryScatter
                         size={5}
                         data={this.props.graphData}/>
+                    <VictoryAxis crossAxis tickFormat={() => ''}/>
+                    <VictoryAxis crossAxis dependentAxis/>
                 </VictoryChart>
             )
 
