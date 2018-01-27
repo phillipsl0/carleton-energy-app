@@ -11,7 +11,6 @@ export const handler = store => next => action => {
             store.dispatch({type: 'GET_GRAPH_DATA_LOADING'});
             try {
                 var historicalData = getAllHistoricalGraphData();
-                console.log(historicalData);
                 var currentData = getAllCurrentGraphData();
                 store.dispatch({
                     type: 'GET_GRAPH_DATA_RECEIVED',
