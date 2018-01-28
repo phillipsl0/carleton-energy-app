@@ -63,7 +63,7 @@ const RootTabs = TabNavigator({
       },
     },
     Buildings: {
-      screen: BuildingStack,
+      screen: BuildingListView,
       navigationOptions: {
         tabBarLabel: 'Buildings',
         tabBarIcon: ({ tintColor, focused }) => (

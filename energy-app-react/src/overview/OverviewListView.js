@@ -66,7 +66,7 @@ class OverviewListView extends Component {
                  containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}
                  title={item.title}
                  titleStyle={styles.title}>
-                 <View style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
+                 <View pointerEvents="none" style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
                  {!currentData && <ActivityIndicator
                                                  animating={loading}
                                                  size="large"/>}
