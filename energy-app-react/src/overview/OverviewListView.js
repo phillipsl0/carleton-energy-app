@@ -66,7 +66,7 @@ class OverviewListView extends Component {
                  containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}
                  title={item.title}
                  titleStyle={styles.title}>
-                 <View style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
+                 <View pointerEvents="none" style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
                  {!currentData && <ActivityIndicator
                                                  animating={loading}
                                                  size="large"/>}
@@ -76,7 +76,7 @@ class OverviewListView extends Component {
                             theme={VictoryTheme.grayscale}
                             graphData={currentData.turbine}/>}
                  {item.title != "Turbine Energy" &&
-                        <Graph
+                        <Graph pointerEvents="none"
                         type={item.graphType}
                         theme={VictoryTheme.grayscale}
                         graphData={item.title == "Energy Use" ? currentData.usage :

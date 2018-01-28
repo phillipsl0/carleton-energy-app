@@ -464,7 +464,7 @@ export function getEveryBuildingUtilityConsumption(utility) {
 }
 
 // Helper function to sory the building list (in descending order)
-export function sortByKey(array, key) {
+function sortByKey(array, key) {
     return array.sort(function(a, b) {
         var x = a[key]; 
         var y = b[key];

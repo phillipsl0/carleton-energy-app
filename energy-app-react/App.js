@@ -15,6 +15,7 @@ import CurrTheme from './src/styling/CurrentTheme'
 import CurrFont from './src/styling/CurrentFont';
 import { handler, dataReducer } from './src/helpers/ReduxHandler'
 import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
+import SustainStack from './src/SustainView';
 
 const defaultFont = CurrFont+'-regular';
 const defaultFontBold = CurrFont+'-bold';
@@ -70,6 +71,15 @@ const RootTabs = TabNavigator({
         ),
       },
     },
+    Sustain: {
+      screen: SustainStack,
+      navigationOptions: {
+        tabBarLabel: 'Sustain',
+        tabBarIcon: ({ tintColor, focused }) => (
+          <FontAwesome name="bolt" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+        ),
+      },
+    },
     HeatMap: {
         screen: HeatMapStack,
         navigationOptions: {
@@ -88,6 +98,8 @@ const RootTabs = TabNavigator({
           inactiveTintColor: '#9E9E9E',},
      navigationOptions: ({ navigation }) => ({
          tabBarOnPress: (tab, jumpToIndex) => {
+          // console.log(navigation)
+          // console.log(tab)
            // resets stack in tabs if their icon is tapped while focused
            if (tab.focused && (tab.index === 0 || tab.index === 1)) {
              if (tab.route.index !== 0) {
