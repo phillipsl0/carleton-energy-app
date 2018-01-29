@@ -223,11 +223,10 @@ export function getCurrentGenerationGraphFormat() {
     var totalSolar = getCurrentSolarGeneration();
     var totalWind = getCurrentWindGeneration();
 
-    var data = new Array(3);
+    var data = new Array(2);
 
     data[0] = {'x': 'Solar', 'y': totalSolar};
     data[1] = {'x': 'Wind', 'y': totalWind};
-    data[2] = {'x': 'Total', 'y': totalSolar+totalWind};
 
     return data;
 }
@@ -340,7 +339,7 @@ export function getCurrentBuildingUtilityConsumption(building, utility) {
 export function getCurrentConsumptionGraphFormat() {
     var totalWater = 0;
     var totalElectricity = 0;
-    var data = new Array(3);
+    var data = new Array(2);
     var buildings = getBuildingsList();
 
     buildings.forEach(function(building) {
@@ -350,7 +349,6 @@ export function getCurrentConsumptionGraphFormat() {
 
     data[0] = {'x': 'Water', 'y': totalWater};
     data[1] = {'x': 'Electricity', 'y': totalElectricity};
-    data[2] = {'x': 'Total', 'y': totalWater+totalElectricity};
 
     return data;
 }

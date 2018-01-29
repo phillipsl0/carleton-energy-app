@@ -38,7 +38,7 @@ const ExampleData = [
                           {y: 1900, x: "2018"}],
                           ranking: 1},
                }},
-        graphType: 'bar' ,
+        graphType: 'pie' ,
     },
     {
         title: 'Energy Generation',
@@ -119,7 +119,7 @@ const ExampleData = [
                                {y: 1900, x: "2018"}],
                                ranking: 1},
                    }},
-            graphType: 'bar' ,
+            graphType: 'pie' ,
         }
 ]
 

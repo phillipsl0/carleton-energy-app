@@ -141,18 +141,18 @@ export default {
   pie: {
     style: {
       data: {
-        padding: 10,
+        padding: 0,
         stroke: "transparent",
         strokeWidth: 10
       },
-      labels: assign({}, baseLabelStyles, {
-        padding: 20
-      })
+      labels: {
+        padding: 0
+      }
     },
     colorScale: colors,
     width: 400,
     height: 400,
-    padding: 50
+    padding: 0
   },
   scatter: assign({
     style: {

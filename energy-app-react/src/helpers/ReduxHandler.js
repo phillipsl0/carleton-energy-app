@@ -1,3 +1,4 @@
+import { Platform, Dimensions } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 import { getAllHistoricalGraphData, getAllCurrentGraphData } from './ApiWrappers'
@@ -24,6 +25,12 @@ export const handler = store => next => action => {
             }
 
             break;
+        case 'GET_LAYOUT':
+            var layout = Dimensions.get('screen');
+            store.dispatch({
+                type: 'GET_LAYOUT_RECEIVED',
+                layout,
+            });
         default:
             break;
     };
@@ -44,6 +51,19 @@ export const dataReducer = (state = { historicalGraphData: [], currentGraphData:
             };
         case 'GET_GRAPH_DATA_ERROR':
             return state;
+        default:
+            return state;
+    };
+}
+const initialState = {'height': 500, 'width': 500};
+
+export const layoutReducer = (state = {layout: []}, action) => {
+//    const layout = Dimensions.get('screen');
+    switch (action.type) {
+        case 'GET_LAYOUT_RECEIVED':
+            return {
+                layout: action.layout,
+            }
         default:
             return state;
     };

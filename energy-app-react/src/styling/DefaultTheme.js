@@ -45,6 +45,13 @@ const DefaultTheme = StyleSheet.create({
         justifyContent: 'space-between'
     },
 
+    flexBoxColumn: {
+        flex: 1.0,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+
     flex: {
         flex: 1.0,
     },

@@ -20,6 +20,7 @@ class Graph extends Component {
                 <VictoryPie
                     theme={this.props.theme}
                     height={this.props.height}
+                    innerRadius={20}
                     width={this.props.width}
                     padding={{ top: 50, bottom: 50, left: 70, right: 65 }}
                     data={this.props.graphData}/>
@@ -42,8 +43,7 @@ class Graph extends Component {
                     height={this.props.height}
                     width={this.props.width}
                     theme={this.props.theme}
-                    style={this.props.style}
-                    padding={{ top: 20, bottom: 10, left: 60, right: 40}}
+                    padding={{ top: 0, bottom: 10, left: 60, right: 40}}
                     domainPadding={10}>
                     <VictoryScatter
                         size={5}
@@ -62,16 +62,38 @@ class Graph extends Component {
         }
     }
 }
+// 1
+//Graph.defaultProps = {
+//    type: 'pie',
+//    graphData: [{y:  8, x: "Electricity"},
+//                 {y: 7, x: "Water"},
+//                 {y: 16, x: "Heat/AC"}],
+//    theme: CustomThemes.grayscale,
+//    height: 300,
+//    width: 300
+//}
 
+// 2
 Graph.defaultProps = {
     type: 'pie',
     graphData: [{y:  8, x: "Electricity"},
                  {y: 7, x: "Water"},
                  {y: 16, x: "Heat/AC"}],
     theme: CustomThemes.grayscale,
-    height: 300,
-    width: 300
+    height: 175,
+    width: 250
 }
+
+// 3
+//Graph.defaultProps = {
+//    type: 'pie',
+//    graphData: [{y:  8, x: "Electricity"},
+//                 {y: 7, x: "Water"},
+//                 {y: 16, x: "Heat/AC"}],
+//    theme: CustomThemes.grayscale,
+//    height: 300,
+//    width: 300
+//}
 
 Graph.propTypes = {
     type: PropTypes.string,

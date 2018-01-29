@@ -23,6 +23,7 @@ const defaultFontBold = CurrFont+'-bold';
     state => ({
         currentData: state.data.currentData,
         loading: state.data.loading,
+        layout: state.ui.layout,
     }),
     dispatch => ({
         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
@@ -49,7 +50,7 @@ class OverviewListView extends Component {
     render() {
         navigation = this.props.navigation;
         const themeStyles = GetStyle(CurrTheme);
-        const { refresh, loading, currentData } = this.props;
+        const { refresh, loading, currentData, layout } = this.props;
 
 
         return (
@@ -81,17 +82,15 @@ class OverviewListView extends Component {
                         theme={VictoryTheme.grayscale}
                         graphData={item.title == "Energy Use" ? currentData.usage :
                             currentData.generation}/>}
-
                  </View>
                  <Button
-                    small
-                    rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                    fontFamily={defaultFont}
-                    fontSize={20}
-                    title='More'
-                    containerViewStyle={styles.button}
-                    backgroundColor='#0B5091'
-                    onPress={() => this.returnScreen(item, navigation)}/>
+                   rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
+                   fontFamily={defaultFont}
+                   fontSize={20}
+                   title='More'
+                   containerViewStyle={styles.button}
+                   backgroundColor='#0B5091'
+                   onPress={() => this.returnScreen(item, navigation)}/>
                </Card>
              )}
            />
@@ -99,6 +98,33 @@ class OverviewListView extends Component {
        );
     }
 }
+
+//1
+//                 <Button
+//                    rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
+//                    fontFamily={defaultFont}
+//                    fontSize={20}
+//                    title='More'
+//                    containerViewStyle={styles.button}
+//                    backgroundColor='#0B5091'
+//                    onPress={() => this.returnScreen(item, navigation)}/>
+
+//2
+//<Button
+//                     rightIcon={{name: "angle-right", type: 'font-awesome', size: 20}}
+//                     containerViewStyle={styles.button}
+//                     backgroundColor='#0B5091'
+//                     onPress={() => this.returnScreen(item, navigation)}/>
+
+                 //3
+//                 <Button
+//                     rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
+//                     fontFamily={defaultFont}
+//                     fontSize={20}
+//                     title='More'
+//                     containerViewStyle={styles.button}
+//                     backgroundColor='#0B5091'
+//                     onPress={() => this.returnScreen(item, navigation)}/>
 
 const navigateOnce = (getStateForAction) => (action, state) => {
     const {type, routeName} = action;
@@ -173,6 +199,10 @@ const styles = StyleSheet.create({
   button: {
     marginTop: '3%',
   },
+  title: {
+    fontSize: 14,
+    fontFamily: defaultFontBold,
+  }
 })
 
 export default OverviewStack

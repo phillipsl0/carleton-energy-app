@@ -23,12 +23,20 @@ export default class GraphDetail extends Component {
             <View style={[themeStyles.singleView, themeStyles.shadowed]}>
                 <View style={[styles.graphContainer, themeStyles.centered,
                               themeStyles.translucent]}>
+                 <View >
+                 <View style={styles.textContainer}>
+                 <Text style={[styles.subHead]}>
+                    units
+                 </Text>
+                 </View>
+
                  <Graph
                      theme={CustomThemes.carleton}
-                     height={300}
-                     width={375}
+                     height={200}
+                     width={275}
                      type={'scatter'}
                      graphData={this.props.data}/>
+                </View>
                 <Text style={styles.subHead}>
                     (figures in thousands)
                 </Text>
@@ -74,11 +82,17 @@ const styles = StyleSheet.create({
         marginBottom: '3%',
         marginLeft: '3%',
         marginRight: '3%',
-        paddingBottom: '3%',
+        paddingBottom: '2%',
         borderRadius: 10,
     },
     subHead: {
         fontSize: 10,
         color: '#0B5091',
+    },
+    verticalText: {
+        transform: [{ rotate: '90deg'}],
+    },
+    textContainer: {
+       paddingTop: '50%',
     }
 })
