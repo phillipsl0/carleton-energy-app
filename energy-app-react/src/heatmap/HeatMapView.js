@@ -7,7 +7,7 @@ import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native
 import MapCallout from './MapCallout';
 import IndividualBuilding from './../IndividualBuilding'
 import buildings from './../Buildings'
-import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
+import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 
 
 /*
@@ -61,7 +61,8 @@ class HeatMapView extends Component {
         latitude: 44.4592961807,
         longitude: -93.15502781429046
       },
-      ready: true
+      ready: true,
+      utilityDisplayed: this.props.displayUtility
     };
     //this.onRegionChange = this.onRegionChange.bind(this);
     // this.setMapBoundaries = this.setMapBoundaries.bind(this) ({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
@@ -100,11 +101,19 @@ class HeatMapView extends Component {
     console.log('onRegionChangeComplete', region);
   };
 
-  // Algorithm to generate CSS hsl color code from [0, 1] value
+  /*
+  Algorithm to generate CSS hsl color code from [0, 1] value
+  Based on: https://stackoverflow.com/questions/12875486/what-is-the-algorithm-to-create-colors-for-a-heatmap
+  0 : green
+  .5 : yellow
+  1 : red
+
+  */
   determineBuildingColor(buildingName) {
-    var use = getCurrentBuildingUtilityConsumption(buildingName, "water").toFixed(1)
+    console.log("Rendering building colors with: ", this.state.utilityDisplayed)
+    // NEED TO NORMALIZE DATA
+    var use = getCurrentBuildingUtilityConsumption(buildingName, this.state.utilityDisplayed).toFixed(1)
     console.log(buildingName, use)
-    // algorithm based on 5 color heatmap: https://stackoverflow.com/questions/12875486/what-is-the-algorithm-to-create-colors-for-a-heatmap
     var h = (1.0 - use) * 240
     return "hsl(" + h + ", 100%, 50%)";
   }
@@ -118,7 +127,7 @@ class HeatMapView extends Component {
           name: building.name,
           color: this.determineBuildingColor(building.name),
           marker_coordinate: building.marker_coordinate,
-          usage: getCurrentBuildingUtilityConsumption(building.name, "water").toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
+          usage: getCurrentBuildingUtilityConsumption(building.name, this.state.utilityDisplayed).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
         }
       })
       this.setState({polygons: polygons})
@@ -152,6 +161,7 @@ class HeatMapView extends Component {
     }, 10);
   }
 
+  // CURRENTLY BROKEN: bug 
   setBoundaries() {
     this.refs.map.setMapBoundaries(
       {
@@ -161,7 +171,6 @@ class HeatMapView extends Component {
         latitude: 44.4592961807,
         longitude: -93.15502781429046
       });
-    //this.refs.mapsetMapBoundaries({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
   }
 
   render() {
@@ -174,12 +183,13 @@ class HeatMapView extends Component {
           provider = { PROVIDER_GOOGLE } // show buildings on OS
           showsTraffic={false}
           //control zooming
-          minZoomLevel={0.0}
-          maxZoomLevel={5}
+          // minZoomLevel={0.0}
+          // maxZoomLevel={5}
           initialRegion={initialRegion}
           onMapReady={this.onMapReady}
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
+          toggleCallout={this.toggleCallout}
           style={styles.map}
                   
 
@@ -242,12 +252,6 @@ class HeatMapView extends Component {
   }
 }
 /*
-        <TouchableOpacity style={styles.button}
-          onPress={() => this.setBoundaries()}>
-          <Text> Button </Text>
-        </TouchableOpacity>
-
-
         <Text style={{ position: 'absolute', bottom: 10 }}>
           Latitude: {this.state.region.latitude}{'\n'}
           Longitude: {this.state.region.longitude}{'\n'}
@@ -319,4 +323,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HeatMapStack;
+export default HeatMapView;

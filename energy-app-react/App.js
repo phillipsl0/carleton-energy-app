@@ -3,10 +3,10 @@ import { Font, AppLoading, Asset } from 'expo';
 import { AsyncStorage, Platform, StyleSheet  } from 'react-native';
 import { TabNavigator, NavigationActions } from 'react-navigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MapView from 'react-native-maps';
 
 import BuildingListView from './src/BuildingListView';
 import HeatMapStack from './src/heatmap/HeatMapView'
+import HeatMap from './src/heatmap/HeatMap'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
@@ -117,7 +117,8 @@ const RootTabs = TabNavigator({
       },
     },
     HeatMap: {
-        screen: HeatMapStack,
+        //screen: HeatMapStack,
+        screen: HeatMap,
         navigationOptions: {
           tabBarLabel: 'Heat Map',
           tabBarIcon: ({ tintColor, focused }) => (
