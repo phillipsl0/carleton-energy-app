@@ -21,7 +21,7 @@ export default class GraphDetail extends Component {
         const themeStyles = GetStyle(CurrTheme);
         return(
             <View style={[themeStyles.singleView, themeStyles.shadowed]}>
-                <View style={[styles.graphContainer, themeStyles.centered,
+                <View pointerEvents="none" style={[styles.graphContainer, themeStyles.centered,
                               themeStyles.translucent]}>
                  <Graph
                      theme={CustomThemes.carleton}
@@ -29,6 +29,9 @@ export default class GraphDetail extends Component {
                      width={375}
                      type={'scatter'}
                      graphData={this.props.data}/>
+                <Text style={styles.subHead}>
+                    (figures in thousands)
+                </Text>
                 </View>
 
                 <View style={[themeStyles.flexboxRow, themeStyles.translucent]}>
@@ -71,6 +74,11 @@ const styles = StyleSheet.create({
         marginBottom: '3%',
         marginLeft: '3%',
         marginRight: '3%',
+        paddingBottom: '3%',
         borderRadius: 10,
     },
+    subHead: {
+        fontSize: 10,
+        color: '#0B5091',
+    }
 })

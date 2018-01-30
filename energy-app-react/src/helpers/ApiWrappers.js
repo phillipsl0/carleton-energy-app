@@ -366,8 +366,7 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
         scaleFactor = 120; 
     }
 
-    // var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
-    var numberEntries = 12;
+    var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
     var currentTime = new Date(timeEnd);
 
     var table = new Array(numberEntries);
@@ -465,7 +464,7 @@ export function getEveryBuildingUtilityConsumption(utility) {
 }
 
 // Helper function to sory the building list (in descending order)
-export function sortByKey(array, key) {
+function sortByKey(array, key) {
     return array.sort(function(a, b) {
         var x = a[key]; 
         var y = b[key];

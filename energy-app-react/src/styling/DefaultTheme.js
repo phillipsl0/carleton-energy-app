@@ -1,7 +1,13 @@
 import { StyleSheet, Platform } from 'react-native'
+
+import CurrFont from './../styling/CurrentFont';
+
+
 const lightBlue = '#e1e8ee';
 const mediumBlue = '#B9C8D6';
 const carletonBlue = '#0B5091';
+const defaultFont = CurrFont+'-regular';
+const defaultFontBold = CurrFont+'-bold';
 
 const DefaultTheme = StyleSheet.create({
     card: {
@@ -43,18 +49,27 @@ const DefaultTheme = StyleSheet.create({
         flex: 1.0,
     },
 
+    fontBold: {
+        fontFamily: defaultFontBold,
+    },
+
+    fontRegular: {
+        fontFamily: defaultFont,
+    },
+
     header: {
         position: 'absolute',
-        left: -10,
+        left: 0,
         right: 0,
         top: 0,
-        opacity: 0.75,
+        opacity: 0.5,
         ...Platform.select({
             ios: {
-                height: 146,
+                height: 147,
             },
             android: {
                 height: 163,
+                width: 412,
             }
         })
     },
@@ -92,7 +107,7 @@ const DefaultTheme = StyleSheet.create({
         paddingBottom: '3%',
         marginLeft: '3%',
         marginRight: '3%',
-        marginTop: '5%',
+        marginTop: '3%',
     },
 
     translucent: {
@@ -100,6 +115,7 @@ const DefaultTheme = StyleSheet.create({
     },
 
     translucentText: {
+        fontFamily: defaultFont,
         color: 'rgba(255, 255, 255, 0.75)',
         backgroundColor: 'transparent',
     }
