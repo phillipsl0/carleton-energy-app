@@ -8,6 +8,7 @@ import MapCallout from './MapCallout';
 import IndividualBuilding from './../IndividualBuilding'
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
+import BottomUtilities from './Utilities';
 
 
 /*
@@ -62,7 +63,7 @@ class HeatMapView extends Component {
         longitude: -93.15502781429046
       },
       ready: true,
-      utilityDisplayed: this.props.displayUtility
+      utilityDisplayed: 'electricity'
     };
     //this.onRegionChange = this.onRegionChange.bind(this);
     // this.setMapBoundaries = this.setMapBoundaries.bind(this) ({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
@@ -92,6 +93,14 @@ class HeatMapView extends Component {
       this.setState({ready: true});
     }
   };
+
+  updateUtility = (utilitySelected) => {
+    console.log("Utility selected:", utilitySelected);
+    this.setState({ utilityShown: utilitySelected});
+    console.log("Displaying utility: ", this.state.utilityShown);
+    this.getBuildingData();
+    this.moveToCarleton();
+  }
 
   onRegionChange = (region) => {
     console.log('onRegionChange', region);
@@ -174,6 +183,8 @@ class HeatMapView extends Component {
   }
 
   render() {
+    navigation = this.props.navigation;
+
     return (
       <View style={styles.container}>
         <MapView
@@ -181,6 +192,7 @@ class HeatMapView extends Component {
           maxZoomLevel={5}
           ref="map"
           provider = { PROVIDER_GOOGLE } // show buildings on OS
+          key={this.state.utilityShown} // key change needed to rerender map
           showsTraffic={false}
           //control zooming
           // minZoomLevel={0.0}
@@ -190,6 +202,7 @@ class HeatMapView extends Component {
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
           toggleCallout={this.toggleCallout}
+          displayUtility={this.state.utilityShown}
           style={styles.map}
                   
 
@@ -226,7 +239,7 @@ class HeatMapView extends Component {
                     <Callout
                       tooltip // enables customizable tooltip style
                       style={styles.callout}
-                      onPress={() => this.props.navigation.navigate('HeatBuildingView', {item:polygon})}>
+                      onPress={() => navigation.navigate('HeatBuildingView', {item:polygon})}>
 
                       <MapCallout
                         name={polygon.name}
@@ -247,6 +260,7 @@ class HeatMapView extends Component {
             type='material-community'
           />
         </TouchableOpacity>
+        <BottomUtilities onUtilitySelect={this.updateUtility} />
       </View>
     );
   }
@@ -262,14 +276,14 @@ class HeatMapView extends Component {
 */
 
 // Stack of HeatMap
-const HeatMapStack = StackNavigator({
+const HeatMapViewStack = StackNavigator({
   HeatMapView: {
     screen: HeatMapView,
-    // navigationOptions: ({ navigation }) => ({
-    //   title: "Heat Map",
-    //   headerTintColor: 'white',
-    //   headerStyle: navStyles.header,
-    // })
+    navigationOptions: ({ navigation }) => ({
+      title: "Heat Map",
+      headerTintColor: 'white',
+      headerStyle: navStyles.header,
+    })
   },
   HeatBuildingView: {
     screen: IndividualBuilding,
@@ -323,4 +337,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HeatMapView;
+export default HeatMapViewStack;
