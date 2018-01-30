@@ -1,5 +1,5 @@
 import buildingsDetail from './BuildingsDetail';
-// import news from './SustainabilityNews';
+import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
 
 
@@ -22,7 +22,7 @@ import events from './SustainabilityEvents';
 export function getBuildingsList() {
     // return list of every building name with data (e.g. "Burton", "Sayles", etc.)
     // /api/buildings/names
-
+// 
     var buildings = ["Burton", "Sayles", "Severance", "Davis", "Musser", "Myers", "Cassat",
                         "Memo", "Nourse", "Evans", "Goodhue", "Watson", "Scoville"];
 

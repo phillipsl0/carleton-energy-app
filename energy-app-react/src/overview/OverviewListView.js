@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native'
+import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, 
+    View, Text, Image, Dimensions, Platform, StatusBar, ScrollView } from 'react-native'
 import { AppLoading } from 'expo';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, Button } from 'react-native-elements'
@@ -14,7 +15,8 @@ import Graph from './../visualizations/Graph'
 import { GetStyle } from './../styling/Themes'
 import CurrTheme from './../styling/CurrentTheme'
 import CurrFont from './../styling/CurrentFont';
-import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './../helpers/ApiWrappers';
+import { getCurrentGenerationGraphFormat, 
+    getCurrentConsumptionGraphFormat } from './../helpers/ApiWrappers';
 
 const defaultFont = CurrFont+'-regular';
 const defaultFontBold = CurrFont+'-bold';
@@ -51,8 +53,18 @@ class OverviewListView extends Component {
         const themeStyles = GetStyle(CurrTheme);
         const { refresh, loading, currentData } = this.props;
 
+        // StatusBar.setBarStyle('dark-content', false);
+        // StatusBar.setBackgroundColor('#ff9800', true);
+
+
+            // <StatusBar
+            //   backgroundColor="#ff9800"
+            //   barStyle="light-content"
+            // />
 
         return (
+          <ScrollView>
+          <MyStatusBar backgroundColor="#ff9800" barStyle="light-content" />
          <List
            style={[styles.list, themeStyles.list, themeStyles.flex]}>
            <FlatList
@@ -66,7 +78,8 @@ class OverviewListView extends Component {
                  containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}
                  title={item.title}
                  titleStyle={styles.title}>
-                 <View pointerEvents="none" style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
+                 <View pointerEvents="none" 
+                    style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
                  {!currentData && <ActivityIndicator
                                                  animating={loading}
                                                  size="large"/>}
@@ -96,6 +109,7 @@ class OverviewListView extends Component {
              )}
            />
          </List>
+         </ScrollView>
        );
     }
 }
@@ -109,6 +123,27 @@ const navigateOnce = (getStateForAction) => (action, state) => {
         routeName === state.routes[state.routes.length - 1].routeName
     ) ? null : getStateForAction(action, state);
 };
+
+const MyStatusBar = ({backgroundColor, ...props}) => (
+  <View style={[{ backgroundColor }]}>
+    <StatusBar backgroundColor={backgroundColor} {...props} />
+  </View>
+);
+
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
+
+const styles02 = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  statusBar: {
+    height: STATUSBAR_HEIGHT,
+  },
+  content: {
+    flex: 1,
+    backgroundColor: '#33373B',
+  },
+});
 
 const navStyles = StyleSheet.create({
     header: {
@@ -124,6 +159,9 @@ const OverviewStack = StackNavigator({
         screen: OverviewListView,
         navigationOptions: ({ navigation }) => ({
             title: 'Overview',
+            ...Platform.select({
+                android: { header: null }
+            }),
             headerTintColor: 'white',
             headerStyle: navStyles.header,
             headerTitleStyle: navStyles.headerTitle,
@@ -172,6 +210,16 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: '3%',
+  },
+  container: {
+    flex: 1,
+  },
+  statusBar: {
+    height: STATUSBAR_HEIGHT,
+  },
+  content: {
+    flex: 1,
+    backgroundColor: '#33373B',
   },
 })
 

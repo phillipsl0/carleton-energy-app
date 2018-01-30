@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, TouchableOpacity } from 'react-native'
+import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, TouchableOpacity, Platform } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
@@ -9,9 +9,12 @@ import IndividualBuilding from './IndividualBuilding';
 
 
 class BuildingListView extends Component {
-    static navigationOptions = {
-        title: 'Buildings'
-    }
+    // static navigationOptions = {
+    //     ...Platform.select({
+    //         android: { header: null }
+    //     }),
+    //     title: 'Buildings'
+    // }
 
     render() {
         const {navigate} = this.props.navigation;
@@ -44,6 +47,14 @@ class BuildingListView extends Component {
 const BuildingStack = StackNavigator({
     Buildings: {
         screen: BuildingListView,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Buildings',
+            ...Platform.select({
+                android: { header: null }
+            }),
+            headerTintColor: 'white',
+            headerStyle: navStyles.header,
+        }),
     },
     CardView: {
         screen: IndividualBuilding,
@@ -64,7 +75,7 @@ const BuildingStack = StackNavigator({
 const navStyles = StyleSheet.create({
     header: {
         backgroundColor: '#0B5091',
-    }
+    },
 })
 
 const styles = StyleSheet.create({

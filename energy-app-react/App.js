@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
-import { Platform, StyleSheet, BackHandler  } from 'react-native';
-import { TabNavigator, NavigationActions, addNavigationHelpers } from 'react-navigation';
+import { Platform, StyleSheet, BackHandler, View, StatusBar } from 'react-native';
+import { TabNavigator, TabBarTop, TabBarBottom, NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -38,19 +38,35 @@ function cacheFonts(fonts) {
 const navStyle = StyleSheet.create({
     header: {
         ...Platform.select({
-           android: {
-           backgroundColor: '#e1e8ee',
-           }
-        })
+            android: {
+                backgroundColor: '#0000FF', // '#0B5091', //'#e1e8ee',
+            }
+        }),
     },
     label: {
-        fontFamily: defaultFont,
+        fontFamily: defaultFontBold,
     },
 
     indicator: {
-        backgroundColor: '#0B5091'
-    }
+        backgroundColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF',
+        // backgroundColor: '#0B5091'
+    },
+    statusBar: {
+        backgroundColor: "#C2185B",
+        height: StatusBar.currentHeight,
+    },
+
+    // activeTintColor: {
+    //     // activeTintColor: '#FFFFFF', //'#0B5091',
+    //     // inactiveTintColor: '#9E9E9E',
+    //     color: '#FFFFFF'
+    // },
+
+    // inactiveTintColor: {
+    //     backgroundColor: '#9E9E9E',
+    // }
 })
+// console.log(navStyle.activeTintColor.color)
 
 const RootTabs = TabNavigator({
     Overview: {
@@ -74,7 +90,7 @@ const RootTabs = TabNavigator({
     Sustain: {
       screen: SustainStack,
       navigationOptions: {
-        tabBarLabel: 'Sustain',
+        tabBarLabel: 'Learn',
         tabBarIcon: ({ tintColor, focused }) => (
           <FontAwesome name="bolt" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
         ),
@@ -90,17 +106,44 @@ const RootTabs = TabNavigator({
         },
       }
   },
-   { tabBarOptions:
+   { 
+    tabBarComponent: props => {
+      const backgroundColor = props.position.interpolate({
+        inputRange: [0, 1, 2, 3],
+        outputRange: ['#03a9f4', '#673ab7', '#ff9800', '#4caf50'],  // alt blue 01579B
+      })
+      return (
+        Platform.OS === 'ios'
+        ? <TabBarBottom {...props} style={{ backgroundColor: '#e1e8ee' }} />
+        : <TabBarTop {...props} style={{ backgroundColor: backgroundColor }} />
+      );
+    },
+    // animationEnabled: false,
+    // lazy: true,
+    tabBarOptions:
         { style: navStyle.header,
           labelStyle: navStyle.label,
           indicatorStyle: navStyle.indicator,
-          activeTintColor: '#0B5091',
-          inactiveTintColor: '#9E9E9E',},
-     navigationOptions: ({ navigation }) => ({
+          // showIcon: true, //this is default false on Android
+          // showLabel: true,
+          activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF', //navStyle.activeTintColor.color, // '#FFFFFF', //'#0B5091',
+          inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90', //navStyle.inactiveTintColor, //'#9E9E9E', FFFFFFA0
+          pressColor: '#FFFFFF' // Android ripple color onPress
+        },
+     navigationOptions: ({ navigation }) => ( {
          tabBarOnPress: (tab, jumpToIndex) => {
-          // console.log(navigation)
+          console.log(navigation.state.key)
           // console.log(tab)
            // resets stack in tabs if their icon is tapped while focused
+           StatusBar.setBarStyle('light-content', false);
+           if (Platform.OS === 'android') {
+             switch (tab.index){
+                case 0: StatusBar.setBackgroundColor('#ff9800', true); break;
+                case 1: StatusBar.setBackgroundColor('#673ab7', true); break;
+                case 2: StatusBar.setBackgroundColor('#4caf50', true); break;
+                case 3: StatusBar.setBackgroundColor('#03a9f4', true); break;
+             }
+           }
            if (tab.focused && (tab.index === 0 || tab.index === 1)) {
              if (tab.route.index !== 0) {
                navigation.dispatch(NavigationActions.reset({
