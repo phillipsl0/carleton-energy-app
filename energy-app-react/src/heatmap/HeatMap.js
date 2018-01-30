@@ -85,15 +85,15 @@ const HeatMapStack = StackNavigator({
       headerStyle: navStyles.header,
     })
   },
-  HeatBuildingView: {
-    screen: IndividualBuilding,
-    path: 'buildings/:name',
-    navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.item.name}`,
-      headerTintColor: 'white',
-      headerStyle: navStyles.header,
-    }),
-  },
+  // HeatBuildingView: {
+  //   screen: IndividualBuilding,
+  //   path: 'buildings/:name',
+  //   navigationOptions: ({ navigation }) => ({
+  //     title: `${navigation.state.params.item.name}`,
+  //     headerTintColor: 'white',
+  //     headerStyle: navStyles.header,
+  //   }),
+  // },
 });
 
 const navStyles = StyleSheet.create({

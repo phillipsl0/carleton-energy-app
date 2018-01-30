@@ -265,11 +265,11 @@ class HeatMapView extends Component {
 const HeatMapStack = StackNavigator({
   HeatMapView: {
     screen: HeatMapView,
-    navigationOptions: ({ navigation }) => ({
-      title: "Heat Map",
-      headerTintColor: 'white',
-      headerStyle: navStyles.header,
-    })
+    // navigationOptions: ({ navigation }) => ({
+    //   title: "Heat Map",
+    //   headerTintColor: 'white',
+    //   headerStyle: navStyles.header,
+    // })
   },
   HeatBuildingView: {
     screen: IndividualBuilding,
