@@ -21,7 +21,7 @@ class Graph extends Component {
                     theme={this.props.theme}
                     height={this.props.height}
                     width={this.props.width}
-                    padding={{ top: 50, bottom: 50, left: 100, right: 65 }}
+                    padding={{ top: 50, bottom: 50, left: 70, right: 65 }}
                     data={this.props.graphData}/>
             )
         } else if (this.props.type=='bar') {

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { AsyncStorage, FlatList, StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native'
+import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native'
 import { AppLoading } from 'expo';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, Button } from 'react-native-elements'
 import { VictoryContainer, VictoryChart, VictoryTheme } from "victory-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
 
 import OverviewCards from './OverviewCards'
 import Turbine from './TurbineView'
@@ -18,61 +19,17 @@ import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } fro
 const defaultFont = CurrFont+'-regular';
 const defaultFontBold = CurrFont+'-bold';
 
+@connect(
+    state => ({
+        currentData: state.data.currentData,
+        loading: state.data.loading,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+    }),
+)
+
 class OverviewListView extends Component {
-     constructor(props) {
-        super(props);
-        var consumptionPlaceholder = new Array(3);
-        var generationPlaceholder = new Array(3);
-        var turbinePlaceholder = new Array(2);
-
-        consumptionPlaceholder[0] = {"x": "Water", "y": 1000};
-        consumptionPlaceholder[1] = {"x": "Electricity", "y": 2500};
-        consumptionPlaceholder[2] = {"x": "Total", "y": 3500};
-
-        generationPlaceholder[0] = {"x": "Solar", "y": 1000};
-        generationPlaceholder[1] = {"x": "Wind", "y": 2500};
-        generationPlaceholder[2] = {"x": "Geothermal", "y": 90};
-
-        turbinePlaceholder[0] = {"x": "Turbine 1", "y": 10000};
-        turbinePlaceholder[1] = {"x": "Turbine 2", "y": 600};
-
-        this.state = {
-                    currentUse: consumptionPlaceholder,
-                    currentGeneration: generationPlaceholder,
-                    turbinePower: turbinePlaceholder,
-                    isReady: false,
-        };
-
-        this.getData();
-     }
-
-    componentDidMount() {
-        this.getData();
-    }
-
-    async getData() {
-        try {
-          const currUse = await AsyncStorage.getItem('currUse');
-          currUse = await JSON.parse(currUse);
-
-          const currGeneration = await AsyncStorage.getItem('currGeneration');
-          currGeneration = await JSON.parse(currGeneration);
-//          console.log("current gen: ");
-//          console.log(currGeneration);
-
-          if (currUse !== null && currGeneration !== null){
-            // We have data!!
-            await this.setState({ currentUse: currUse, currentGeneration: currGeneration,
-                isReady: true});
-//            console.log("Got it: ");
-//            console.log(currGeneration);
-          }
-        } catch (error) {
-          // Error retrieving data
-          console.warn("noooooo");
-        }
-    }
-
     returnScreen = ( item, navigation ) => {
         if (item.title == "Turbine Energy") {
             navigation.navigate('TurbineView',
@@ -89,25 +46,11 @@ class OverviewListView extends Component {
         }
     };
 
-    getEnergyUsed() {
-        currUse = getCurrentConsumptionGraphFormat();
-
-        this.setState({
-            currentUse: currUse
-        });
-    }
-
-    getEnergyProduced() {
-        currGeneration = getCurrentGenerationGraphFormat();
-
-        this.setState({
-            currentGeneration: currGeneration
-        });
-    }
-
     render() {
         navigation = this.props.navigation;
         const themeStyles = GetStyle(CurrTheme);
+        const { refresh, loading, currentData } = this.props;
+
 
         return (
          <List
@@ -115,25 +58,33 @@ class OverviewListView extends Component {
            <FlatList
              data={ExampleData}
              keyExtractor={item => item.title}
+             onRefresh={refresh}
+             refreshing={loading}
+
              renderItem={({ item }) => (
                <Card
                  containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}
                  title={item.title}
                  titleStyle={styles.title}>
-                 <View style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
+                 <View pointerEvents="none" style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
+                 {!currentData && <ActivityIndicator
+                                                 animating={loading}
+                                                 size="large"/>}
                  {item.title == "Turbine Energy" &&
-                    <Graph
+                        <Graph
+                            type={item.graphType}
+                            theme={VictoryTheme.grayscale}
+                            graphData={currentData.turbine}/>}
+                 {item.title != "Turbine Energy" &&
+                        <Graph pointerEvents="none"
                         type={item.graphType}
                         theme={VictoryTheme.grayscale}
-                        graphData={this.state.turbinePower}/>}
-                 {item.title != "Turbine Energy" &&
-                    <Graph
-                    type={item.graphType}
-                    theme={VictoryTheme.grayscale}
-                    graphData={item.title == "Energy Use" ? this.state.currentUse :
-                        this.state.currentGeneration}/>}
+                        graphData={item.title == "Energy Use" ? currentData.usage :
+                            currentData.generation}/>}
+
                  </View>
                  <Button
+                    small
                     rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                     fontFamily={defaultFont}
                     fontSize={20}

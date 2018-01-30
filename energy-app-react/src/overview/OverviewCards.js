@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, Platform, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
@@ -7,83 +8,26 @@ import GraphDetail from './GraphDetailCard';
 import Utilities from './UtilitiesMiniCards';
 import { getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './../helpers/ApiWrappers';
 
+@connect(
+    state => ({
+        historicalData: state.data.historicalData,
+        loading: state.data.loading,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+    }),
+)
 
 export default class OverviewCards extends Component {
     constructor(props) {
         super(props);
-        data = this.props.navigation.state.params.data.comparison;
         //TODO: add when lastupdated
 
         this.state = {
             view: 'day',
             viewNumber: 7,
             selectedCard: 1,
-            dayData: data.day.graph,
-            weekData: data.week.graph,
-            monthData: data.month.graph,
-            yearData: data.year.graph,
         };
-    }
-
-    componentDidMount() {
-        currDate = new Date();
-        
-        this.updateDay(currDate);
-        this.updateWeek(currDate);
-        this.updateMonth(currDate);
-        this.updateYear(currDate);
-    }
-
-    updateDay = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setDate(currDate.getDate()-7);
-        
-        if (this.props.navigation.state.params.card == 1) {
-            updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
-        } else {
-            updatedDay = getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
-        }
-        
-        this.setState({ dayData: updatedDay });
-    }
-
-    updateWeek = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setDate(currDate.getDate()-28);
-        
-        if (this.props.navigation.state.params.card == 1) {
-            updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
-        } else {
-            updatedWeek = getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
-        }
-        
-        this.setState({ weekData: updatedWeek });
-    }
-
-    updateMonth = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setMonth(currDate.getMonth()-11);
-
-        if (this.props.navigation.state.params.card == 1) {
-            updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
-        } else {
-            updatedMonth = getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
-        }
-
-        this.setState({ monthData: updatedMonth });
-    }
-
-    updateYear = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setYear(currDate.getFullYear()-5);
-
-        if (this.props.navigation.state.params.card == 1) {
-            updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
-        } else {
-            updatedYear = getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
-        }
-
-        this.setState({ yearData: updatedYear });
     }
 
     scopeCallbackGraph = ( buttonView, buttonComparator, buttonIndex ) => {
@@ -96,39 +40,50 @@ export default class OverviewCards extends Component {
         this.setState({ selectedCard: buttonIndex});
     }
 
-    getGraphScope = () => {
-        graphData = navigation.state.params.data.comparison;
+    getGraphScope = (data, cardType) => {
+        if (cardType == 1) {
+            if (this.state.view == 'day') {
+                return data["dayUsage"].data;
+            } else if (this.state.view == 'week') {
+                return data["weekUsage"].data;
+            } else if (this.state.view == 'month') {
+                return data["monthUsage"].data;
+            } else if (this.state.view == 'year') {
+                return data["yearUsage"].data;
+            }
+        } else {
+            if (this.state.view == 'day') {
+                return data["dayGeneration"].data;
+            } else if (this.state.view == 'week') {
+                return data["weekGeneration"].data;
+            } else if (this.state.view == 'month') {
+                return data["monthGeneration"].data;
+            } else if (this.state.view == 'year') {
+                return data["yearGeneration"].data;
+            }
+        }
+
+    }
+
+    getRanking = (data, cardType) => {
+//        graphData = navigation.state.params.data.comparison;
 
         if (this.state.view == 'day') {
-            return this.state.dayData["data"];
+            return data["dayUsage"].rank;
         } else if (this.state.view == 'week') {
-            return this.state.weekData["data"];
+            return data["weekUsage"].rank;
         } else if (this.state.view == 'month') {
-            return this.state.monthData["data"];
+            return data["monthUsage"].rank;
         } else if (this.state.view == 'year') {
-             return this.state.yearData["data"];
+             return data["yearUsage"].rank;
         }
     }
 
-    getRanking = () => {
-        graphData = navigation.state.params.data.comparison;
-
-        if (this.state.view == 'day') {
-            return this.state.dayData["rank"];
-        } else if (this.state.view == 'week') {
-            return this.state.weekData["rank"];
-        } else if (this.state.view == 'month') {
-            return this.state.monthData["rank"];;
-        } else if (this.state.view == 'year') {
-             return this.state.yearData["rank"];;
-        }
-    }
-
-    getHeader = () => {
+    getHeader = (historicalData, cardType) => {
         const themeStyles = GetStyle(CurrTheme);
 
         if (this.state.selectedCard <= 4) {
-            headerText = this.getRanking();
+            headerText = this.getRanking(historicalData, cardType);
             viewNumber = this.state.viewNumber;
             view = this.state.view;
 
@@ -173,9 +128,11 @@ export default class OverviewCards extends Component {
 
     render() {
         const themeStyles = GetStyle(CurrTheme);
-        navigation = this.props.navigation;
-        currData = this.getGraphScope();
-        header = this.getHeader();
+        const { refresh, loading, historicalData } = this.props;
+
+        cardType = this.props.navigation.state.params.card;
+        currData = this.getGraphScope(historicalData, cardType);
+        header = this.getHeader(historicalData, cardType);
 
         return (
             <View style={[themeStyles.flex, themeStyles.list]}>
