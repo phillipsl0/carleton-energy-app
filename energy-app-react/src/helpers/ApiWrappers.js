@@ -1,7 +1,11 @@
 import buildingsDetail from './BuildingsDetail';
 import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
+// import apiRSS2jsonKey from './../../App.js';
 
+import { setJsonData } from './../SustainView.js';
+
+const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
 
 // 1) For a given building, resource and timeframe, return (from API) 
 //      a single value (e.g. gal/week in Burton)
@@ -49,6 +53,19 @@ export function getSustainabilityNews() {
     // https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton
     // https://api.rss2json.com/v1/api.json?
     //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fblogs%2Fsustaining_carleton
+    // console.log(apiRSS2jsonKey);
+    newsRSS = 'https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton';
+    // jsonResult = convertRSStoJSON(newsRSS);
+    return convertRSStoJSON(newsRSS);
+}
+
+export function getSustainabilityNewsBak() {
+    // https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton
+    // https://api.rss2json.com/v1/api.json?
+    //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fblogs%2Fsustaining_carleton
+    // console.log(apiRSS2jsonKey);
+    newsRSS = 'https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton';
+    // jsonResult = convertRSStoJSON(newsRSS);
     return news;
 }
 
@@ -56,9 +73,77 @@ export function getSustainabilityEvents() {
     // https://apps.carleton.edu/sustainability/feeds/events
     // https://api.rss2json.com/v1/api.json?
     //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fevents
+    eventsRSS = 'https://apps.carleton.edu/sustainability/feeds/events';
+    // jsonResult = 
+    return convertRSStoJSON(eventsRSS);
+    // console.log(typeof(jsonResult));
+    // console.log(jsonResult);
+    // return events;
+}
+
+export function getSustainabilityEventsBak() {
+    // https://apps.carleton.edu/sustainability/feeds/events
+    // https://api.rss2json.com/v1/api.json?
+    //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fevents
+    eventsRSS = 'https://apps.carleton.edu/sustainability/feeds/events';
+    // jsonResult = 
+    // return convertRSStoJSON(eventsRSS);
+    // console.log(typeof(jsonResult));
+    // console.log(jsonResult);
     return events;
 }
 
+function convertRSStoJSON(rssFeed) {
+    baseURL = 'https://api.rss2json.com/v1/api.json';
+
+    constructedURL = baseURL + '?rss_url=' + rssFeed + '&api_key=' + apiRSS2jsonKey + '&count=2';
+    // console.log(constructedURL);
+
+    return fetch(constructedURL);
+    // fetch('https://facebook.github.io/react-native/movies.json')  
+    //     .then(function(response) {
+    //         jsonResult = response.json();
+    //         console.log(jsonResult)
+    //         return jsonResult;
+    //     })
+
+    // const res = await fetch(constructedURL);
+    // const json = await res.json();
+    // console.log(json);
+
+    // return fetch(constructedURL)
+    // .then((response) => response.json())
+    // .then((responseJson) => {
+    //     // console.log(responseJson)
+    //     return responseJson;
+    // })
+    // .then((responseJson) => {
+    //     addJSON(responseJson);
+    //     frame.setState({eventsData: responseJson});
+    //     // setJsonData(responseJson);
+    // })
+    // .catch((error) => {
+    //     console.error(error);
+    // });
+
+
+    // return fetch(constructedURL)
+    //     .then((response) => response.json())
+    //     .then((responseJson) => {
+    //         return responseJson;
+    //     })
+    //     .catch((error) => {
+    //         console.error(error);
+    //     });
+    // jsonResult = fetch(constructedURL);
+    // console.log(jsonResult);
+    // https://api.rss2json.com/v1/api.json?rss_url=https://apps.carleton.edu/sustainability/feeds/events&api_key=eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw
+}
+
+
+// function addJSON(responseJson) {
+//     console.log(responseJson["items"][0]["title"])
+// }
 
 // -------------------- Electricity Generation -------------------------
 

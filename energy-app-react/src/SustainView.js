@@ -5,29 +5,67 @@ import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
-import { getSustainabilityEvents, getSustainabilityNews } from './helpers/ApiWrappers.js';
+import { getSustainabilityEvents, getSustainabilityEventsBak, getSustainabilityNews, getSustainabilityNewsBak } from './helpers/ApiWrappers.js';
 
+
+eventsJson = '';
+
+export function setJsonData(responseJson) {
+    console.log(responseJson["items"].length)
+    eventsJson = responseJson;
+    // SustainListView.setState({eventsData: responseJson});
+    // console.log("State Data:", this.state.eventsData);
+}
 
 class SustainListView extends Component {
-    // static navigationOptions = {
-    //     // header: Platform.OS === 'ios' ? true : null,
-    //     ...Platform.select({
-    //         android: { header: null }
-    //     }),
-    //     // header: {
-    //     //     // backgroundColor: '#FF0000', // '#0B5091',
-    //     // },
-    //     title: 'Learn More'
-    // }
+
+    constructor(props) {
+        super(props);
+        this.state = {
+           newsData: '',
+           eventsData: ''
+        }
+    }
+
+      // state = {}
+
+      setStateAsync(state) {
+        return new Promise((resolve) => {
+          this.setState(state, resolve)
+        });
+      }
+
+      async componentDidMount() {
+        // StatusBar.setNetworkActivityIndicatorVisible(true)
+        const events = await getSustainabilityEvents();
+        const eventsJson = await events.json()
+        // console.log(events)
+        await this.setStateAsync({eventsData: eventsJson})
+
+        const news = await getSustainabilityNews();
+        const newsJson = await news.json()
+        // console.log(news)
+        await this.setStateAsync({newsData: newsJson})
+
+        // console.log(res)
+        // StatusBar.setNetworkActivityIndicatorVisible(false)
+      }
 
 
     render() {
-        // const {navigate} = this.props.navigation;
 
-        // console.log(Platform.OS)
+        events = getSustainabilityEventsBak();
+        news = getSustainabilityNewsBak();
+        // console.log("Json:", this.state.eventsJson);
+        // console.log("Code:", events);
 
-        events = getSustainabilityEvents();
-        news = getSustainabilityNews();
+        if (this.state.eventsData) {
+            events["events"] = this.state.eventsData;
+        }
+        if (this.state.newsData) {
+            news["news"] = this.state.newsData;
+        }
+        // console.log(this.state)
 
         links = ['https://apps.carleton.edu/sustainability/', 
                 'https://apps.carleton.edu/sustainability/campus/', 
@@ -213,86 +251,7 @@ const SustainStack = StackNavigator({
             headerStyle: navStyles.header,
         }),
         // headerBackgroundColor: '#FF0000', // '#0B5091',
-    },
-    // CardView: {
-    // path: 'OverviewCards/:title',
-    // screen: OverviewCards,
-    // navigationOptions: ({ navigation }) => ({
-    //   title: `${navigation.state.params.title}`,
-    //   headerTintColor: 'white',
-    //   headerStyle: navStyles.header,
-    // }),
-    // },
-    // CardView: {
-    //   screen: IndividualBuilding,
-    //   // navigationOptions: 
-    // },
+    }
 });
-
-const styles02 = StyleSheet.create({
-    card: {
-        paddingTop: 20,
-    },
-    bigyellow: {
-        color: 'green',
-        fontWeight: 'bold',
-        fontSize: 30
-    },
-    blue: {
-        color: 'blue',
-        fontWeight: 'bold',
-    },
-    head: {
-        backgroundColor: 'grey',
-    },
-    table: {
-        width: 250,
-        marginLeft: 5,
-
-    },
-    text: {
-        alignSelf: 'center',
-        marginLeft: 5,
-        fontSize: 18,
-    },
-    listItem: {
-        height: 50,
-        backgroundColor: 'aqua',
-        borderBottomColor: '#c8c7cc',
-        borderBottomWidth: 0.5,
-        width: 300,
-        alignSelf: 'center',
-        paddingTop: 35,
-        paddingRight: 15,
-        paddingBottom: 55,
-    },
-    subtitleView: {
-        // color: 'black',
-        paddingTop: 35,
-        paddingRight: 40,
-        paddingLeft: 20
-
-    },
-    listImg: {
-        height: 30,
-        alignSelf: 'stretch',
-    },
-    listText: {
-        paddingLeft: 30,
-        marginLeft: 30,
-        fontSize: 24,
-    },
-    row: {
-        backgroundColor: 'orange',
-    },
-    view: {
-        alignItems: 'center',
-        backgroundColor: 'yellow'
-    },
-    img: {
-        alignSelf: 'stretch',
-        height: 100,
-    },
-})
 
 export default SustainStack;
