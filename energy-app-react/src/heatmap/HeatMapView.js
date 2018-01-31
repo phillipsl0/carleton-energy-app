@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Platform, StatusBar, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Platform, StyleSheet, Dimensions, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
@@ -10,6 +10,7 @@ import OverviewCards from './../overview/OverviewCards';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import TopUtilities from './UtilityButtons';
+import Loader from './Loader';
 
 
 /*
@@ -64,18 +65,35 @@ class HeatMapView extends Component {
         longitude: -93.15502781429046
       },
       ready: true,
-      utilityShown: 'electricity'
+      utilityShown: 'electricity',
+      loading: true
     };
-    //this.onRegionChange = this.onRegionChange.bind(this);
+    this.onRegionChange = this.onRegionChange.bind(this);
+    //this.moveToCarleton = this.moveToCarleton.bind(this);
+    //this.updateUtility = this.updateUtility.bind(this);
     // this.setMapBoundaries = this.setMapBoundaries.bind(this) ({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
   }
 
-  // Assemble all of Carleton's buildings
-  componentDidMount() {
+  // Assemble all of Carleton's buildings BEFORE rendering
+  componentWillMount() {
     this.getBuildingData();
     this.moveToCarleton();
     // this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
-    console.log('Component did mount');
+    console.log('Component will mount');
+    this.closeActivityIndicator();
+  }
+
+  componentDidMount() {
+    console.log("Component did mount");
+  }
+
+  openActivityIndicator() {
+    this.setState({ loading: true });
+  }
+
+  closeActivityIndicator() {
+    setTimeout(() => this.setState({
+      loading: false }), 2000);
   }
 
   setRegion(region) {
@@ -96,15 +114,26 @@ class HeatMapView extends Component {
   };
 
   updateUtility = (utilitySelected) => {
+    // Begin to update map
+    this.openActivityIndicator();
     console.log("Utility selected:", utilitySelected);
     this.setState({ utilityShown: utilitySelected});
     console.log("Displaying utility: ", this.state.utilityShown);
+    
+    // Update map
     this.getBuildingData();
     this.moveToCarleton();
-  }
+    this.closeActivityIndicator();
+    console.log("Map updated") 
+  };
 
   onRegionChange = (region) => {
     console.log('onRegionChange', region);
+    this.state.polygons.map((polygon) => {
+      if (polygon.open) {
+        this.toggleCallout(polygon)
+      }
+    })
   };
 
   onRegionChangeComplete = (region) => {
@@ -120,9 +149,9 @@ class HeatMapView extends Component {
 
   */
   determineBuildingColor(buildingName) {
-    console.log("Rendering building colors with: ", this.state.utilityDisplayed)
+    console.log("Rendering building colors with: ", this.state.utilityShown)
     // NEED TO NORMALIZE DATA
-    var use = getCurrentBuildingUtilityConsumption(buildingName, this.state.utilityDisplayed).toFixed(1)
+    var use = getCurrentBuildingUtilityConsumption(buildingName, this.state.utilityShown).toFixed(1)
     console.log(buildingName, use)
     var h = (1.0 - use) * 240
     return "hsl(" + h + ", 100%, 50%)";
@@ -137,14 +166,14 @@ class HeatMapView extends Component {
           name: building.name,
           color: this.determineBuildingColor(building.name),
           marker_coordinate: building.marker_coordinate,
-          usage: getCurrentBuildingUtilityConsumption(building.name, this.state.utilityDisplayed).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
+          usage: getCurrentBuildingUtilityConsumption(building.name, this.state.utilityShown).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
         }
       })
       this.setState({polygons: polygons})
       return polygons
     } catch(error) {
-      var introStr = "This is embarrassing...: "
-      alert(introStr.concat(error))
+        var introStr = "This is embarrassing...: "
+        alert(introStr.concat(error))
     }
   }
 
@@ -185,6 +214,10 @@ class HeatMapView extends Component {
 
   render() {
     navigation = this.props.navigation;
+    utilityShown = this.state.utilityShown
+    loading = this.state.loading
+    console.log("Utility displayed before return:", utilityShown)
+    console.log("Loading?", loading)
 
     return (
       <View style={styles.container}>
@@ -193,7 +226,7 @@ class HeatMapView extends Component {
           maxZoomLevel={5}
           ref="map"
           provider = { PROVIDER_GOOGLE } // show buildings on OS
-          key={this.state.utilityShown} // key change needed to rerender map
+          key={utilityShown} // key change needed to rerender map
           showsTraffic={false}
           //control zooming
           // minZoomLevel={0.0}
@@ -203,15 +236,12 @@ class HeatMapView extends Component {
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
           toggleCallout={this.toggleCallout}
-          displayUtility={this.state.utilityShown}
+          displayUtility={utilityShown}
           style={styles.map}
                   
 
           // set map boundaries, NE by SW
-          //setMapBoundaries={ this.setBoundaries } 
-          loadingEnabled={true}
-          loadingIndicatorColor="#666666"
-          loadingBackgroundColor="#eeeeee"     
+          //setMapBoundaries={ this.setBoundaries }     
           >
             {this.state.polygons.map((polygon, index) => (
               /* Renders polygons from list */
@@ -241,12 +271,11 @@ class HeatMapView extends Component {
                       tooltip // enables customizable tooltip style
                       style={styles.callout}
                       onPress={() => navigation.navigate('HeatBuildingView', {item:polygon})}>
-
                       <MapCallout
                         name={polygon.name}
                         image={'image'} // to be replaced with building image
-                        number={polygon.usage}/>
-
+                        number={polygon.usage}
+                        utility={utilityShown}/>
                     </Callout>
                   </Marker>
               </View>
@@ -263,6 +292,12 @@ class HeatMapView extends Component {
             type='material-community'
           />
         </TouchableOpacity>
+        <View style={styles.loading}>
+          <ActivityIndicator
+            size='large'
+            color='#0000ff'
+            animating={this.state.loading} />
+        </View>
         <TopUtilities
           // top utilities
           onUtilitySelect={this.updateUtility}
@@ -355,6 +390,15 @@ const styles = StyleSheet.create({
     bottom: 5,
     justifyContent: 'center'
   },
+  activityIndicator: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });
 
 export default HeatMapViewStack;
