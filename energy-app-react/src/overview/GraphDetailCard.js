@@ -6,7 +6,7 @@ import CurrTheme from './../styling/CurrentTheme';
 import Graph from './../visualizations/Graph';
 import { default as CustomThemes } from './../visualizations/GraphThemes';
 import GraphButton from './GraphButton';
-
+import { moderateScale, verticalScale } from './../helpers/Scaling';
 
 export default class GraphDetail extends Component {
     constructor(props) {
@@ -19,30 +19,25 @@ export default class GraphDetail extends Component {
 
     render() {
         const themeStyles = GetStyle(CurrTheme);
+
         return(
-            <View style={[themeStyles.singleView, themeStyles.shadowed]}>
+            <View style={[themeStyles.singleView, themeStyles.shadowed, themeStyles.centered]}>
                 <View style={[styles.graphContainer, themeStyles.centered,
                               themeStyles.translucent]}>
-                 <View >
-                 <View style={styles.textContainer}>
-                 <Text style={[styles.subHead]}>
-                    units
-                 </Text>
-                 </View>
+
 
                  <Graph
                      theme={CustomThemes.carleton}
-                     height={200}
-                     width={275}
+                     height={verticalScale(210)}
+                     width={moderateScale(275)}
                      type={'scatter'}
                      graphData={this.props.data}/>
-                </View>
                 <Text style={styles.subHead}>
-                    (figures in thousands)
+                    (aggregate energy usage in thousands)
                 </Text>
                 </View>
 
-                <View style={[themeStyles.flexboxRow, themeStyles.translucent]}>
+                <View style={[themeStyles.flexboxRow, themeStyles.flexButtons, themeStyles.translucent]}>
                     <GraphButton title='D'
                         view='day'
                         comparator={7}
@@ -80,10 +75,12 @@ const styles = StyleSheet.create({
     graphContainer: {
         marginTop: '3%',
         marginBottom: '3%',
-        marginLeft: '3%',
-        marginRight: '3%',
+        paddingTop: '5%',
+        paddingLeft: '3%',
+        paddingRight: '3%',
         paddingBottom: '2%',
         borderRadius: 10,
+        width: moderateScale(300)
     },
     subHead: {
         fontSize: 10,
@@ -94,5 +91,8 @@ const styles = StyleSheet.create({
     },
     textContainer: {
        paddingTop: '50%',
+    },
+    narrow: {
+        width: moderateScale(300)
     }
 })

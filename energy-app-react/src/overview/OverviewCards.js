@@ -7,6 +7,7 @@ import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './GraphDetailCard';
 import Utilities from './UtilitiesMiniCards';
 import { getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './../helpers/ApiWrappers';
+import { moderateScale, verticalScale } from './../helpers/Scaling';
 
 @connect(
     state => ({
@@ -66,8 +67,6 @@ export default class OverviewCards extends Component {
     }
 
     getRanking = (data, cardType) => {
-//        graphData = navigation.state.params.data.comparison;
-
         if (this.state.view == 'day') {
             return data["dayUsage"].rank;
         } else if (this.state.view == 'week') {
@@ -158,15 +157,16 @@ export default class OverviewCards extends Component {
 
 const styles = StyleSheet.create({
     number: {
-        fontSize: 100,
+        fontSize: verticalScale(100),
     },
 
     textContainer: {
-        marginBottom: '5%',
+        marginBottom: '2%',
+        marginTop: '-2%'
     },
 
     words: {
-        fontSize: 16,
+        fontSize: verticalScale(16),
         marginTop: '-3%',
     },
 })

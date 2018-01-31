@@ -2,28 +2,58 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Dimensions } from 'react-native'
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme,
-         VictoryScatter, VictoryAxis } from "victory-native";
-
+         VictoryScatter, VictoryAxis, VictoryLegend, VictoryContainer } from "victory-native";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
 import CurrTheme from './../styling/CurrentTheme'
 import { default as CustomThemes } from './GraphThemes'
 
-
 class Graph extends Component {
+    getLegendData = (data) => {
+        var result = new Array(data.length);
+
+        for (var i = 0; i < data.length; i++) {
+            var name = {};
+            name["name"] = data[i]["x"];
+            result[i] = name;
+        }
+
+        return result;
+    }
+
     render() {
         const themeStyles = GetStyle(CurrTheme);
 
+        var legendData = this.getLegendData(this.props.graphData);
+
         if (this.props.type=='pie') {
+            var colorScheme = ["#0B5091", "#447BB0", "#001324", "#98BDE1"];
+            colorScheme = colorScheme.slice(0, this.props.graphData.length);
+            var legendHeight = 25 * this.props.graphData.length;
+            var legendFont = moderateScale(12);
+
             return (
+                <View style={[{width: moderateScale(200), height: verticalScale(120)},
+                        themeStyles.flexboxRow]}>
                 <VictoryPie
+                    labels={() => null}
                     theme={this.props.theme}
-                    height={this.props.height}
-                    innerRadius={20}
-                    width={this.props.width}
-                    padding={{ top: 50, bottom: 50, left: 70, right: 65 }}
+                    height={moderateScale(100)}
+                    innerRadius={moderateScale(20)}
+                    width={moderateScale(110)}
+                    padding={{ top: 0, bottom: 0, left: 10, right: 10 }}
                     data={this.props.graphData}/>
+                <VictoryLegend
+                 colorScale={colorScheme}
+                 height={legendHeight}
+                 style={{labels: {fontSize: legendFont}}}
+                 width={moderateScale(130)}
+                 title=""
+                 data={legendData}/>
+                </View>
+
             )
         } else if (this.props.type=='bar') {
             return (
@@ -62,18 +92,7 @@ class Graph extends Component {
         }
     }
 }
-// 1
-//Graph.defaultProps = {
-//    type: 'pie',
-//    graphData: [{y:  8, x: "Electricity"},
-//                 {y: 7, x: "Water"},
-//                 {y: 16, x: "Heat/AC"}],
-//    theme: CustomThemes.grayscale,
-//    height: 300,
-//    width: 300
-//}
 
-// 2
 Graph.defaultProps = {
     type: 'pie',
     graphData: [{y:  8, x: "Electricity"},
@@ -83,17 +102,6 @@ Graph.defaultProps = {
     height: 175,
     width: 250
 }
-
-// 3
-//Graph.defaultProps = {
-//    type: 'pie',
-//    graphData: [{y:  8, x: "Electricity"},
-//                 {y: 7, x: "Water"},
-//                 {y: 16, x: "Heat/AC"}],
-//    theme: CustomThemes.grayscale,
-//    height: 300,
-//    width: 300
-//}
 
 Graph.propTypes = {
     type: PropTypes.string,

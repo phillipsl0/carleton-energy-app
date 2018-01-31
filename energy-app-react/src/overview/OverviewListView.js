@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native'
+import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, View, Text, Image, Dimensions, Platform, TouchableHighlight } from 'react-native'
 import { AppLoading } from 'expo';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, Button } from 'react-native-elements'
@@ -15,6 +15,8 @@ import { GetStyle } from './../styling/Themes'
 import CurrTheme from './../styling/CurrentTheme'
 import CurrFont from './../styling/CurrentFont';
 import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './../helpers/ApiWrappers';
+import { default as CustomThemes } from './../visualizations/GraphThemes';
+import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 
 const defaultFont = CurrFont+'-regular';
 const defaultFontBold = CurrFont+'-bold';
@@ -51,12 +53,19 @@ class OverviewListView extends Component {
         navigation = this.props.navigation;
         const themeStyles = GetStyle(CurrTheme);
         const { refresh, loading, currentData, layout } = this.props;
+//        if (Platform.OS === 'ios') {
+//            console.log("IOS");
+//        } else {
+//            console.log("ANDROID");
+//        }
+//
+//        console.log(layout);
 
 
         return (
          <List
            style={[styles.list, themeStyles.list, themeStyles.flex]}>
-           <FlatList
+           <FlatList style={[themeStyles.flex, styles.up]}
              data={ExampleData}
              keyExtractor={item => item.title}
              onRefresh={refresh}
@@ -66,31 +75,38 @@ class OverviewListView extends Component {
                <Card
                  containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}
                  title={item.title}
-                 titleStyle={styles.title}>
-                 <View style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
-                 {!currentData && <ActivityIndicator
-                                                 animating={loading}
-                                                 size="large"/>}
+                 titleStyle={styles.title}
+                 dividerStyle={styles.divider}>
+                 <TouchableHighlight
+                    onPress={() => this.returnScreen(item, navigation)}
+                    underlayColor="transparent">
+                 <View style={[themeStyles.container, themeStyles.flexboxRow]}>
+                 {!currentData &&
+                  <ActivityIndicator
+                    animating={loading}
+                    size="large"/>}
+
                  {item.title == "Turbine Energy" &&
-                        <Graph
-                            type={item.graphType}
-                            theme={VictoryTheme.grayscale}
-                            graphData={currentData.turbine}/>}
+                  <Graph
+                    type={item.graphType}
+                    theme={CustomThemes.carleton}
+                    graphData={currentData.turbine}/>}
+
                  {item.title != "Turbine Energy" &&
-                        <Graph
-                        type={item.graphType}
-                        theme={VictoryTheme.grayscale}
-                        graphData={item.title == "Energy Use" ? currentData.usage :
-                            currentData.generation}/>}
+                  <Graph
+                    type={item.graphType}
+                    theme={CustomThemes.carleton}
+                    graphData={item.title == "Energy Use" ? currentData.usage :
+                        currentData.generation}/>}
+
+                 <TouchableHighlight onPress={() => this.returnScreen(item, navigation)}
+                    underlayColor="transparent"
+                    style={styles.button}>
+                    <FontAwesome name="angle-right" size={moderateScale(40)} color="#0B5091" />
+                 </TouchableHighlight>
                  </View>
-                 <Button
-                   rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                   fontFamily={defaultFont}
-                   fontSize={20}
-                   title='More'
-                   containerViewStyle={styles.button}
-                   backgroundColor='#0B5091'
-                   onPress={() => this.returnScreen(item, navigation)}/>
+                 </TouchableHighlight>
+
                </Card>
              )}
            />
@@ -98,33 +114,6 @@ class OverviewListView extends Component {
        );
     }
 }
-
-//1
-//                 <Button
-//                    rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-//                    fontFamily={defaultFont}
-//                    fontSize={20}
-//                    title='More'
-//                    containerViewStyle={styles.button}
-//                    backgroundColor='#0B5091'
-//                    onPress={() => this.returnScreen(item, navigation)}/>
-
-//2
-//<Button
-//                     rightIcon={{name: "angle-right", type: 'font-awesome', size: 20}}
-//                     containerViewStyle={styles.button}
-//                     backgroundColor='#0B5091'
-//                     onPress={() => this.returnScreen(item, navigation)}/>
-
-                 //3
-//                 <Button
-//                     rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-//                     fontFamily={defaultFont}
-//                     fontSize={20}
-//                     title='More'
-//                     containerViewStyle={styles.button}
-//                     backgroundColor='#0B5091'
-//                     onPress={() => this.returnScreen(item, navigation)}/>
 
 const navigateOnce = (getStateForAction) => (action, state) => {
     const {type, routeName} = action;
@@ -188,8 +177,13 @@ const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
     borderRadius: 3,
-    padding: 15,
-    margin: 15,
+    paddingLeft: moderateScale(10),
+    paddingRight: moderateScale(10),
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginLeft: moderateScale(15),
+    marginRight: moderateScale(15),
+    marginTop: 10,
     marginBottom: 0,
   },
   list: {
@@ -197,11 +191,20 @@ const styles = StyleSheet.create({
       marginRight: '3%',
   },
   button: {
-    marginTop: '3%',
+    marginRight: '3%',
+    paddingTop: '3%',
+    paddingBottom: '3%',
   },
   title: {
     fontSize: 14,
     fontFamily: defaultFontBold,
+    marginBottom: 10
+  },
+  divider: {
+    marginBottom: 5,
+  },
+  up: {
+    marginTop: '-1%'
   }
 })
 

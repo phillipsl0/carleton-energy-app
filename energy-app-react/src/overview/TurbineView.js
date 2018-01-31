@@ -1,8 +1,20 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, Platform, ScrollView, Text } from 'react-native';
+import { connect } from 'react-redux';
+
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
+
+@connect(
+    state => ({
+        layout: state.ui.layout,
+        currentData: state.data.currentData,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_LAYOUT'}),
+    }),
+)
 
 export default class Windmill extends Component {
     constructor(props) {
@@ -16,6 +28,8 @@ export default class Windmill extends Component {
 
     render() {
         const themeStyles = GetStyle(CurrTheme);
+        const { layout, currentData } = this.props;
+        var turbineTotal = Math.round(currentData.turbine[0]["y"]+currentData.turbine[1]["y"]);
 
         return (
             <View style={[themeStyles.flex, styles.main]}>
@@ -26,7 +40,7 @@ export default class Windmill extends Component {
                     Currently generating
                 </Text>
                 <Text style={[styles.number, themeStyles.fontBold]}>
-                    20,000
+                    {turbineTotal}
                 </Text>
                 <Text style={[styles.units, themeStyles.fontRegular]}>
                     kW/h

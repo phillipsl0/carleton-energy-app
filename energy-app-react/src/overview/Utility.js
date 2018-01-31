@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Text, TouchableHighlight, Platform } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import CurrFont from './../styling/CurrentFont';
-
+import { moderateScale } from './../helpers/Scaling';
 const defaultFont = CurrFont+'-regular';
 const defaultFontBold = CurrFont+'-bold';
 
@@ -16,6 +16,7 @@ export default class Utility extends Component {
 
     render() {
         const themeStyles = GetStyle(CurrTheme);
+
         return (
              <TouchableHighlight
                 underlayColor="transparent"
@@ -27,17 +28,12 @@ export default class Utility extends Component {
                                 [styles.card, themeStyles.card,
                                  themeStyles.shadowed, themeStyles.centered]}>
 
-                    <FontAwesome name={this.props.icon} size={50} style={styles.icon}
+                    <FontAwesome name={this.props.icon} size={moderateScale(14)} style={styles.icon}
                         color={this.props.selected == this.props.index ? "white" : "#0B5091"}/>
 
                     <Text style={this.props.selected == this.props.index ?
                                  styles.textFocused : styles.text}>
                         {this.props.utilityType}
-                    </Text>
-
-                    <Text style={this.props.selected == this.props.index ?
-                                 styles.subFocused : styles.sub}>
-                        {this.props.number} {this.props.unit}
                     </Text>
 
                 </View>
@@ -48,12 +44,13 @@ export default class Utility extends Component {
 
 const styles = StyleSheet.create({
     card: {
-        width: 125,
-        height: 125,
+        width: moderateScale(60),
+        height: moderateScale(60),
         borderWidth: 1,
         borderRadius: 10,
-        padding: 15,
-        margin: 15,
+        padding: moderateScale(12),
+        margin: moderateScale(15),
+        marginTop: moderateScale(10),
         marginBottom: 0,
     },
 
@@ -62,27 +59,15 @@ const styles = StyleSheet.create({
         marginBottom: '10%',
     },
 
-    sub: {
-        color: '#9E9E9E',
-        fontFamily: defaultFontBold,
-        fontSize: 12,
-    },
-
-    subFocused: {
-        color: 'white',
-        fontFamily: defaultFont,
-        fontSize: 12,
-    },
-
     text: {
         color: '#0B5091',
         fontFamily: defaultFont,
-        fontSize: 15,
+        fontSize: moderateScale(10),
     },
 
     textFocused: {
         color: 'white',
         fontFamily: defaultFont,
-        fontSize: 15,
+        fontSize: moderateScale(10),
     },
 })

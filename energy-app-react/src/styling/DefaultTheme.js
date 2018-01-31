@@ -1,7 +1,7 @@
 import { StyleSheet, Platform } from 'react-native'
 
 import CurrFont from './../styling/CurrentFont';
-
+import { moderateScale, verticalScale } from './../helpers/Scaling';
 
 const lightBlue = '#e1e8ee';
 const mediumBlue = '#B9C8D6';
@@ -34,14 +34,18 @@ const DefaultTheme = StyleSheet.create({
     },
 
     flexboxRow: {
+        flex: 1.0,
+        flexDirection: 'row',
+        alignItems: 'center',
+
+    },
+
+    flexButtons: {
         paddingTop: 10,
         paddingBottom: 10,
-        flex: 1.0,
         marginLeft: '10%',
         marginRight: '10%',
         borderRadius: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between'
     },
 
@@ -72,10 +76,10 @@ const DefaultTheme = StyleSheet.create({
         opacity: 0.5,
         ...Platform.select({
             ios: {
-                height: 147,
+                height: verticalScale(140),
             },
             android: {
-                height: 163,
+                height: verticalScale(163),
                 width: 412,
             }
         })
@@ -102,7 +106,7 @@ const DefaultTheme = StyleSheet.create({
                 shadowOffset: { height: 0, width: 0 },
             },
             android: {
-                elevation: 3,
+                elevation: 1,
 
             },
         }),
