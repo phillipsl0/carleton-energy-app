@@ -9,7 +9,7 @@ import MapCallout from './MapCallout';
 import OverviewCards from './../overview/OverviewCards';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
-import BottomUtilities from './Utilities';
+import TopUtilities from './UtilityButtons';
 
 
 /*
@@ -64,7 +64,7 @@ class HeatMapView extends Component {
         longitude: -93.15502781429046
       },
       ready: true,
-      utilityDisplayed: 'electricity'
+      utilityShown: 'electricity'
     };
     //this.onRegionChange = this.onRegionChange.bind(this);
     // this.setMapBoundaries = this.setMapBoundaries.bind(this) ({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
@@ -252,7 +252,9 @@ class HeatMapView extends Component {
               </View>
             ))}
         </MapView>
-        <TouchableOpacity style={styles.button}
+        <TouchableOpacity
+          // Button to go back to home location
+          style={styles.button}
           onPress={() => this.moveMaptoLocation(initialRegion)}>
           <Icon
             // see: https://react-native-training.github.io/react-native-elements/API/icons/
@@ -261,7 +263,10 @@ class HeatMapView extends Component {
             type='material-community'
           />
         </TouchableOpacity>
-        <BottomUtilities onUtilitySelect={this.updateUtility} />
+        <TopUtilities
+          // top utilities
+          onUtilitySelect={this.updateUtility}
+          selected={this.state.utilityShown} />
       </View>
     );
   }
