@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
 import { Platform, StyleSheet, BackHandler, View, StatusBar } from 'react-native';
-import { TabNavigator, TabBarTop, TabBarBottom, NavigationActions, addNavigationHelpers } from 'react-navigation';
+import { TabNavigator, TabBarTop, TabBarBottom, 
+  NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -14,7 +15,8 @@ import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
 import CurrFont from './src/styling/CurrentFont';
 import { handler, dataReducer } from './src/helpers/ReduxHandler'
-import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
+import { getCurrentGenerationGraphFormat, 
+  getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
 
 const defaultFont = CurrFont+'-regular';
@@ -36,37 +38,30 @@ function cacheFonts(fonts) {
 }
 
 const navStyle = StyleSheet.create({
-    header: {
-        ...Platform.select({
-            android: {
-                backgroundColor: '#0000FF', // '#0B5091', //'#e1e8ee',
-            }
-        }),
-    },
     label: {
         fontFamily: defaultFontBold,
     },
 
     indicator: {
         backgroundColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF',
-        // backgroundColor: '#0B5091'
-    },
-    statusBar: {
-        backgroundColor: "#C2185B",
-        height: StatusBar.currentHeight,
-    },
-
-    // activeTintColor: {
-    //     // activeTintColor: '#FFFFFF', //'#0B5091',
-    //     // inactiveTintColor: '#9E9E9E',
-    //     color: '#FFFFFF'
-    // },
-
-    // inactiveTintColor: {
-    //     backgroundColor: '#9E9E9E',
-    // }
+    }
 })
-// console.log(navStyle.activeTintColor.color)
+
+const tabStyle = [];
+tabStyle.tabColors = {
+        tab0: '#6699cc',  // blue
+        tab1: '#20cef5',  // light blue
+        tab2: '#67b868',  // green
+        tab3: '#a695c7'   // purple
+    }
+
+tabStyle.tabStatusColors = {
+        tab0: '#527aa3',
+        tab1: '#1aa5c4',
+        tab2: '#529353',
+        tab3: '#85779f'
+    }
+
 
 const RootTabs = TabNavigator({
     Overview: {
@@ -110,7 +105,10 @@ const RootTabs = TabNavigator({
     tabBarComponent: props => {
       const backgroundColor = props.position.interpolate({
         inputRange: [0, 1, 2, 3],
-        outputRange: ['#03a9f4', '#673ab7', '#ff9800', '#4caf50'],  // alt blue 01579B
+        outputRange: [tabStyle.tabColors.tab0, 
+                      tabStyle.tabColors.tab1, 
+                      tabStyle.tabColors.tab2, 
+                      tabStyle.tabColors.tab3],  // alt blue 01579B
       })
       return (
         Platform.OS === 'ios'
@@ -126,24 +124,15 @@ const RootTabs = TabNavigator({
           indicatorStyle: navStyle.indicator,
           // showIcon: true, //this is default false on Android
           // showLabel: true,
-          activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF', //navStyle.activeTintColor.color, // '#FFFFFF', //'#0B5091',
-          inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90', //navStyle.inactiveTintColor, //'#9E9E9E', FFFFFFA0
+          activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF', 
+          //navStyle.activeTintColor.color, // '#FFFFFF', //'#0B5091',
+          inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90', 
+          //navStyle.inactiveTintColor, //'#9E9E9E', FFFFFFA0
           pressColor: '#FFFFFF' // Android ripple color onPress
         },
      navigationOptions: ({ navigation }) => ( {
          tabBarOnPress: (tab, jumpToIndex) => {
-          console.log(navigation.state.key)
-          // console.log(tab)
            // resets stack in tabs if their icon is tapped while focused
-           StatusBar.setBarStyle('light-content', false);
-           if (Platform.OS === 'android') {
-             switch (tab.index){
-                case 0: StatusBar.setBackgroundColor('#ff9800', true); break;
-                case 1: StatusBar.setBackgroundColor('#673ab7', true); break;
-                case 2: StatusBar.setBackgroundColor('#4caf50', true); break;
-                case 3: StatusBar.setBackgroundColor('#03a9f4', true); break;
-             }
-           }
            if (tab.focused && (tab.index === 0 || tab.index === 1)) {
              if (tab.route.index !== 0) {
                navigation.dispatch(NavigationActions.reset({
@@ -161,7 +150,8 @@ const RootTabs = TabNavigator({
 });
 
 //for redux
-const initialState = RootTabs.router.getStateForAction(RootTabs.router.getActionForPathAndParams('Overview'));
+const initialState = RootTabs.router.getStateForAction(
+                      RootTabs.router.getActionForPathAndParams('Overview'));
 
 const navReducer = (state = initialState, action) => {
     const nextState = RootTabs.router.getStateForAction(action, state);
@@ -220,6 +210,21 @@ class App extends Component {
             data,
             state: nav
         });
+
+        // StatusBar.setBackgroundColor('#ff9800', true);
+        // console.log("\n\n~~!!New Render!!~~\n\n")
+        // console.log(this.props.nav.index)
+        // console.log(tabStyle.tabStatusColors);
+
+        StatusBar.setBarStyle('light-content', false);
+        if (Platform.OS === 'android') {
+          switch (this.props.nav.index){
+             case 0: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab0, true); break;
+             case 1: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab1, true); break;
+             case 2: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab2, true); break;
+             case 3: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab3, true); break;
+          }
+        }
 
         if (!this.state.isReady) {
             return(

@@ -1,9 +1,6 @@
 import buildingsDetail from './BuildingsDetail';
 import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
-// import apiRSS2jsonKey from './../../App.js';
-
-import { setJsonData } from './../SustainView.js';
 
 const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
 
@@ -50,46 +47,20 @@ export function getUnitsList() {
 }
 
 export function getSustainabilityNews() {
-    // https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton
-    // https://api.rss2json.com/v1/api.json?
-    //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fblogs%2Fsustaining_carleton
-    // console.log(apiRSS2jsonKey);
     newsRSS = 'https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton';
-    // jsonResult = convertRSStoJSON(newsRSS);
     return convertRSStoJSON(newsRSS);
 }
 
 export function getSustainabilityNewsBak() {
-    // https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton
-    // https://api.rss2json.com/v1/api.json?
-    //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fblogs%2Fsustaining_carleton
-    // console.log(apiRSS2jsonKey);
-    newsRSS = 'https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton';
-    // jsonResult = convertRSStoJSON(newsRSS);
     return news;
 }
 
 export function getSustainabilityEvents() {
-    // https://apps.carleton.edu/sustainability/feeds/events
-    // https://api.rss2json.com/v1/api.json?
-    //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fevents
     eventsRSS = 'https://apps.carleton.edu/sustainability/feeds/events';
-    // jsonResult = 
     return convertRSStoJSON(eventsRSS);
-    // console.log(typeof(jsonResult));
-    // console.log(jsonResult);
-    // return events;
 }
 
 export function getSustainabilityEventsBak() {
-    // https://apps.carleton.edu/sustainability/feeds/events
-    // https://api.rss2json.com/v1/api.json?
-    //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fevents
-    eventsRSS = 'https://apps.carleton.edu/sustainability/feeds/events';
-    // jsonResult = 
-    // return convertRSStoJSON(eventsRSS);
-    // console.log(typeof(jsonResult));
-    // console.log(jsonResult);
     return events;
 }
 
@@ -139,11 +110,6 @@ function convertRSStoJSON(rssFeed) {
     // console.log(jsonResult);
     // https://api.rss2json.com/v1/api.json?rss_url=https://apps.carleton.edu/sustainability/feeds/events&api_key=eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw
 }
-
-
-// function addJSON(responseJson) {
-//     console.log(responseJson["items"][0]["title"])
-// }
 
 // -------------------- Electricity Generation -------------------------
 
