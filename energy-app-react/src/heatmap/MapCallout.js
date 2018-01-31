@@ -22,11 +22,9 @@ export default class MapCallout extends Component {
           <View>
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.number}>{number}</Text>
-            <Button
-              title='MORE INFO'
-              iconRight={{name: 'envira', type: 'font-awesome'}}
-              backgroundColor='#0B5091'
-            />
+          </View>
+          <View style={{ justifyContent: 'center', alignItems: 'center', padding: 10, }}>
+            <Text style={styles.icon}> > </Text>
           </View>
         </View>
         <View style={styles.arrowBorder} />
@@ -50,7 +48,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 0.5,
     padding: 15,
-    width: 150,
+    width: 135,
   },
   // Arrow below the bubble
   arrow: {
@@ -79,9 +77,9 @@ const styles = StyleSheet.create({
   number: {
     fontSize: 30,
   },
-  // Info icon image
-  infoIcon: {
-    width: 20,
-    height: 20,
-  },
+  // Wedge icon
+  icon: {
+    fontSize: 30,
+    color: '#0B5091',
+  }
 });
