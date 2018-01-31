@@ -5,7 +5,8 @@ import { Button } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
 
 import MapCallout from './MapCallout';
-import IndividualBuilding from './../IndividualBuilding'
+// import IndividualBuilding from './../IndividualBuilding'
+import OverviewCards from './../overview/OverviewCards';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
 
@@ -208,8 +209,21 @@ const HeatMapStack = StackNavigator({
       }),
     })
   },
+
+  // // Old Version: (when individualBuilding was a thing)
+  // HeatBuildingView: {
+  //   screen: IndividualBuilding,
+  //   path: 'buildings/:name',
+  //   navigationOptions: ({ navigation }) => ({
+  //     title: `${navigation.state.params.item.name}`,
+  //     headerTintColor: 'white',
+  //     headerStyle: navStyles.header,
+  //   }),
+  // },
+
+  // New Version:
   HeatBuildingView: {
-    screen: IndividualBuilding,
+    screen: OverviewCards,
     path: 'buildings/:name',
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.item.name}`,
@@ -217,6 +231,7 @@ const HeatMapStack = StackNavigator({
       headerStyle: navStyles.header,
     }),
   },
+
 });
 
 const navStyles = StyleSheet.create({

@@ -5,7 +5,8 @@ import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
 import buildings from './Buildings';
-import IndividualBuilding from './IndividualBuilding';
+// import IndividualBuilding from './IndividualBuilding';
+import OverviewCards from './overview/OverviewCards';
 
 
 class BuildingListView extends Component {
@@ -56,20 +57,30 @@ const BuildingStack = StackNavigator({
             headerStyle: navStyles.header,
         }),
     },
+
+    // CardView: {
+    //     screen: IndividualBuilding,
+    //     path: 'buildings/:name',
+    //     navigationOptions: ({ navigation }) => ({
+    //           title: `${navigation.state.params.item.name}`,
+    //           headerTintColor: 'white',
+    //           headerStyle: navStyles.header,
+    //         }),
+
+    // },
+
     CardView: {
-        screen: IndividualBuilding,
-        path: 'buildings/:name',
-        navigationOptions: ({ navigation }) => ({
+      screen: OverviewCards,
+      path: 'buildings/:name',
+      navigationOptions: ({ navigation }) => ({
               title: `${navigation.state.params.item.name}`,
               headerTintColor: 'white',
               headerStyle: navStyles.header,
-            }),
-
+              headerTitleStyle: navStyles.headerTitle,
+              headerBackTitleStyle: navStyles.headerTitle,
+              headerBackTitle: 'Back',
+            }), 
     },
-    // CardView: {
-    //   screen: IndividualBuilding,
-    //   // navigationOptions: 
-    // },
 });
 
 const navStyles = StyleSheet.create({
