@@ -1,12 +1,34 @@
 import { StyleSheet, Platform } from 'react-native'
+
+import CurrFont from './../styling/CurrentFont';
+import { moderateScale, verticalScale } from './../helpers/Scaling';
+
+
 const lightBlue = '#e1e8ee';
 const mediumBlue = '#B9C8D6';
 const carletonBlue = '#0B5091';
 
+const fontFamily = 'lato';
+const font = fontFamily+'-regular';
+const boldFont = fontFamily+'-bold';
+
 const DefaultTheme = StyleSheet.create({
+    button: {
+        marginTop: '3%',
+    },
+  
     card: {
         backgroundColor: 'white',
         borderColor: lightBlue,
+
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 10,
+        // margin: 15,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 5,
+        marginBottom: 10,
 
         ...Platform.select({
               ios: {
@@ -28,33 +50,53 @@ const DefaultTheme = StyleSheet.create({
     },
 
     flexboxRow: {
+        flex: 1.0,
+        flexDirection: 'row',
+        alignItems: 'center',
+
+    },
+
+    flexButtons: {
         paddingTop: 10,
         paddingBottom: 10,
-        flex: 1.0,
         marginLeft: '10%',
         marginRight: '10%',
         borderRadius: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between'
+    },
+
+    flexBoxColumn: {
+        flex: 1.0,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
 
     flex: {
         flex: 1.0,
     },
 
+    fontBold: {
+        fontFamily: boldFont,
+    },
+
+    fontRegular: {
+        fontFamily: font,
+    },
+
     header: {
         position: 'absolute',
-        left: -10,
+        left: 0,
         right: 0,
         top: 0,
-        opacity: 0.75,
+        opacity: 0.5,
         ...Platform.select({
             ios: {
-                height: 146,
+                height: verticalScale(160),
             },
             android: {
-                height: 163,
+                height: verticalScale(160),
+                width: 412,
             }
         })
     },
@@ -65,10 +107,18 @@ const DefaultTheme = StyleSheet.create({
 
     list: {
         backgroundColor: 'white',
+        // marginLeft: '3%',
+        // marginRight: '3%',
     },
 
     listItem: {
-        borderBottomColor: '#c8c7cc',
+        borderBottomColor: '#cbd2d9', 
+        borderBottomWidth: 0.7
+    },
+
+    testItem: {
+        borderBottomColor: '#cbd2d9', 
+        borderBottomWidth: 0.7
     },
 
     shadowed: {
@@ -80,7 +130,7 @@ const DefaultTheme = StyleSheet.create({
                 shadowOffset: { height: 0, width: 0 },
             },
             android: {
-                elevation: 3,
+                elevation: 1,
 
             },
         }),
@@ -92,18 +142,29 @@ const DefaultTheme = StyleSheet.create({
         paddingBottom: '3%',
         marginLeft: '3%',
         marginRight: '3%',
-        marginTop: '5%',
+        marginTop: '3%',
     },
 
+    subtitle: {
+        color: 'slategray',
+        fontWeight: 'normal',
+        fontStyle: 'italic',
+    },
+    
+    title: {
+        color: 'darkslategrey'
+    },
+    
     translucent: {
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
 
     translucentText: {
+        fontFamily: font,
         color: 'rgba(255, 255, 255, 0.75)',
         backgroundColor: 'transparent',
     }
 
 })
 
-export default DefaultTheme
+export default {DefaultTheme, fontFamily, font, boldFont}

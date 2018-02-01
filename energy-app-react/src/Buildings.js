@@ -1,7 +1,7 @@
 const buildings = [
     {
         name: 'Burton',
-        avatar: 'https://i.pinimg.com/originals/5f/08/83/5f08832ee298016cb9baa79e2a44d0c0.jpg',   
+        avatar: 'https://i.pinimg.com/originals/5f/08/83/5f08832ee298016cb9baa79e2a44d0c0.jpg',
         buildingID: 1,
         floors: 4,
         //API calls here
@@ -15,7 +15,7 @@ const buildings = [
           {latitude: 44.46059784, longitude: -93.15664217},
           {latitude: 44.46059784, longitude: -93.15661401},
           {latitude: 44.46055764, longitude: -93.15661401}, // E: hi lower outer mid
-          {latitude: 44.46055764, longitude: -93.15664217}, // E: hi lower inner mid 
+          {latitude: 44.46055764, longitude: -93.15664217}, // E: hi lower inner mid
           {latitude: 44.460499, longitude: -93.156638},
           {latitude: 44.460501, longitude: -93.156614},
           {latitude: 44.460474, longitude: -93.156609},
@@ -31,9 +31,10 @@ const buildings = [
           {latitude: 44.460587, longitude: -93.156818},
           {latitude: 44.460593, longitude: -93.156778}
         ],
-        marker_coordinate: {latitude: 44.46053452, longitude: -93.15672227}, 
+        marker_coordinate: {latitude: 44.46053452, longitude: -93.15672227},
         open: false,
         color: "lightgreen",
+        data:[{name: "Burton", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://i.pinimg.com/originals/5f/08/83/5f08832ee298016cb9baa79e2a44d0c0.jpg'}]
     },
     {
         name: 'Sayles',
@@ -62,15 +63,16 @@ const buildings = [
           {latitude: 44.461299, longitude: -93.156228},
           {latitude: 44.461619, longitude: -93.156233}
           ],
-        marker_coordinate: {latitude: 44.4613041, longitude: -93.1560839}, 
+        marker_coordinate: {latitude: 44.4613041, longitude: -93.1560839},
         open: false,
         color: "yellow",
+        data:[{name: "Sayles", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set110/488110/a39b9465187c3a6c5255046bc6381f74.jpg'}]
     },
     {
        name: 'Severance',
        avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set138/496138/dda9ea601b8c4166b0ee1cd3d86e6fbb.jpg',
        buildingID: 3,
-       floors: 3,  
+       floors: 3,
        //API calls here
        sefloor1: ['floor1', 102, 171, 10],
        sefloor2: ['floor2',350, 19, 22],
@@ -92,9 +94,10 @@ const buildings = [
           {latitude: 44.460926, longitude: -93.156874},
           {latitude: 44.461056, longitude: -93.156874}
         ],
-         marker_coordinate: {latitude: 44.46097292, longitude: -93.15653451}, 
+         marker_coordinate: {latitude: 44.46097292, longitude: -93.15653451},
         open: false,
         color: "red",
+        data:[{name: "Severance", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set138/496138/dda9ea601b8c4166b0ee1cd3d86e6fbb.jpg'}]
     },
     {
        name: 'Davis',
@@ -134,9 +137,11 @@ const buildings = [
         {latitude: 44.460029, longitude: -93.156835},
         {latitude: 44.460136, longitude: -93.156832}
       ],
-      marker_coordinate: {latitude: 44.46009804, longitude: -93.15659352}, 
+      marker_coordinate: {latitude: 44.46009804, longitude: -93.15659352},
       open: false,
       color: "yellow",
+      data:[{name: "Davis", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/images/645842.jpg'}]
+
     },
     {
        name: 'Musser',
@@ -157,6 +162,8 @@ const buildings = [
       marker_coordinate: {latitude: 44.45989813, longitude: -93.15723896}, // center for callout
       open: false,
       color: "yellow",
+      data:[{name: "Musser", electricity: "44W", water: "500G", heat: "1200U", avatar: 'http://www.peoplesco.com/assets/images/construction-specialties/inshied_carleton-musser.jpg'}]
+
     },
     {
        name: 'Myers',
@@ -175,9 +182,11 @@ const buildings = [
           {latitude: 44.460478, longitude: -93.150804},
           {latitude: 44.460991, longitude: -93.150826}
         ],
-      marker_coordinate: {latitude: 44.4606781, longitude: -93.15070339}, 
+      marker_coordinate: {latitude: 44.4606781, longitude: -93.15070339},
       open: false,
       color: "yellow",
+      data:[{name: "Myers", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set088/496088/a1e01d7aac13ef62e2d4c92b2e12ac41.jpg'}]
+
     },
     {
        name: 'Cassat',
@@ -228,9 +237,10 @@ const buildings = [
         {latitude: 44.460090, longitude: -93.151303},
         {latitude: 44.460128, longitude: -93.151298}
           ],
-        marker_coordinate: {latitude: 44.4600387, longitude: -93.15096893}, 
+        marker_coordinate: {latitude: 44.4600387, longitude: -93.15096893},
         open: false,
         color: "lightgreen",
+        data:[{name: "Cassat", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set344/586344/19248e063227e0265fb66cd1379a2352.jpg'}]
     },
     {
         name: 'Memo',
@@ -269,9 +279,10 @@ const buildings = [
           {latitude: 44.460122, longitude: -93.151968},
           {latitude: 44.460208, longitude: -93.151972}
         ],
-        marker_coordinate: {latitude: 44.46003104, longitude: -93.15181651}, 
+        marker_coordinate: {latitude: 44.46003104, longitude: -93.15181651},
         open: false,
         color: "lightgreen",
+        data:[{name: "Memo", electricity: "44W", water: "500G", heat: "1200U", avatar: 'http://www.lhbcorp.com/wp-content/uploads/2013/08/CarletonCollege_CassatMemorial_070353_H11_G1.jpg'}]
     },
     {
         name: 'Nourse',
@@ -296,9 +307,10 @@ const buildings = [
           {latitude: 44.46032408, longitude: -93.15200865}, //SW - lowest
           {latitude: 44.46032408, longitude: -93.15181822} //SE - lowest
         ],
-        marker_coordinate: {latitude: 44.46054218, longitude: -93.15189161}, 
+        marker_coordinate: {latitude: 44.46054218, longitude: -93.15189161},
         open: false,
         color: "red",
+        data:[{name: "Nourse", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/images_local/1057376.jpg'}]
     },
     {
         name: 'Evans',
@@ -330,9 +342,10 @@ const buildings = [
           {latitude: 44.460649, longitude: -93.149793},
           {latitude: 44.460762, longitude: -93.149796}
         ],
-        marker_coordinate: {latitude: 44.46054792, longitude: -93.14967878}, 
+        marker_coordinate: {latitude: 44.46054792, longitude: -93.14967878},
         open: false,
         color: "lightgreen",
+        data:[{name: "Evans", electricity: "44W", water: "500G", heat: "1200U", avatar: 'http://finance-commerce.com/files/2013/07/EvansHall5x.jpg'}]
     },
     {
         name: 'Goodhue',
@@ -363,9 +376,10 @@ const buildings = [
           {latitude: 44.462525, longitude: -93.150000},
           {latitude: 44.462706, longitude: -93.150166}
           ],
-        marker_coordinate: {latitude: 44.46243466, longitude: -93.14965099}, 
+        marker_coordinate: {latitude: 44.46243466, longitude: -93.14965099},
         open: false,
         color: "red",
+        data:[{name: "Goodhue", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://emeraldcitybookreview.com/wp-content/uploads/sites/163/2015/10/8-GoodhueExt.jpg'}]
     },
     {
         name: 'Watson',
@@ -389,6 +403,7 @@ const buildings = [
         marker_coordinate: {latitude: 44.45935334, longitude: -93.1503252},
         open: false,
         color: "yellow",
+        data:[{name: "Watson", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set183/490183/8bc51bab3276c56a4ecc7398aeee40de.jpg'}]
     },
     {
         name: 'Scoville',
@@ -409,10 +424,12 @@ const buildings = [
           {latitude: 44.460026, longitude: -93.156222},
           {latitude: 44.460168, longitude: -93.156228}
         ],
-        marker_coordinate: {latitude: 44.46011336, longitude: -93.15605708}, 
+        marker_coordinate: {latitude: 44.46011336, longitude: -93.15605708},
         open: false,
         color: "lightgreen",
+        data:[{name: "Scoville", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/images_local/1579342.jpg'}]
     },
 ]
+
 
 export default buildings

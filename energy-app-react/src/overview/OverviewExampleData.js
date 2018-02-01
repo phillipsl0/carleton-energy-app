@@ -1,6 +1,6 @@
 const ExampleData = [
     {
-        title: 'Campus Energy Use',
+        title: 'Energy Use',
         data: {current: [{y: 8, x: "Electricity"},
                          {y: 7, x: "Water"},
                          {y: 16, x: "Heat/AC"}],
@@ -22,10 +22,10 @@ const ExampleData = [
                            {y: 213, x: "Mar"},
                            {y: 178, x: "Apr"},
                            {y: 310, x: "May"},
-                           {y: 134, x: "June"},
-                           {y: 105, x: "July"},
+                           {y: 134, x: "Jun"},
+                           {y: 105, x: "Jul"},
                            {y: 100, x: "Aug"},
-                           {y: 260, x: "Sept"},
+                           {y: 260, x: "Sep"},
                            {y: 234, x: "Oct"},
                            {y: 190, x: "Nov"},
                            {y: 146, x: "Dec"},
@@ -38,10 +38,10 @@ const ExampleData = [
                           {y: 1900, x: "2018"}],
                           ranking: 1},
                }},
-        graphType: 'bar' ,
+        graphType: 'pie' ,
     },
     {
-        title: 'Energy Generated on Campus',
+        title: 'Energy Generation',
         data: {current: [{y: 8, x: "Solar"},
                          {y: 7, x: "Wind"},
                          {y: 16, x: "Geothermal"}],
@@ -63,10 +63,10 @@ const ExampleData = [
                              {y: 213, x: "Mar"},
                              {y: 178, x: "Apr"},
                              {y: 310, x: "May"},
-                             {y: 134, x: "June"},
-                             {y: 105, x: "July"},
+                             {y: 134, x: "Jun"},
+                             {y: 105, x: "Jul"},
                              {y: 100, x: "Aug"},
-                             {y: 260, x: "Sept"},
+                             {y: 260, x: "Sep"},
                              {y: 234, x: "Oct"},
                              {y: 190, x: "Nov"},
                              {y: 146, x: "Dec"},
@@ -82,10 +82,9 @@ const ExampleData = [
         graphType: 'pie' ,
     },
     {
-            title: 'Energy Generated vs. Energy Used',
-            data: {current: [{y: 8, x: "Electricity"},
-                             {y: 7, x: "Water"},
-                             {y: 16, x: "Heat/AC"}],
+            title: 'Turbine Energy',
+            data: {current: [{y: 8, x: "Turbine One"},
+                             {y: 7, x: "Turbine Two"},],
                    comparison: {
                        day: {graph: [{y: 8, x: "1/10"},
                                      {y: 7, x: "1/11"},
@@ -104,10 +103,10 @@ const ExampleData = [
                                  {y: 213, x: "Mar"},
                                  {y: 178, x: "Apr"},
                                  {y: 310, x: "May"},
-                                 {y: 134, x: "June"},
-                                 {y: 105, x: "July"},
+                                 {y: 134, x: "Jun"},
+                                 {y: 105, x: "Jul"},
                                  {y: 100, x: "Aug"},
-                                 {y: 260, x: "Sept"},
+                                 {y: 260, x: "Sep"},
                                  {y: 234, x: "Oct"},
                                  {y: 190, x: "Nov"},
                                  {y: 146, x: "Dec"},
@@ -120,8 +119,68 @@ const ExampleData = [
                                {y: 1900, x: "2018"}],
                                ranking: 1},
                    }},
-            graphType: 'bar' ,
+            graphType: 'pie' ,
         }
+]
+
+const turbineData = [
+    {
+     title: 'Turbine One',
+     generation: {
+                  current: 433032,
+                  historicalHigh: 548600,
+                 },
+     speed: {
+              current: 6.2,
+              historicalHigh: 8.3,
+            },
+     consumption: {
+                    current: 601
+                  }
+
+    },
+    {
+     title: 'Turbine Two',
+     generation: {
+                  current: 583389,
+                  historicalHigh: 602780,
+                 },
+     speed: {
+              current: 6.2,
+              historicalHigh: 8.3,
+            },
+     consumption: {
+                    current: 750
+                  }
+
+    }
+]
+
+export const fake = [
+    {
+      title: 'Wind Speed',
+      x: '6.2 mph',
+      icon: "weather-windy",
+    },
+
+    {
+      title: 'Turbine Generation',
+      x: '583,389 kWh',
+      icon: "airplane-takeoff",
+    },
+
+    {
+      title: 'Turbine Consumption',
+      x: '750 kWh',
+      icon: "airplane-landing",
+    },
+
+    {
+          title: 'Other',
+          x: '?????',
+          icon: "leaf",
+        },
+
 ]
 
 export default ExampleData

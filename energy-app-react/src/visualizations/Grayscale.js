@@ -1,5 +1,8 @@
 import { assign } from "lodash";
 
+import CurrFont from './../styling/CurrentFont';
+
+
 // *
 // * Colors
 // *
@@ -18,6 +21,8 @@ const charcoal = "#252525";
 // * Typography
 // *
 const sansSerif = "'Gill Sans', 'Gill Sans MT', 'Ser­avek', 'Trebuchet MS', sans-serif";
+const fontRegular = CurrFont+'-regular';
+const fontBold = CurrFont+'-bold';
 const letterSpacing = "normal";
 const fontSize = 14;
 // *
@@ -33,7 +38,7 @@ const baseProps = {
 // * Labels
 // *
 const baseLabelStyles = {
-  fontFamily: sansSerif,
+  fontFamily: 'lato-regular',
   fontSize,
   letterSpacing,
   padding: 10,
@@ -136,18 +141,18 @@ export default {
   pie: {
     style: {
       data: {
-        padding: 10,
+        padding: 0,
         stroke: "transparent",
         strokeWidth: 10
       },
-      labels: assign({}, baseLabelStyles, {
-        padding: 20
-      })
+      labels: {
+        padding: 0
+      }
     },
     colorScale: colors,
     width: 400,
     height: 400,
-    padding: 50
+    padding: 0
   },
   scatter: assign({
     style: {

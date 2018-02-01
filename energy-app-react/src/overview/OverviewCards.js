@@ -1,15 +1,29 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, Platform, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './GraphDetailCard';
 import Utilities from './UtilitiesMiniCards';
+import { getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './../helpers/ApiWrappers';
+import { moderateScale, verticalScale } from './../helpers/Scaling';
 
+@connect(
+    state => ({
+        historicalData: state.data.historicalData,
+        currentData: state.data.currentData,
+        loading: state.data.loading,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+    }),
+)
 
 export default class OverviewCards extends Component {
     constructor(props) {
         super(props);
+        //TODO: add when lastupdated
 
         this.state = {
             view: 'day',
@@ -28,69 +42,81 @@ export default class OverviewCards extends Component {
         this.setState({ selectedCard: buttonIndex});
     }
 
+    getGraphScope = (data, cardType) => {
+        if (cardType == 1) {
+            if (this.state.view == 'day') {
+                return data["dayUsage"].data;
+            } else if (this.state.view == 'week') {
+                return data["weekUsage"].data;
+            } else if (this.state.view == 'month') {
+                return data["monthUsage"].data;
+            } else if (this.state.view == 'year') {
+                return data["yearUsage"].data;
+            }
+        } else {
+            if (this.state.view == 'day') {
+                return data["dayGeneration"].data;
+            } else if (this.state.view == 'week') {
+                return data["weekGeneration"].data;
+            } else if (this.state.view == 'month') {
+                return data["monthGeneration"].data;
+            } else if (this.state.view == 'year') {
+                return data["yearGeneration"].data;
+            }
+        }
 
-    getGraphScope = () => {
-        graphData = navigation.state.params.data.comparison;
+    }
 
+    getRanking = (data, cardType) => {
         if (this.state.view == 'day') {
-            return graphData.day.graph;
+            return data["dayUsage"].rank;
         } else if (this.state.view == 'week') {
-            return graphData.week.graph;
+            return data["weekUsage"].rank;
         } else if (this.state.view == 'month') {
-            return graphData.month.graph;
+            return data["monthUsage"].rank;
         } else if (this.state.view == 'year') {
-             return graphData.year.graph;
+             return data["yearUsage"].rank;
         }
     }
 
-    getRanking = () => {
-        graphData = navigation.state.params.data.comparison;
-
-        if (this.state.view == 'day') {
-            return graphData.day.ranking;
-        } else if (this.state.view == 'week') {
-            return graphData.week.ranking;
-        } else if (this.state.view == 'month') {
-            return graphData.month.ranking;
-        } else if (this.state.view == 'year') {
-             return graphData.year.ranking;
-        }
-    }
-
-    getHeader = () => {
+    getHeader = (historicalData, cardType, currentData) => {
         const themeStyles = GetStyle(CurrTheme);
+        var units = ["thm", "kWh", "kBTU", "gal"];
 
         if (this.state.selectedCard <= 4) {
-            headerText = this.getRanking();
+            headerText = this.getRanking(historicalData, cardType);
             viewNumber = this.state.viewNumber;
             view = this.state.view;
-            subheaderText = "in energy use compared to the past " + viewNumber
+
+            if (this.props.navigation.state.params.card == 1) {
+                verb = 'use';
+            } else {
+                verb = 'generation';
+            }
+
+            subheaderText = "in " + verb + " compared to the past " + viewNumber
                 + " " + view + "s";
 
-        } else if (this.state.selectedCard == 5) {
-            headerText = "!!!";
-            subheaderText = "testing";
+        } else {
+            if (this.props.navigation.state.params.card == 1) {
+                verb = 'usage';
+            } else {
+                verb = 'generation';
+            }
 
-        } else if (this.state.selectedCard == 6) {
-            headerText = "???";
-            subheaderText = "testing";
+            headerText = Number(currentData["usage"][this.state.selectedCard - 5]["y"]).toLocaleString();
+            subheaderText = units[this.state.selectedCard - 5];
+        }
 
-        } else if (this.state.selectedCard == 7) {
-            headerText = "Wow";
-            subheaderText = "testing";
-
-      } else if (this.state.selectedCard == 8) {
-            headerText = "test";
-            subheaderText = "testing";
-      }
 
       return (
           <View style={[styles.textContainer, themeStyles.centered]}>
-             <Text style={[styles.number, themeStyles.translucentText]}>
-                {headerText}
-             </Text>
 
-             <Text style={[styles.words, themeStyles.translucentText]}>
+            <Text style={[styles.number, themeStyles.translucentText, themeStyles.fontBold]}>
+                {headerText}
+            </Text>
+
+            <Text style={[styles.words, themeStyles.translucentText]}>
                 {subheaderText}
              </Text>
           </View>
@@ -99,26 +125,32 @@ export default class OverviewCards extends Component {
 
     render() {
         const themeStyles = GetStyle(CurrTheme);
-        navigation = this.props.navigation;
-        currData = this.getGraphScope();
-        header = this.getHeader();
+        const { refresh, loading, historicalData, currentData } = this.props;
+        var utilities = ["Gas", "Electric", "Heat", "Water"];
+        var generators = ["Wind", "Solar", "Geothermal"]
+
+        cardType = this.props.navigation.state.params.card;
+        currData = this.getGraphScope(historicalData, cardType);
+        header = this.getHeader(historicalData, cardType, currentData);
 
         return (
             <View style={[themeStyles.flex, themeStyles.list]}>
-
-            <Image source={require('./../assets/noskyWindmill.png')}
+            <View style={{ height: verticalScale(130) }}>
+            <Image source={require('./../assets/windmillHeader.png')}
                 style={themeStyles.header}/>
             <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
             {header}
+            </View>
 
              <ScrollView style={themeStyles.lightBlueBackground}>
-                    <GraphDetail data={currData}
-                        callback={this.scopeCallbackGraph}
-                        selected={this.state.selectedCard}/>
-
-                    <Utilities callback={this.scopeCallbackUtilities}
-                        selected={this.state.selectedCard}/>
+                <GraphDetail data={currData}
+                    callback={this.scopeCallbackGraph}
+                    selected={this.state.selectedCard}/>
              </ScrollView>
+             <Utilities callback={this.scopeCallbackUtilities}
+//              cards={cardType == 1 ? utilities : generators}
+                cardType={cardType}
+              selected={this.state.selectedCard}/>
              </View>
 
             );
@@ -127,15 +159,15 @@ export default class OverviewCards extends Component {
 
 const styles = StyleSheet.create({
     number: {
-        fontSize: 100,
+        fontSize: moderateScale(75),
     },
 
     textContainer: {
-        marginBottom: '5%',
+        marginBottom: '2%',
+        marginTop: '2%'
     },
 
     words: {
-        fontSize: 16,
-        marginTop: '-3%',
+        fontSize: moderateScale(16),
     },
 })
