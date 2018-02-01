@@ -6,10 +6,9 @@ import { TabNavigator, TabBarTop, TabBarBottom,
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MapView from 'react-native-maps';
 
 import BuildingListView from './src/BuildingListView';
-import HeatMapStack from './src/heatmap/HeatMapView'
+import HeatMapViewStack from './src/heatmap/HeatMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
@@ -93,7 +92,7 @@ const RootTabs = TabNavigator({
       },
     },
     HeatMap: {
-        screen: HeatMapStack,
+        screen: HeatMapViewStack,
         navigationOptions: {
           tabBarLabel: 'Heat Map',
           tabBarIcon: ({ tintColor, focused }) => (
