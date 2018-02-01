@@ -40,7 +40,7 @@ function cacheFonts(fonts) {
 
 const navStyle = StyleSheet.create({
     label: {
-        fontFamily: themeStyles.fontBold,
+        fontFamily: themeStyles.boldFont,
     },
 
     indicator: {

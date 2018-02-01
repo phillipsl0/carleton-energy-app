@@ -7,6 +7,8 @@ import { List, Card, ListItem, Button } from 'react-native-elements';
 
 import { getSustainabilityEvents, getSustainabilityEventsBak, 
     getSustainabilityNews, getSustainabilityNewsBak } from './helpers/ApiWrappers.js';
+import { GetStyle } from './styling/Themes'
+const themeStyles = GetStyle();
 
 class SustainListView extends Component {
 
@@ -53,22 +55,24 @@ class SustainListView extends Component {
                 'https://apps.carleton.edu/sustainability/events/', 
                 'https://apps.carleton.edu/sustainability/news/']
 
+        // console.log("Style", themeStyles)
+        
         return (
             <ScrollView>
                 <Card title="Get Involved"
-                    containerStyle={styles.card}
-                    titleStyle={styles.title}>
+                    containerStyle={themeStyles.card}
+                    titleStyle={themeStyles.title}>
 
                     <List containerStyle={styles.list}>
-                        <ListItem containerStyle={styles.listItem}
+                        <ListItem containerStyle={themeStyles.listItem}
                             title={"Our Campus"}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(links[1])} />
-                        <ListItem containerStyle={styles.listItem}
+                        <ListItem containerStyle={themeStyles.testItem}
                             title={"Take Action"}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(links[2])} />
-                        <ListItem containerStyle={styles.listItem}
+                        <ListItem containerStyle={themeStyles.listItem}
                             title={"People & Policies"}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(links[3])} />
@@ -76,22 +80,22 @@ class SustainListView extends Component {
                 </Card>
 
                 <Card title="Upcoming Events"
-                    containerStyle={styles.card}
-                    titleStyle={styles.title}>
+                    containerStyle={themeStyles.card}
+                    titleStyle={themeStyles.title}>
 
                     <List containerStyle={styles.list}>
-                        <ListItem containerStyle={styles.listItem}
+                        <ListItem containerStyle={themeStyles.listItem}
                             title={events["events"]["items"][0]["title"]}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(events["events"]["items"][0]["link"])}
-                            subtitleStyle={styles.subtitle}
+                            subtitleStyle={themeStyles.subtitle}
                             subtitle={events["events"]["items"][0]["content"]} />
-                        <ListItem containerStyle={styles.listItem}
+                        <ListItem containerStyle={themeStyles.listItem}
                             title={events["events"]["items"][1]["title"]}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(events["events"]["items"][1]["link"])}
                             // subtitle={events["events"]["items"][1]["content"]}
-                            subtitleStyle={styles.subtitle} />
+                            subtitleStyle={themeStyles.subtitle} />
                     </List>
                     <Button
                         title="More Events"
@@ -102,24 +106,25 @@ class SustainListView extends Component {
                 </Card>
 
                 <Card title="Recent News"
-                    containerStyle={[styles.card, {marginBottom: 10}]}
-                    titleStyle={styles.title}>
+                    containerStyle={[themeStyles.card, {marginBottom: 10}]}
+                    titleStyle={themeStyles.title}>
 
                     <List containerStyle={styles.list}>
-                        <ListItem containerStyle={styles.listItem}
+                        <ListItem containerStyle={themeStyles.listItem}
                             title={news["news"]["items"][0]["title"]}
-                            titleStyle={styles.title}
+                            titleStyle={themeStyles.title}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(news["news"]["items"][0]["link"])}
                             subtitle={news["news"]["items"][0]["content"].replace(/<[^>]+>/g, '')}
-                            subtitleStyle={styles.subtitle}
+                            subtitleStyle={themeStyles.subtitle}
                             subtitleNumberOfLines={3} />
-                        <ListItem containerStyle={styles.listItem}
+                        <ListItem containerStyle={themeStyles.listItem}
                             title={news["news"]["items"][1]["title"]}
+                            titleStyle={themeStyles.title}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(news["news"]["items"][1]["link"])}
                             subtitle={news["news"]["items"][1]["content"].replace(/<[^>]+>/g, '')}
-                            subtitleStyle={styles.subtitle}
+                            subtitleStyle={themeStyles.subtitle}
                             subtitleNumberOfLines={3} /> 
                     </List>
                     <Button
@@ -127,7 +132,7 @@ class SustainListView extends Component {
                         rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                         fontSize={20}
                         backgroundColor='#0B5091'
-                        // buttonStyle={styles.button}
+                        // buttonStyle={themeStyles.button}
                         onPress={() => Linking.openURL(links[5])} />
                 </Card>
             </ScrollView>
@@ -178,33 +183,15 @@ const SustainStack = StackNavigator({
 });
 
 const styles = StyleSheet.create({
-    card: {
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 15,
-        margin: 15,
-        marginBottom: -5
-    },
     list: {                 // Keep to local list
         marginBottom: 12, 
         marginTop: -15, 
         borderTopWidth: 0
     },
-    listItem: {
-        borderBottomColor: '#cbd2d9', 
-        borderBottomWidth: 0.7
-    },
-    button: {
-      // marginTop: '3%',
-    },
-    title: {
-        color: 'darkslategrey'
-    },
-    subtitle: {
-        color: 'slategray',
-        fontWeight: 'normal',
-        fontStyle: 'italic',
-    }
+    // listItem: {
+    //     borderBottomColor: '#cbd2d9', 
+    //     borderBottomWidth: 0.7
+    // }
 })
 
 export default SustainStack;

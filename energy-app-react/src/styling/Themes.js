@@ -2,17 +2,18 @@
 import defaultTheme from "./DefaultTheme";
 // import font from "./DefaultTheme";
 
-console.log(defaultTheme)
+// console.log(defaultTheme)
 
 export function GetStyle() {
-    return defaultTheme;
+    theme = defaultTheme["DefaultTheme"];
+    theme.font = defaultTheme.font;
+    theme.fontFamily = defaultTheme.fontFamily;
+    theme.boldFont = defaultTheme.boldFont;
+    // console.log(theme)
+    return theme;
     // if (name=='bland') {
     //     return defaultTheme;
     // } else if (name=='colorful') {
     //     return colorfulTheme;
     // }
-}
-
-export function GetFont() {
-    // body...
 }

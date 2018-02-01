@@ -13,13 +13,9 @@ import Turbine from './TurbineView'
 import ExampleData from './OverviewExampleData'
 import Graph from './../visualizations/Graph'
 import { GetStyle } from './../styling/Themes'
-// import CurrTheme from './../styling/CurrentTheme'
-// import CurrFont from './../styling/CurrentFont';
 import { getCurrentGenerationGraphFormat, 
     getCurrentConsumptionGraphFormat } from './../helpers/ApiWrappers';
 
-// const defaultFont = CurrFont+'-regular';
-// const defaultFontBold = CurrFont+'-bold';
 const themeStyles = GetStyle();
 
 @connect(
@@ -63,9 +59,9 @@ class OverviewListView extends Component {
 
              renderItem={({ item }) => (
                <Card
-                 containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}
+                 containerStyle={[themeStyles.card, themeStyles.flex]}
                  title={item.title}
-                 titleStyle={styles.title}>
+                 titleStyle={themeStyles.title}>
                  <View pointerEvents="none" 
                     style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
                  {!currentData && <ActivityIndicator
@@ -90,7 +86,7 @@ class OverviewListView extends Component {
                     fontFamily={themeStyles.font}
                     fontSize={20}
                     title='More'
-                    containerViewStyle={styles.button}
+                    containerViewStyle={themeStyles.button}
                     backgroundColor='#0B5091'
                     onPress={() => this.returnScreen(item, navigation)}/>
                </Card>
@@ -161,25 +157,5 @@ const OverviewStack = StackNavigator({
 );
 
 OverviewStack.router.getStateForAction = navigateOnce(OverviewStack.router.getStateForAction);
-
-const styles = StyleSheet.create({
-  card: {
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 15,
-    margin: 15,
-    marginBottom: -5,
-  },
-  list: {
-      marginLeft: '3%',
-      marginRight: '3%',
-  },
-  button: {
-    marginTop: '3%',
-  },
-  title: {
-    color: 'darkslategrey'
-  }
-})
 
 export default OverviewStack

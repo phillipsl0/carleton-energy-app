@@ -8,13 +8,26 @@ const carletonBlue = '#0B5091';
 
 const fontFamily = 'lato';
 const font = fontFamily+'-regular';
-const fontBold = fontFamily+'-bold';
+const boldFont = fontFamily+'-bold';
 
 
 const DefaultTheme = StyleSheet.create({
+    button: {
+        marginTop: '3%',
+    },
+  
     card: {
         backgroundColor: 'white',
         borderColor: lightBlue,
+
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 10,
+        // margin: 15,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 5,
+        marginBottom: 10,
 
         ...Platform.select({
               ios: {
@@ -52,7 +65,7 @@ const DefaultTheme = StyleSheet.create({
     },
 
     fontBold: {
-        fontFamily: fontBold,
+        fontFamily: boldFont,
     },
 
     fontRegular: {
@@ -82,10 +95,18 @@ const DefaultTheme = StyleSheet.create({
 
     list: {
         backgroundColor: 'white',
+        // marginLeft: '3%',
+        // marginRight: '3%',
     },
 
     listItem: {
-        borderBottomColor: '#c8c7cc',
+        borderBottomColor: '#cbd2d9', 
+        borderBottomWidth: 0.7
+    },
+
+    testItem: {
+        borderBottomColor: '#cbd2d9', 
+        borderBottomWidth: 0.7
     },
 
     shadowed: {
@@ -112,6 +133,16 @@ const DefaultTheme = StyleSheet.create({
         marginTop: '3%',
     },
 
+    subtitle: {
+        color: 'slategray',
+        fontWeight: 'normal',
+        fontStyle: 'italic',
+    },
+    
+    title: {
+        color: 'darkslategrey'
+    },
+    
     translucent: {
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
@@ -124,4 +155,4 @@ const DefaultTheme = StyleSheet.create({
 
 })
 
-export default {DefaultTheme, fontFamily, font, fontBold}
+export default {DefaultTheme, fontFamily, font, boldFont}
