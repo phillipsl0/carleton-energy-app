@@ -16,32 +16,37 @@ class BuildingListView extends Component {
     }
 
     renderHeader = (headerItem) => {
-        return <Text style={styles.header}>{headerItem.section.title}</Text>
+        return <Text style={styles.header}>{headerItem.section.name}</Text>
     }
 
     renderItem = (item) => {
-        return <View>
-            <ListItem
-                style={styles.listItem}
-                title={item.item.name}
+        return <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: 'black',
+        borderBottomWidth: 1}}>
+            <Image
+            style={{alignItems:'center', width:60, paddingBottom:"10%"}} source={{uri: item.item.avatar}}/>
+            <View style={{flex: 1, flexDirection: 'column', paddingTop:'2%'}}>
+                <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
+                <Text style={styles.text}>Water: {item.item.water}</Text>
+                <Text style={styles.text}>Heat: {item.item.heat}</Text>
+            </View>
+            <Button
+                rightIcon={{name: "angle-right", type: 'font-awesome', size: 20}}
+                fontSize={14}
+                title='More Info'
+                style={{paddingBottom:20}}
+                containerViewStyle={styles.button}
+                backgroundColor='#0B5091'
                 onPress={() => this.props.navigation.navigate('CardView', {item:item.item})}/>
-            <Text> {item.item.place} </Text>
-            <Text> {item.item.train} </Text>
         </View>
     }
 
     render() {
         const {navigate} = this.props.navigation;
 
-        var sectionData = [
-            {title: "Burton", data:[{name: "Burty", place: "Carleton", train: "Electric"},{name: "Gurty"}]},
-            {title: "Davis", data:[{name: "Davy", place:"Olaf", train:"Coal"}]}
-        ]
-
         return (
             <List>
                 <SectionList
-                    sections = {sectionData}
+                    sections = {buildings}
                     renderSectionHeader={this.renderHeader}
                     renderItem={this.renderItem}
                     keyExtractor = {(item) => item.name}
@@ -100,9 +105,9 @@ const styles = StyleSheet.create({
 
   },
   text: {
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
     marginLeft: 5,
-    fontSize: 18,
+    fontSize: 12,
   },
   listItem: {
     height: 50,
@@ -127,6 +132,10 @@ const styles = StyleSheet.create({
   row: {
     backgroundColor: 'orange',
   },
+  button: {
+    marginTop: '3%',
+
+  },
   view: {
     alignItems: 'center',
     backgroundColor: 'yellow'
@@ -136,7 +145,10 @@ const styles = StyleSheet.create({
     height: 100,
   },
   header: {
-      fontSize: 20
+      backgroundColor:'#f4f8ff',
+      fontSize: 20,
+      paddingLeft: 5,
+      paddingTop: 5
   }
 })
 
