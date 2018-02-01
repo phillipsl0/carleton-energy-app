@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, TouchableOpacity } from 'react-native'
+import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions,
+  View, Text, Image, WebView, TouchableOpacity, Platform } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar, Header } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
 
-
-
+import buildings from './Buildings';
+import OverviewCards from './overview/OverviewCards';
+import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js';
 
 
 class BuildingListView extends Component {
-    static navigationOptions = {
-        title: 'Buildings'
-    }
 
     renderHeader = (headerItem) => {
         return <Text style={styles.header}>{headerItem.section.name}</Text>
@@ -60,16 +59,27 @@ class BuildingListView extends Component {
 const BuildingStack = StackNavigator({
     Buildings: {
         screen: BuildingListView,
-    },
-    CardView: {
-        screen: IndividualBuilding,
-        path: 'buildings/:name',
         navigationOptions: ({ navigation }) => ({
+            title: 'Buildings',
+            ...Platform.select({
+                android: { header: null }
+            }),
+            headerTintColor: 'white',
+            headerStyle: navStyles.header,
+        }),
+    },
+
+    CardView: {
+      screen: OverviewCards,
+      path: 'buildings/:name',
+      navigationOptions: ({ navigation }) => ({
               title: `${navigation.state.params.item.name}`,
               headerTintColor: 'white',
               headerStyle: navStyles.header,
-            }),
-
+              headerTitleStyle: navStyles.headerTitle,
+              headerBackTitleStyle: navStyles.headerTitle,
+              headerBackTitle: 'Back',
+            }), 
     },
     // CardView: {
     //   screen: IndividualBuilding,
@@ -80,8 +90,18 @@ const BuildingStack = StackNavigator({
 const navStyles = StyleSheet.create({
     header: {
         backgroundColor: '#0B5091',
-    }
+    },
 })
+
+
+// styles.listItem
+// styles.text
+// styles.subtitleText
+// styles.listImg
+// navStyles.header
+// navStyles.header
+// navStyles.headerTitle
+// navStyles.headerTitle
 
 const styles = StyleSheet.create({
   card: {
@@ -113,12 +133,22 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomColor: '#c8c7cc',
     borderBottomWidth: 0.5,
-    width: 300,
+    width: Dimensions.get('window').width - 0, //300,
+    marginLeft: '25%',
+    marginRight: '25%',
     alignSelf: 'center',
-    paddingTop: 35,
+    paddingTop: 15,
     paddingRight: 15,
-    paddingBottom: 55,
-
+    paddingLeft: 20,
+    // color: 'silver'
+    // paddingBottom: 55,
+  },
+  subtitleText: {
+    paddingTop: 5,
+    paddingRight: 40,
+    paddingLeft: 20,
+    color: 'silver',
+    fontSize: 15
   },
   listImg: {
     height: 30,

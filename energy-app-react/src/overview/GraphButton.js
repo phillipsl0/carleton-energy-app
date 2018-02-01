@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
+import CurrFont from './../styling/CurrentFont';
+
+const defaultFont = CurrFont+'-regular';
+const defaultFontBold = CurrFont+'-bold';
 
 export default class GraphButton extends Component {
     constructor(props) {
@@ -10,6 +14,7 @@ export default class GraphButton extends Component {
         return (
             <Button
                  fontSize={10}
+                 fontFamily={defaultFont}
                  title={this.props.title}
                  borderRadius={10}
                  color={this.props.selected == this.props.index ? 'white' : '#9E9E9E'}
