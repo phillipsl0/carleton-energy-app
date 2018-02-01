@@ -323,6 +323,9 @@ const HeatMapViewStack = StackNavigator({
       title: "Heat Map",
       headerTintColor: 'white',
       headerStyle: navStyles.header,
+      ...Platform.select({
+          android: { header: null }
+      }),
     })
   },
 

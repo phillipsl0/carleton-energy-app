@@ -1,7 +1,8 @@
 import buildingsDetail from './BuildingsDetail';
-// import news from './SustainabilityNews';
+import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
 
+const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
 
 // 1) For a given building, resource and timeframe, return (from API) 
 //      a single value (e.g. gal/week in Burton)
@@ -28,7 +29,7 @@ var scaleFactorOther = 60;
 export function getBuildingsList() {
     // return list of every building name with data (e.g. "Burton", "Sayles", etc.)
     // /api/buildings/names
-
+// 
     var buildings = ["Burton", "Sayles", "Severance", "Davis", "Musser", "Myers", "Cassat",
                         "Memo", "Nourse", "Evans", "Goodhue", "Watson", "Scoville"];
 
@@ -52,16 +53,20 @@ export function getUnitsList() {
 }
 
 export function getSustainabilityNews() {
-    // https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton
-    // https://api.rss2json.com/v1/api.json?
-    //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fblogs%2Fsustaining_carleton
+    newsRSS = 'https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton';
+    return convertRSStoJSON(newsRSS);
+}
+
+export function getSustainabilityNewsBak() {
     return news;
 }
 
 export function getSustainabilityEvents() {
-    // https://apps.carleton.edu/sustainability/feeds/events
-    // https://api.rss2json.com/v1/api.json?
-    //      rss_url=https%3A%2F%2Fapps.carleton.edu%2Fsustainability%2Ffeeds%2Fevents
+    eventsRSS = 'https://apps.carleton.edu/sustainability/feeds/events';
+    return convertRSStoJSON(eventsRSS);
+}
+
+export function getSustainabilityEventsBak() {
     return events;
 }
 
@@ -71,6 +76,52 @@ function getSpecificRandom(min, max, scaleFactor, otherFactor) {
 
     temp = Math.floor(Math.random() * (max - min)) + min
     return temp * scaleFactor * otherFactor;
+
+  function convertRSStoJSON(rssFeed) {
+    baseURL = 'https://api.rss2json.com/v1/api.json';
+
+    constructedURL = baseURL + '?rss_url=' + rssFeed + '&api_key=' + apiRSS2jsonKey + '&count=2';
+    // console.log(constructedURL);
+
+    return fetch(constructedURL);
+    // fetch('https://facebook.github.io/react-native/movies.json')  
+    //     .then(function(response) {
+    //         jsonResult = response.json();
+    //         console.log(jsonResult)
+    //         return jsonResult;
+    //     })
+
+    // const res = await fetch(constructedURL);
+    // const json = await res.json();
+    // console.log(json);
+
+    // return fetch(constructedURL)
+    // .then((response) => response.json())
+    // .then((responseJson) => {
+    //     // console.log(responseJson)
+    //     return responseJson;
+    // })
+    // .then((responseJson) => {
+    //     addJSON(responseJson);
+    //     frame.setState({eventsData: responseJson});
+    //     // setJsonData(responseJson);
+    // })
+    // .catch((error) => {
+    //     console.error(error);
+    // });
+
+
+    // return fetch(constructedURL)
+    //     .then((response) => response.json())
+    //     .then((responseJson) => {
+    //         return responseJson;
+    //     })
+    //     .catch((error) => {
+    //         console.error(error);
+    //     });
+    // jsonResult = fetch(constructedURL);
+    // console.log(jsonResult);
+    // https://api.rss2json.com/v1/api.json?rss_url=https://apps.carleton.edu/sustainability/feeds/events&api_key=eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw
 }
 
 // -------------------- Electricity Generation -------------------------

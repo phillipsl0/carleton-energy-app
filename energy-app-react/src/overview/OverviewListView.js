@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, View, Text, Image, Dimensions, Platform, TouchableHighlight } from 'react-native'
+import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, View, Text, Image, Dimensions, 
+        Platform, TouchableHighlight, Scrollview } from 'react-native'
 import { AppLoading } from 'expo';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, Button } from 'react-native-elements'
@@ -18,8 +19,7 @@ import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } fro
 import { default as CustomThemes } from './../visualizations/GraphThemes';
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 
-const defaultFont = CurrFont+'-regular';
-const defaultFontBold = CurrFont+'-bold';
+const themeStyles = GetStyle();
 
 @connect(
     state => ({
@@ -55,9 +55,11 @@ class OverviewListView extends Component {
         const { refresh, loading, currentData, layout } = this.props;
 
         return (
-         <List
-           style={[styles.list, themeStyles.list, themeStyles.flex]}>
-           <FlatList style={[themeStyles.flex, styles.up]}
+//           <ScrollView>
+           <List
+            style={[styles.list, themeStyles.list, themeStyles.flex]}>
+           <FlatList
+            style={[themeStyles.flex, styles.up]}
              data={ExampleData}
              keyExtractor={item => item.title}
              onRefresh={refresh}
@@ -65,9 +67,10 @@ class OverviewListView extends Component {
 
              renderItem={({ item }) => (
                <Card
-                 containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}
+                 containerStyle={[themeStyles.card, themeStyles.flex]}
                  title={item.title}
                  titleStyle={styles.title}
+//                  titleStyle={themeStyles.title}>
                  dividerStyle={styles.divider}>
                  <TouchableHighlight
                     onPress={() => this.returnScreen(item, navigation)}
@@ -98,11 +101,10 @@ class OverviewListView extends Component {
                  </TouchableHighlight>
                  </View>
                  </TouchableHighlight>
-
                </Card>
              )}
            />
-         </List>
+//          </ScrollView>
        );
     }
 }
@@ -122,7 +124,7 @@ const navStyles = StyleSheet.create({
         backgroundColor: '#0B5091',
     },
     headerTitle: {
-        fontFamily: defaultFontBold,
+        fontFamily: themeStyles.font,
     }
 })
 
@@ -131,6 +133,9 @@ const OverviewStack = StackNavigator({
         screen: OverviewListView,
         navigationOptions: ({ navigation }) => ({
             title: 'Overview',
+            ...Platform.select({
+                android: { header: null }
+            }),
             headerTintColor: 'white',
             headerStyle: navStyles.header,
             headerTitleStyle: navStyles.headerTitle,

@@ -3,16 +3,32 @@ import { StyleSheet, Platform } from 'react-native'
 import CurrFont from './../styling/CurrentFont';
 import { moderateScale, verticalScale } from './../helpers/Scaling';
 
+
 const lightBlue = '#e1e8ee';
 const mediumBlue = '#B9C8D6';
 const carletonBlue = '#0B5091';
-const defaultFont = CurrFont+'-regular';
-const defaultFontBold = CurrFont+'-bold';
+
+const fontFamily = 'lato';
+const font = fontFamily+'-regular';
+const boldFont = fontFamily+'-bold';
 
 const DefaultTheme = StyleSheet.create({
+    button: {
+        marginTop: '3%',
+    },
+  
     card: {
         backgroundColor: 'white',
         borderColor: lightBlue,
+
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 10,
+        // margin: 15,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 5,
+        marginBottom: 10,
 
         ...Platform.select({
               ios: {
@@ -61,11 +77,11 @@ const DefaultTheme = StyleSheet.create({
     },
 
     fontBold: {
-        fontFamily: defaultFontBold,
+        fontFamily: boldFont,
     },
 
     fontRegular: {
-        fontFamily: defaultFont,
+        fontFamily: font,
     },
 
     header: {
@@ -91,10 +107,18 @@ const DefaultTheme = StyleSheet.create({
 
     list: {
         backgroundColor: 'white',
+        // marginLeft: '3%',
+        // marginRight: '3%',
     },
 
     listItem: {
-        borderBottomColor: '#c8c7cc',
+        borderBottomColor: '#cbd2d9', 
+        borderBottomWidth: 0.7
+    },
+
+    testItem: {
+        borderBottomColor: '#cbd2d9', 
+        borderBottomWidth: 0.7
     },
 
     shadowed: {
@@ -121,16 +145,26 @@ const DefaultTheme = StyleSheet.create({
         marginTop: '3%',
     },
 
+    subtitle: {
+        color: 'slategray',
+        fontWeight: 'normal',
+        fontStyle: 'italic',
+    },
+    
+    title: {
+        color: 'darkslategrey'
+    },
+    
     translucent: {
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
 
     translucentText: {
-        fontFamily: defaultFont,
+        fontFamily: font,
         color: 'rgba(255, 255, 255, 0.75)',
         backgroundColor: 'transparent',
     }
 
 })
 
-export default DefaultTheme
+export default {DefaultTheme, fontFamily, font, boldFont}

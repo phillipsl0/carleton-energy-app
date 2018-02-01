@@ -1,62 +1,73 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, TouchableOpacity } from 'react-native'
+import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions,
+  View, Text, Image, WebView, TouchableOpacity, Platform } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
-import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
+import { List, Card, ListItem, Button, Avatar, Header } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import buildings from './Buildings';
+import IndividualBuilding from './IndividualBuilding';
 
 import buildings from './Buildings';
-// import IndividualBuilding from './IndividualBuilding';
 import OverviewCards from './overview/OverviewCards';
+import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js';
 
 
 class BuildingListView extends Component {
-    static navigationOptions = {
-        title: 'Buildings'
+
+    renderHeader = (headerItem) => {
+        return <Text style={styles.header}>{headerItem.section.name}</Text>
+    }
+
+    renderItem = (item) => {
+        return <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: 'black',
+        borderBottomWidth: 1}}>
+            <Image
+            style={{alignItems:'center', width:60, paddingBottom:"10%"}} source={{uri: item.item.avatar}}/>
+            <View style={{flex: 1, flexDirection: 'column', paddingTop:'2%'}}>
+                <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
+                <Text style={styles.text}>Water: {item.item.water}</Text>
+                <Text style={styles.text}>Heat: {item.item.heat}</Text>
+            </View>
+            <Button
+                rightIcon={{name: "angle-right", type: 'font-awesome', size: 20}}
+                fontSize={14}
+                title='More Info'
+                style={{paddingBottom:20}}
+                containerViewStyle={styles.button}
+                backgroundColor='#0B5091'
+                onPress={() => this.props.navigation.navigate('CardView', {item:item.item})}/>
+        </View>
     }
 
     render() {
         const {navigate} = this.props.navigation;
 
         return (
-         // <List>
-          <FlatList
-              data={buildings}
-              keyExtractor={item => item.name}
-              renderItem={({ item }) => (
-                <ListItem
-                    style={styles.listItem}
-                    title={item.name}
-                    subtitle={<View style={styles.subtitleView}>
-                              <Text>{item.buildingID}</Text></View>}
-                    avatar={<Avatar
-                              style={styles.listImg}
-                              source={ { uri: item.avatar }}
-                              containerStyle={{alignSelf: 'stretch'}} />}
-                    onPress={() => this.props.navigation.navigate('CardView', {item:item})}
+            <List>
+                <SectionList
+                    sections = {buildings}
+                    renderSectionHeader={this.renderHeader}
+                    renderItem={this.renderItem}
+                    keyExtractor = {(item) => item.name}
                 />
-             )}
-           />
-         // </List> 
+            </List>
        );
-     }
+    }
 }
 
 
 const BuildingStack = StackNavigator({
     Buildings: {
         screen: BuildingListView,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Buildings',
+            ...Platform.select({
+                android: { header: null }
+            }),
+            headerTintColor: 'white',
+            headerStyle: navStyles.header,
+        }),
     },
-
-    // CardView: {
-    //     screen: IndividualBuilding,
-    //     path: 'buildings/:name',
-    //     navigationOptions: ({ navigation }) => ({
-    //           title: `${navigation.state.params.item.name}`,
-    //           headerTintColor: 'white',
-    //           headerStyle: navStyles.header,
-    //         }),
-
-    // },
 
     CardView: {
       screen: OverviewCards,
@@ -70,13 +81,27 @@ const BuildingStack = StackNavigator({
               headerBackTitle: 'Back',
             }), 
     },
+    // CardView: {
+    //   screen: IndividualBuilding,
+    //   // navigationOptions:
+    // },
 });
 
 const navStyles = StyleSheet.create({
     header: {
         backgroundColor: '#0B5091',
-    }
+    },
 })
+
+
+// styles.listItem
+// styles.text
+// styles.subtitleText
+// styles.listImg
+// navStyles.header
+// navStyles.header
+// navStyles.headerTitle
+// navStyles.headerTitle
 
 const styles = StyleSheet.create({
   card: {
@@ -94,31 +119,36 @@ const styles = StyleSheet.create({
     head: {
       backgroundColor: 'grey',
     },
-  table: { 
+  table: {
     width: 250,
-    marginLeft: 5, 
-    
+    marginLeft: 5,
+
   },
-  text: { 
-    alignSelf: 'center',
-    marginLeft: 5, 
-    fontSize: 18,
+  text: {
+    alignSelf: 'flex-start',
+    marginLeft: 5,
+    fontSize: 12,
   },
   listItem: {
-    height: 80,
-    backgroundColor: 'aqua',
+    height: 50,
     borderBottomColor: '#c8c7cc',
     borderBottomWidth: 0.5,
-    width: 300,
+    width: Dimensions.get('window').width - 0, //300,
+    marginLeft: '25%',
+    marginRight: '25%',
     alignSelf: 'center',
     paddingTop: 15,
     paddingRight: 15,
+    paddingLeft: 20,
+    // color: 'silver'
     // paddingBottom: 55,
   },
-  subtitleView: {
+  subtitleText: {
     paddingTop: 5,
     paddingRight: 40,
-    paddingLeft: 20
+    paddingLeft: 20,
+    color: 'silver',
+    fontSize: 15
   },
   listImg: {
     height: 30,
@@ -132,6 +162,10 @@ const styles = StyleSheet.create({
   row: {
     backgroundColor: 'orange',
   },
+  button: {
+    marginTop: '3%',
+
+  },
   view: {
     alignItems: 'center',
     backgroundColor: 'yellow'
@@ -140,6 +174,12 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     height: 100,
   },
+  header: {
+      backgroundColor:'#f4f8ff',
+      fontSize: 20,
+      paddingLeft: 5,
+      paddingTop: 5
+  }
 })
 
 export default BuildingStack;
