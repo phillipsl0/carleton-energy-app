@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native'
+import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, 
+    View, Text, Image, Dimensions, Platform, ScrollView } from 'react-native'
 import { AppLoading } from 'expo';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, Button } from 'react-native-elements'
@@ -12,12 +13,10 @@ import Turbine from './TurbineView'
 import ExampleData from './OverviewExampleData'
 import Graph from './../visualizations/Graph'
 import { GetStyle } from './../styling/Themes'
-import CurrTheme from './../styling/CurrentTheme'
-import CurrFont from './../styling/CurrentFont';
-import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './../helpers/ApiWrappers';
+import { getCurrentGenerationGraphFormat, 
+    getCurrentConsumptionGraphFormat } from './../helpers/ApiWrappers';
 
-const defaultFont = CurrFont+'-regular';
-const defaultFontBold = CurrFont+'-bold';
+const themeStyles = GetStyle();
 
 @connect(
     state => ({
@@ -48,13 +47,10 @@ class OverviewListView extends Component {
 
     render() {
         navigation = this.props.navigation;
-        const themeStyles = GetStyle(CurrTheme);
         const { refresh, loading, currentData } = this.props;
 
-
         return (
-         <List
-           style={[styles.list, themeStyles.list, themeStyles.flex]}>
+          <ScrollView>
            <FlatList
              data={ExampleData}
              keyExtractor={item => item.title}
@@ -63,10 +59,11 @@ class OverviewListView extends Component {
 
              renderItem={({ item }) => (
                <Card
-                 containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}
+                 containerStyle={[themeStyles.card, themeStyles.flex]}
                  title={item.title}
-                 titleStyle={styles.title}>
-                 <View pointerEvents="none" style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
+                 titleStyle={themeStyles.title}>
+                 <View pointerEvents="none" 
+                    style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
                  {!currentData && <ActivityIndicator
                                                  animating={loading}
                                                  size="large"/>}
@@ -86,16 +83,16 @@ class OverviewListView extends Component {
                  <Button
                     small
                     rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                    fontFamily={defaultFont}
+                    fontFamily={themeStyles.font}
                     fontSize={20}
                     title='More'
-                    containerViewStyle={styles.button}
+                    containerViewStyle={themeStyles.button}
                     backgroundColor='#0B5091'
                     onPress={() => this.returnScreen(item, navigation)}/>
                </Card>
              )}
            />
-         </List>
+         </ScrollView>
        );
     }
 }
@@ -115,7 +112,7 @@ const navStyles = StyleSheet.create({
         backgroundColor: '#0B5091',
     },
     headerTitle: {
-        fontFamily: defaultFontBold,
+        fontFamily: themeStyles.font,
     }
 })
 
@@ -124,6 +121,9 @@ const OverviewStack = StackNavigator({
         screen: OverviewListView,
         navigationOptions: ({ navigation }) => ({
             title: 'Overview',
+            ...Platform.select({
+                android: { header: null }
+            }),
             headerTintColor: 'white',
             headerStyle: navStyles.header,
             headerTitleStyle: navStyles.headerTitle,
@@ -157,22 +157,5 @@ const OverviewStack = StackNavigator({
 );
 
 OverviewStack.router.getStateForAction = navigateOnce(OverviewStack.router.getStateForAction);
-
-const styles = StyleSheet.create({
-  card: {
-    borderWidth: 1,
-    borderRadius: 3,
-    padding: 15,
-    margin: 15,
-    marginBottom: 0,
-  },
-  list: {
-      marginLeft: '3%',
-      marginRight: '3%',
-  },
-  button: {
-    marginTop: '3%',
-  },
-})
 
 export default OverviewStack

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
-import { Platform, StyleSheet, BackHandler  } from 'react-native';
-import { TabNavigator, NavigationActions, addNavigationHelpers } from 'react-navigation';
+import { Platform, StyleSheet, BackHandler, View, StatusBar } from 'react-native';
+import { TabNavigator, TabBarTop, TabBarBottom, 
+  NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -13,12 +14,14 @@ import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
 import CurrFont from './src/styling/CurrentFont';
 import { handler, dataReducer } from './src/helpers/ReduxHandler'
-import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
+import { getCurrentGenerationGraphFormat, 
+  getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
 
-const defaultFont = CurrFont+'-regular';
-const defaultFontBold = CurrFont+'-bold';
+// const defaultFont = CurrFont+'-regular';
+// const defaultFontBold = CurrFont+'-bold';
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
+const themeStyles = GetStyle();
 
 function cacheImages(images) {
   return images.map(image => {
@@ -35,21 +38,30 @@ function cacheFonts(fonts) {
 }
 
 const navStyle = StyleSheet.create({
-    header: {
-        ...Platform.select({
-           android: {
-           backgroundColor: '#e1e8ee',
-           }
-        })
-    },
     label: {
-        fontFamily: defaultFont,
+        fontFamily: themeStyles.boldFont,
     },
 
     indicator: {
-        backgroundColor: '#0B5091'
+        backgroundColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF',
     }
 })
+
+const tabStyle = [];
+tabStyle.tabColors = {
+        tab0: '#6699cc',  // blue
+        tab1: '#20cef5',  // light blue
+        tab2: '#67b868',  // green
+        tab3: '#a695c7'   // purple
+    }
+
+tabStyle.tabStatusColors = {
+        tab0: '#527aa3',
+        tab1: '#1aa5c4',
+        tab2: '#529353',
+        tab3: '#85779f'
+    }
+
 
 const RootTabs = TabNavigator({
     Overview: {
@@ -73,7 +85,7 @@ const RootTabs = TabNavigator({
     Sustain: {
       screen: SustainStack,
       navigationOptions: {
-        tabBarLabel: 'Sustain',
+        tabBarLabel: 'Learn',
         tabBarIcon: ({ tintColor, focused }) => (
           <FontAwesome name="bolt" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
         ),
@@ -89,16 +101,37 @@ const RootTabs = TabNavigator({
         },
       }
   },
-   { tabBarOptions:
+   { 
+    tabBarComponent: props => {
+      const backgroundColor = props.position.interpolate({
+        inputRange: [0, 1, 2, 3],
+        outputRange: [tabStyle.tabColors.tab0, 
+                      tabStyle.tabColors.tab1, 
+                      tabStyle.tabColors.tab2, 
+                      tabStyle.tabColors.tab3],  // alt blue 01579B
+      })
+      return (
+        Platform.OS === 'ios'
+        ? <TabBarBottom {...props} style={{ backgroundColor: '#e1e8ee' }} />
+        : <TabBarTop {...props} style={{ backgroundColor: backgroundColor }} />
+      );
+    },
+    // animationEnabled: false,
+    // lazy: true,
+    tabBarOptions:
         { style: navStyle.header,
           labelStyle: navStyle.label,
           indicatorStyle: navStyle.indicator,
-          activeTintColor: '#0B5091',
-          inactiveTintColor: '#9E9E9E',},
-     navigationOptions: ({ navigation }) => ({
+          // showIcon: true, //this is default false on Android
+          // showLabel: true,
+          activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF', 
+          //navStyle.activeTintColor.color, // '#FFFFFF', //'#0B5091',
+          inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90', 
+          //navStyle.inactiveTintColor, //'#9E9E9E', FFFFFFA0
+          pressColor: '#FFFFFF' // Android ripple color onPress
+        },
+     navigationOptions: ({ navigation }) => ( {
          tabBarOnPress: (tab, jumpToIndex) => {
-          // console.log(navigation)
-          // console.log(tab)
            // resets stack in tabs if their icon is tapped while focused
            if (tab.focused && (tab.index === 0 || tab.index === 1)) {
              if (tab.route.index !== 0) {
@@ -117,7 +150,8 @@ const RootTabs = TabNavigator({
 });
 
 //for redux
-const initialState = RootTabs.router.getStateForAction(RootTabs.router.getActionForPathAndParams('Overview'));
+const initialState = RootTabs.router.getStateForAction(
+                      RootTabs.router.getActionForPathAndParams('Overview'));
 
 const navReducer = (state = initialState, action) => {
     const nextState = RootTabs.router.getStateForAction(action, state);
@@ -176,6 +210,21 @@ class App extends Component {
             data,
             state: nav
         });
+
+        // StatusBar.setBackgroundColor('#ff9800', true);
+        // console.log("\n\n~~!!New Render!!~~\n\n")
+        // console.log(this.props.nav.index)
+        // console.log(tabStyle.tabStatusColors);
+
+        StatusBar.setBarStyle('light-content', false);
+        if (Platform.OS === 'android') {
+          switch (this.props.nav.index){
+             case 0: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab0, true); break;
+             case 1: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab1, true); break;
+             case 2: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab2, true); break;
+             case 3: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab3, true); break;
+          }
+        }
 
         if (!this.state.isReady) {
             return(
