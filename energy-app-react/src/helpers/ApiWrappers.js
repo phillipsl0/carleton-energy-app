@@ -76,7 +76,7 @@ function getSpecificRandom(min, max, scaleFactor, otherFactor) {
 
     temp = Math.floor(Math.random() * (max - min)) + min
     return temp * scaleFactor * otherFactor;
-
+}
   function convertRSStoJSON(rssFeed) {
     baseURL = 'https://api.rss2json.com/v1/api.json';
 

@@ -104,6 +104,7 @@ class OverviewListView extends Component {
                </Card>
              )}
            />
+           </List>
 //          </ScrollView>
        );
     }
@@ -194,7 +195,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-    fontFamily: defaultFontBold,
     marginBottom: 10
   },
   divider: {

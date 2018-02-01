@@ -7,7 +7,6 @@ import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-ta
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
 
-import buildings from './Buildings';
 import OverviewCards from './overview/OverviewCards';
 import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js';
 
