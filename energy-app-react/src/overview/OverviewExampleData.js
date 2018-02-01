@@ -38,7 +38,7 @@ const ExampleData = [
                           {y: 1900, x: "2018"}],
                           ranking: 1},
                }},
-        graphType: 'bar' ,
+        graphType: 'pie' ,
     },
     {
         title: 'Energy Generation',
@@ -119,8 +119,68 @@ const ExampleData = [
                                {y: 1900, x: "2018"}],
                                ranking: 1},
                    }},
-            graphType: 'bar' ,
+            graphType: 'pie' ,
         }
+]
+
+const turbineData = [
+    {
+     title: 'Turbine One',
+     generation: {
+                  current: 433032,
+                  historicalHigh: 548600,
+                 },
+     speed: {
+              current: 6.2,
+              historicalHigh: 8.3,
+            },
+     consumption: {
+                    current: 601
+                  }
+
+    },
+    {
+     title: 'Turbine Two',
+     generation: {
+                  current: 583389,
+                  historicalHigh: 602780,
+                 },
+     speed: {
+              current: 6.2,
+              historicalHigh: 8.3,
+            },
+     consumption: {
+                    current: 750
+                  }
+
+    }
+]
+
+export const fake = [
+    {
+      title: 'Wind Speed',
+      x: '6.2 mph',
+      icon: "weather-windy",
+    },
+
+    {
+      title: 'Turbine Generation',
+      x: '583,389 kWh',
+      icon: "airplane-takeoff",
+    },
+
+    {
+      title: 'Turbine Consumption',
+      x: '750 kWh',
+      icon: "airplane-landing",
+    },
+
+    {
+          title: 'Other',
+          x: '?????',
+          icon: "leaf",
+        },
+
 ]
 
 export default ExampleData

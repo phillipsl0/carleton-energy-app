@@ -151,7 +151,7 @@ class HeatMapView extends Component {
     console.log("Rendering building colors with: ", this.state.utilityShown)
     // NEED TO NORMALIZE DATA
     var use = getCurrentBuildingUtilityConsumption(buildingName, this.state.utilityShown).toFixed(1)
-    console.log(buildingName, use)
+//     console.log(buildingName, use)
     var h = (1.0 - use) * 240
     return "hsl(" + h + ", 100%, 50%)";
   }
@@ -179,7 +179,7 @@ class HeatMapView extends Component {
 
   // Show callout when building polygon is pressed
   toggleCallout(polygon) {
-    console.log('onPress', polygon.name);
+//    console.log('onPress', polygon.name);
     this.setState({lastBuildingPressed: polygon.name})
 
     if (polygon.open) {

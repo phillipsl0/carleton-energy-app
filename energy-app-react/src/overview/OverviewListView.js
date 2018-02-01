@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, 
-    View, Text, Image, Dimensions, Platform, ScrollView } from 'react-native'
+import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, View, Text, Image, Dimensions, 
+        Platform, TouchableHighlight, Scrollview } from 'react-native'
 import { AppLoading } from 'expo';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, Button } from 'react-native-elements'
@@ -13,8 +13,11 @@ import Turbine from './TurbineView'
 import ExampleData from './OverviewExampleData'
 import Graph from './../visualizations/Graph'
 import { GetStyle } from './../styling/Themes'
-import { getCurrentGenerationGraphFormat, 
-    getCurrentConsumptionGraphFormat } from './../helpers/ApiWrappers';
+import CurrTheme from './../styling/CurrentTheme'
+import CurrFont from './../styling/CurrentFont';
+import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './../helpers/ApiWrappers';
+import { default as CustomThemes } from './../visualizations/GraphThemes';
+import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 
 const themeStyles = GetStyle();
 
@@ -22,6 +25,7 @@ const themeStyles = GetStyle();
     state => ({
         currentData: state.data.currentData,
         loading: state.data.loading,
+        layout: state.ui.layout,
     }),
     dispatch => ({
         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
@@ -47,11 +51,15 @@ class OverviewListView extends Component {
 
     render() {
         navigation = this.props.navigation;
-        const { refresh, loading, currentData } = this.props;
+        const themeStyles = GetStyle(CurrTheme);
+        const { refresh, loading, currentData, layout } = this.props;
 
         return (
-          <ScrollView>
+//           <ScrollView>
+           <List
+            style={[styles.list, themeStyles.list, themeStyles.flex]}>
            <FlatList
+            style={[themeStyles.flex, styles.up]}
              data={ExampleData}
              keyExtractor={item => item.title}
              onRefresh={refresh}
@@ -61,38 +69,42 @@ class OverviewListView extends Component {
                <Card
                  containerStyle={[themeStyles.card, themeStyles.flex]}
                  title={item.title}
-                 titleStyle={themeStyles.title}>
-                 <View pointerEvents="none" 
-                    style={[themeStyles.container, themeStyles.flex, themeStyles.centered]}>
-                 {!currentData && <ActivityIndicator
-                                                 animating={loading}
-                                                 size="large"/>}
-                 {item.title == "Turbine Energy" &&
-                        <Graph
-                            type={item.graphType}
-                            theme={VictoryTheme.grayscale}
-                            graphData={currentData.turbine}/>}
-                 {item.title != "Turbine Energy" &&
-                        <Graph pointerEvents="none"
-                        type={item.graphType}
-                        theme={VictoryTheme.grayscale}
-                        graphData={item.title == "Energy Use" ? currentData.usage :
-                            currentData.generation}/>}
+                 titleStyle={styles.title}
+//                  titleStyle={themeStyles.title}>
+                 dividerStyle={styles.divider}>
+                 <TouchableHighlight
+                    onPress={() => this.returnScreen(item, navigation)}
+                    underlayColor="transparent">
+                 <View pointerEvents="none" style={[themeStyles.container, themeStyles.flexboxRow]}>
+                 {!currentData &&
+                  <ActivityIndicator
+                    animating={loading}
+                    size="large"/>}
 
+                 {item.title == "Turbine Energy" &&
+                  <Graph
+                    type={item.graphType}
+                    theme={CustomThemes.carleton}
+                    graphData={currentData.turbine}/>}
+
+                 {item.title != "Turbine Energy" &&
+                  <Graph
+                    type={item.graphType}
+                    theme={CustomThemes.carleton}
+                    graphData={item.title == "Energy Use" ? currentData.usage :
+                        currentData.generation}/>}
+
+                 <TouchableHighlight onPress={() => this.returnScreen(item, navigation)}
+                    underlayColor="transparent"
+                    style={styles.button}>
+                    <FontAwesome name="angle-right" size={moderateScale(40)} color="#0B5091" />
+                 </TouchableHighlight>
                  </View>
-                 <Button
-                    small
-                    rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                    fontFamily={themeStyles.font}
-                    fontSize={20}
-                    title='More'
-                    containerViewStyle={themeStyles.button}
-                    backgroundColor='#0B5091'
-                    onPress={() => this.returnScreen(item, navigation)}/>
+                 </TouchableHighlight>
                </Card>
              )}
            />
-         </ScrollView>
+//          </ScrollView>
        );
     }
 }
@@ -157,5 +169,40 @@ const OverviewStack = StackNavigator({
 );
 
 OverviewStack.router.getStateForAction = navigateOnce(OverviewStack.router.getStateForAction);
+
+const styles = StyleSheet.create({
+  card: {
+    borderWidth: 1,
+    borderRadius: 3,
+    paddingLeft: moderateScale(10),
+    paddingRight: moderateScale(10),
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginLeft: moderateScale(15),
+    marginRight: moderateScale(15),
+    marginTop: 10,
+    marginBottom: 0,
+  },
+  list: {
+      marginLeft: '3%',
+      marginRight: '3%',
+  },
+  button: {
+    marginRight: '3%',
+    paddingTop: '3%',
+    paddingBottom: '3%',
+  },
+  title: {
+    fontSize: 14,
+    fontFamily: defaultFontBold,
+    marginBottom: 10
+  },
+  divider: {
+    marginBottom: 5,
+  },
+  up: {
+    marginTop: '-1%'
+  }
+})
 
 export default OverviewStack

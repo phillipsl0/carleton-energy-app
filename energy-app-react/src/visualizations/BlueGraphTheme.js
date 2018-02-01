@@ -7,8 +7,9 @@ import CurrFont from './../styling/CurrentFont';
 // *
 const colors = [
   "#0B5091",
-  "#2465A4",
   "#447BB0",
+  "#04305A",
+  "#98BDE1",
   "#FEF9E7",
   "#FDEDEC",
   "#E9F7EF",

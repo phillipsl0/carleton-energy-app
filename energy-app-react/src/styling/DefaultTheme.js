@@ -1,6 +1,8 @@
 import { StyleSheet, Platform } from 'react-native'
 
-// import CurrFont from './../styling/CurrentFont';
+import CurrFont from './../styling/CurrentFont';
+import { moderateScale, verticalScale } from './../helpers/Scaling';
+
 
 const lightBlue = '#e1e8ee';
 const mediumBlue = '#B9C8D6';
@@ -9,7 +11,6 @@ const carletonBlue = '#0B5091';
 const fontFamily = 'lato';
 const font = fontFamily+'-regular';
 const boldFont = fontFamily+'-bold';
-
 
 const DefaultTheme = StyleSheet.create({
     button: {
@@ -49,15 +50,26 @@ const DefaultTheme = StyleSheet.create({
     },
 
     flexboxRow: {
+        flex: 1.0,
+        flexDirection: 'row',
+        alignItems: 'center',
+
+    },
+
+    flexButtons: {
         paddingTop: 10,
         paddingBottom: 10,
-        flex: 1.0,
         marginLeft: '10%',
         marginRight: '10%',
         borderRadius: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between'
+    },
+
+    flexBoxColumn: {
+        flex: 1.0,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
 
     flex: {
@@ -80,10 +92,10 @@ const DefaultTheme = StyleSheet.create({
         opacity: 0.5,
         ...Platform.select({
             ios: {
-                height: 147,
+                height: verticalScale(160),
             },
             android: {
-                height: 163,
+                height: verticalScale(160),
                 width: 412,
             }
         })
@@ -118,7 +130,7 @@ const DefaultTheme = StyleSheet.create({
                 shadowOffset: { height: 0, width: 0 },
             },
             android: {
-                elevation: 3,
+                elevation: 1,
 
             },
         }),

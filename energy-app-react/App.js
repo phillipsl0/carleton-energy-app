@@ -13,7 +13,7 @@ import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
 import CurrFont from './src/styling/CurrentFont';
-import { handler, dataReducer } from './src/helpers/ReduxHandler'
+import { handler, dataReducer, layoutReducer } from './src/helpers/ReduxHandler'
 import { getCurrentGenerationGraphFormat, 
   getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
@@ -162,15 +162,17 @@ const navReducer = (state = initialState, action) => {
 const appReducer = combineReducers({
     nav: navReducer,
     data: dataReducer,
+    ui: layoutReducer
+
 });
 
 const mapStateToProps = (state) => ({
     nav: state.nav,
-    data: state.data
+    data: state.data,
+    ui: state.layout,
 });
 
 class App extends Component {
-
     componentDidMount() {
         BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
     }
@@ -204,10 +206,11 @@ class App extends Component {
     }
 
     render() {
-        const { dispatch, nav, data } = this.props;
+        const { dispatch, nav, data, ui } = this.props;
         const navigation = addNavigationHelpers({
             dispatch,
             data,
+            ui,
             state: nav
         });
 
@@ -246,6 +249,8 @@ const AppWithNavigationState = connect(mapStateToProps)(App);
 
 const store = createStore(appReducer, {}, applyMiddleware(handler));
 store.dispatch({type: 'GET_GRAPH_DATA'});
+store.dispatch({type: 'GET_LAYOUT'});
+
 
 export default class Root extends Component {
     render() {
@@ -256,6 +261,3 @@ export default class Root extends Component {
         );
     }
 }
-
-
-
