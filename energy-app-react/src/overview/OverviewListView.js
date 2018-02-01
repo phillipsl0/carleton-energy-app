@@ -53,14 +53,6 @@ class OverviewListView extends Component {
         navigation = this.props.navigation;
         const themeStyles = GetStyle(CurrTheme);
         const { refresh, loading, currentData, layout } = this.props;
-//        if (Platform.OS === 'ios') {
-//            console.log("IOS");
-//        } else {
-//            console.log("ANDROID");
-//        }
-//
-//        console.log(layout);
-
 
         return (
          <List

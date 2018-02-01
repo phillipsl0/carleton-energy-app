@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Text } from 'react-native'
 import { connect } from 'react-redux';
 
 import { GetStyle } from './../styling/Themes';
@@ -81,10 +81,13 @@ export default class Utilities extends Component {
     render() {
         const themeStyles = GetStyle(CurrTheme);
         const { refresh, loading, currentData, layout } = this.props;
-        console.log(this.getCardData(currentData));
+        var cardType = this.props.cardType;
 
         return(
-        <View style={[themeStyles.flexboxRow, themeStyles.centered]}>
+        <View style={[themeStyles.centered, themeStyles.translucent, styles.panel]}>
+
+           {cardType == 1 &&
+            <View style={[themeStyles.flexboxRow]}>
                <Utility index={5}
                     icon={"fire"}
                     utilityType={"Gas"}
@@ -116,10 +119,44 @@ export default class Utilities extends Component {
                    unit={"gal"}
                    callback={this.sendToParent}
                    selected={this.props.selected}/>
+            </View>}
+
+         {cardType == 2 &&
+           <View style={[themeStyles.flexboxRow]}>
+           <Utility index={5}
+            icon={"leaf"}
+            utilityType={"Wind"}
+            number={'151'}
+            unit={"kWh"}
+            callback={this.sendToParent}
+            selected={this.props.selected}/>
+
+           <Utility index={6}
+              icon={"sun-o"}
+              utilityType={"Solar"}
+              number={'61,178'}
+              unit={"kWh"}
+              callback={this.sendToParent}
+              selected={this.props.selected}/>
+
+            <Utility index={7}
+               icon={"fire"}
+               utilityType={"Geo"}
+               number={'6,027,397'}
+               unit={"kBTU"}
+               callback={this.sendToParent}
+               selected={this.props.selected}/>
+            </View>}
         </View>);
     }
 }
 
 const styles = StyleSheet.create({
-
+    panel : {
+        paddingBottom: '3%',
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+    }
 })

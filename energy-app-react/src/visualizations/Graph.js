@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Dimensions } from 'react-native'
+import { StyleSheet, View, Dimensions, Platform } from 'react-native'
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme,
          VictoryScatter, VictoryAxis, VictoryLegend, VictoryContainer } from "victory-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -31,7 +31,7 @@ class Graph extends Component {
         if (this.props.type=='pie') {
             var colorScheme = ["#0B5091", "#447BB0", "#001324", "#98BDE1"];
             colorScheme = colorScheme.slice(0, this.props.graphData.length);
-            var legendHeight = 25 * this.props.graphData.length;
+            var legendHeight = moderateScale(26 * this.props.graphData.length);
             var legendFont = moderateScale(12);
 
             return (

@@ -21,11 +21,9 @@ export default class GraphDetail extends Component {
         const themeStyles = GetStyle(CurrTheme);
 
         return(
-            <View style={[themeStyles.singleView, themeStyles.shadowed, themeStyles.centered]}>
+            <View style={[themeStyles.centered]}>
                 <View style={[styles.graphContainer, themeStyles.centered,
                               themeStyles.translucent]}>
-
-
                  <Graph
                      theme={CustomThemes.carleton}
                      height={verticalScale(210)}
@@ -73,7 +71,7 @@ export default class GraphDetail extends Component {
 
 const styles = StyleSheet.create({
     graphContainer: {
-        marginTop: '3%',
+        marginTop: '2%',
         marginBottom: '3%',
         paddingTop: '5%',
         paddingLeft: '3%',

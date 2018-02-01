@@ -76,10 +76,10 @@ const DefaultTheme = StyleSheet.create({
         opacity: 0.5,
         ...Platform.select({
             ios: {
-                height: verticalScale(140),
+                height: verticalScale(160),
             },
             android: {
-                height: verticalScale(163),
+                height: verticalScale(160),
                 width: 412,
             }
         })
