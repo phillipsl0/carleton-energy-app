@@ -25,8 +25,8 @@ export default class Utility extends Component {
                 <View style={this.props.selected == this.props.index ?
                                 [styles.card, themeStyles.carletonBlueBackground,
                                     themeStyles.centered] :
-                                [styles.card, themeStyles.card,
-                                    themeStyles.centered]}>
+                                [styles.card, themeStyles.centered, {backgroundColor: 'white',
+                                                                             borderColor: '#e1e8ee',}]}>
 
                     <FontAwesome name={this.props.icon} size={moderateScale(14)} style={styles.icon}
                         color={this.props.selected == this.props.index ? "white" : "#0B5091"}/>
