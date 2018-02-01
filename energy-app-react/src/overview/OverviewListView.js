@@ -72,7 +72,7 @@ class OverviewListView extends Component {
                  <TouchableHighlight
                     onPress={() => this.returnScreen(item, navigation)}
                     underlayColor="transparent">
-                 <View style={[themeStyles.container, themeStyles.flexboxRow]}>
+                 <View pointerEvents="none" style={[themeStyles.container, themeStyles.flexboxRow]}>
                  {!currentData &&
                   <ActivityIndicator
                     animating={loading}

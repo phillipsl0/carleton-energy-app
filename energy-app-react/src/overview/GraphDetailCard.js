@@ -22,8 +22,8 @@ export default class GraphDetail extends Component {
 
         return(
             <View style={[themeStyles.centered]}>
-                <View style={[styles.graphContainer, themeStyles.centered,
-                              themeStyles.translucent]}>
+                <View pointerEvents="none" style={[styles.graphContainer, themeStyles.centered,
+                    themeStyles.translucent]}>
                  <Graph
                      theme={CustomThemes.carleton}
                      height={verticalScale(210)}

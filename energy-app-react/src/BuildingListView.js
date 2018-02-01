@@ -3,11 +3,10 @@ import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebV
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+
 import buildings from './Buildings';
-import IndividualBuilding from './IndividualBuilding';
-
-
-
+// import IndividualBuilding from './IndividualBuilding';
+import OverviewCards from './overview/OverviewCards';
 
 
 class BuildingListView extends Component {
@@ -18,25 +17,26 @@ class BuildingListView extends Component {
     render() {
         const {navigate} = this.props.navigation;
 
-       return (
-         <List>
-           <FlatList
-             data={buildings}
-             keyExtractor={item => item.name}
-             renderItem={({ item }) => (
-               <ListItem
+        return (
+         // <List>
+          <FlatList
+              data={buildings}
+              keyExtractor={item => item.name}
+              renderItem={({ item }) => (
+                <ListItem
                     style={styles.listItem}
-                 onPress={() => this.props.navigation.navigate('CardView', {item:item})}
-                 title={item.name}
-                 avatar={<Avatar
-                            style={styles.listImg}
-                            source={ { uri: item.avatar }}
-                            containerStyle={{alignSelf: 'stretch'}}
-                            />}
-               />
+                    title={item.name}
+                    subtitle={<View style={styles.subtitleView}>
+                              <Text>{item.buildingID}</Text></View>}
+                    avatar={<Avatar
+                              style={styles.listImg}
+                              source={ { uri: item.avatar }}
+                              containerStyle={{alignSelf: 'stretch'}} />}
+                    onPress={() => this.props.navigation.navigate('CardView', {item:item})}
+                />
              )}
            />
-         </List>
+         // </List> 
        );
      }
 }
@@ -46,20 +46,30 @@ const BuildingStack = StackNavigator({
     Buildings: {
         screen: BuildingListView,
     },
+
+    // CardView: {
+    //     screen: IndividualBuilding,
+    //     path: 'buildings/:name',
+    //     navigationOptions: ({ navigation }) => ({
+    //           title: `${navigation.state.params.item.name}`,
+    //           headerTintColor: 'white',
+    //           headerStyle: navStyles.header,
+    //         }),
+
+    // },
+
     CardView: {
-        screen: IndividualBuilding,
-        path: 'buildings/:name',
-        navigationOptions: ({ navigation }) => ({
+      screen: OverviewCards,
+      path: 'buildings/:name',
+      navigationOptions: ({ navigation }) => ({
               title: `${navigation.state.params.item.name}`,
               headerTintColor: 'white',
               headerStyle: navStyles.header,
-            }),
-
+              headerTitleStyle: navStyles.headerTitle,
+              headerBackTitleStyle: navStyles.headerTitle,
+              headerBackTitle: 'Back',
+            }), 
     },
-    // CardView: {
-    //   screen: IndividualBuilding,
-    //   // navigationOptions: 
-    // },
 });
 
 const navStyles = StyleSheet.create({
@@ -95,16 +105,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   listItem: {
-    height: 50,
+    height: 80,
     backgroundColor: 'aqua',
     borderBottomColor: '#c8c7cc',
     borderBottomWidth: 0.5,
     width: 300,
     alignSelf: 'center',
-    paddingTop: 35,
+    paddingTop: 15,
     paddingRight: 15,
-    paddingBottom: 55,
-
+    // paddingBottom: 55,
+  },
+  subtitleView: {
+    paddingTop: 5,
+    paddingRight: 40,
+    paddingLeft: 20
   },
   listImg: {
     height: 30,
