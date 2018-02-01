@@ -1,13 +1,15 @@
 import { StyleSheet, Platform } from 'react-native'
 
-import CurrFont from './../styling/CurrentFont';
-
+// import CurrFont from './../styling/CurrentFont';
 
 const lightBlue = '#e1e8ee';
 const mediumBlue = '#B9C8D6';
 const carletonBlue = '#0B5091';
-const defaultFont = CurrFont+'-regular';
-const defaultFontBold = CurrFont+'-bold';
+
+const fontFamily = 'lato';
+const font = fontFamily+'-regular';
+const fontBold = fontFamily+'-bold';
+
 
 const DefaultTheme = StyleSheet.create({
     card: {
@@ -50,11 +52,11 @@ const DefaultTheme = StyleSheet.create({
     },
 
     fontBold: {
-        fontFamily: defaultFontBold,
+        fontFamily: fontBold,
     },
 
     fontRegular: {
-        fontFamily: defaultFont,
+        fontFamily: font,
     },
 
     header: {
@@ -115,11 +117,11 @@ const DefaultTheme = StyleSheet.create({
     },
 
     translucentText: {
-        fontFamily: defaultFont,
+        fontFamily: font,
         color: 'rgba(255, 255, 255, 0.75)',
         backgroundColor: 'transparent',
     }
 
 })
 
-export default DefaultTheme
+export default {DefaultTheme, fontFamily, font, fontBold}

@@ -19,9 +19,10 @@ import { getCurrentGenerationGraphFormat,
   getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
 
-const defaultFont = CurrFont+'-regular';
-const defaultFontBold = CurrFont+'-bold';
+// const defaultFont = CurrFont+'-regular';
+// const defaultFontBold = CurrFont+'-bold';
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
+const themeStyles = GetStyle();
 
 function cacheImages(images) {
   return images.map(image => {
@@ -39,7 +40,7 @@ function cacheFonts(fonts) {
 
 const navStyle = StyleSheet.create({
     label: {
-        fontFamily: defaultFontBold,
+        fontFamily: themeStyles.fontBold,
     },
 
     indicator: {

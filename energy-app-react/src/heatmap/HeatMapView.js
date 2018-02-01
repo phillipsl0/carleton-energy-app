@@ -69,7 +69,7 @@ class HeatMapView extends Component {
   // Algorithm to generate CSS hsl color code from [0, 1] value
   determineBuildingColor(buildingName) {
     var use = getCurrentBuildingUtilityConsumption(buildingName, "water").toFixed(1)
-    console.log(buildingName, use)
+    // console.log(buildingName, use)
     // algorithm based on 5 color heatmap: https://stackoverflow.com/questions/12875486/what-is-the-algorithm-to-create-colors-for-a-heatmap
     var h = (1.0 - use) * 240
     return "hsl(" + h + ", 100%, 50%)";

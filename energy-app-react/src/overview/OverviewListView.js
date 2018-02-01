@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ActivityIndicator, RefreshControl, FlatList, StyleSheet, 
-    View, Text, Image, Dimensions, Platform, StatusBar, ScrollView } from 'react-native'
+    View, Text, Image, Dimensions, Platform, ScrollView } from 'react-native'
 import { AppLoading } from 'expo';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, Button } from 'react-native-elements'
@@ -13,13 +13,14 @@ import Turbine from './TurbineView'
 import ExampleData from './OverviewExampleData'
 import Graph from './../visualizations/Graph'
 import { GetStyle } from './../styling/Themes'
-import CurrTheme from './../styling/CurrentTheme'
-import CurrFont from './../styling/CurrentFont';
+// import CurrTheme from './../styling/CurrentTheme'
+// import CurrFont from './../styling/CurrentFont';
 import { getCurrentGenerationGraphFormat, 
     getCurrentConsumptionGraphFormat } from './../helpers/ApiWrappers';
 
-const defaultFont = CurrFont+'-regular';
-const defaultFontBold = CurrFont+'-bold';
+// const defaultFont = CurrFont+'-regular';
+// const defaultFontBold = CurrFont+'-bold';
+const themeStyles = GetStyle();
 
 @connect(
     state => ({
@@ -50,23 +51,10 @@ class OverviewListView extends Component {
 
     render() {
         navigation = this.props.navigation;
-        const themeStyles = GetStyle(CurrTheme);
         const { refresh, loading, currentData } = this.props;
-
-        // StatusBar.setBarStyle('dark-content', false);
-        // StatusBar.setBackgroundColor('#ff9800', true);
-
-
-            // <StatusBar
-            //   backgroundColor="#ff9800"
-            //   barStyle="light-content"
-            // />
 
         return (
           <ScrollView>
-          <MyStatusBar backgroundColor="#ff9800" barStyle="light-content" />
-         <List
-           style={[styles.list, themeStyles.list, themeStyles.flex]}>
            <FlatList
              data={ExampleData}
              keyExtractor={item => item.title}
@@ -99,7 +87,7 @@ class OverviewListView extends Component {
                  <Button
                     small
                     rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                    fontFamily={defaultFont}
+                    fontFamily={themeStyles.font}
                     fontSize={20}
                     title='More'
                     containerViewStyle={styles.button}
@@ -108,7 +96,6 @@ class OverviewListView extends Component {
                </Card>
              )}
            />
-         </List>
          </ScrollView>
        );
     }
@@ -124,33 +111,12 @@ const navigateOnce = (getStateForAction) => (action, state) => {
     ) ? null : getStateForAction(action, state);
 };
 
-const MyStatusBar = ({backgroundColor, ...props}) => (
-  <View style={[{ backgroundColor }]}>
-    <StatusBar backgroundColor={backgroundColor} {...props} />
-  </View>
-);
-
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
-
-const styles02 = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  statusBar: {
-    height: STATUSBAR_HEIGHT,
-  },
-  content: {
-    flex: 1,
-    backgroundColor: '#33373B',
-  },
-});
-
 const navStyles = StyleSheet.create({
     header: {
         backgroundColor: '#0B5091',
     },
     headerTitle: {
-        fontFamily: defaultFontBold,
+        fontFamily: themeStyles.font,
     }
 })
 
@@ -199,10 +165,10 @@ OverviewStack.router.getStateForAction = navigateOnce(OverviewStack.router.getSt
 const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
-    borderRadius: 3,
+    borderRadius: 5,
     padding: 15,
     margin: 15,
-    marginBottom: 0,
+    marginBottom: -5,
   },
   list: {
       marginLeft: '3%',
@@ -211,16 +177,9 @@ const styles = StyleSheet.create({
   button: {
     marginTop: '3%',
   },
-  container: {
-    flex: 1,
-  },
-  statusBar: {
-    height: STATUSBAR_HEIGHT,
-  },
-  content: {
-    flex: 1,
-    backgroundColor: '#33373B',
-  },
+  title: {
+    color: 'darkslategrey'
+  }
 })
 
 export default OverviewStack

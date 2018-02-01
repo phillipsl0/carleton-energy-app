@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { FlatList, AppRegistry, SectionList, Linking, Platform,
     StyleSheet, View, ScrollView, Text, Image, WebView, TouchableOpacity } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
-import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { List, Card, ListItem, Button } from 'react-native-elements';
+// import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
-import { getSustainabilityEvents, getSustainabilityEventsBak, getSustainabilityNews, getSustainabilityNewsBak } from './helpers/ApiWrappers.js';
+import { getSustainabilityEvents, getSustainabilityEventsBak, 
+    getSustainabilityNews, getSustainabilityNewsBak } from './helpers/ApiWrappers.js';
 
 class SustainListView extends Component {
 
@@ -55,70 +56,79 @@ class SustainListView extends Component {
         return (
             <ScrollView>
                 <Card title="Get Involved"
-                    containerStyle={{marginBottom: -5}}>
+                    containerStyle={styles.card}
+                    titleStyle={styles.title}>
 
-                    <List containerStyle={{marginBottom: 0, marginTop: -15, borderTopWidth: 0}}>
-                        <ListItem containerStyle={{borderBottomColor: '#cbd2d9', borderBottomWidth: 0.7}}
+                    <List containerStyle={styles.list}>
+                        <ListItem containerStyle={styles.listItem}
                             title={"Our Campus"}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(links[1])} />
-                        <ListItem containerStyle={{borderBottomColor: '#cbd2d9', borderBottomWidth: 0.7}}
+                        <ListItem containerStyle={styles.listItem}
                             title={"Take Action"}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(links[2])} />
-                        <ListItem containerStyle={{borderBottomColor: '#cbd2d9', borderBottomWidth: 0.7}}
+                        <ListItem containerStyle={styles.listItem}
                             title={"People & Policies"}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(links[3])} />
                     </List>
                 </Card>
+
                 <Card title="Upcoming Events"
-                    containerStyle={{marginBottom: -5}}>
-                    <List containerStyle={{marginBottom: 0, marginTop: -15, borderTopWidth: 0}}>
-                        <ListItem containerStyle={{borderBottomColor: '#cbd2d9', borderBottomWidth: 0.7}}
+                    containerStyle={styles.card}
+                    titleStyle={styles.title}>
+
+                    <List containerStyle={styles.list}>
+                        <ListItem containerStyle={styles.listItem}
                             title={events["events"]["items"][0]["title"]}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(events["events"]["items"][0]["link"])}
+                            subtitleStyle={styles.subtitle}
                             subtitle={events["events"]["items"][0]["content"]} />
-                        <ListItem containerStyle={{borderBottomWidth: 0 }}
+                        <ListItem containerStyle={styles.listItem}
                             title={events["events"]["items"][1]["title"]}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(events["events"]["items"][1]["link"])}
-                            subtitle={events["events"]["items"][1]["content"]} />
+                            // subtitle={events["events"]["items"][1]["content"]}
+                            subtitleStyle={styles.subtitle} />
                     </List>
                     <Button
                         title="More Events"
                         rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                         fontSize={20}
                         backgroundColor='#0B5091'
-                        onPress={() => Linking.openURL(links[4])}
-                        />
+                        onPress={() => Linking.openURL(links[4])} />
                 </Card>
+
                 <Card title="Recent News"
-                    containerStyle={{marginBottom: 10}}>
-                    <List containerStyle={{marginBottom: 0, marginTop: -15, borderTopWidth: 0}}>
-                        <ListItem containerStyle={{borderBottomColor: '#cbd2d9', borderBottomWidth: 0.7}}
+                    containerStyle={[styles.card, {marginBottom: 10}]}
+                    titleStyle={styles.title}>
+
+                    <List containerStyle={styles.list}>
+                        <ListItem containerStyle={styles.listItem}
                             title={news["news"]["items"][0]["title"]}
+                            titleStyle={styles.title}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(news["news"]["items"][0]["link"])}
-                            subtitle={
-                                news["news"]["items"][0]["content"].replace(/<[^>]+>/g, '')
-                            }
+                            subtitle={news["news"]["items"][0]["content"].replace(/<[^>]+>/g, '')}
+                            subtitleStyle={styles.subtitle}
                             subtitleNumberOfLines={3} />
-                        <ListItem containerStyle={{borderBottomWidth: 0 }}
+                        <ListItem containerStyle={styles.listItem}
                             title={news["news"]["items"][1]["title"]}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(news["news"]["items"][1]["link"])}
                             subtitle={news["news"]["items"][1]["content"].replace(/<[^>]+>/g, '')}
-                            subtitleNumberOfLines={3} />
+                            subtitleStyle={styles.subtitle}
+                            subtitleNumberOfLines={3} /> 
                     </List>
                     <Button
                         title="More News"
                         rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                         fontSize={20}
                         backgroundColor='#0B5091'
-                        onPress={() => Linking.openURL(links[5])}
-                        />
+                        // buttonStyle={styles.button}
+                        onPress={() => Linking.openURL(links[5])} />
                 </Card>
             </ScrollView>
             );
@@ -145,7 +155,11 @@ class SustainListView extends Component {
 const navStyles = StyleSheet.create({
     header: {
         backgroundColor: '#0B5091',
+        // headerTintColor: 'white'
     },
+    // headerTitle: {
+    //     fontFamily: 'lato-bold',
+    // }
 })
 
 const SustainStack = StackNavigator({
@@ -158,8 +172,39 @@ const SustainStack = StackNavigator({
             }),
             headerTintColor: 'white',
             headerStyle: navStyles.header,
+            // headerTitleStyle: navStyles.headerTitle,
         }),
     }
 });
+
+const styles = StyleSheet.create({
+    card: {
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 15,
+        margin: 15,
+        marginBottom: -5
+    },
+    list: {                 // Keep to local list
+        marginBottom: 12, 
+        marginTop: -15, 
+        borderTopWidth: 0
+    },
+    listItem: {
+        borderBottomColor: '#cbd2d9', 
+        borderBottomWidth: 0.7
+    },
+    button: {
+      // marginTop: '3%',
+    },
+    title: {
+        color: 'darkslategrey'
+    },
+    subtitle: {
+        color: 'slategray',
+        fontWeight: 'normal',
+        fontStyle: 'italic',
+    }
+})
 
 export default SustainStack;

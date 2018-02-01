@@ -1,10 +1,18 @@
-import colorfulTheme from "./ColorfulTheme";
+// import colorfulTheme from "./ColorfulTheme";
 import defaultTheme from "./DefaultTheme";
+// import font from "./DefaultTheme";
 
-export function GetStyle(name) {
-    if (name=='bland') {
-        return defaultTheme;
-    } else if (name=='colorful') {
-        return colorfulTheme;
-    }
+console.log(defaultTheme)
+
+export function GetStyle() {
+    return defaultTheme;
+    // if (name=='bland') {
+    //     return defaultTheme;
+    // } else if (name=='colorful') {
+    //     return colorfulTheme;
+    // }
+}
+
+export function GetFont() {
+    // body...
 }
