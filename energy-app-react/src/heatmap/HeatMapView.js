@@ -47,6 +47,138 @@ class HeatMapView extends Component {
     this.state = {
       lastBuildingPressed: "No buildings have been pressed",
       polygons: [],
+      buildings_info: {
+        "Burton": {
+          "electricity": {
+            "max": 21664,
+            "min": 1334,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        },
+        "Cassat": {
+          "electricity": {
+            "max": 40469,
+            "min": 3137,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        },
+        "Davis": {
+          "electricity": {
+            "max": 21664,
+            "min": 1334,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        },
+        "Evans": {
+          "electricity": {
+            "max": 47703,
+            "min": 3228,
+          },
+          "water": {
+            "max": 316880,
+            "min": 4232,
+          },
+        },
+        "Goodhue": {
+          "electricity": {
+            "max": 38955,
+            "min": 2427,
+          },
+          "water": {
+            "max": 285100,
+            "min": 3200,
+          },
+        },
+        "Memo": {
+          "electricity": {
+            "max": 21664,
+            "min": 1334,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        },
+        "Musser": {
+          "electricity": {
+            "max": 21664,
+            "min": 1334,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        },
+        "Myers": {
+          "electricity": {
+            "max": 21664,
+            "min": 1334,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        },
+        "Nourse": {
+          "electricity": {
+            "max": 21664,
+            "min": 1334,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        },
+        "Sayles": {
+          "electricity": {
+            "max": 21664,
+            "min": 1334,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        },
+        "Scoville": {
+          "electricity": {
+            "max": 21664,
+            "min": 1334,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        },
+        "Severance": {
+          "electricity": {
+            "max": 21664,
+            "min": 1334,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        },
+        "Watson": {
+          "electricity": {
+            "max": 21664,
+            "min": 1334,
+          },
+          "water": {
+            "max": 47243177,
+            "min": 18784,
+          },
+        }
+      },
       // Initial region is Carleton's coordinates
       region: {
         // Carleton's coordinates
@@ -71,40 +203,40 @@ class HeatMapView extends Component {
     //this.moveToCarleton = this.moveToCarleton.bind(this);
     //this.updateUtility = this.updateUtility.bind(this);
     // this.setMapBoundaries = this.setMapBoundaries.bind(this) ({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
-  }
+  };
 
   // Assemble all of Carleton's buildings BEFORE rendering
   componentWillMount() {
+    //this.getNormalizationData();
     this.getBuildingData();
     this.moveToCarleton();
     // this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
-    console.log('Component will mount');
+    //console.log('HeatMapView component will mount');
     this.closeActivityIndicator();
-  }
+  };
 
   componentDidMount() {
-    console.log("Component did mount");
-  }
+    //console.log("HeatMapView Component did mount");
+  };
 
   openActivityIndicator() {
     this.setState({ loading: true });
-  }
+  };
 
   closeActivityIndicator() {
     setTimeout(() => this.setState({
       loading: false }), 2000);
-  }
+  };
 
   setRegion(region) {
     if(this.state.ready) {
       setTimeout(() => this.refs.map.animateToRegion(region), 1);
     }
-    //this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
-  }
+  };
 
   moveToCarleton() {
     this.setRegion(this.state.region);
-  }
+  };
 
   onMapReady = (e) => {
     if(!this.state.ready) {
@@ -127,16 +259,12 @@ class HeatMapView extends Component {
   };
 
   onRegionChange = (region) => {
-    console.log('onRegionChange', region);
-    this.state.polygons.map((polygon) => {
-      if (polygon.open) {
-        this.toggleCallout(polygon)
-      }
-    })
+    //console.log('onRegionChange', region);
+    this.checkCalloutRender(region);
   };
 
   onRegionChangeComplete = (region) => {
-    console.log('onRegionChangeComplete', region);
+    //console.log('onRegionChangeComplete', region);
   };
 
   /*
@@ -145,16 +273,38 @@ class HeatMapView extends Component {
   0 : green
   .5 : yellow
   1 : red
-
   */
   determineBuildingColor(buildingName) {
-    console.log("Rendering building colors with: ", this.state.utilityShown)
-    // NEED TO NORMALIZE DATA
+    //console.log("Rendering building colors with: ", this.state.utilityShown)
     var use = getCurrentBuildingUtilityConsumption(buildingName, this.state.utilityShown).toFixed(1)
-//     console.log(buildingName, use)
-    var h = (1.0 - use) * 240
-    return "hsl(" + h + ", 100%, 50%)";
-  }
+    //var h = (1.0 - use) * 240
+    var building = this.state.buildings_info
+    building = building[buildingName][this.state.utilityShown]
+    var val = Math.abs(1 - ((use - building.min) / (building.max - building.min))) // taken from https://stats.stackexchange.com/questions/70801/how-to-normalize-data-to-0-1-range
+    console.log("Normalizing " + buildingName, val)
+    var h = val * 85 // taken from: https://stackoverflow.com/questions/6660879/python-map-float-range-0-0-1-0-to-color-range-red-green
+    //return "hsl(" + h + ", 100%, 50%)";
+
+    return this.setColor(val);
+  };
+
+  // taken from: https://ux.stackexchange.com/questions/34875/how-to-translate-a-rating-range-into-red-yellow-green-colours
+  // Generates color from normalization of 0 to 10 scale
+  setColor(value) {
+    var color;
+    var parts = (value > 5) ? (1-((value-5)/5)) : value/5;
+    parts = Math.round(parts * 255);
+    if (value > 5) {
+        color = [255, parts, 0];
+    }
+    else if (value < 5){
+        color = [parts, 255, 0];
+    }
+    else {
+        color = [255,255,0]
+    }
+    return "rgb(" + color.join(',') + ")";
+}
 
   // Get current building data
   async getBuildingData() {
@@ -167,14 +317,29 @@ class HeatMapView extends Component {
           marker_coordinate: building.marker_coordinate,
           usage: getCurrentBuildingUtilityConsumption(building.name, this.state.utilityShown).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
         }
-      })
-      this.setState({polygons: polygons})
-      return polygons
+      });
+      this.setState({polygons: polygons});
+      return polygons;
+    } catch(error) {
+        var introStr = "This is embarrassing... \n"
+        alert(introStr.concat(error))
+    }
+  };
+
+  getNormalizationData() {
+    try {
+      let normalization = buildings.reduce(function(map, building) {
+        map[building.name] = building.normalization;
+        return map;
+      }, {});
+      //console.log("Normalization: ", normalization)
+      this.setState({buildings_info: normalization})
+      var keys = Object.keys(this.state.buildings_info)
     } catch(error) {
         var introStr = "This is embarrassing...: "
         alert(introStr.concat(error))
     }
-  }
+  };
 
 
   // Show callout when building polygon is pressed
@@ -189,7 +354,24 @@ class HeatMapView extends Component {
     }
 
     polygon.open = !polygon.open;
-  }
+  };
+
+  round(value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+  };
+
+  // Close open callout upon user zoom
+  checkCalloutRender(region) {
+    //console.log("New region: ", this.round(region.latitudeDelta, 5))
+    //console.log("State region: ", this.round(this.state.region.latitudeDelta, 5))
+    if (this.round(region.latitudeDelta, 5) != this.round(this.state.region.latitudeDelta, 5)) {
+      this.state.polygons.map((polygon) => {
+        if (polygon.open) {
+          this.toggleCallout(polygon)
+        }
+      })
+    }
+  };
 
   moveMaptoLocation(latlng) {
     this.refs.map.animateToRegion({
@@ -197,9 +379,9 @@ class HeatMapView extends Component {
       longitudeDelta: 0.02,
       ...latlng,
     }, 10);
-  }
+  };
 
-  // CURRENTLY BROKEN: bug 
+  // CURRENTLY BROKEN AS OF 1/25/18: error in React framework 
   setBoundaries() {
     this.refs.map.setMapBoundaries(
       {
@@ -209,7 +391,7 @@ class HeatMapView extends Component {
         latitude: 44.4592961807,
         longitude: -93.15502781429046
       });
-  }
+  };
 
   render() {
     navigation = this.props.navigation;
@@ -222,7 +404,7 @@ class HeatMapView extends Component {
       <View style={styles.container}>
         <MapView
           //control zooming
-          maxZoomLevel={5}
+          //maxZoomLevel={5} // max in terms of how far IN you can zoon
           ref="map"
           provider = { PROVIDER_GOOGLE } // show buildings on OS
           key={utilityShown} // key change needed to rerender map
