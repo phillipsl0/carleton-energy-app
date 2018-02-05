@@ -252,15 +252,12 @@ class HeatMapView extends Component {
   updateUtility = (utilitySelected) => {
     // Begin to update map
     this.openActivityIndicator();
-    console.log("Utility selected:", utilitySelected);
     this.setState({ utilityShown: utilitySelected});
-    console.log("Displaying utility: ", this.state.utilityShown);
     
     // Update map
     this.getBuildingData();
     this.moveToCarleton();
     this.closeActivityIndicator();
-    console.log("Map updated") 
     {this.props.navigation.setParams({ updated: "Updating time stamp..." })}
   };
 
