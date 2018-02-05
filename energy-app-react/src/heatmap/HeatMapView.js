@@ -529,7 +529,7 @@ const HeatMapViewStack = StackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.item.name}`,
       headerTintColor: 'white',
-      headerStyle: navStyles.header,
+      headerStyle: {backgroundColor: '#0B5091'},
     }),
   },
 });
