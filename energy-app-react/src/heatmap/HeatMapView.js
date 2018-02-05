@@ -248,6 +248,7 @@ class HeatMapView extends Component {
     }
   };
 
+  // Updates colors of heat map with new utility selection
   updateUtility = (utilitySelected) => {
     // Begin to update map
     this.openActivityIndicator();
@@ -260,6 +261,7 @@ class HeatMapView extends Component {
     this.moveToCarleton();
     this.closeActivityIndicator();
     console.log("Map updated") 
+    {this.props.navigation.setParams({ updated: "Updating time stamp..." })}
   };
 
   onRegionChange = (region) => {
@@ -402,8 +404,8 @@ class HeatMapView extends Component {
     navigation = this.props.navigation;
     utilityShown = this.state.utilityShown
     loading = this.state.loading
-    console.log("Utility displayed before return:", utilityShown)
-    console.log("Loading?", loading)
+    //console.log("Utility displayed before return:", utilityShown)
+    //console.log("Loading?", loading)
 
     return (
       <View style={styles.container}>
@@ -505,6 +507,14 @@ class HeatMapView extends Component {
 const HeatMapViewStack = StackNavigator({
   HeatMapView: {
     screen: HeatMapView,
+     transitionConfig: () => ({
+      // disable animation
+      transitionSpec: {
+        duration: 0,
+        timing: Animated.timing,
+        easing: Easing.step0,
+      }
+    }),
     navigationOptions: ({ navigation, updated }) => ({
       headerTitle: <HeatMapHeader/>,
       headerStyle: {backgroundColor: '#0B5091'},
@@ -522,7 +532,6 @@ const HeatMapViewStack = StackNavigator({
       headerStyle: navStyles.header,
     }),
   },
-
 });
 
 const styles = StyleSheet.create({
