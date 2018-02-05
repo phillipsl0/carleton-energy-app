@@ -477,22 +477,28 @@ class HeatMapView extends Component {
             type='material-community'
           />
         </TouchableOpacity>
-        <View style={styles.loading}>
+        <TopUtilities
+          // top utilities
+          onUtilitySelect={this.updateUtility}
+          selected={this.state.utilityShown} />
+        {this.state.loading && <View style={styles.loading} accessibe={false}>
           <ActivityIndicator
             size='large'
             color='#0000ff'
             animating={this.state.loading} />
         </View>
-        <TopUtilities
-          // top utilities
-          onUtilitySelect={this.updateUtility}
-          selected={this.state.utilityShown} />
+        }
       </View>
     );
   }
 }
 
 /*
+      {this.state.loading && 
+        <View style=styles.loading}>
+          <ActivityIndicator size='large' />
+        </View>
+      }
         <Text style={{ position: 'absolute', bottom: 10 }}>
           Latitude: {this.state.region.latitude}{'\n'}
           Longitude: {this.state.region.longitude}{'\n'}
@@ -575,6 +581,16 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F5FCFF88'
   }
 });
 
