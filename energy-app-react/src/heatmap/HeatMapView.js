@@ -10,6 +10,7 @@ import OverviewCards from './../overview/OverviewCards';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import TopUtilities from './UtilityButtons';
+import HeatMapHeader from './HeatMapHeader';
 
 
 /*
@@ -211,18 +212,20 @@ class HeatMapView extends Component {
     this.getBuildingData();
     this.moveToCarleton();
     // this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
-    //console.log('HeatMapView component will mount');
+    //console.log('HeatMapView component is mounting...');
     this.closeActivityIndicator();
   };
 
+  // Called AFTER class completely renders
   componentDidMount() {
-    //console.log("HeatMapView Component did mount");
+    //console.log("HeatMapView component did mount");
   };
 
   openActivityIndicator() {
     this.setState({ loading: true });
   };
 
+  // Closes activity indicator with 2 second delay after call
   closeActivityIndicator() {
     setTimeout(() => this.setState({
       loading: false }), 2000);
@@ -238,6 +241,7 @@ class HeatMapView extends Component {
     this.setRegion(this.state.region);
   };
 
+  // Indicates when map is ready
   onMapReady = (e) => {
     if(!this.state.ready) {
       this.setState({ready: true});
@@ -281,7 +285,7 @@ class HeatMapView extends Component {
     var building = this.state.buildings_info
     building = building[buildingName][this.state.utilityShown]
     var val = Math.abs(1 - ((use - building.min) / (building.max - building.min))) // taken from https://stats.stackexchange.com/questions/70801/how-to-normalize-data-to-0-1-range
-    console.log("Normalizing " + buildingName, val)
+    //console.log("Normalizing " + buildingName, val)
     var h = val * 85 // taken from: https://stackoverflow.com/questions/6660879/python-map-float-range-0-0-1-0-to-color-range-red-green
     //return "hsl(" + h + ", 100%, 50%)";
 
@@ -393,6 +397,7 @@ class HeatMapView extends Component {
       });
   };
 
+
   render() {
     navigation = this.props.navigation;
     utilityShown = this.state.utilityShown
@@ -409,9 +414,6 @@ class HeatMapView extends Component {
           provider = { PROVIDER_GOOGLE } // show buildings on OS
           key={utilityShown} // key change needed to rerender map
           showsTraffic={false}
-          //control zooming
-          // minZoomLevel={0.0}
-          // maxZoomLevel={5}
           initialRegion={initialRegion}
           onMapReady={this.onMapReady}
           onRegionChange={this.onRegionChange}
@@ -487,6 +489,7 @@ class HeatMapView extends Component {
     );
   }
 }
+
 /*
         <Text style={{ position: 'absolute', bottom: 10 }}>
           Latitude: {this.state.region.latitude}{'\n'}
@@ -497,32 +500,19 @@ class HeatMapView extends Component {
         </Text>
 */
 
+
 // Stack of HeatMap
 const HeatMapViewStack = StackNavigator({
   HeatMapView: {
     screen: HeatMapView,
-    navigationOptions: ({ navigation }) => ({
-      title: "Heat Map",
-      headerTintColor: 'white',
-      headerStyle: navStyles.header,
+    navigationOptions: ({ navigation, updated }) => ({
+      headerTitle: <HeatMapHeader/>,
+      headerStyle: {backgroundColor: '#0B5091'},
       ...Platform.select({
           android: { header: null }
       }),
     })
   },
-
-  // // Old Version: (when individualBuilding was a thing)
-  // HeatBuildingView: {
-  //   screen: IndividualBuilding,
-  //   path: 'buildings/:name',
-  //   navigationOptions: ({ navigation }) => ({
-  //     title: `${navigation.state.params.item.name}`,
-  //     headerTintColor: 'white',
-  //     headerStyle: navStyles.header,
-  //   }),
-  // },
-
-  // New Version:
   HeatBuildingView: {
     screen: OverviewCards,
     path: 'buildings/:name',
@@ -534,12 +524,6 @@ const HeatMapViewStack = StackNavigator({
   },
 
 });
-
-const navStyles = StyleSheet.create({
-    header: {
-        backgroundColor: '#0B5091',
-    }
-})
 
 const styles = StyleSheet.create({
   container: {
