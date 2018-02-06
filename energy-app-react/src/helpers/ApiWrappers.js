@@ -468,6 +468,18 @@ export function getCurrentConsumptionGraphFormat() {
     return data;
 }
 
+export function reformatDate(date){
+    console.log(date);
+    newDate = [date.getMonth()+1,
+               date.getDate(),
+               Number(date.getFullYear().toString().substring(2,4))].join('/')+' '+
+              [date.getHours(),
+               date.getMinutes()].join(':');
+
+    console.log(newDate);
+    return newDate;
+}
+
 export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd, timeScale) {
 
     // different utilities have different "typical" amounts
@@ -481,6 +493,7 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
 
     var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
     var currentTime = new Date(timeEnd);
+    var reformattedDate = reformatDate(currentTime);
 
     var table = new Array(numberEntries);
     for (var i = numberEntries-1; i >= 0; i--) {
@@ -534,6 +547,8 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
 
     finalTable["rank"] = rank;
     finalTable["data"] = combinedTable;
+
+    console.log(finalTable);
 
     return finalTable;
 }
