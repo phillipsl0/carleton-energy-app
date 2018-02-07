@@ -474,7 +474,7 @@ export function reformatDate(date){
                date.getDate(),
                Number(date.getFullYear().toString().substring(2,4))].join('/')+' '+
               [date.getHours(),
-               date.getMinutes()].join(':');
+               "00"].join(':');
 
     console.log(newDate);
     return newDate;
