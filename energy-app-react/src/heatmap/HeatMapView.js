@@ -261,8 +261,9 @@ class HeatMapView extends Component {
   };
 
   onRegionChange = (region) => {
+    //this.setState({ region: region })
     //console.log('onRegionChange', region);
-    this.checkCalloutRender(region);
+    //this.checkCalloutRender(region);
   };
 
   onRegionChangeComplete = (region) => {

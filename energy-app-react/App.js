@@ -186,10 +186,18 @@ const mapStateToProps = (state) => ({
 
 class App extends Component {
   
-  // ADDED
-  componentWillMount() {
-    const isFirstLaunch = checkIfFirstLaunch();
+  // Checks AsyncStorage to see if app has been launched already
+  async componentWillMount() {
+    const isFirstLaunch = await checkIfFirstLaunch();
+    //console.log("Mounting:", isFirstLaunch);
     this.setState({ isFirstLaunch, hasCheckedAsyncStorage: true });
+  }
+
+  // Closes intro screen when done button is pressed
+  closeIntro = (onDonePress) => {
+    if (onDonePress == true) {
+      this.setState({ isFirstLaunch: false });
+    };
   }  
 
   componentDidMount() {
@@ -253,29 +261,28 @@ class App extends Component {
 
     if (!this.state.isReady) {
         return(
-            <AppLoading
-                startAsync={this._cacheResourcesAsync}
-                onFinish={() => this.setState({ isReady: true })}
-                onError={console.warn}/>
+          <AppLoading
+              startAsync={this._cacheResourcesAsync}
+              onFinish={() => this.setState({ isReady: true })}
+              onError={console.warn}/>
         );
     }
 
-    // if (this.state.firstLaunch == null ) {
-    //   return null;
-    // } else if (this.state.firstLaunch == true) {
-    //   return (<IntroSlider />);
-    // } else {
-    //   return (<RootTabs navigation={navigation} />);
-    // }
-
     const { hasCheckedAsyncStorage, isFirstLaunch } = this.state;
-    //console.log("Async response:", AsyncStorage.getItem('hasLaunched'));
-
-    if (this.state.isFirstLaunch == true) {
-      return (<IntroSlider />);
-    } else {
-      return (<RootTabs navigation={navigation} />);
+    //console.log("First launch app:", isFirstLaunch);
+    // Check if app has been launched for the first time
+    // Comment block out to disable
+    if (this.state.isFirstLaunch == true ) {
+      return (
+        <IntroSlider
+          onDone={this.closeIntro}
+        />
+      );
     }
+
+    return (
+      <RootTabs navigation={navigation} />
+    );
   }
 }
 

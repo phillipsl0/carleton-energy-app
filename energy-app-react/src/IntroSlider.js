@@ -7,25 +7,25 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 // Slides shown in intro
 const slides = [
   {
-    key: 'somethun',
-    title: 'Quick setup, good defaults',
-    text: 'React-native-app-intro-slider is easy to setup with a small footprint and no dependencies. And it comes with good default layouts!',
-    icon: 'ios-images-outline',
-    color: '#63E2FF',
-    type: 'ionicon'
+    key: 'Welcome',
+    title: "Welcome to our comps",
+    text: "You can see Carleton's energy usage! Ever wondered how much energy the wind turbine is using at any given point? Now you can find out! Yay comps! Jeff is awesome! Martha is amazing!",
+    icon: 'tree',
+    color: '#00b33c',
+    type: 'entypo'
   },
   {
-    key: 'somethun1',
-    title: 'Super customizable',
-    text: 'The component is also super customizable, so you can adapt it to cover your needs and wants.',
+    key: 'Buildings',
+    title: "Compare buildings energy usage",
+    text: 'Ever wondered what buildings use the most energy? Burton or Sayles? Watson or Cassat? Check out the building comparison screen!',
     icon: 'ios-options-outline',
     color: '#A3A1FF',
     type: 'ionicon'
   },
   {
-    key: 'somethun2',
+    key: 'Heatmap',
     title: "There's a heatmap!",
-    text: "Feel free to use it",
+    text: "See which buildings are using the most energy on campus in this moment. Red is bad! Green is good! Yay sustainability!",
     icon: 'ios-sunny-outline',
     color: '#29ABE2',
     type: 'ionicon'
@@ -34,6 +34,10 @@ const slides = [
 
 // Documentation: https://github.com/Jacse/react-native-app-intro-slider
 export default class IntroSlider extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   // Renders slide
   _renderItem = props => (
     <View
@@ -73,6 +77,12 @@ export default class IntroSlider extends Component {
       </View>
     );
   }
+
+  // Handles done press on intro screen
+  _onDone = () => {
+    console.log("Done button was pressed!")
+    this.props.onDone(true);
+  }
   
   // Renders checkmark button at final slide
   _renderDoneButton = () => {
@@ -91,16 +101,13 @@ export default class IntroSlider extends Component {
 
   render() {
     return (
-      <View style={styles.mainContent}>
-      { this.state.visible &&
-        <AppIntroSlider
-          slides={slides}
-          renderItem={this._renderItem}
-          renderDoneButton={this._renderDoneButton}
-          renderNextButton={this._renderNextButton}
-        />
-      }
-      </View>
+      <AppIntroSlider
+        slides={slides}
+        renderItem={this._renderItem}
+        renderDoneButton={this._renderDoneButton}
+        renderNextButton={this._renderNextButton}
+        onDone={this._onDone}
+      />
     );
   }
 }
