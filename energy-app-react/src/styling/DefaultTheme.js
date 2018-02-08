@@ -24,11 +24,10 @@ const DefaultTheme = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         padding: 10,
-        // margin: 15,
-        marginLeft: 10,
-        marginRight: 10,
-        marginTop: 5,
-        marginBottom: 10,
+        // marginLeft: 10,
+        // marginRight: 10,
+        // marginTop: 5,
+        // marginBottom: 10,
 
         ...Platform.select({
               ios: {

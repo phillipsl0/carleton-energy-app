@@ -7,6 +7,8 @@ import { List, Card, ListItem, Button } from 'react-native-elements';
 
 import { getSustainabilityEvents, getSustainabilityEventsBak, 
     getSustainabilityNews, getSustainabilityNewsBak } from './helpers/ApiWrappers.js';
+import { scale, moderateScale, verticalScale} from './helpers/Scaling';
+import InlineImage from './helpers/InlineImage.js';
 import { GetStyle } from './styling/Themes'
 const themeStyles = GetStyle();
 
@@ -56,12 +58,32 @@ class SustainListView extends Component {
                 'https://apps.carleton.edu/sustainability/news/']
 
         // console.log("Style", themeStyles)
-        
+        // style={{paddingTop: 0}}>
+
         return (
             <ScrollView>
-                <Card title="Get Involved"
+                <Card
+                    // title='Get Involved'//{<View><Image 
+                        //style={{alignItems:'center', width:80, height:80, paddingBottom:'0%'}} 
+                        //source={require('./assets/cfl_icon.png')} /> <Text>Get Involved</Text></View>} //"Get Involved"
                     containerStyle={themeStyles.card}
-                    titleStyle={themeStyles.title}>
+                    // titleStyle={themeStyles.title}
+                    // image={require('./assets/cfl_icon.png')} 
+                    >
+
+                    <View style={{paddingTop: 0, marginBottom: 25, flex: 1}} >
+                    <Text style={[{fontSize: 18, fontWeight: 'bold', textAlign: 'center'}, themeStyles.title]}>
+                    <InlineImage
+                        // resizeMode="contain"
+                        style={styles.image}
+                        source={require('./assets/cfl_icon.png')} />
+                        
+                        Get Involved</Text>
+                    </View>
+
+
+                    
+
 
                     <List containerStyle={styles.list}>
                         <ListItem containerStyle={themeStyles.listItem}
@@ -102,6 +124,7 @@ class SustainListView extends Component {
                         rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                         fontSize={20}
                         backgroundColor='#0B5091'
+                        buttonStyle={styles.button}
                         onPress={() => Linking.openURL(links[4])} />
                 </Card>
 
@@ -132,9 +155,10 @@ class SustainListView extends Component {
                         rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                         fontSize={20}
                         backgroundColor='#0B5091'
-                        // buttonStyle={themeStyles.button}
+                        buttonStyle={styles.button}
                         onPress={() => Linking.openURL(links[5])} />
                 </Card>
+                <View style={{paddingTop:10}} />
             </ScrollView>
             );
 
@@ -183,15 +207,19 @@ const SustainStack = StackNavigator({
 });
 
 const styles = StyleSheet.create({
-    list: {                 // Keep to local list
+    button: {
+        marginBottom: 3
+    },
+    image: {
+        width: 80,
+        height: 80,
+    },
+    cardContainer: {paddingTop: 5},
+    list: {
         marginBottom: 12, 
         marginTop: -15, 
         borderTopWidth: 0
     },
-    // listItem: {
-    //     borderBottomColor: '#cbd2d9', 
-    //     borderBottomWidth: 0.7
-    // }
 })
 
 export default SustainStack;
