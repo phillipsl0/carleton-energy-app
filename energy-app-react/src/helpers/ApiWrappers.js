@@ -536,7 +536,7 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
             console.log('NOPE ' + reformattedDate);
             dataPt = "0";
         }
-        table[i][utility] = dataPt;
+        table[i][utility] = Number(dataPt);
 
         currentTime.setMinutes(currentTime.getMinutes() - timeScale);
     }
