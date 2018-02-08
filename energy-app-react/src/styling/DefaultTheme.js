@@ -24,11 +24,10 @@ const DefaultTheme = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         padding: 10,
-        // margin: 15,
-        marginLeft: 10,
-        marginRight: 10,
-        marginTop: 5,
-        marginBottom: 10,
+        // marginLeft: 10,
+        // marginRight: 10,
+        // marginTop: 5,
+        // marginBottom: 10,
 
         ...Platform.select({
               ios: {
@@ -112,13 +111,10 @@ const DefaultTheme = StyleSheet.create({
     },
 
     listItem: {
-        borderBottomColor: '#cbd2d9', 
-        borderBottomWidth: 0.7
-    },
-
-    testItem: {
-        borderBottomColor: '#cbd2d9', 
-        borderBottomWidth: 0.7
+        // borderTopColor: '#cbd2d9', 
+        // borderTopWidth: 0.7,
+        borderColor: '#cbd2d940', 
+        borderBottomWidth: StyleSheet.hairlineWidth // 0.7
     },
 
     shadowed: {
