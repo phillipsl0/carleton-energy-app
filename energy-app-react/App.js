@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
-import { Platform, StyleSheet, BackHandler, View, StatusBar } from 'react-native';
+import { Platform, StyleSheet, BackHandler, View, StatusBar, AsyncStorage} from 'react-native';
 import { TabNavigator, TabBarTop, TabBarBottom, 
   NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
@@ -8,7 +8,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import BuildingListView from './src/BuildingListView';
-import HeatMapViewStack from './src/heatmap/HeatMapView'
+import EnergyMapViewStack from './src/energymap/EnergyMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
@@ -16,6 +16,9 @@ import { handler, dataReducer, layoutReducer } from './src/helpers/ReduxHandler'
 import { getCurrentGenerationGraphFormat, 
   getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
+
+import IntroSlider from './src/IntroSlider';
+import checkIfFirstLaunch from './src/checkIfFirstLaunch';
 
 // const defaultFont = CurrFont+'-regular';
 // const defaultFontBold = CurrFont+'-bold';
@@ -63,6 +66,15 @@ tabStyle.tabStatusColors = {
 
 
 const RootTabs = TabNavigator({
+    // Overview: {
+    //   screen: IntroSlider,
+    //   navigationOptions: {
+    //     tabBarLabel: 'Overview',
+    //     tabBarIcon: ({ tintColor, focused }) => (
+    //       <FontAwesome name="tachometer" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+    //     ),
+    //   },
+    // },
     Overview: {
       screen: OverviewStack,
       navigationOptions: {
@@ -90,10 +102,10 @@ const RootTabs = TabNavigator({
         ),
       },
     },
-    HeatMap: {
-        screen: HeatMapViewStack,
+    EnergyMap: {
+        screen: EnergyMapViewStack,
         navigationOptions: {
-          tabBarLabel: 'Heat Map',
+          tabBarLabel: 'Map',
           tabBarIcon: ({ tintColor, focused }) => (
             <FontAwesome name="fire" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
           ),
@@ -172,76 +184,105 @@ const mapStateToProps = (state) => ({
 });
 
 class App extends Component {
-    componentDidMount() {
-        BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-    }
+  
+  // Checks AsyncStorage to see if app has been launched already
+  async componentWillMount() {
+    const isFirstLaunch = await checkIfFirstLaunch();
+    //console.log("Mounting:", isFirstLaunch);
+    this.setState({ isFirstLaunch, hasCheckedAsyncStorage: true });
+  }
 
-    componentWillUnmount() {
-        BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
-    }
-
-    onBackPress = () => {
-        const { dispatch, nav } = this.props;
-        if (nav.index === 0) {
-            return false;
-        }
-
-        dispatch(NavigationActions.back());
-        return true;
+  // Closes intro screen when done button is pressed
+  closeIntro = (onDonePress) => {
+    if (onDonePress == true) {
+      this.setState({ isFirstLaunch: false });
     };
+  }  
 
-    state = {
-        isReady: false,
-    };
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+  }
 
-    async _cacheResourcesAsync() {
-        const fontAssets = cacheFonts([FontAwesome.font,
-            {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
-            {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
-        const imageAssets = cacheImages([require('./src/assets/windmill.png'),
-            require('./src/assets/windmillHeader.png')]);
+  componentWillUnmount() {
+      BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+  }
 
-        await Promise.all([...imageAssets, ...fontAssets]);
+  onBackPress = () => {
+      const { dispatch, nav } = this.props;
+      if (nav.index === 0) {
+          return false;
+      }
+
+      dispatch(NavigationActions.back());
+      return true;
+  };
+
+  state = {
+      isReady: false,
+      isFirstLaunch: false,
+      hasCheckedAsyncStorage: false,
+  };
+
+  async _cacheResourcesAsync() {
+      const fontAssets = cacheFonts([FontAwesome.font,
+          {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
+          {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
+      const imageAssets = cacheImages([require('./src/assets/windmill.png'),
+          require('./src/assets/windmillHeader.png')]);
+
+
+      await Promise.all([...imageAssets, ...fontAssets]);
+  }
+
+  render() {
+    const { dispatch, nav, data, ui } = this.props;
+    const navigation = addNavigationHelpers({
+        dispatch,
+        data,
+        ui,
+        state: nav
+    });
+
+    // StatusBar.setBackgroundColor('#ff9800', true);
+    // console.log("\n\n~~!!New Render!!~~\n\n")
+    // console.log(this.props.nav.index)
+    // console.log(tabStyle.tabStatusColors);
+
+    StatusBar.setBarStyle('light-content', false);
+    if (Platform.OS === 'android') {
+      switch (this.props.nav.index){
+         case 0: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab0, true); break;
+         case 1: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab1, true); break;
+         case 2: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab2, true); break;
+         case 3: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab3, true); break;
+      }
     }
 
-    render() {
-        const { dispatch, nav, data, ui } = this.props;
-        const navigation = addNavigationHelpers({
-            dispatch,
-            data,
-            ui,
-            state: nav
-        });
-
-        // StatusBar.setBackgroundColor('#ff9800', true);
-        // console.log("\n\n~~!!New Render!!~~\n\n")
-        // console.log(this.props.nav.index)
-        // console.log(tabStyle.tabStatusColors);
-
-        StatusBar.setBarStyle('light-content', false);
-        if (Platform.OS === 'android') {
-          switch (this.props.nav.index){
-             case 0: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab0, true); break;
-             case 1: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab1, true); break;
-             case 2: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab2, true); break;
-             case 3: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab3, true); break;
-          }
-        }
-
-        if (!this.state.isReady) {
-            return(
-                <AppLoading
-                    startAsync={this._cacheResourcesAsync}
-                    onFinish={() => this.setState({ isReady: true })}
-                    onError={console.warn}/>
-            );
-        }
-
+    if (!this.state.isReady) {
         return(
-            <RootTabs navigation={navigation} />
+          <AppLoading
+              startAsync={this._cacheResourcesAsync}
+              onFinish={() => this.setState({ isReady: true })}
+              onError={console.warn}/>
         );
-
     }
+
+    const { hasCheckedAsyncStorage, isFirstLaunch } = this.state;
+    //console.log("First launch app:", isFirstLaunch);
+    // Check if app has been launched for the first time
+    // Comment block out to disable
+    if (this.state.isFirstLaunch == true ) {
+      return (
+        <IntroSlider
+          onDone={this.closeIntro}
+        />
+      );
+    }
+
+    return (
+      <RootTabs navigation={navigation} />
+    );
+  }
 }
 
 const AppWithNavigationState = connect(mapStateToProps)(App);

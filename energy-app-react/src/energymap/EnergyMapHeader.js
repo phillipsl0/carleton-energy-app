@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Platform, StyleSheet, Dimensions, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 // Special header for HeatMap's StackNavigator
-export default class HeatMapHeader extends Component {
+export default class EnergyMapHeader extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,8 +16,8 @@ export default class HeatMapHeader extends Component {
     var currTime = currDate.getHours() + ":"
       + currDate.getMinutes() + ":"
       + currDate.getSeconds() + ", "
-      + currDate.getDate() + "/"
       + (currDate.getMonth()+1) + "/"
+      + currDate.getDate() + "/"
       + currDate.getFullYear();
     return currTime
   }
@@ -26,7 +26,7 @@ export default class HeatMapHeader extends Component {
     return (
       <View style={navStyles.header}>
         <Text style={navStyles.titleText}>
-        Heat Map
+        Energy Map
         </Text>
         <Text style={navStyles.subTitleText}>
         Last updated: {this.getTime()}

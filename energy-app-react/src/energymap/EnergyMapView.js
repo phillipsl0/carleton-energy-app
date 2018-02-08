@@ -5,12 +5,11 @@ import { Icon } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
 
 import MapCallout from './MapCallout';
-// import IndividualBuilding from './../IndividualBuilding'
 import OverviewCards from './../overview/OverviewCards';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import TopUtilities from './UtilityButtons';
-import HeatMapHeader from './HeatMapHeader';
+import EnergyMapHeader from './EnergyMapHeader';
 
 
 /*
@@ -38,7 +37,7 @@ const initialRegion = {
   longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
 }
 
-class HeatMapView extends Component {
+class EnergyMapView extends Component {
   constructor(props) {
     super(props);
     
@@ -212,7 +211,7 @@ class HeatMapView extends Component {
     this.getBuildingData();
     this.moveToCarleton();
     // this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
-    //console.log('HeatMapView component is mounting...');
+    //console.log('EnergyMapView component is mounting...');
     this.closeActivityIndicator();
   };
 
@@ -248,7 +247,7 @@ class HeatMapView extends Component {
     }
   };
 
-  // Updates colors of heat map with new utility selection
+  // Updates colors of energy map with new utility selection
   updateUtility = (utilitySelected) => {
     // Begin to update map
     this.openActivityIndicator();
@@ -262,8 +261,9 @@ class HeatMapView extends Component {
   };
 
   onRegionChange = (region) => {
+    //this.setState({ region: region })
     //console.log('onRegionChange', region);
-    this.checkCalloutRender(region);
+    //this.checkCalloutRender(region);
   };
 
   onRegionChangeComplete = (region) => {
@@ -452,7 +452,7 @@ class HeatMapView extends Component {
                     <Callout
                       tooltip // enables customizable tooltip style
                       style={styles.callout}
-                      onPress={() => navigation.navigate('HeatBuildingView', {item:polygon})}>
+                      onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon})}>
                       <MapCallout
                         name={polygon.name}
                         image={'image'} // to be replaced with building image
@@ -506,10 +506,10 @@ class HeatMapView extends Component {
 */
 
 
-// Stack of HeatMap
-const HeatMapViewStack = StackNavigator({
-  HeatMapView: {
-    screen: HeatMapView,
+// Stack of EnergyMap
+const EnergyMapViewStack = StackNavigator({
+  EnergyMapView: {
+    screen: EnergyMapView,
      transitionConfig: () => ({
       // disable animation
       transitionSpec: {
@@ -519,14 +519,14 @@ const HeatMapViewStack = StackNavigator({
       }
     }),
     navigationOptions: ({ navigation, updated }) => ({
-      headerTitle: <HeatMapHeader/>,
+      headerTitle: <EnergyMapHeader/>,
       headerStyle: {backgroundColor: '#0B5091'},
       ...Platform.select({
           android: { header: null }
       }),
     })
   },
-  HeatBuildingView: {
+  EnergyBuildingView: {
     screen: OverviewCards,
     path: 'buildings/:name',
     navigationOptions: ({ navigation }) => ({
@@ -591,4 +591,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HeatMapViewStack;
+export default EnergyMapViewStack;
