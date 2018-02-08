@@ -6,7 +6,7 @@ import { TabNavigator, TabBarTop, TabBarBottom,
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+import ComparisonStack from './src/BuildingComparison';
 import BuildingListView from './src/BuildingListView';
 import HeatMapViewStack from './src/heatmap/HeatMapView'
 import OverviewStack from './src/overview/OverviewListView';
@@ -77,6 +77,15 @@ const RootTabs = TabNavigator({
       screen: BuildingListView,
       navigationOptions: {
         tabBarLabel: 'Buildings',
+        tabBarIcon: ({ tintColor, focused }) => (
+          <FontAwesome name="building" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+        ),
+      },
+    },
+    Compare: {
+      screen: ComparisonStack,
+      navigationOptions: {
+        tabBarLabel: 'Compare',
         tabBarIcon: ({ tintColor, focused }) => (
           <FontAwesome name="building" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
         ),
