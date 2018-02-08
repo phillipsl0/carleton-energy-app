@@ -62,31 +62,21 @@ class SustainListView extends Component {
 
         return (
             <ScrollView>
-                <Card
-                    // title='Get Involved'//{<View><Image 
-                        //style={{alignItems:'center', width:80, height:80, paddingBottom:'0%'}} 
-                        //source={require('./assets/cfl_icon.png')} /> <Text>Get Involved</Text></View>} //"Get Involved"
-                    containerStyle={themeStyles.card}
-                    // titleStyle={themeStyles.title}
-                    // image={require('./assets/cfl_icon.png')} 
-                    >
+                <Card containerStyle={[themeStyles.card, styles.card]}>
 
-                    <View style={{paddingTop: 0, marginBottom: 25, flex: 1}} >
-                    <Text style={[{fontSize: 18, fontWeight: 'bold', textAlign: 'center'}, themeStyles.title]}>
-                    <InlineImage
-                        // resizeMode="contain"
-                        style={styles.image}
-                        source={require('./assets/cfl_icon.png')} />
-                        
-                        Get Involved</Text>
+                    <View style={styles.header} >
+                        <Image
+                            resizeMode="contain"
+                            style={styles.image}
+                            source={require('./assets/calendar.png')} />
+                        <View>
+                            <Text style={[styles.title, themeStyles.title]}>Get Involved</Text>
+                        </View>
+                        <View style={styles.image} />
                     </View>
 
-
-                    
-
-
                     <List containerStyle={styles.list}>
-                        <ListItem containerStyle={themeStyles.listItem}
+                        <ListItem containerStyle={[themeStyles.listItem, {borderTopWidth: 0.7}]}
                             title={"Our Campus"}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(links[1])} />
@@ -162,20 +152,6 @@ class SustainListView extends Component {
             </ScrollView>
             );
 
-            // <FlatList
-            //     data={events["events"]["items"]}
-            //     keyExtractor={item => item["title"]}
-            //     renderItem={({ item }) => (
-            // <Card title={item["title"]}>
-            //     <Button
-            //         rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-            //         fontSize={20}
-            //         title={item["content"]}
-            //         backgroundColor='#0B5091'
-            //         onPress={() => Linking.openURL(item["link"])} />
-            // </Card>
-            // )}
-            //     />
     }
 }
 
@@ -184,11 +160,7 @@ class SustainListView extends Component {
 const navStyles = StyleSheet.create({
     header: {
         backgroundColor: '#0B5091',
-        // headerTintColor: 'white'
     },
-    // headerTitle: {
-    //     fontFamily: 'lato-bold',
-    // }
 })
 
 const SustainStack = StackNavigator({
@@ -207,18 +179,31 @@ const SustainStack = StackNavigator({
 });
 
 const styles = StyleSheet.create({
+    card: {
+        paddingTop: 0,
+    },
+    header: {
+        marginBottom: 25,
+        flex: 1, 
+        flexDirection: 'row', 
+        justifyContent: 'space-around',
+        alignItems: 'center'
+    },
     button: {
         marginBottom: 3
     },
     image: {
-        width: 80,
-        height: 80,
+        width: moderateScale(55),
+        height: moderateScale(55),
     },
-    cardContainer: {paddingTop: 5},
     list: {
         marginBottom: 12, 
         marginTop: -15, 
         borderTopWidth: 0
+    },
+    title: {
+        fontSize: 18, 
+        fontWeight: 'bold'
     },
 })
 

@@ -111,6 +111,8 @@ const DefaultTheme = StyleSheet.create({
     },
 
     listItem: {
+        borderTopColor: '#cbd2d9', 
+        // borderTopWidth: 0.7,
         borderBottomColor: '#cbd2d9', 
         borderBottomWidth: 0.7
     },
