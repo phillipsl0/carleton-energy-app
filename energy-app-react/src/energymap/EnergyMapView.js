@@ -257,7 +257,7 @@ class EnergyMapView extends Component {
     this.getBuildingData();
     this.moveToCarleton();
     this.closeActivityIndicator();
-    {this.props.navigation.setParams({ updated: "Updating time stamp..." })}
+    //{this.props.navigation.setParams({ updated: "Updating time stamp..." })}
   };
 
   onRegionChange = (region) => {
@@ -463,6 +463,7 @@ class EnergyMapView extends Component {
               </View>
             ))}
         </MapView>
+        <Text> I'm text! </Text>
         <TouchableOpacity
           // Button to go back to home location
           style={styles.button}
@@ -518,8 +519,16 @@ const EnergyMapViewStack = StackNavigator({
         easing: Easing.step0,
       }
     }),
-    navigationOptions: ({ navigation, updated }) => ({
-      headerTitle: <EnergyMapHeader/>,
+    // navigationOptions: ({ navigation, updated }) => ({
+    //   headerTitle: <EnergyMapHeader/>,
+    //   headerStyle: {backgroundColor: '#0B5091'},
+    //   ...Platform.select({
+    //       android: { header: null }
+    //   }),
+    // })
+    navigationOptions: ({ navigation }) => ({
+      title: "Energy Map",
+      headerTintColor: 'white',
       headerStyle: {backgroundColor: '#0B5091'},
       ...Platform.select({
           android: { header: null }

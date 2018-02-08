@@ -66,15 +66,6 @@ tabStyle.tabStatusColors = {
 
 
 const RootTabs = TabNavigator({
-    // Overview: {
-    //   screen: IntroSlider,
-    //   navigationOptions: {
-    //     tabBarLabel: 'Overview',
-    //     tabBarIcon: ({ tintColor, focused }) => (
-    //       <FontAwesome name="tachometer" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
-    //     ),
-    //   },
-    // },
     Overview: {
       screen: OverviewStack,
       navigationOptions: {
