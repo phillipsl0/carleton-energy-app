@@ -2,7 +2,7 @@ import buildingsDetail from './BuildingsDetail';
 import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
 
-import { JanData, wTable } from './../assets/data/JanData.js';
+import { JanData, eTable, wTable } from './../assets/data/JanData.js';
 
 
 const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
@@ -509,28 +509,35 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
         table[i] = {};
         table[i]["date"] = reformattedDate.toString();
 
+        var utilityTable = wTable;
+
         switch (utility) {
             case 'electricity':
-                table[i][utility] = getRandomElectric() * numberEntries;
+                // table[i][utility] = getRandomElectric() * numberEntries;
+                // utilityTable = eTable;
                 break;
             case 'water':
-                var dataPt = JanData[wTable["Burton"]][reformattedDate];
-                if (typeof dataPt != 'undefined') {
-                    console.log(dataPt);
-                } else {
-                    console.log('NOPE ' + reformattedDate);
-                    dataPt = "0";
-                }
-                table[i][utility] = dataPt;
+                // utilityTable = wTable;
                 // table[i][utility] = getRandomWater() * numberEntries;
                 break;
             case 'gas':
-                table[i][utility] = getRandomGas() * numberEntries;
+                // utilityTable = sTable;
+                // table[i][utility] = getRandomGas() * numberEntries;
                 break;
             case 'heat':
-                table[i][utility] = getRandomHeat() * numberEntries;
+                // utilityTable = sTable;
+                // table[i][utility] = getRandomHeat() * numberEntries;
                 break;
         }
+        var dataPt = JanData[utilityTable["Burton"]][reformattedDate];
+        if (typeof dataPt != 'undefined') {
+            console.log(dataPt);
+        } else {
+            console.log('NOPE ' + reformattedDate);
+            dataPt = "0";
+        }
+        table[i][utility] = dataPt;
+
         currentTime.setMinutes(currentTime.getMinutes() - timeScale);
     }
 

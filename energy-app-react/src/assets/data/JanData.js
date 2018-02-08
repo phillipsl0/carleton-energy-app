@@ -152,21 +152,21 @@ export const buildingNameTranslation = {
 		"Watson W"	:	96,
 	}
 
-// export const eTable = {
-// 	"Burton"	:	[3, 4],
-// 	"Cassat"	:	[7, 11],
-// 	"Memo"	:	[11, 35],
-// 	"Davis"	:	[17],
-// 	"Evans"	:	[20],
-// 	"Goodhue"	:	[23],
-// 	"Musser"	:	[58 59],
-// 	"Myers"	:	[62],
-// 	"Nourse"	:	[65],
-// 	"Sayles"	:	[76],
-// 	"Scoville"	:	[79],
-// 	"Severance"	:	[81, 82],
-// 	"Watson"	:	[94],
-// }
+export const eTable = {
+	"Burton"	:	[3, 4],
+	"Cassat"	:	[7, 11],
+	"Memo"	:	[11, 35],
+	"Davis"	:	[17],
+	"Evans"	:	[20],
+	"Goodhue"	:	[23],
+	"Musser"	:	[58, 59],
+	"Myers"	:	[62],
+	"Nourse"	:	[65],
+	"Sayles"	:	[76],
+	"Scoville"	:	[79],
+	"Severance"	:	[81, 82],
+	"Watson"	:	[94],
+}
 
 export const wTable = {
 	"Burton"	:	[6],
@@ -183,21 +183,21 @@ export const wTable = {
 	"Watson"	:	[96],
 }
 
-// export const sTable = {
-// 	"Burton"	:	[5],
-// 	"Cassat"	:	[8],
-// 	"Memo"	:	[9],
-// 	"Davis"	:	[18],
-// 	"Evans"	:	[21],
-// 	"Goodhue"	:	[24],
-// 	"Musser"	:	[60],
-// 	"Myers"	:	[63],
-// 	"Nourse"	:	[66],
-// 	"Sayles"	:	[77],
-// 	"Scoville"	:	[80],
-// 	"Severance"	:	[83],
-// 	"Watson"	:	[95],
-// }
+export const sTable = {
+	"Burton"	:	[5],
+	"Cassat"	:	[8],
+	"Memo"	:	[9],
+	"Davis"	:	[18],
+	"Evans"	:	[21],
+	"Goodhue"	:	[24],
+	"Musser"	:	[60],
+	"Myers"	:	[63],
+	"Nourse"	:	[66],
+	"Sayles"	:	[77],
+	"Scoville"	:	[80],
+	"Severance"	:	[83],
+	"Watson"	:	[95],
+}
 
 
 
