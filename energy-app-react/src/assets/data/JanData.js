@@ -199,5 +199,12 @@ export const sTable = {
 	"Watson"	:	[95],
 }
 
+export const turbineTable = {
+	"publicProduction"	: 49,
+	"publicSpeed"	: 50,
+	"kracumConsumption"	: 51,
+	"kracumProduction"	: 52,
+	"kracumSpeed"	: 53,
+}
 
 
