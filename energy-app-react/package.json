@@ -5,7 +5,7 @@
   "devDependencies": {
     "react-native-scripts": "1.6.0",
     "jest-expo": "^22.0.0",
-    "react-test-renderer": "16.0.0-beta.5"
+    "react-test-renderer": "16.0.0"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
@@ -21,14 +21,11 @@
   "dependencies": {
     "@shoutem/ui": "^0.23.2",
     "exp": "^47.3.17",
-    "expo": "^22.0.0",
+    "expo": "^24.0.0",
     "google-map-react": "^0.25.0",
     "prop-types": "^15.6.0",
-    "react": "^16.0.0-alpha.12",
-    "react-dom": "^15.0.0",
-    "react-google-map": "^3.1.0",
-    "react-google-maps": "^9.2.2",
-    "react-native": "^0.49.5",
+    "react": "^16.0.0",
+    "react-native": "^0.51.0",
     "react-native-app-intro-slider": "^0.2.3",
     "react-native-elements": "^0.17.0",
     "react-native-linear-gradient": "^2.4.0",

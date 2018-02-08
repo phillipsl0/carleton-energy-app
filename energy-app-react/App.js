@@ -126,7 +126,7 @@ const RootTabs = TabNavigator({
           // showLabel: true,
           activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF', 
           inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90', 
-          pressColor: '#FFFFFF' // Android ripple color onPress
+          pressColor: '#CCC' // Android ripple color onPress
         },
      navigationOptions: ({ navigation }) => ( {
          tabBarOnPress: (tab, jumpToIndex) => {
