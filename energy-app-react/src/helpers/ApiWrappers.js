@@ -2,6 +2,9 @@ import buildingsDetail from './BuildingsDetail';
 import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
 
+import { JanData, wTable } from './../assets/data/JanData.js';
+
+
 const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
 
 // 1) For a given building, resource and timeframe, return (from API) 
@@ -469,14 +472,18 @@ export function getCurrentConsumptionGraphFormat() {
 }
 
 export function reformatDate(date){
-    console.log(date);
-    newDate = [date.getMonth()+1,
+    // This function reformats the date object into a string that matched the format of a key 
+    // in the JSON JanData. Note: at the moment it HARDCODES the month as "1" and year as "18"
+    // We'll have to change that if we add more hardcoded data dumps from Lucid.
+
+    newDate = ["1",
                date.getDate(),
-               Number(date.getFullYear().toString().substring(2,4))].join('/')+' '+
+               "18"].join('/')+' '+
+               // Number(date.getFullYear().toString().substring(2,4))].join('/')+' '+
               [date.getHours(),
                "00"].join(':');
 
-    console.log(newDate);
+    // console.log(newDate);
     return newDate;
 }
 
@@ -497,15 +504,25 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
 
     var table = new Array(numberEntries);
     for (var i = numberEntries-1; i >= 0; i--) {
+        reformattedDate = reformatDate(currentTime);
+
         table[i] = {};
-        table[i]["date"] = currentTime.toString();
+        table[i]["date"] = reformattedDate.toString();
 
         switch (utility) {
             case 'electricity':
                 table[i][utility] = getRandomElectric() * numberEntries;
                 break;
             case 'water':
-                table[i][utility] = getRandomWater() * numberEntries;
+                var dataPt = JanData[wTable["Burton"]][reformattedDate];
+                if (typeof dataPt != 'undefined') {
+                    console.log(dataPt);
+                } else {
+                    console.log('NOPE ' + reformattedDate);
+                    dataPt = "0";
+                }
+                table[i][utility] = dataPt;
+                // table[i][utility] = getRandomWater() * numberEntries;
                 break;
             case 'gas':
                 table[i][utility] = getRandomGas() * numberEntries;
@@ -548,7 +565,7 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
     finalTable["rank"] = rank;
     finalTable["data"] = combinedTable;
 
-    console.log(finalTable);
+    // console.log(finalTable);
 
     return finalTable;
 }

@@ -103,18 +103,18 @@ export const JanData = [
 ]
 
 export const buildingNameTranslation = {
-		"Burton E1"	:	3,
+		"Burton E"	:	3,
 		"Burton E2"	:	4,
 		"Burton S"	:	5,
 		"Burton W"	:	6,
-		"Cassat E1"	:	7,
-		"Cassat S1"	:	8,
+		"Cassat E"	:	7,
+		"Cassat S"	:	8,
 		"Cassat S2"	:	9,
 		"Memo S"	:	9,
 		"Cassat W"	:	10,
 		"Memo W"	:	10,
 		"Cassat E2"	:	11,
-		"Memo E1"	:	11,
+		"Memo E"	:	11,
 		"Davis E"	:	17,
 		"Davis S"	:	18,
 		"Davis W"	:	19,
@@ -126,9 +126,9 @@ export const buildingNameTranslation = {
 		"Goodhue W"	:	25,
 		"Memo E2"	:	35,
 		"SOLAR"	:	36,
-		"Musser W1"	:	56,
+		"Musser W"	:	56,
 		"Musser W2"	:	57,
-		"Musser E1"	:	58,
+		"Musser E"	:	58,
 		"Musser E2"	:	59,
 		"Musser S"	:	60,
 		"Musser W3"	:	61,
@@ -143,7 +143,7 @@ export const buildingNameTranslation = {
 		"Sayles W"	:	78,
 		"Scoville E"	:	79,
 		"Scoville S"	:	80,
-		"Severance E1"	:	81,
+		"Severance E"	:	81,
 		"Severance E2"	:	82,
 		"Severance S"	:	83,
 		"Severance W"	:	84,
@@ -152,6 +152,52 @@ export const buildingNameTranslation = {
 		"Watson W"	:	96,
 	}
 
+// export const eTable = {
+// 	"Burton"	:	[3, 4],
+// 	"Cassat"	:	[7, 11],
+// 	"Memo"	:	[11, 35],
+// 	"Davis"	:	[17],
+// 	"Evans"	:	[20],
+// 	"Goodhue"	:	[23],
+// 	"Musser"	:	[58 59],
+// 	"Myers"	:	[62],
+// 	"Nourse"	:	[65],
+// 	"Sayles"	:	[76],
+// 	"Scoville"	:	[79],
+// 	"Severance"	:	[81, 82],
+// 	"Watson"	:	[94],
+// }
+
+export const wTable = {
+	"Burton"	:	[6],
+	"Cassat"	:	[10],
+	"Memo"	:	[10],
+	"Davis"	:	[19],
+	"Evans"	:	[22],
+	"Goodhue"	:	[25],
+	"Musser"	:	[56, 57, 61],
+	"Myers"	:	[64],
+	"Nourse"	:	[67],
+	"Sayles"	:	[78],
+	"Severance"	:	[84],
+	"Watson"	:	[96],
+}
+
+// export const sTable = {
+// 	"Burton"	:	[5],
+// 	"Cassat"	:	[8],
+// 	"Memo"	:	[9],
+// 	"Davis"	:	[18],
+// 	"Evans"	:	[21],
+// 	"Goodhue"	:	[24],
+// 	"Musser"	:	[60],
+// 	"Myers"	:	[63],
+// 	"Nourse"	:	[66],
+// 	"Sayles"	:	[77],
+// 	"Scoville"	:	[80],
+// 	"Severance"	:	[83],
+// 	"Watson"	:	[95],
+// }
 
 
 
