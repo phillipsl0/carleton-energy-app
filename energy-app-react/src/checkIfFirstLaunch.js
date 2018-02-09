@@ -34,12 +34,11 @@ export const checkIfFirstLaunch = () => {
     AsyncStorage.getItem(HAS_LAUNCHED)
       .then(res => {
         if (res !== null) {
-          console.warn(res)
-          console.log("Result in checkIfFirstLaunch is not null")
+          //console.log("Result in checkIfFirstLaunch.js is not null")
           resolve(true);
         } else {
-          console.warn(res)
-          console.log("Result in checkIfFirstLaunch is null")
+          //console.warn(res)
+          //console.log("Result in checkIfFirstLaunch.js is null")
           resolve(false);
         }
       })

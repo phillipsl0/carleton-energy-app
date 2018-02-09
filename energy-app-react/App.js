@@ -260,8 +260,7 @@ class App extends Component {
     }
 
     // const { hasCheckedAsyncStorage, isFirstLaunch } = this.state;
-    // //console.log("First launch app:", isFirstLaunch);
-    // // Check if app has been launched for the first time
+    // Check if app has been launched for the first time
     // if (this.state.isFirstLaunch == true ) {
     //   return (
     //     <IntroSlider

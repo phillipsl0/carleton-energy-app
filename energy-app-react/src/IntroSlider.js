@@ -80,7 +80,7 @@ export default class IntroSlider extends Component {
 
   // Handles done press on intro screen
   _onDone = () => {
-    console.log("Done button was pressed!")
+    //console.log("Done button was pressed!")
     this.props.onDone(true);
   }
   
