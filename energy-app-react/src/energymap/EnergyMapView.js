@@ -10,6 +10,7 @@ import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import TopUtilities from './UtilityButtons';
 import EnergyMapHeader from './EnergyMapHeader';
+import EnergyMapTimestamp from './EnergyMapTimestamp';
 
 
 /*
@@ -463,10 +464,10 @@ class EnergyMapView extends Component {
               </View>
             ))}
         </MapView>
-        <Text> I'm text! </Text>
+        <EnergyMapTimestamp />
         <TouchableOpacity
           // Button to go back to home location
-          style={styles.button}
+          style={styles.homeButton}
           onPress={() => this.moveMaptoLocation(initialRegion)}>
           <Icon
             // see: https://react-native-training.github.io/react-native-elements/API/icons/
@@ -567,7 +568,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative'
   },
-  button: {
+  homeButton: {
     borderRadius: 10,
     padding: 10,
     backgroundColor: '#0B5091',

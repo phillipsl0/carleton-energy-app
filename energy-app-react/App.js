@@ -258,17 +258,16 @@ class App extends Component {
         );
     }
 
-    const { hasCheckedAsyncStorage, isFirstLaunch } = this.state;
-    //console.log("First launch app:", isFirstLaunch);
-    // Check if app has been launched for the first time
-    // Comment block out to disable
-    if (this.state.isFirstLaunch == true ) {
-      return (
-        <IntroSlider
-          onDone={this.closeIntro}
-        />
-      );
-    }
+    // const { hasCheckedAsyncStorage, isFirstLaunch } = this.state;
+    // //console.log("First launch app:", isFirstLaunch);
+    // // Check if app has been launched for the first time
+    // if (this.state.isFirstLaunch == true ) {
+    //   return (
+    //     <IntroSlider
+    //       onDone={this.closeIntro}
+    //     />
+    //   );
+    // }
 
     return (
       <RootTabs navigation={navigation} />
