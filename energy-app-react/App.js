@@ -18,10 +18,8 @@ import { getCurrentGenerationGraphFormat,
 import SustainStack from './src/SustainView';
 
 import IntroSlider from './src/IntroSlider';
-import checkIfFirstLaunch from './src/checkIfFirstLaunch';
+import { checkIfFirstLaunch } from './src/checkIfFirstLaunch';
 
-// const defaultFont = CurrFont+'-regular';
-// const defaultFontBold = CurrFont+'-bold';
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
 
@@ -65,6 +63,7 @@ tabStyle.tabStatusColors = {
     }
 
 
+// Bottom tab navigation
 const RootTabs = TabNavigator({
     Overview: {
       screen: OverviewStack,
@@ -177,21 +176,16 @@ const mapStateToProps = (state) => ({
 class App extends Component {
   
   // Checks AsyncStorage to see if app has been launched already
-  async componentWillMount() {
-    const isFirstLaunch = await checkIfFirstLaunch();
-    //console.log("Mounting:", isFirstLaunch);
-    this.setState({ isFirstLaunch, hasCheckedAsyncStorage: true });
-  }
-
-  // Closes intro screen when done button is pressed
-  closeIntro = (onDonePress) => {
-    if (onDonePress == true) {
-      this.setState({ isFirstLaunch: false });
-    };
-  }  
-
+  /*
+  Great info about components mounting:
+  https://daveceddia.com/where-fetch-data-componentwillmount-vs-componentdidmount/
+  Put all data loading in component DID mount to avoid rerendering
+  */
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+    checkIfFirstLaunch()
+      .then(res => this.setState({ isFirstLaunch: res, hasCheckedAsyncStorage: true }))
+      .catch(err => alert("An error occurred with async: ", err));
   }
 
   componentWillUnmount() {
@@ -209,21 +203,28 @@ class App extends Component {
   };
 
   state = {
-      isReady: false,
-      isFirstLaunch: false,
-      hasCheckedAsyncStorage: false,
+    isReady: false,
+    isFirstLaunch: false,
+    hasCheckedAsyncStorage: false,
   };
 
   async _cacheResourcesAsync() {
-      const fontAssets = cacheFonts([FontAwesome.font,
-          {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
-          {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
-      const imageAssets = cacheImages([require('./src/assets/windmill.png'),
-          require('./src/assets/windmillHeader.png')]);
+    const fontAssets = cacheFonts([FontAwesome.font,
+        {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
+        {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
+    const imageAssets = cacheImages([require('./src/assets/windmill.png'),
+        require('./src/assets/windmillHeader.png')]);
 
 
-      await Promise.all([...imageAssets, ...fontAssets]);
+    await Promise.all([...imageAssets, ...fontAssets]);
   }
+
+  // Closes intro screen when done button is pressed
+  closeIntro = (onDonePress) => {
+    if (onDonePress == true) {
+      this.setState({ isFirstLaunch: false });
+    };
+  }  
 
   render() {
     const { dispatch, nav, data, ui } = this.props;
@@ -249,7 +250,7 @@ class App extends Component {
       }
     }
 
-    if (!this.state.isReady) {
+    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage) {
         return(
           <AppLoading
               startAsync={this._cacheResourcesAsync}
