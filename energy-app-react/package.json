@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "react-native-scripts": "1.6.0",
-    "jest-expo": "^22.0.0",
+    "react-native-scripts": "1.11.1",
+    "jest-expo": "^25.1.0",
     "react-test-renderer": "16.0.0"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
@@ -20,9 +20,9 @@
   },
   "dependencies": {
     "@shoutem/ui": "^0.23.2",
-    "exp": "^47.3.17",
+    "exp": "^49.2.2",
     "expo": "^24.0.0",
-    "google-map-react": "^0.25.0",
+    "google-map-react": "^0.29.0",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-native": "^0.51.0",
