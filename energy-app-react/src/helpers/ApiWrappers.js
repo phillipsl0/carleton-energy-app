@@ -3,7 +3,20 @@ import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
 
 import { JanData, eTable, wTable } from './../assets/data/JanData.js';
-
+import {
+    solarProduction,
+    solarMeter,
+    turbine1Production,
+    turbine1Meter,
+    turbine1Wind,
+    turbine1WindMeter,
+    turbine2Consumption,
+    turbine2ConsumptionMeter,
+    turbine2Production,
+    turbine2Meter,
+    turbine2Wind,
+    turbine2WindMeter
+} from './ProductionMeters.js'
 
 const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
 
