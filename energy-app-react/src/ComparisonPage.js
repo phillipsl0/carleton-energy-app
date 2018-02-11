@@ -8,8 +8,9 @@ import IndividualBuiding from './IndividualBuilding';
 import { GetStyle } from './styling/Themes';
 import CurrTheme from './styling/CurrentTheme';
 import BuildingComparison from './BuildingComparison';
-import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './helpers/ApiWrappers.js';
-
+import { getCurrentBuildingUtilityConsumption, getUtilitiesList, getCurrentBuildingUtilityConsumptionGraphFormat} from './helpers/ApiWrappers.js';
+import Graph from './visualizations/Graph';
+import { default as CustomThemes } from './visualizations/GraphThemes';
 
 class ComparisonPage extends Component {
   static navigationOptions = {
@@ -53,7 +54,7 @@ class ComparisonPage extends Component {
         flex: 1,
         flexDirection: 'row',
       }}>
-        <View style={{width: 125, height: 150}}>
+        <View style={{width: 130, height: 225}}>
         <Card
         containerStyle={[styles.cards, themeStyles.card, themeStyles.flex]}>
         <Text style={styles.htext}> {this.props.navigation.state.params.building1} </Text>
@@ -65,13 +66,41 @@ class ComparisonPage extends Component {
         <Text style={styles.text}> {Math.round(getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.building1,'Gas'))} kBTU</Text>
         </Card>
         </View>
-        <View style={{width: 125, height: 150}}>
-        <Card
-        containerStyle={[styles.cards, themeStyles.card, themeStyles.flex]}>
-        <Text style={styles.text}>Visual Comparison!</Text>
-          </Card>
+        <View style={{
+        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: '#F3B61D',
+      }}>
+         <Card
+      containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}>
+        <View style={{width: 150, height: 40, alignSelf: 'center'}}>
+        <Graph
+            style = {styles.img}
+            type= 'pie'
+            theme={CustomThemes.carleton}
+            graphData={getCurrentBuildingUtilityConsumptionGraphFormat(this.props.navigation.state.params.building1, this.props.navigation.state.params.building2, 'Electric')} />
         </View>
-        <View style={{width: 125, height: 150,}}>
+        </Card>
+         <Card
+      containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}>
+        <View style={{width: 150, height: 40, alignSelf: 'center'}}>
+       <Graph
+                    type= 'pie'
+                    theme={CustomThemes.carleton}
+                    graphData={getCurrentBuildingUtilityConsumptionGraphFormat(this.props.navigation.state.params.building1, this.props.navigation.state.params.building2, 'Water')} />
+        </View>
+        </Card>
+        <Card
+      containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}>
+        <View style={{width: 150, height: 40, alignSelf: 'center', paddingBottom: 10}}>
+        <Graph
+                    type= 'pie'
+                    theme={CustomThemes.carleton}
+                    graphData={getCurrentBuildingUtilityConsumptionGraphFormat(this.props.navigation.state.params.building1, this.props.navigation.state.params.building2, 'Gas')} />
+        </View>
+        </Card>
+        </View>
+        <View style={{width: 130, height: 225,}}>
         <Card
       containerStyle={[styles.cards, themeStyles.card, themeStyles.flex]}>
         <Text style={styles.htext}> {this.props.navigation.state.params.building2} </Text>
@@ -136,15 +165,15 @@ const styles = StyleSheet.create({
   htext: { 
     alignSelf: 'center',
     marginLeft: 5, 
-    fontSize: 14,
-    paddingBottom: 2,
+    fontSize: 15,
+    paddingBottom: 10,
     fontWeight: 'bold',
   },
   text: { 
     alignSelf: 'center',
     marginLeft: 5, 
     fontSize: 14,
-    paddingBottom: 2,
+    paddingBottom: 5,
   },
   listItem: {
     height: 50,
@@ -169,7 +198,7 @@ const styles = StyleSheet.create({
 
   },
   listImg: {
-    height: 220,
+    height: 180,
     width: 120,
     alignSelf: 'center',
   },
@@ -186,8 +215,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'yellow'
   },
   img: {
-    alignSelf: 'stretch',
-    height: 100,
+    alignSelf: 'center',
+    height: 30,
+    width: 30,
   },
 })
 

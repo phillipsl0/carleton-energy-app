@@ -132,13 +132,11 @@ export default class OverviewCards extends Component {
         cardType = this.props.navigation.state.params.card;
         currData = this.getGraphScope(historicalData, cardType);
         header = this.getHeader(historicalData, cardType, currentData);
-        // item = this.props.navigation.state.params.item
-        // image = (item ? item : )
+
         return (
             <View style={[themeStyles.flex, themeStyles.list]}>
             <View style={{ height: verticalScale(130) }}>
-
-            <Image source={{uri: this.props.navigation.state.params.item.avatar}}
+            <Image source={require('./../assets/windmillHeader.png')}
                 style={themeStyles.header}/>
             <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
             {header}

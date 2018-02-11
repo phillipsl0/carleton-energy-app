@@ -11,9 +11,9 @@ import CurrTheme from './styling/CurrentTheme';
 
 class BuildingComparison extends Component {
   static navigationOptions = {
-        title: 'Building Comparison'
+        title: 'Choose two buildings',
+        backgroundColor: '#F3B61D',
     }
-  
   constructor(props){
       super(props);
 
@@ -32,6 +32,7 @@ class BuildingComparison extends Component {
     return (
       <View style={{
         flex: 1,
+        backgroundColor: '#F3B61D',
         flexDirection: 'column',
       }}>
       <View style={{
@@ -105,25 +106,9 @@ const navStyles = StyleSheet.create({
 const ComparisonStack = StackNavigator({
     BuildingComparison: {
         screen: BuildingComparison,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Building Comparison',
-            ...Platform.select({
-                android: { header: null }
-            }),
-            headerTintColor: 'white',
-            headerStyle: navStyles.header,
-        }),
     }, 
     Comparison: {
         screen: ComparisonPage,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Compare',
-            ...Platform.select({
-                android: { header: null }
-            }),
-            headerTintColor: 'white',
-            headerStyle: navStyles.header,
-        }),
     },
 });
 

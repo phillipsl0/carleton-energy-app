@@ -14,7 +14,6 @@ class UtilityButton extends React.Component {
   }
 
   render() {
-    console.log("Utility selected: ", this.props.selected);
     return (
         <Button
           key={this.props.utility}

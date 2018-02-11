@@ -2,6 +2,9 @@ import buildingsDetail from './BuildingsDetail';
 import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
 
+import { JanData, eTable, wTable } from './../assets/data/JanData.js';
+
+
 const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
 
 // 1) For a given building, resource and timeframe, return (from API) 
@@ -444,6 +447,15 @@ export function getCurrentBuildingUtilityConsumption(building, utility) {
     return getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEnd);
 }
 
+
+export function getCurrentBuildingUtilityConsumptionGraphFormat(building1, building2, utility) {
+    var utility1 = getCurrentBuildingUtilityConsumption(building1, utility);
+    var utility2 = getCurrentBuildingUtilityConsumption(building2, utility)
+    var data = new Array(2);
+    data[0] = {'x': building1, 'y': utility1};
+    data[1] = {'x': building2, 'y': utility2};
+    return data;
+}
 // added function to get usage I need
 export function getCurrentConsumptionGraphFormat() {
     var totalWater = 0;
@@ -468,6 +480,22 @@ export function getCurrentConsumptionGraphFormat() {
     return data;
 }
 
+export function reformatDate(date){
+    // This function reformats the date object into a string that matched the format of a key 
+    // in the JSON JanData. Note: at the moment it HARDCODES the month as "1" and year as "18"
+    // We'll have to change that if we add more hardcoded data dumps from Lucid.
+
+    newDate = ["1",
+               date.getDate(),
+               "18"].join('/')+' '+
+               // Number(date.getFullYear().toString().substring(2,4))].join('/')+' '+
+              [date.getHours(),
+               "00"].join(':');
+
+    // console.log(newDate);
+    return newDate;
+}
+
 export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd, timeScale) {
 
     // different utilities have different "typical" amounts
@@ -481,26 +509,44 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
 
     var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
     var currentTime = new Date(timeEnd);
+    var reformattedDate = reformatDate(currentTime);
 
     var table = new Array(numberEntries);
     for (var i = numberEntries-1; i >= 0; i--) {
+        reformattedDate = reformatDate(currentTime);
+
         table[i] = {};
-        table[i]["date"] = currentTime.toString();
+        table[i]["date"] = reformattedDate.toString();
+
+        var utilityTable = wTable;
 
         switch (utility) {
             case 'electricity':
-                table[i][utility] = getRandomElectric() * numberEntries;
+                // table[i][utility] = getRandomElectric() * numberEntries;
+                // utilityTable = eTable;
                 break;
             case 'water':
-                table[i][utility] = getRandomWater() * numberEntries;
+                // utilityTable = wTable;
+                // table[i][utility] = getRandomWater() * numberEntries;
                 break;
             case 'gas':
-                table[i][utility] = getRandomGas() * numberEntries;
+                // utilityTable = sTable;
+                // table[i][utility] = getRandomGas() * numberEntries;
                 break;
             case 'heat':
-                table[i][utility] = getRandomHeat() * numberEntries;
+                // utilityTable = sTable;
+                // table[i][utility] = getRandomHeat() * numberEntries;
                 break;
         }
+        var dataPt = JanData[utilityTable["Burton"]][reformattedDate];
+        if (typeof dataPt != 'undefined') {
+            console.log(dataPt);
+        } else {
+            console.log('NOPE ' + reformattedDate);
+            dataPt = "0";
+        }
+        table[i][utility] = Number(dataPt);
+
         currentTime.setMinutes(currentTime.getMinutes() - timeScale);
     }
 
@@ -534,6 +580,8 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
 
     finalTable["rank"] = rank;
     finalTable["data"] = combinedTable;
+
+    // console.log(finalTable);
 
     return finalTable;
 }
