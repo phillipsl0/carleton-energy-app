@@ -2,7 +2,8 @@ import buildingsDetail from './BuildingsDetail';
 import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
 
-import { JanData, eTable, wTable } from './../assets/data/JanData.js';
+import { JanData, eTable, wTable, sTable } from './../assets/data/JanData.js';
+
 import {
     solarProduction,
     solarMeter,
@@ -17,6 +18,7 @@ import {
     turbine2Wind,
     turbine2WindMeter
 } from './ProductionMeters.js'
+
 
 const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
 
@@ -496,29 +498,28 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
 
         switch (utility) {
             case 'electricity':
-                // table[i][utility] = getRandomElectric() * numberEntries;
-                // utilityTable = eTable;
+                utilityTable = eTable;
                 break;
             case 'water':
-                // utilityTable = wTable;
-                // table[i][utility] = getRandomWater() * numberEntries;
+                utilityTable = wTable;
                 break;
             case 'gas':
-                // utilityTable = sTable;
-                // table[i][utility] = getRandomGas() * numberEntries;
+                utilityTable = sTable;
                 break;
             case 'heat':
-                // utilityTable = sTable;
-                // table[i][utility] = getRandomHeat() * numberEntries;
+                utilityTable = sTable;
                 break;
         }
+
         var dataPt = JanData[utilityTable["Burton"]][reformattedDate];
-        if (typeof dataPt != 'undefined') {
-            // console.log(dataPt);
-        } else {
-            console.log('NOPE ' + reformattedDate);
+
+        
+        if (typeof dataPt == 'undefined') {
+            console.log('UNDEFINED DATA POINT (ApiWrappers.js):' + reformattedDate);
+
             dataPt = "0";
         }
+
         table[i][utility] = Number(dataPt);
 
         currentTime.setMinutes(currentTime.getMinutes() - timeScale);

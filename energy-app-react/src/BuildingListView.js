@@ -13,27 +13,28 @@ import  ComparisonPage from './ComparisonPage';
 
 class BuildingListView extends Component {
 
+    renderHeader = (headerItem) => {
+        return <Text style={styles.header}>{headerItem.section.name}</Text>
+    }
+
     renderItem = (item) => {
-        return <View>
-            <Text style={styles.header}>{item.item.name}</Text>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: 'black',
-            borderBottomWidth: 1, backgroundColor: 'white'}}>
-                <Image
-                style={{alignItems:'center', width:60, borderColor:'black', borderWidth:1, marginBottom:3, marginLeft:3}} source={{uri: item.item.avatar}}/>
-                <View style={{flex: 1, flexDirection: 'column', paddingTop:'2%'}}>
-                    <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
-                    <Text style={styles.text}>Water: {item.item.water}</Text>
-                    <Text style={styles.text}>Heat: {item.item.heat}</Text>
-                </View>
-                <Button
-                    rightIcon={{name: "angle-right", type: 'font-awesome', size: 20}}
-                    fontSize={14}
-                    title='More Info'
-                    style={{paddingBottom:20}}
-                    containerViewStyle={styles.button}
-                    backgroundColor='#0B5091'
-                    onPress={() => this.props.navigation.navigate('CardView', {item:item.item})}/>
+        return <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: 'black',
+        borderBottomWidth: 1}}>
+            <Image
+            style={{alignItems:'center', width:60, paddingBottom:"10%"}} source={{uri: item.item.avatar}}/>
+            <View style={{flex: 1, flexDirection: 'column', paddingTop:'2%'}}>
+                <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
+                <Text style={styles.text}>Water: {item.item.water}</Text>
+                <Text style={styles.text}>Heat: {item.item.heat}</Text>
             </View>
+            <Button
+                rightIcon={{name: "angle-right", type: 'font-awesome', size: 20}}
+                fontSize={14}
+                title='More Info'
+                style={{paddingBottom:20}}
+                containerViewStyle={styles.button}
+                backgroundColor='#0B5091'
+                onPress={() => this.props.navigation.navigate('CardView', {item:item.item})}/>
         </View>
     }
 
@@ -41,11 +42,14 @@ class BuildingListView extends Component {
         const {navigate} = this.props.navigation;
 
         return (
-                <FlatList
-                    data = {buildings}
+            <List>
+                <SectionList
+                    sections = {buildings}
+                    renderSectionHeader={this.renderHeader}
                     renderItem={this.renderItem}
                     keyExtractor = {(item) => item.name}
                 />
+            </List>
        );
     }
 }
@@ -74,7 +78,7 @@ const BuildingStack = StackNavigator({
               headerTitleStyle: navStyles.headerTitle,
               headerBackTitleStyle: navStyles.headerTitle,
               headerBackTitle: 'Back',
-            }),
+            }), 
     },
     Comparison: {
         screen: BuildingComparison,
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
   text: {
     alignSelf: 'flex-start',
     marginLeft: 5,
-    fontSize: 16,
+    fontSize: 12,
   },
   listItem: {
     height: 50,
@@ -190,8 +194,8 @@ const styles = StyleSheet.create({
   header: {
       backgroundColor:'#f4f8ff',
       fontSize: 20,
-      paddingLeft: 3,
-      fontWeight: 'bold'
+      paddingLeft: 5,
+      paddingTop: 5
   }
 })
 
