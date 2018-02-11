@@ -3,10 +3,10 @@ import { FlatList, AppRegistry, SectionList, Linking, Platform,
     StyleSheet, View, ScrollView, Text, Image, WebView, TouchableOpacity } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button } from 'react-native-elements';
-// import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
-import { getSustainabilityEvents, getSustainabilityEventsBak, 
+import { getSustainabilityEvents, getSustainabilityEventsBak,
     getSustainabilityNews, getSustainabilityNewsBak } from './helpers/ApiWrappers.js';
+import { scale, moderateScale, verticalScale} from './helpers/Scaling';
 import { GetStyle } from './styling/Themes'
 const themeStyles = GetStyle();
 
@@ -48,17 +48,15 @@ class SustainListView extends Component {
             news["news"] = this.state.newsData;
         }
 
-        links = ['https://apps.carleton.edu/sustainability/', 
-                'https://apps.carleton.edu/sustainability/campus/', 
-                'https://apps.carleton.edu/sustainability/action/', 
-                'https://apps.carleton.edu/sustainability/about/', 
-                'https://apps.carleton.edu/sustainability/events/', 
+        links = ['https://apps.carleton.edu/sustainability/',
+                'https://apps.carleton.edu/sustainability/campus/',
+                'https://apps.carleton.edu/sustainability/action/',
+                'https://apps.carleton.edu/sustainability/about/',
+                'https://apps.carleton.edu/sustainability/events/',
                 'https://apps.carleton.edu/sustainability/news/']
 
-        // console.log("Style", themeStyles)
-        
-        return (
 
+        return (
             <ScrollView style={{backgroundColor: '#fafafa'}}>
                 <Card containerStyle={[themeStyles.card, styles.card]}>
 
@@ -72,113 +70,99 @@ class SustainListView extends Component {
                         </View>
                     </View>
 
-
                     <List containerStyle={styles.list}>
-                        <ListItem containerStyle={themeStyles.listItem}
+                        <ListItem
+                            containerStyle={[themeStyles.listItem, styles.listItem]}
                             title={"Our Campus"}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(links[1])} />
-                        <ListItem containerStyle={themeStyles.testItem}
+                        <ListItem containerStyle={[themeStyles.listItem, styles.listItem]}
                             title={"Take Action"}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(links[2])} />
-                        <ListItem containerStyle={themeStyles.listItem}
+                        <ListItem containerStyle={[themeStyles.listItem, styles.listItem]}
                             title={"People & Policies"}
                             titleNumberOfLines={3}
                             onPress={() => Linking.openURL(links[3])} />
                     </List>
                 </Card>
 
-                <Card title="Upcoming Events"
-                    containerStyle={themeStyles.card}
-                    titleStyle={themeStyles.title}>
+                <Card containerStyle={[themeStyles.card, styles.card]}>
+
+                    <View style={styles.header} >
+                        <Image
+                            resizeMode="contain"
+                            style={styles.image}
+                            source={require('./assets/calendar.png')} />
+                        <View>
+                            <Text style={[styles.title, themeStyles.title]}>Upcoming Events</Text>
+                        </View>
+                        <View style={styles.image} />
+                    </View>
 
                     <List containerStyle={styles.list}>
-                        <ListItem containerStyle={themeStyles.listItem}
-                            title={events["events"]["items"][0]["title"]}
-                            titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(events["events"]["items"][0]["link"])}
-                            subtitleStyle={themeStyles.subtitle}
-                            subtitle={events["events"]["items"][0]["content"]} />
-                        <ListItem containerStyle={themeStyles.listItem}
-                            title={events["events"]["items"][1]["title"]}
-                            titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(events["events"]["items"][1]["link"])}
-                            // subtitle={events["events"]["items"][1]["content"]}
-                            subtitleStyle={themeStyles.subtitle} />
+                        { events["events"]["items"].map((item, key) => 
+                            item["content"] 
+                            ? <ListItem
+                                key={item["guid"]}
+                                containerStyle={[themeStyles.listItem, styles.listItem]}
+                                title={item["title"]}
+                                titleNumberOfLines={3}
+                                onPress={() => Linking.openURL(item["link"])}
+                                subtitleStyle={themeStyles.subtitle}
+                                subtitle={item["content"]} />
+                            : <ListItem
+                                key={item["guid"]}
+                                containerStyle={[themeStyles.listItem, styles.listItem]}
+                                title={item["title"]}
+                                titleNumberOfLines={3}
+                                onPress={() => Linking.openURL(item["link"])} />
+                            )
+                        }
                     </List>
-
                     <View>
                         <Text 
                             style={[styles.title, themeStyles.title, styles.button]}
                             onPress={() => Linking.openURL(links[4])}>MORE EVENTS</Text>
                     </View>
-                    {//<Button
-                        // title="More Events"
-                        // rightIcon={{name: "angle-right", type: 'font-awesome', size: 16}}
-                        // fontSize={16}
-                        // backgroundColor='#529353' //'#0B5091'
-                        // // buttonStyle={styles.button}
-                        // onPress={() => Linking.openURL(links[4])} />
-                    }
-
                 </Card>
 
-                <Card title="Recent News"
-                    containerStyle={[themeStyles.card, {marginBottom: 10}]}
-                    titleStyle={themeStyles.title}>
+                <Card containerStyle={[themeStyles.card, styles.card]}>
+
+                    <View style={styles.header} >
+                        <Image
+                            resizeMode="contain"
+                            style={styles.image}
+                            source={require('./assets/news.png')} />
+                        <View>
+                            <Text style={[styles.title, themeStyles.title]}>Recent News</Text>
+                        </View>
+                    </View>
 
                     <List containerStyle={styles.list}>
-                        <ListItem containerStyle={themeStyles.listItem}
-                            title={news["news"]["items"][0]["title"]}
-                            titleStyle={themeStyles.title}
-                            titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(news["news"]["items"][0]["link"])}
-                            subtitle={news["news"]["items"][0]["content"].replace(/<[^>]+>/g, '')}
-                            subtitleStyle={themeStyles.subtitle}
-                            subtitleNumberOfLines={3} />
-                        <ListItem containerStyle={themeStyles.listItem}
-                            title={news["news"]["items"][1]["title"]}
-                            titleStyle={themeStyles.title}
-                            titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(news["news"]["items"][1]["link"])}
-                            subtitle={news["news"]["items"][1]["content"].replace(/<[^>]+>/g, '')}
-                            subtitleStyle={themeStyles.subtitle}
-                            subtitleNumberOfLines={3} /> 
+                        { news["news"]["items"].map((item, key) => 
+                            <ListItem
+                                key={item["guid"]}
+                                containerStyle={[themeStyles.listItem, styles.listItem]}
+                                title={item["title"]}
+                                titleStyle={themeStyles.title}
+                                titleNumberOfLines={3}
+                                onPress={() => Linking.openURL(item["link"])}
+                                subtitle={item["content"].replace(/<[^>]+>/g, '')}
+                                subtitleStyle={themeStyles.subtitle}
+                                subtitleNumberOfLines={3} />
+                        )}
                     </List>
-
                     <View>
                         <Text 
                             style={[styles.title, themeStyles.title, styles.button]}
                             onPress={() => Linking.openURL(links[5])}>MORE NEWS</Text>
                     </View>
-                    {// <Button
-                    //     title="More News"
-                    //     rightIcon={{name: "angle-right", type: 'font-awesome', size: 16}}
-                    //     fontSize={16}
-                    //     backgroundColor='#529353' //'#0B5091'
-                    //     // buttonStyle={styles.button}
-                    //     onPress={() => Linking.openURL(links[5])} />
-                    }
-
                 </Card>
+                <View style={{paddingTop:15}} />
             </ScrollView>
             );
 
-            // <FlatList
-            //     data={events["events"]["items"]}
-            //     keyExtractor={item => item["title"]}
-            //     renderItem={({ item }) => (
-            // <Card title={item["title"]}>
-            //     <Button
-            //         rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-            //         fontSize={20}
-            //         title={item["content"]}
-            //         backgroundColor='#0B5091'
-            //         onPress={() => Linking.openURL(item["link"])} />
-            // </Card>
-            // )}
-            //     />
     }
 }
 
@@ -187,11 +171,7 @@ class SustainListView extends Component {
 const navStyles = StyleSheet.create({
     header: {
         backgroundColor: '#0B5091',
-        // headerTintColor: 'white'
     },
-    // headerTitle: {
-    //     fontFamily: 'lato-bold',
-    // }
 })
 
 const SustainStack = StackNavigator({
@@ -204,13 +184,11 @@ const SustainStack = StackNavigator({
             }),
             headerTintColor: 'white',
             headerStyle: navStyles.header,
-            // headerTitleStyle: navStyles.headerTitle,
         }),
     }
 });
 
 const styles = StyleSheet.create({
-
     card: {
         paddingTop: 0,
         // margin: 10,
@@ -257,10 +235,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'normal',
     },
-    // listItem: {
-    //     borderBottomColor: '#cbd2d9', 
-    //     borderBottomWidth: 0.7
-    // }
 })
 
 export default SustainStack;
