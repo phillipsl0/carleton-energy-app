@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StyleSheet, Dimensions, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 
-// Special header for HeatMap's StackNavigator
-export default class HeatMapHeader extends Component {
+// Timestamp for EnergyMap's Update
+export default class EnergyMapTimestamp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,22 +16,17 @@ export default class HeatMapHeader extends Component {
     var currTime = currDate.getHours() + ":"
       + currDate.getMinutes() + ":"
       + currDate.getSeconds() + ", "
-      + currDate.getDate() + "/"
       + (currDate.getMonth()+1) + "/"
+      + currDate.getDate() + "/"
       + currDate.getFullYear();
     return currTime
   }
 
   render() {
     return (
-      <View style={navStyles.header}>
-        <Text style={navStyles.titleText}>
-        Heat Map
-        </Text>
-        <Text style={navStyles.subTitleText}>
-        Last updated: {this.getTime()}
-        </Text>
-      </View>
+      <Text style={navStyles.subTitleText}>
+      Last updated: {this.getTime()}
+      </Text>
     );
   }
 }

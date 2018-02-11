@@ -58,10 +58,20 @@ class SustainListView extends Component {
         // console.log("Style", themeStyles)
         
         return (
-            <ScrollView>
-                <Card title="Get Involved"
-                    containerStyle={themeStyles.card}
-                    titleStyle={themeStyles.title}>
+
+            <ScrollView style={{backgroundColor: '#fafafa'}}>
+                <Card containerStyle={[themeStyles.card, styles.card]}>
+
+                    <View style={styles.header} >
+                        <Image
+                            resizeMode="contain"
+                            style={styles.image}
+                            source={require('./assets/cfl.png')} />
+                        <View>
+                            <Text style={[styles.title, themeStyles.title]}>Get Involved</Text>
+                        </View>
+                    </View>
+
 
                     <List containerStyle={styles.list}>
                         <ListItem containerStyle={themeStyles.listItem}
@@ -97,12 +107,21 @@ class SustainListView extends Component {
                             // subtitle={events["events"]["items"][1]["content"]}
                             subtitleStyle={themeStyles.subtitle} />
                     </List>
-                    <Button
-                        title="More Events"
-                        rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                        fontSize={20}
-                        backgroundColor='#0B5091'
-                        onPress={() => Linking.openURL(links[4])} />
+
+                    <View>
+                        <Text 
+                            style={[styles.title, themeStyles.title, styles.button]}
+                            onPress={() => Linking.openURL(links[4])}>MORE EVENTS</Text>
+                    </View>
+                    {//<Button
+                        // title="More Events"
+                        // rightIcon={{name: "angle-right", type: 'font-awesome', size: 16}}
+                        // fontSize={16}
+                        // backgroundColor='#529353' //'#0B5091'
+                        // // buttonStyle={styles.button}
+                        // onPress={() => Linking.openURL(links[4])} />
+                    }
+
                 </Card>
 
                 <Card title="Recent News"
@@ -127,13 +146,21 @@ class SustainListView extends Component {
                             subtitleStyle={themeStyles.subtitle}
                             subtitleNumberOfLines={3} /> 
                     </List>
-                    <Button
-                        title="More News"
-                        rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                        fontSize={20}
-                        backgroundColor='#0B5091'
-                        // buttonStyle={themeStyles.button}
-                        onPress={() => Linking.openURL(links[5])} />
+
+                    <View>
+                        <Text 
+                            style={[styles.title, themeStyles.title, styles.button]}
+                            onPress={() => Linking.openURL(links[5])}>MORE NEWS</Text>
+                    </View>
+                    {// <Button
+                    //     title="More News"
+                    //     rightIcon={{name: "angle-right", type: 'font-awesome', size: 16}}
+                    //     fontSize={16}
+                    //     backgroundColor='#529353' //'#0B5091'
+                    //     // buttonStyle={styles.button}
+                    //     onPress={() => Linking.openURL(links[5])} />
+                    }
+
                 </Card>
             </ScrollView>
             );
@@ -183,10 +210,52 @@ const SustainStack = StackNavigator({
 });
 
 const styles = StyleSheet.create({
-    list: {                 // Keep to local list
-        marginBottom: 12, 
-        marginTop: -15, 
-        borderTopWidth: 0
+
+    card: {
+        paddingTop: 0,
+        // margin: 10,
+    },
+    header: {
+        marginBottom: 25,
+        paddingLeft: 18,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+    button: {
+        marginBottom: 3,
+        paddingRight: 25,
+        fontSize: 17,
+        fontWeight: 'bold',
+        textAlign: 'right',
+        color: '#529353'
+    },
+    image: {
+        width: moderateScale(40),
+        height: moderateScale(40),
+    },
+    list: {
+        marginBottom: 12,
+        marginTop: -15,
+        marginLeft: 15,
+        marginRight: 20,
+        borderTopColor: '#cbd2d9',
+        borderBottomColor: '#cbd2d940',
+        borderTopWidth: StyleSheet.hairlineWidth, 
+        borderBottomWidth: StyleSheet.hairlineWidth
+    },
+    listItem: {
+        marginLeft: -15,
+        marginRight: -10,
+        borderColor: '#cbd2d940',
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: StyleSheet.hairlineWidth
+    },
+    title: {
+        paddingLeft: 12,
+        fontSize: 18,
+        fontWeight: 'normal',
     },
     // listItem: {
     //     borderBottomColor: '#cbd2d9', 
