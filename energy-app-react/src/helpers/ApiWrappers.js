@@ -97,47 +97,8 @@ function getSpecificRandom(min, max, scaleFactor, otherFactor) {
     baseURL = 'https://api.rss2json.com/v1/api.json';
 
     constructedURL = baseURL + '?rss_url=' + rssFeed + '&api_key=' + apiRSS2jsonKey + '&count=2';
-    // console.log(constructedURL);
 
     return fetch(constructedURL);
-    // fetch('https://facebook.github.io/react-native/movies.json')  
-    //     .then(function(response) {
-    //         jsonResult = response.json();
-    //         console.log(jsonResult)
-    //         return jsonResult;
-    //     })
-
-    // const res = await fetch(constructedURL);
-    // const json = await res.json();
-    // console.log(json);
-
-    // return fetch(constructedURL)
-    // .then((response) => response.json())
-    // .then((responseJson) => {
-    //     // console.log(responseJson)
-    //     return responseJson;
-    // })
-    // .then((responseJson) => {
-    //     addJSON(responseJson);
-    //     frame.setState({eventsData: responseJson});
-    //     // setJsonData(responseJson);
-    // })
-    // .catch((error) => {
-    //     console.error(error);
-    // });
-
-
-    // return fetch(constructedURL)
-    //     .then((response) => response.json())
-    //     .then((responseJson) => {
-    //         return responseJson;
-    //     })
-    //     .catch((error) => {
-    //         console.error(error);
-    //     });
-    // jsonResult = fetch(constructedURL);
-    // console.log(jsonResult);
-    // https://api.rss2json.com/v1/api.json?rss_url=https://apps.carleton.edu/sustainability/feeds/events&api_key=eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw
 }
 
 // -------------------- Electricity Generation -------------------------
@@ -544,7 +505,7 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
         }
         var dataPt = JanData[utilityTable["Burton"]][reformattedDate];
         if (typeof dataPt != 'undefined') {
-            console.log(dataPt);
+            // console.log(dataPt);
         } else {
             console.log('NOPE ' + reformattedDate);
             dataPt = "0";
