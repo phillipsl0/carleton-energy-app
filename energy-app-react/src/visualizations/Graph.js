@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Dimensions, Platform } from 'react-native'
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme,
-         VictoryScatter, VictoryAxis, VictoryLegend, VictoryContainer } from "victory-native";
+         VictoryScatter, VictoryAxis, VictoryLegend, VictoryLabel, VictoryContainer } from "victory-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
 import CurrTheme from './../styling/CurrentTheme'
 import { default as CustomThemes } from './GraphThemes'
-
+import Comparator from './../helpers/Comparators';
 class Graph extends Component {
     getLegendData = (data) => {
         var result = new Array(data.length);
@@ -26,9 +26,8 @@ class Graph extends Component {
     render() {
         const themeStyles = GetStyle(CurrTheme);
 
-        var legendData = this.getLegendData(this.props.graphData);
-
         if (this.props.type=='pie') {
+            var legendData = this.getLegendData(this.props.graphData);
             var colorScheme = ["#0B5091", "#447BB0", "#001324", "#98BDE1"];
             colorScheme = colorScheme.slice(0, this.props.graphData.length);
             var legendHeight = moderateScale(26 * this.props.graphData.length);
@@ -40,21 +39,30 @@ class Graph extends Component {
                 <VictoryPie
                     labels={() => null}
                     theme={this.props.theme}
-                    height={moderateScale(100)}
-                    innerRadius={moderateScale(20)}
-                    width={moderateScale(110)}
+                    height={moderateScale(this.props.height)}
+                    innerRadius={moderateScale(this.props.innerRadius)}
+                    width={moderateScale(this.props.width)}
                     padding={{ top: 0, bottom: 0, left: 10, right: 10 }}
                     data={this.props.graphData}/>
-                <VictoryLegend
-                 colorScale={colorScheme}
-                 height={legendHeight}
-                 style={{labels: {fontSize: legendFont}}}
-                 width={moderateScale(130)}
-                 title=""
-                 data={legendData}/>
-                </View>
+                {this.props.legend &&
+                    <VictoryLegend
+                     colorScale={colorScheme}
+                     height={legendHeight}
+                     style={{labels: {fontSize: legendFont}}}
+                     width={moderateScale(130)}
+                     title=""
+                     data={legendData}/>
+                 }
+                 </View>
+                 )
+//                 {!this.props.legend &&
+//                   <Comparator
+//                    width={moderateScale()}
+//                    height={}
+//                    data={this.props.graphData}
+//                    unit={'kWh'}/>
+//                 }
 
-            )
         } else if (this.props.type=='bar') {
             return (
                 <VictoryChart
@@ -73,13 +81,17 @@ class Graph extends Component {
                     height={this.props.height}
                     width={this.props.width}
                     theme={this.props.theme}
-                    padding={{ top: 0, bottom: 10, left: 60, right: 40}}
+                    padding={{ top: 10, bottom: 40, left: 60, right: 40}}
                     domainPadding={10}>
                     <VictoryScatter
                         size={5}
                         data={this.props.graphData}/>
-                    <VictoryAxis crossAxis tickFormat={() => ''}/>
-                    <VictoryAxis crossAxis dependentAxis/>
+                        <VictoryAxis crossAxis
+                            label={this.props.xLabel}
+                            fixLabelOverlap={this.props.overlap}/>
+                        <VictoryAxis crossAxis dependentAxis
+                            label={this.props.yLabel}
+                            axisLabelComponent={<VictoryLabel angle={90}/>}/>
                 </VictoryChart>
             )
 
@@ -99,8 +111,9 @@ Graph.defaultProps = {
                  {y: 7, x: "Water"},
                  {y: 16, x: "Heat/AC"}],
     theme: CustomThemes.grayscale,
-    height: 175,
-    width: 250
+    height: 100,
+    width: 110,
+    innerRadius: 20
 }
 
 Graph.propTypes = {
@@ -108,7 +121,8 @@ Graph.propTypes = {
     graphData: PropTypes.any,
     theme: PropTypes.object,
     height: PropTypes.number,
-    width: PropTypes.number
+    width: PropTypes.number,
+    innerRadius: PropTypes.number
 }
 
 const styles = StyleSheet.create({
