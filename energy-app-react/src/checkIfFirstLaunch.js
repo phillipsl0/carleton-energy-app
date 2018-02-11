@@ -35,11 +35,11 @@ export const checkIfFirstLaunch = () => {
       .then(res => {
         if (res !== null) {
           //console.log("Result in checkIfFirstLaunch.js is not null")
-          resolve(true);
+          resolve(false);
         } else {
           //console.warn(res)
           //console.log("Result in checkIfFirstLaunch.js is null")
-          resolve(false);
+          resolve(true);
         }
       })
       .catch(err => reject(err));

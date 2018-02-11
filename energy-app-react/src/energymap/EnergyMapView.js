@@ -216,11 +216,6 @@ class EnergyMapView extends Component {
     this.closeActivityIndicator();
   };
 
-  // Called AFTER class completely renders
-  componentDidMount() {
-    //console.log("HeatMapView component did mount");
-  };
-
   openActivityIndicator() {
     this.setState({ loading: true });
   };
@@ -348,7 +343,7 @@ class EnergyMapView extends Component {
 
   // Show callout when building polygon is pressed
   toggleCallout(polygon) {
-//    console.log('onPress', polygon.name);
+    // console.log('onPress', polygon.name);
     this.setState({lastBuildingPressed: polygon.name})
 
     if (polygon.open) {
