@@ -39,9 +39,9 @@ class Graph extends Component {
                 <VictoryPie
                     labels={() => null}
                     theme={this.props.theme}
-                    height={this.props.height? this.props.height : moderateScale(100)}
-                    innerRadius={this.props.innerRadius? this.props.innerRadius : moderateScale(20)}
-                    width={this.props.width? this.props.width : moderateScale(110)}
+                    height={moderateScale(this.props.height)}
+                    innerRadius={moderateScale(this.props.innerRadius)}
+                    width={moderateScale(this.props.width)}
                     padding={{ top: 0, bottom: 0, left: 10, right: 10 }}
                     data={this.props.graphData}/>
                 {this.props.legend &&
@@ -111,8 +111,9 @@ Graph.defaultProps = {
                  {y: 7, x: "Water"},
                  {y: 16, x: "Heat/AC"}],
     theme: CustomThemes.grayscale,
-    height: 175,
-    width: 250
+    height: 100,
+    width: 110,
+    innerRadius: 20
 }
 
 Graph.propTypes = {
@@ -120,7 +121,8 @@ Graph.propTypes = {
     graphData: PropTypes.any,
     theme: PropTypes.object,
     height: PropTypes.number,
-    width: PropTypes.number
+    width: PropTypes.number,
+    innerRadius: PropTypes.number
 }
 
 const styles = StyleSheet.create({
