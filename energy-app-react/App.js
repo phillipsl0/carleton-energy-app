@@ -12,7 +12,6 @@ import EnergyMapViewStack from './src/energymap/EnergyMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
-import CurrFont from './src/styling/CurrentFont';
 import { handler, dataReducer, layoutReducer } from './src/helpers/ReduxHandler'
 import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';

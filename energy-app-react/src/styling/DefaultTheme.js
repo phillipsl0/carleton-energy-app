@@ -112,13 +112,10 @@ const DefaultTheme = StyleSheet.create({
     },
 
     listItem: {
-        borderBottomColor: '#cbd2d9', 
-        borderBottomWidth: 0.7
-    },
-
-    testItem: {
-        borderBottomColor: '#cbd2d9', 
-        borderBottomWidth: 0.7
+        // borderTopColor: '#cbd2d9', 
+        // borderTopWidth: 0.7,
+        borderColor: '#cbd2d940', 
+        borderBottomWidth: StyleSheet.hairlineWidth // 0.7
     },
 
     shadowed: {
