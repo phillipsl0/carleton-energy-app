@@ -421,6 +421,15 @@ export function getCurrentBuildingUtilityConsumption(building, utility) {
     return getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEnd);
 }
 
+
+export function getCurrentBuildingUtilityConsumptionGraphFormat(building1, building2, utility) {
+    var utility1 = getCurrentBuildingUtilityConsumption(building1, utility);
+    var utility2 = getCurrentBuildingUtilityConsumption(building2, utility)
+    var data = new Array(2);
+    data[0] = {'x': building1, 'y': utility1};
+    data[1] = {'x': building2, 'y': utility2};
+    return data;
+}
 // added function to get usage I need
 export function getCurrentConsumptionGraphFormat() {
     var totalWater = 0;

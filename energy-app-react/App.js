@@ -7,18 +7,19 @@ import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import BuildingListView from './src/BuildingListView';
+import BuildingStack from './src/BuildingListView';
 import EnergyMapViewStack from './src/energymap/EnergyMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
 import { handler, dataReducer, layoutReducer } from './src/helpers/ReduxHandler'
-import { getCurrentGenerationGraphFormat, 
-  getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
+import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
-
 import IntroSlider from './src/IntroSlider';
 import { checkIfFirstLaunch } from './src/checkIfFirstLaunch';
+
+// const defaultFont = CurrFont+'-regular';
+// const defaultFontBold = CurrFont+'-bold';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
@@ -75,7 +76,7 @@ const RootTabs = TabNavigator({
       },
     },
     Buildings: {
-      screen: BuildingListView,
+      screen: BuildingStack,
       navigationOptions: {
         tabBarLabel: 'Buildings',
         tabBarIcon: ({ tintColor, focused }) => (
@@ -273,6 +274,7 @@ class App extends Component {
       this.setState({ isFirstLaunch: false });
     };
   }  
+
 
   render() {
     const { dispatch, nav, data, ui } = this.props;

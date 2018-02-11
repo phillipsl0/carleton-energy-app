@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StyleSheet, Dimensions, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-import {GetStyle} from './../styling/Themes';
-import CurrTheme from './../styling/CurrentTheme';
 
 // Timestamp for EnergyMap's Update
 export default class EnergyMapTimestamp extends Component {
@@ -25,8 +23,6 @@ export default class EnergyMapTimestamp extends Component {
   }
 
   render() {
-    var themeStyles = GetStyle(CurrTheme);
-
     return (
       <View style={styles.container}>
       <Text style={styles.text}>
@@ -40,7 +36,6 @@ export default class EnergyMapTimestamp extends Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      
       alignItems: 'center',
       justifyContent: 'space-between',
     },

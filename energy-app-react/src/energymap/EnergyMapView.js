@@ -9,9 +9,7 @@ import OverviewCards from './../overview/OverviewCards';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import TopUtilities from './UtilityButtons';
-import EnergyMapHeader from './EnergyMapHeader';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
-
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 var {screen_height, screen_width} = Dimensions.get('window');
@@ -197,7 +195,7 @@ class EnergyMapView extends Component {
       loading: true
     };
     this.onRegionChange = this.onRegionChange.bind(this);
-    };
+  };
 
   // Assemble all of Carleton's buildings BEFORE rendering
   componentWillMount() {

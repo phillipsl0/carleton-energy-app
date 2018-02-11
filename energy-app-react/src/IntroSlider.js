@@ -78,6 +78,21 @@ export default class IntroSlider extends Component {
     );
   }
 
+  // Renders skip button
+  _renderSkipButton = () => {
+    return (
+      <View style={styles.buttonCircle}>
+        <Icon
+          name="ios-arrow-round-forward-outline"
+          color="rgba(255, 255, 255, .9)"
+          size={35}
+          style={{ backgroundColor: 'transparent' }}
+          type="ionicon"
+        />
+      </View>
+    );
+  }
+
   // Handles done press on intro screen
   _onDone = () => {
     //console.log("Done button was pressed!")
