@@ -9,7 +9,8 @@ import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
 import CurrTheme from './../styling/CurrentTheme'
 import { default as CustomThemes } from './GraphThemes'
-import Comparator from './../helpers/Comparators';
+//import Comparator from './../helpers/Comparators';
+
 class Graph extends Component {
     getLegendData = (data) => {
         var result = new Array(data.length);
