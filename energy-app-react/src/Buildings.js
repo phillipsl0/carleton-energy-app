@@ -35,9 +35,7 @@ const buildings = [
         open: false,
         color: "lightgreen",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W",
-        water: "500G",
-        heat: "1200U"
+        data:[{name: "Burton", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://i.pinimg.com/originals/5f/08/83/5f08832ee298016cb9baa79e2a44d0c0.jpg'}]
     },
     {
         name: 'Sayles',
@@ -70,7 +68,7 @@ const buildings = [
         open: false,
         color: "yellow",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        data:[{name: "Sayles", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set110/488110/a39b9465187c3a6c5255046bc6381f74.jpg'}]
     },
     {
        name: 'Severance',
@@ -102,7 +100,7 @@ const buildings = [
         open: false,
         color: "red",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        data:[{name: "Severance", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set138/496138/dda9ea601b8c4166b0ee1cd3d86e6fbb.jpg'}]
     },
     {
        name: 'Davis',
@@ -146,7 +144,7 @@ const buildings = [
       open: false,
       color: "yellow",
       normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-      electricity: "44W", water: "500G", heat: "1200U",
+      data:[{name: "Davis", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/images/645842.jpg'}]
 
     },
     {
@@ -169,7 +167,8 @@ const buildings = [
       open: false,
       color: "yellow",
       normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-      electricity: "44W", water: "500G", heat: "1200U",
+      data:[{name: "Musser", electricity: "44W", water: "500G", heat: "1200U", avatar: 'http://www.peoplesco.com/assets/images/construction-specialties/inshied_carleton-musser.jpg'}]
+
     },
     {
 		name: 'Myers',
@@ -192,7 +191,7 @@ const buildings = [
 		open: false,
 		color: "yellow",
 		normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+		data:[{name: "Myers", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set088/496088/a1e01d7aac13ef62e2d4c92b2e12ac41.jpg'}]
     },
     {
        name: 'Cassat',
@@ -247,7 +246,7 @@ const buildings = [
         open: false,
         color: "lightgreen",
         normalization: {electricity: {max: 40469, min: 3137}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        data:[{name: "Cassat", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set344/586344/19248e063227e0265fb66cd1379a2352.jpg'}]
     },
     {
         name: 'Memo',
@@ -290,7 +289,7 @@ const buildings = [
         open: false,
         color: "lightgreen",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        data:[{name: "Memo", electricity: "44W", water: "500G", heat: "1200U", avatar: 'http://www.lhbcorp.com/wp-content/uploads/2013/08/CarletonCollege_CassatMemorial_070353_H11_G1.jpg'}]
     },
     {
         name: 'Nourse',
@@ -319,7 +318,7 @@ const buildings = [
         open: false,
         color: "red",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        data:[{name: "Nourse", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/images_local/1057376.jpg'}]
     },
     {
         name: 'Evans',
@@ -355,7 +354,7 @@ const buildings = [
         open: false,
         color: "lightgreen",
         normalization: {electricity: {max: 47703, min: 3228}, water: {max: 316880, min: 4232}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        data:[{name: "Evans", electricity: "44W", water: "500G", heat: "1200U", avatar: 'http://finance-commerce.com/files/2013/07/EvansHall5x.jpg'}]
     },
     {
         name: 'Goodhue',
@@ -390,7 +389,7 @@ const buildings = [
         open: false,
         color: "red",
         normalization: {electricity: {max: 38955, min: 2427}, water: {max: 285100, min: 3200}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        data:[{name: "Goodhue", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://emeraldcitybookreview.com/wp-content/uploads/sites/163/2015/10/8-GoodhueExt.jpg'}]
     },
     {
         name: 'Watson',
@@ -415,7 +414,7 @@ const buildings = [
         open: false,
         color: "yellow",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        data:[{name: "Watson", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/sized_images_local/set183/490183/8bc51bab3276c56a4ecc7398aeee40de.jpg'}]
     },
     {
         name: 'Scoville',
@@ -440,7 +439,7 @@ const buildings = [
         open: false,
         color: "lightgreen",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        data:[{name: "Scoville", electricity: "44W", water: "500G", heat: "1200U", avatar: 'https://apps.carleton.edu/reason_package/reason_4.0/www/images_local/1579342.jpg'}]
     },
 ]
 
