@@ -109,7 +109,7 @@ const RootTabs = TabNavigator({
         outputRange: [tabStyle.tabColors.tab0, 
                       tabStyle.tabColors.tab1, 
                       tabStyle.tabColors.tab2, 
-                      tabStyle.tabColors.tab3],  // alt blue 01579B
+                      tabStyle.tabColors.tab3]
       })
       return (
         Platform.OS === 'ios'
@@ -126,10 +126,8 @@ const RootTabs = TabNavigator({
           // showIcon: true, //this is default false on Android
           // showLabel: true,
           activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF', 
-          //navStyle.activeTintColor.color, // '#FFFFFF', //'#0B5091',
           inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90', 
-          //navStyle.inactiveTintColor, //'#9E9E9E', FFFFFFA0
-          pressColor: '#FFFFFF' // Android ripple color onPress
+          pressColor: '#DDD' // Android ripple color onPress
         },
      navigationOptions: ({ navigation }) => ( {
          tabBarOnPress: (tab, jumpToIndex) => {
@@ -284,11 +282,6 @@ class App extends Component {
         ui,
         state: nav
     });
-
-    // StatusBar.setBackgroundColor('#ff9800', true);
-    // console.log("\n\n~~!!New Render!!~~\n\n")
-    // console.log(this.props.nav.index)
-    // console.log(tabStyle.tabStatusColors);
 
     StatusBar.setBarStyle('light-content', false);
     if (Platform.OS === 'android') {
