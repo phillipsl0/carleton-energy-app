@@ -175,6 +175,18 @@ const mapStateToProps = (state) => ({
 
 class App extends Component {
   
+
+  // componentWillMount() {
+  //   AsyncStorage.getItem('RANDOM2')
+  //     .then(res => {
+  //       if (res !== null) {
+  //         console.log("Not null random2");
+  //       } else {
+  //         console.log("Null random2");
+  //       }
+  //     })
+  //     .catch(err => reject(err));
+  // }
   // Checks AsyncStorage to see if app has been launched already
   /*
   Great info about components mounting:
@@ -186,6 +198,16 @@ class App extends Component {
     checkIfFirstLaunch()
       .then(res => this.setState({ isFirstLaunch: res, hasCheckedAsyncStorage: true }))
       .catch(err => alert("An error occurred with async: ", err));
+
+    // AsyncStorage.getItem('RANDOM')
+    //   .then(res => {
+    //     if (res !== null) {
+    //       console.log("Not null random");
+    //     } else {
+    //       console.log("Null random");
+    //     }
+    //   })
+    //   .catch(err => reject(err));
   }
 
   componentWillUnmount() {
