@@ -13,10 +13,6 @@ import EnergyMapHeader from './EnergyMapHeader';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
 
 
-/*
-Google API Key:
-AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI 
-*/
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 var {screen_height, screen_width} = Dimensions.get('window');
 
@@ -201,10 +197,7 @@ class EnergyMapView extends Component {
       loading: true
     };
     this.onRegionChange = this.onRegionChange.bind(this);
-    //this.moveToCarleton = this.moveToCarleton.bind(this);
-    //this.updateUtility = this.updateUtility.bind(this);
-    // this.setMapBoundaries = this.setMapBoundaries.bind(this) ({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
-  };
+    };
 
   // Assemble all of Carleton's buildings BEFORE rendering
   componentWillMount() {
@@ -403,7 +396,6 @@ class EnergyMapView extends Component {
     return (
       <View style={styles.container}>
         <MapView
-          //control zooming
           //maxZoomLevel={5} // max in terms of how far IN you can zoon
           ref="map"
           provider = { PROVIDER_GOOGLE } // show buildings on OS
@@ -459,6 +451,7 @@ class EnergyMapView extends Component {
               </View>
             ))}
         </MapView>
+        <View style={styles.rightSwipeHack}></View>
         <EnergyMapTimestamp />
         <TouchableOpacity
           // Button to go back to home location
@@ -558,6 +551,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: screen_width,
     height: screen_height
+  },
+  rightSwipeHack: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: Dimensions.get('window').width - 20,
+    left: 0,
+    backgroundColor: 'transparent'
   },
   callout: {
     flex: 1,
