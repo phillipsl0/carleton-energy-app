@@ -57,8 +57,6 @@ class OverviewListView extends Component {
         const { refresh, loading, currentData, layout } = this.props;
 
         return (
-           <List
-            style={[styles.list, themeStyles.list, themeStyles.flex]}>
            <FlatList
             style={[themeStyles.flex, styles.up]}
              data={ExampleData}
@@ -128,7 +126,6 @@ class OverviewListView extends Component {
                </Card>
              )}
            />
-           </List>
        );
     }
 }
