@@ -9,7 +9,7 @@ import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
 import CurrTheme from './../styling/CurrentTheme'
 import { default as CustomThemes } from './GraphThemes'
-//import Comparator from './../helpers/Comparators';
+import Comparator from './../helpers/Comparators';
 
 class Graph extends Component {
     getLegendData = (data) => {
@@ -54,15 +54,16 @@ class Graph extends Component {
                      title=""
                      data={legendData}/>
                  }
+                 {!this.props.legend &&
+                    <Comparator
+                     width={moderateScale(150)}
+                     height={moderateScale(30 * 3)}
+                     data={this.props.graphData}
+                     unit={'kWh'}/>
+                 }
                  </View>
                  )
-//                 {!this.props.legend &&
-//                   <Comparator
-//                    width={moderateScale()}
-//                    height={}
-//                    data={this.props.graphData}
-//                    unit={'kWh'}/>
-//                 }
+//
 
         } else if (this.props.type=='bar') {
             return (
@@ -91,7 +92,7 @@ class Graph extends Component {
                             label={this.props.xLabel}
                             fixLabelOverlap={this.props.overlap}/>
                         <VictoryAxis crossAxis dependentAxis
-                            label={this.props.yLabel}
+                            label={""}
                             axisLabelComponent={<VictoryLabel angle={90}/>}/>
                 </VictoryChart>
             )
