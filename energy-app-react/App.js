@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
 import { Platform, StyleSheet, BackHandler, View, StatusBar, AsyncStorage} from 'react-native';
-import { TabNavigator, TabBarTop, TabBarBottom, 
+import { TabNavigator, TabBarTop, TabBarBottom, SafeAreaView,
   NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
@@ -18,11 +18,13 @@ import SustainStack from './src/SustainView';
 import IntroSlider from './src/IntroSlider';
 import { checkIfFirstLaunch } from './src/checkIfFirstLaunch';
 
-// const defaultFont = CurrFont+'-regular';
-// const defaultFontBold = CurrFont+'-bold';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
+
+if (Platform.OS === 'android') {
+  SafeAreaView.setStatusBarHeight(0);
+}
 
 function cacheImages(images) {
   return images.map(image => {
@@ -119,7 +121,6 @@ const RootTabs = TabNavigator({
       );
     },
     // animationEnabled: false,
-    // lazy: true,
     tabBarOptions:
         { style: navStyle.header,
           labelStyle: navStyle.label,
@@ -132,18 +133,26 @@ const RootTabs = TabNavigator({
         },
      navigationOptions: ({ navigation }) => ( {
          tabBarOnPress: (tab, jumpToIndex) => {
+          // console.log("tab route", tab.scene.route)
+          // console.log("~")
+          // console.log("tab", tab)
            // resets stack in tabs if their icon is tapped while focused
-           if (tab.focused && (tab.index === 0 || tab.index === 1)) {
-             if (tab.route.index !== 0) {
+           
+           // if (false) {
+           if (tab.scene.focused && (tab.scene.index === 0 || tab.scene.index === 1)) {
+              console.log("~~ If Statement TRUE~~")
+              console.log(tab)
+             if (tab.scene.route.index !== 0) {
                navigation.dispatch(NavigationActions.reset({
                  index: 0,
                  actions: [
-                   NavigationActions.navigate({ routeName: tab.route.routes[0].routeName })
+                   NavigationActions.navigate({ routeName: tab.scene.route.routes[0].routeName })
                  ]
-               }))
+               }));
              }
            } else {
-             jumpToIndex(tab.index)
+              tab.jumpToIndex(tab.scene.index);
+             // jumpToIndex(tab.index)
            }
          }
        })
@@ -173,11 +182,12 @@ const mapStateToProps = (state) => ({
 });
 
 class App extends Component {
+
     state = {
-    isReady: false,
-    isFirstLaunch: false,
-    hasCheckedAsyncStorage: false,
-  };
+      isReady: false,
+      isFirstLaunch: false,
+      hasCheckedAsyncStorage: false,
+    };
   
   // componentWillMount() {
   //   AsyncStorage.getItem('RANDOM2')
@@ -250,7 +260,14 @@ class App extends Component {
   onBackPress = () => {
       const { dispatch, nav } = this.props;
       if (nav.index === 0) {
-          return false;
+          // console.log("Dispatch", dispatch)
+          // console.log("Nav", nav.routes[0].routes.length)
+          if (nav.routes[0].routes.length != 1) {
+            dispatch(NavigationActions.back());
+            return true;
+          } else {
+            return false;
+          }
       }
 
       dispatch(NavigationActions.back());
