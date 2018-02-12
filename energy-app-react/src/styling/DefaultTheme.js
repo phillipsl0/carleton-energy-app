@@ -20,11 +20,9 @@ const DefaultTheme = StyleSheet.create({
     card: {
         backgroundColor: 'white',
         borderColor: lightBlue,
-
         borderWidth: 1,
         borderRadius: 5,
         padding: 10,
-        // margin: 15,
         marginLeft: 10,
         marginRight: 10,
         marginTop: 5,
@@ -112,10 +110,8 @@ const DefaultTheme = StyleSheet.create({
     },
 
     listItem: {
-        // borderTopColor: '#cbd2d9', 
-        // borderTopWidth: 0.7,
         borderColor: '#cbd2d940', 
-        borderBottomWidth: StyleSheet.hairlineWidth // 0.7
+        borderBottomWidth: StyleSheet.hairlineWidth
     },
 
     shadowed: {
