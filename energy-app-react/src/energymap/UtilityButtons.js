@@ -3,7 +3,9 @@ import { View, Text, StyleSheet, Dimensions, Heading, Overlay, TouchableHighligh
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import { Button } from 'react-native-elements'
 
-const UTILITIES = getUtilitiesList();
+//const UTILITIES = getUtilitiesList();
+const UTILITIES = ['Gas', 'Electric', 'Heat', 'Water'];
+
 
 class UtilityButton extends React.Component {
   constructor(props) {
@@ -21,6 +23,7 @@ class UtilityButton extends React.Component {
           onPress={() => this.props.onPress(this.props.utility)}
           backgroundColor={this.props.selected ==  this.props.utility ? '#0B5091' : 'white'}
           color={this.props.selected ==  this.props.utility ? 'white' : '#0B5091'}
+          textStyle={{ fontSize: 12 }}
         />
       )
   }

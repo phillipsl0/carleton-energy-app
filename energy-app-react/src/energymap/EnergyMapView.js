@@ -6,10 +6,13 @@ import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native
 
 import MapCallout from './MapCallout';
 import IndividualBuilding from './../IndividualBuilding';
+import BuildingStack from './../BuildingListView';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import TopUtilities from './UtilityButtons';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
+import ComparisonPage from './../ComparisonPage';
+import BuildingComparison from './../BuildingComparison';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 var {screen_height, screen_width} = Dimensions.get('window');
@@ -191,7 +194,8 @@ class EnergyMapView extends Component {
         longitude: -93.15502781429046
       },
       ready: true,
-      utilityShown: 'electricity',
+      utilityNameShown: 'electricity',
+      utilityIndexShown: 6, // for IndividualBuilding's UtilitiesMiniCard
       loading: true
     };
     this.onRegionChange = this.onRegionChange.bind(this);
@@ -234,11 +238,29 @@ class EnergyMapView extends Component {
     }
   };
 
+  // Maps utility name to its respective utility mini card index
+  utilityNameToIndex(utilityName) {
+    if (utilityName == 'gas') {
+      return (5);
+    }
+    else if (utilityName == 'electricity') {
+      return (6);
+    }
+    else if (utilityName == 'heat') {
+      return (7);
+    }
+    else if (utilityName == 'water') {
+      return (8);
+    }
+    return (1);
+  };
+
   // Updates colors of energy map with new utility selection
   updateUtility = (utilitySelected) => {
     // Begin to update map
     this.openActivityIndicator();
-    this.setState({ utilityShown: utilitySelected});
+    utilityIndex = this.utilityNameToIndex(utilitySelected)
+    this.setState({ utilityNameShown: utilitySelected, utilityIndexShown: utilityIndex });
     
     // Update map
     this.getBuildingData();
@@ -265,11 +287,11 @@ class EnergyMapView extends Component {
   1 : red
   */
   determineBuildingColor(buildingName) {
-    //console.log("Rendering building colors with: ", this.state.utilityShown)
-    var use = getCurrentBuildingUtilityConsumption(buildingName, this.state.utilityShown).toFixed(1)
+    //console.log("Rendering building colors with: ", this.state.utilityNameShown)
+    var use = getCurrentBuildingUtilityConsumption(buildingName, this.state.utilityNameShown).toFixed(1)
     //var h = (1.0 - use) * 240
     var building = this.state.buildings_info
-    building = building[buildingName][this.state.utilityShown]
+    building = building[buildingName][this.state.utilityNameShown]
     var val = Math.abs(1 - ((use - building.min) / (building.max - building.min))) // taken from https://stats.stackexchange.com/questions/70801/how-to-normalize-data-to-0-1-range
     //console.log("Normalizing " + buildingName, val)
     var h = val * 85 // taken from: https://stackoverflow.com/questions/6660879/python-map-float-range-0-0-1-0-to-color-range-red-green
@@ -306,7 +328,7 @@ class EnergyMapView extends Component {
           name: building.name,
           color: this.determineBuildingColor(building.name),
           marker_coordinate: building.marker_coordinate,
-          usage: getCurrentBuildingUtilityConsumption(building.name, this.state.utilityShown).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
+          usage: getCurrentBuildingUtilityConsumption(building.name, this.state.utilityNameShown).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
         }
       });
       this.setState({polygons: polygons});
@@ -387,9 +409,9 @@ class EnergyMapView extends Component {
 
   render() {
     navigation = this.props.navigation;
-    utilityShown = this.state.utilityShown
+    utilityNameShown = this.state.utilityNameShown
     loading = this.state.loading
-    //console.log("Utility displayed before return:", utilityShown)
+    //console.log("Utility displayed before return:", utilityNameShown)
     //console.log("Loading?", loading)
 
     return (
@@ -398,14 +420,14 @@ class EnergyMapView extends Component {
           //maxZoomLevel={5} // max in terms of how far IN you can zoon
           ref="map"
           provider = { PROVIDER_GOOGLE } // show buildings on OS
-          key={utilityShown} // key change needed to rerender map
+          key={utilityNameShown} // key change needed to rerender map
           showsTraffic={false}
           initialRegion={initialRegion}
           onMapReady={this.onMapReady}
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
           toggleCallout={this.toggleCallout}
-          displayUtility={utilityShown}
+          displayUtility={utilityNameShown}
           style={styles.map}
                   
 
@@ -439,12 +461,12 @@ class EnergyMapView extends Component {
                     <Callout
                       tooltip // enables customizable tooltip style
                       style={styles.callout}
-                      onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon.item})}>
+                      onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon.item, selected: this.state.utilityIndexShown })}>
                       <MapCallout
                         name={polygon.name}
                         image={'image'} // to be replaced with building image
                         number={polygon.usage}
-                        utility={utilityShown}/>
+                        utility={utilityNameShown}/>
                     </Callout>
                   </Marker>
               </View>
@@ -466,7 +488,7 @@ class EnergyMapView extends Component {
         <TopUtilities
           // top utilities
           onUtilitySelect={this.updateUtility}
-          selected={this.state.utilityShown} />
+          selected={this.state.utilityNameShown} />
         {this.state.loading && <View style={styles.loading} accessibe={false}>
           <ActivityIndicator
             size='large'
@@ -507,13 +529,6 @@ const EnergyMapViewStack = StackNavigator({
         easing: Easing.step0,
       }
     }),
-    // navigationOptions: ({ navigation, updated }) => ({
-    //   headerTitle: <EnergyMapHeader/>,
-    //   headerStyle: {backgroundColor: '#0B5091'},
-    //   ...Platform.select({
-    //       android: { header: null }
-    //   }),
-    // })
     navigationOptions: ({ navigation }) => ({
       title: "Energy Map",
       headerTintColor: 'white',
@@ -524,13 +539,6 @@ const EnergyMapViewStack = StackNavigator({
     })
   },
   EnergyBuildingView: {
-    // screen: OverviewCards,
-    // path: 'buildings/:name',
-    // navigationOptions: ({ navigation }) => ({
-    //   title: `${navigation.state.params.item.name}`,
-    //   headerTintColor: 'white',
-    //   headerStyle: {backgroundColor: '#0B5091'},
-    // }),
     screen: IndividualBuilding,
     path: 'buildings/:name',
     navigationOptions: ({ navigation }) => ({
@@ -541,6 +549,27 @@ const EnergyMapViewStack = StackNavigator({
       headerBackTitleStyle: navStyles.headerTitle,
       headerBackTitle: 'Back',
     }), 
+  },
+  Comparison: {
+    screen: BuildingComparison,
+    navigationOptions: ({ navigation }) => ({
+      ...Platform.select({
+          android: { header: null }
+      }),
+      headerTintColor: 'white',
+      headerStyle: navStyles.header,
+    }),
+  },
+  ComparisonPage: {
+    screen: ComparisonPage,
+    navigationOptions: ({ navigation }) => ({
+        title: 'Comparison',
+        ...Platform.select({
+            android: { header: null }
+        }),
+        headerTintColor: 'white',
+        headerStyle: navStyles.header,
+    }),
   },
 });
 

@@ -33,7 +33,7 @@ class BuildingListView extends Component {
               style={{paddingBottom:20}}
               containerViewStyle={styles.button}
               backgroundColor='#0B5091'
-              onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item})}/>
+              onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item, selected: 1})}/>
       </View>
   }
 
@@ -66,18 +66,6 @@ const BuildingStack = StackNavigator({
           headerStyle: navStyles.header,
       }),
   },
-  // BuildingCardView: {
-  //   screen: IndividualBuilding,
-  //   path: 'buildings/:name',
-  //   navigationOptions: ({ navigation }) => ({
-  //           title: `${navigation.state.params.item.name}`,
-  //           headerTintColor: 'white',
-  //           headerStyle: navStyles.header,
-  //           headerTitleStyle: navStyles.headerTitle,
-  //           headerBackTitleStyle: navStyles.headerTitle,
-  //           headerBackTitle: 'Back',
-  //         }), 
-  // },
   BuildingCardView: {
     screen: IndividualBuilding,
     path: 'buildings/:name',
@@ -90,18 +78,6 @@ const BuildingStack = StackNavigator({
       headerBackTitle: 'Back',
     }), 
   },
-  // Comparison: {
-  //   screen: BuildingComparison,
-  //   navigationOptions: ({ navigation }) => ({
-  //     title: 'Building Comparison',
-  //     ...Platform.select({
-  //         android: { header: null }
-  //         ios
-  //     }),
-  //     headerTintColor: 'white',
-  //     headerStyle: navStyles.header,
-  //   }),
-  // },
   Comparison: {
     screen: BuildingComparison,
     navigationOptions: ({ navigation }) => ({

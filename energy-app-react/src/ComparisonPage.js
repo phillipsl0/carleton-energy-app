@@ -85,35 +85,35 @@ class ComparisonPage extends Component {
       containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}>
         <View style={{width: 150, height: 40, alignSelf: 'center'}}>
        <Graph
-                    type= 'pie'
-                    theme={CustomThemes.carleton}
-                    graphData={getCurrentBuildingUtilityConsumptionGraphFormat(this.props.navigation.state.params.building1, this.props.navigation.state.params.building2, 'Water')} />
+          type= 'pie'
+          theme={CustomThemes.carleton}
+          graphData={getCurrentBuildingUtilityConsumptionGraphFormat(this.props.navigation.state.params.building1, this.props.navigation.state.params.building2, 'Water')} />
         </View>
         </Card>
         <Card
       containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}>
         <View style={{width: 150, height: 40, alignSelf: 'center', paddingBottom: 10}}>
-        <Graph
-                    type= 'pie'
-                    theme={CustomThemes.carleton}
-                    graphData={getCurrentBuildingUtilityConsumptionGraphFormat(this.props.navigation.state.params.building1, this.props.navigation.state.params.building2, 'Gas')} />
-        </View>
-        </Card>
+      <Graph
+        type= 'pie'
+        theme={CustomThemes.carleton}
+        graphData={getCurrentBuildingUtilityConsumptionGraphFormat(this.props.navigation.state.params.building1, this.props.navigation.state.params.building2, 'Gas')} />
+      </View>
+      </Card>
         </View>
         <View style={{width: 130, height: 225,}}>
         <Card
       containerStyle={[styles.cards, themeStyles.card, themeStyles.flex]}>
-        <Text style={styles.htext}> {this.props.navigation.state.params.building2} </Text>
-        <Text style={styles.text}> Electric: </Text>
-        <Text style={styles.text}> {Math.round(getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.building2,'Electric'))} kWh</Text>
-        <Text style={styles.text}> Water: </Text>
-        <Text style={styles.text}> {Math.round(getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.building2,'Water'))} gal</Text>
-        <Text style={styles.text}> Gas: </Text>
-        <Text style={styles.text}> {Math.round(getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.building2,'Gas'))} kBTU</Text>
-        </Card>
+            <Text style={styles.htext}> {this.props.navigation.state.params.building2} </Text>
+            <Text style={styles.text}> Electric: </Text>
+            <Text style={styles.text}> {Math.round(getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.building2,'Electric'))} kWh</Text>
+            <Text style={styles.text}> Water: </Text>
+            <Text style={styles.text}> {Math.round(getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.building2,'Water'))} gal</Text>
+            <Text style={styles.text}> Gas: </Text>
+            <Text style={styles.text}> {Math.round(getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.building2,'Gas'))} kBTU</Text>
+          </Card>
         </View>
       </View>
-      </View>
+    </View>
     );
   }
 };

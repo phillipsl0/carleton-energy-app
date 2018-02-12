@@ -30,6 +30,15 @@ export default class IndividualBuilding extends Component {
         this.updateWeek(currDate);
         this.updateMonth(currDate);
         this.updateYear(currDate);
+
+        this.getUtility(); // get utility from energy map selection, if present
+    }
+
+    getUtility() {
+        utilitySelected = this.props.navigation.state.params.selected;
+        if (utilitySelected !== null) {
+            this.setState({ selectedCard:utilitySelected })
+        }
     }
 
     updateDay = ( currDate ) => {
@@ -131,10 +140,8 @@ export default class IndividualBuilding extends Component {
     render() {
         navigation = this.props.navigation;
         const themeStyles = GetStyle(CurrTheme);
-        header = this.getHeader();
-        const { navigate } = this.props.navigation;
-  
-        const {state} = this.props.navigation;
+        header = this.getHeader();  
+        const { state } = this.props.navigation;
         var utilities = ["Gas", "Electric", "Heat", "Water"];
         
         const test = []
@@ -155,9 +162,7 @@ export default class IndividualBuilding extends Component {
         test[6],
         ];
 
-
         return (
-
             <View style={[themeStyles.flex, themeStyles.list]}>
                 <Image style={themeStyles.header} 
                     source={{ uri: this.props.navigation.state.params.item.avatar }} />
@@ -175,55 +180,17 @@ export default class IndividualBuilding extends Component {
                         title='Compare'
                         containerViewStyle={styles.button}
                         backgroundColor='#0B5091'
-                        onPress={() => navigate("Comparison")}/>
+                        onPress={() => this.props.navigation.navigate("Comparison")}/>
                 </ScrollView>
                 <Utilities callback={this.scopeCallbackUtilities}
                     cardType={1}
                     selected={this.state.selectedCard}
+                    //selected={5}
                 />
             </View>
         );
     }
 }
-
-/*
-*/
-
-// const SelectStack = StackNavigator({
-//     IndividualBuilding: {
-//         screen: IndividualBuilding,
-//         navigationOptions: ({ navigation }) => ({
-//             title: 'Individual Building',
-//             ...Platform.select({
-//                 android: { header: null }
-//             }),
-//             headerTintColor: 'white',
-//             headerStyle: navStyles.header,
-//         }),
-//     }, 
-    // Comparison: {
-    //     screen: BuildingComparison,
-    //     navigationOptions: ({ navigation }) => ({
-    //         title: 'Building Comparison',
-    //         ...Platform.select({
-    //             android: { header: null }
-    //         }),
-    //         headerTintColor: 'white',
-    //         headerStyle: navStyles.header,
-    //     }),
-    // },
-    // Comparison_Page: {
-    //     screen: ComparisonPage,
-    //     navigationOptions: ({ navigation }) => ({
-    //         title: 'Compare',
-    //         ...Platform.select({
-    //             android: { header: null }
-    //         }),
-    //         headerTintColor: 'white',
-    //         headerStyle: navStyles.header,
-    //     }),
-    // },
-// });
 
 const navStyles = StyleSheet.create({
     header: {
