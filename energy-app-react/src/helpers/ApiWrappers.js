@@ -590,7 +590,7 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
                 }
                 break;
             case 30:
-                combinedTable[i]["x"] = currDate.getMonth() + 1 + "/" + currDate.getYear().toString().substring(1);
+                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
                 break;
             case 365:
                 combinedTable[i]["x"] = currDate.getFullYear().toString();
