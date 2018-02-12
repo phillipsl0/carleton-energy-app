@@ -24,28 +24,28 @@ export default class EnergyMapTimestamp extends Component {
 
   render() {
     return (
-      <Text style={navStyles.subTitleText}>
-      Last updated: {this.getTime()}
+      <View style={styles.container}>
+      <Text style={styles.text}>
+        Last updated: {this.getTime()}
       </Text>
+      </View>
     );
   }
 }
 
-const navStyles = StyleSheet.create({
-    header: {
-        flex: 1,
-        backgroundColor: '#0B5091',
-        alignItems: 'center',
-        justifyContent: 'center',
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
-    titleText: {
-      color: "white",
-      //fontWeight: "bold",
-      fontSize: 17,
-      alignSelf: 'center',
-    },
-    subTitleText: {
-      color: "white",
+    text: {
+      position: "absolute",
+      bottom: 10,
+      backgroundColor: 'rgba(255, 255, 255, 0.7)',
+      color: "black",
       fontSize: 15,
+      alignSelf: 'center',
+      padding: 5,
     }
 })

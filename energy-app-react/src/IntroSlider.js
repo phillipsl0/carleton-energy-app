@@ -9,23 +9,23 @@ const slides = [
   {
     key: 'Welcome',
     title: "Welcome to our comps",
-    text: "You can see Carleton's energy usage! Ever wondered how much energy the wind turbine is using at any given point? Now you can find out! Yay comps! Jeff is awesome! Martha is amazing!",
+    text: "Explore Carleton's energy usage at anytime. View energy, heat, and water consumption and generation by building or across campus. Don't forget about the turbines!",
     icon: 'tree',
     color: '#00b33c',
     type: 'entypo'
   },
   {
-    key: 'Buildings',
-    title: "Compare buildings energy usage",
-    text: 'Ever wondered what buildings use the most energy? Burton or Sayles? Watson or Cassat? Check out the building comparison screen!',
+    key: 'Data',
+    title: "Data at your touch",
+    text: 'Get real-time data from key buildings on campus. Our app is reads data from various meters within each building.',
     icon: 'ios-options-outline',
     color: '#A3A1FF',
     type: 'ionicon'
   },
   {
-    key: 'Heatmap',
+    key: 'Where',
     title: "There's a heatmap!",
-    text: "See which buildings are using the most energy on campus in this moment. Red is bad! Green is good! Yay sustainability!",
+    text: "Energy data right ",
     icon: 'ios-sunny-outline',
     color: '#29ABE2',
     type: 'ionicon'
@@ -95,7 +95,7 @@ export default class IntroSlider extends Component {
 
   // Handles done press on intro screen
   _onDone = () => {
-    console.log("Done button was pressed!")
+    //console.log("Done button was pressed!")
     this.props.onDone(true);
   }
   

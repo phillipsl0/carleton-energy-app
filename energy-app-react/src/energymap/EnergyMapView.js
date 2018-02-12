@@ -9,13 +9,8 @@ import OverviewCards from './../overview/OverviewCards';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import TopUtilities from './UtilityButtons';
-import EnergyMapHeader from './EnergyMapHeader';
+import EnergyMapTimestamp from './EnergyMapTimestamp';
 
-
-/*
-Google API Key:
-AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI 
-*/
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 var {screen_height, screen_width} = Dimensions.get('window');
 
@@ -200,9 +195,6 @@ class EnergyMapView extends Component {
       loading: true
     };
     this.onRegionChange = this.onRegionChange.bind(this);
-    //this.moveToCarleton = this.moveToCarleton.bind(this);
-    //this.updateUtility = this.updateUtility.bind(this);
-    // this.setMapBoundaries = this.setMapBoundaries.bind(this) ({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
   };
 
   // Assemble all of Carleton's buildings BEFORE rendering
@@ -213,11 +205,6 @@ class EnergyMapView extends Component {
     // this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
     //console.log('EnergyMapView component is mounting...');
     this.closeActivityIndicator();
-  };
-
-  // Called AFTER class completely renders
-  componentDidMount() {
-    //console.log("HeatMapView component did mount");
   };
 
   openActivityIndicator() {
@@ -347,7 +334,7 @@ class EnergyMapView extends Component {
 
   // Show callout when building polygon is pressed
   toggleCallout(polygon) {
-//    console.log('onPress', polygon.name);
+    // console.log('onPress', polygon.name);
     this.setState({lastBuildingPressed: polygon.name})
 
     if (polygon.open) {
@@ -407,7 +394,6 @@ class EnergyMapView extends Component {
     return (
       <View style={styles.container}>
         <MapView
-          //control zooming
           //maxZoomLevel={5} // max in terms of how far IN you can zoon
           ref="map"
           provider = { PROVIDER_GOOGLE } // show buildings on OS
@@ -463,10 +449,11 @@ class EnergyMapView extends Component {
               </View>
             ))}
         </MapView>
-        <Text> I'm text! </Text>
+        <View style={styles.rightSwipeHack}></View>
+        <EnergyMapTimestamp />
         <TouchableOpacity
           // Button to go back to home location
-          style={styles.button}
+          style={styles.homeButton}
           onPress={() => this.moveMaptoLocation(initialRegion)}>
           <Icon
             // see: https://react-native-training.github.io/react-native-elements/API/icons/
@@ -563,11 +550,19 @@ const styles = StyleSheet.create({
     width: screen_width,
     height: screen_height
   },
+  rightSwipeHack: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: Dimensions.get('window').width - 20,
+    left: 0,
+    backgroundColor: 'transparent'
+  },
   callout: {
     flex: 1,
     position: 'relative'
   },
-  button: {
+  homeButton: {
     borderRadius: 10,
     padding: 10,
     backgroundColor: '#0B5091',
