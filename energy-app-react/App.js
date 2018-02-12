@@ -173,7 +173,10 @@ const mapStateToProps = (state) => ({
 });
 
 class App extends Component {
-  state = {
+    componentDidMount() {
+        BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+
+    state = {
     isReady: false,
     isFirstLaunch: false,
     hasCheckedAsyncStorage: false,
@@ -264,10 +267,9 @@ class App extends Component {
     const imageAssets = cacheImages([require('./src/assets/windmill.png'),
         require('./src/assets/windmillHeader.png')]);
 
-
     await Promise.all([...imageAssets, ...fontAssets]);
   }
-
+      
   // Closes intro screen when done button is pressed
   closeIntro = (onDonePress) => {
     if (onDonePress == true) {
