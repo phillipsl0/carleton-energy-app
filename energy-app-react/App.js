@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
-import { Platform, StyleSheet, BackHandler, View, StatusBar } from 'react-native';
+import { Platform, StyleSheet, BackHandler, View, StatusBar, AsyncStorage, Text } from 'react-native';
 import { TabNavigator, TabBarTop, TabBarBottom, 
   NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
@@ -173,6 +173,10 @@ const mapStateToProps = (state) => ({
 });
 
 class App extends Component {
+//    componentWillMount() {
+//        this.finishLoading();
+//    }
+
     componentDidMount() {
         BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
     }
@@ -193,6 +197,8 @@ class App extends Component {
 
     state = {
         isReady: false,
+        firstView: "intro",
+        firstUse: true,
     };
 
     async _cacheResourcesAsync() {
@@ -205,6 +211,60 @@ class App extends Component {
         await Promise.all([...imageAssets, ...fontAssets]);
     }
 
+    async finishLoading() {
+        console.log("WHY");
+        var pls = await AsyncStorage.getItem("firstUse");
+        console.log("PLEASE");
+        var bool = await JSON.parse(pls);
+        console.log("??: " + bool);
+
+        if (bool === "intro") {
+            await AsyncStorage.setItem("firstUse", "false");
+            console.log("!!!!");
+        }
+
+        await Promise.all([...pls, ...bool]);
+        this.setState({ firstScreen: bool });
+
+        console.log("###: " + this.state.firstScreen);
+//        console.log(AsyncStorage.getAllKeys());
+//        try {
+//            var firstUse = true;
+//            var recall = await AsyncStorage.getItem("firstUse")
+//                          .then(res => {
+//                            console.log("redddd: " + res);
+//                            if (res === "false") {
+//                                firstUse = false;
+//                            }});
+//            console.log(1);
+//             if (firstUse === true) {
+//                await AsyncStorage.setItem("firstUse", "false");
+//                console.log(2);
+//             } else {
+//                this.setState({ firstView: "normal", firstUse: false })
+//                console.log("~ " + this.state.firstView + " ~ " + this.state.firstUse);
+//                console.log(3);
+//             }
+//        } catch (error) {
+//            alert(error);
+//        }
+//        return new Promise((resolve, reject) => {
+//            AsyncStorage.getItem("firstUse")
+//                .then(res => {
+//                    if (res !== null) {
+//                        console.log("res: " + res);
+//                        resolve(true);
+//                    } else {
+//                        console.log("Nah");
+//                        resolve(false);
+//                    }
+//                })
+//                .catch(err => reject(err));
+//
+//        });
+//    console.log(4)
+    }
+
     render() {
         const { dispatch, nav, data, ui } = this.props;
         const navigation = addNavigationHelpers({
@@ -213,11 +273,6 @@ class App extends Component {
             ui,
             state: nav
         });
-
-        // StatusBar.setBackgroundColor('#ff9800', true);
-        // console.log("\n\n~~!!New Render!!~~\n\n")
-        // console.log(this.props.nav.index)
-        // console.log(tabStyle.tabStatusColors);
 
         StatusBar.setBarStyle('light-content', false);
         if (Platform.OS === 'android') {
@@ -238,10 +293,16 @@ class App extends Component {
             );
         }
 
-        return(
-            <RootTabs navigation={navigation} />
-        );
-
+//        if (this.state.firstView === "intro") {
+//            return(
+//                <Text> lol </Text>
+//            );
+//
+//        } else {
+            return(
+                <RootTabs navigation={navigation} />
+            );
+//        }
     }
 }
 

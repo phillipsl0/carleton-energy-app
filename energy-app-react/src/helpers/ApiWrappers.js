@@ -52,6 +52,18 @@ export function getUnitsList() {
     return units;
 }
 
+export function getDayOfWeek(date) {
+    var week = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    return week[date];
+}
+
+export function getMonth(date) {
+    var month = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    return month[date];
+}
+
 export function getSustainabilityNews() {
     newsRSS = 'https://apps.carleton.edu/sustainability/feeds/blogs/sustaining_carleton';
     return convertRSStoJSON(newsRSS);
@@ -343,7 +355,33 @@ export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, sca
 
     for (var i=solarTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
-        combinedTable[i]["x"] = solarTable[i]["date"];
+        currDate = new Date(solarTable[i]["date"]);
+        switch (scaleFactor){
+            case 1:
+                combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
+                break;
+            case 7:
+                if (i==0) {
+                    combinedTable[i]["x"] = "-3";
+                } else if (i==1) {
+                    combinedTable[i]["x"] = "-2";
+                } else if (i==2) {
+                    combinedTable[i]["x"] = "-1";
+                } else if (i==3) {
+                    combinedTable[i]["x"] = "Current";
+                }
+                break;
+            case 30:
+                combinedTable[i]["x"] = getMonth(currDate.getMonth());
+                break;
+            case 365:
+                combinedTable[i]["x"] = currDate.getFullYear().toString();
+                break;
+            default:
+                combinedTable[i]["x"] = solarTable[i]["date"];
+                break;
+        }
+
         combinedTable[i]["y"] = (solarTable[i]["solar"] + windTable[i]["wind"]
                                     + geoTable[i]["geothermal"]) * scaleFactor /1000;
 
@@ -469,16 +507,6 @@ export function getCurrentConsumptionGraphFormat() {
 }
 
 export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd, timeScale) {
-
-    // different utilities have different "typical" amounts
-//    var scaleFactor = scaleFactorOther;
-//
-//    if (utility == "water") {
-//        scaleFactor = scaleFactorWater;
-//    } else if (utility == "electricity") {
-//        scaleFactor = scaleFactorElectricity;
-//    }
-
     var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
     var currentTime = new Date(timeEnd);
 
@@ -521,7 +549,36 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
 
     for (var i=waterTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
-        combinedTable[i]["x"] = waterTable[i]["date"];
+        currDate = new Date(waterTable[i]["date"]);
+
+        switch (scaleFactor){
+            case 1:
+                combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
+                break;
+            case 7:
+                if (i==0) {
+                    combinedTable[i]["x"] = "-3 Weeks";
+                } else if (i==1) {
+                    combinedTable[i]["x"] = "-2 Weeks";
+                } else if (i==2) {
+                    combinedTable[i]["x"] = "-1 Week";
+                } else if (i==3) {
+                    combinedTable[i]["x"] = "This Week";
+                } else {
+                    combinedTable[i]["x"] = "help";
+                }
+                break;
+            case 30:
+                combinedTable[i]["x"] = currDate.getMonth() + 1 + "/" + currDate.getYear().toString().substring(1);
+                break;
+            case 365:
+                combinedTable[i]["x"] = currDate.getFullYear().toString();
+                break;
+            default:
+                combinedTable[i]["x"] = waterTable[i]["date"];
+                break;
+        }
+
         combinedTable[i]["y"] = (waterTable[i]["water"] + electricityTable[i]["electricity"]
                                     + gasTable[i]["gas"] + heatTable[i]["heat"]) * scaleFactor /1000;
 
@@ -580,14 +637,6 @@ export function getCurrentCampusUtilityConsumption(utility) {
 }
 
 export function getEveryBuildingUtilityConsumption(utility) {
-//    var scaleFactor = scaleFactorOther;
-//
-//    if (utility == "water") {
-//        scaleFactor = scaleFactorWater;
-//    } else if (utility == "electricity") {
-//        scaleFactor = scaleFactorElectricity;
-//    }
-
     var buildings = getBuildingsList();
 
     var total = 0;
@@ -651,7 +700,7 @@ function getRandomElectric() {
 
 export function getAllHistoricalGraphData() {
     var historicalData = {};
-    currDate = new Date();
+    var currDate = new Date();
 
     var dayUsageData = getDayGraph(currDate, "usage");
     var dayGenerationData = getDayGraph(currDate, "generation");
@@ -703,7 +752,7 @@ export function getAllCurrentGraphData() {
 }
 
 function getDayGraph(currDate, type) {
-    comparisonDate = new Date();
+    var comparisonDate = new Date();
     comparisonDate.setDate(currDate.getDate()-7);
 
     if (type === "usage") {
@@ -717,7 +766,7 @@ function getDayGraph(currDate, type) {
 }
 
 function getWeekGraph(currDate, type) {
-    comparisonDate = new Date();
+    var comparisonDate = new Date();
     comparisonDate.setDate(currDate.getDate()-28);
 
     if (type === "usage") {
@@ -731,8 +780,8 @@ function getWeekGraph(currDate, type) {
 }
 
 function getMonthGraph(currDate, type){
-    comparisonDate = new Date();
-    comparisonDate.setMonth(currDate.getMonth()-11);
+    var comparisonDate = new Date();
+    comparisonDate.setMonth(currDate.getMonth()-12);
 
     if (type === "usage") {
         return getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760, 30);
@@ -744,8 +793,8 @@ function getMonthGraph(currDate, type){
 }
 
 function getYearGraph(currDate, type) {
-    comparisonDate = new Date();
-    comparisonDate.setYear(currDate.getFullYear()-5);
+    var comparisonDate = new Date();
+    comparisonDate.setYear(currDate.getFullYear()-4);
 
     if (type === "usage") {
         return getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600, 365);
