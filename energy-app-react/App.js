@@ -135,23 +135,23 @@ const RootTabs = TabNavigator({
           // console.log("tab route", tab.scene.route)
           // console.log("~")
           // console.log("tab", tab)
-           // resets stack in tabs if their icon is tapped while focused
-           
-           // if (false) {
-           if (tab.scene.focused && (tab.scene.index === 0 || tab.scene.index === 1)) {
-              console.log("~~ If Statement TRUE~~")
-              console.log(tab)
-             if (tab.scene.route.index !== 0) {
-               navigation.dispatch(NavigationActions.reset({
-                 index: 0,
-                 actions: [
-                   NavigationActions.navigate({ routeName: tab.scene.route.routes[0].routeName })
-                 ]
-               }));
-             }
-           } else {
-              tab.jumpToIndex(tab.scene.index);
-           }
+          tab.jumpToIndex(tab.scene.index);
+
+          // resets stack in tabs if their icon is tapped while focused
+          // if (tab.scene.focused) {
+          //    console.log("~~ If Statement TRUE~~")
+          //    console.log(tab.scene)
+          //   if (tab.scene.route.index !== 0) {
+          //     navigation.dispatch(NavigationActions.reset({
+          //       index: 0,
+          //       actions: [
+          //         NavigationActions.navigate({ routeName: tab.scene.route.routes[0].routeName })
+          //       ]
+          //     }));
+          //   }
+          // } else {
+          //    tab.jumpToIndex(tab.scene.index);
+          // }
          }
        })
 });
