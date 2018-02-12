@@ -5,6 +5,7 @@ import { TabNavigator, TabBarTop, TabBarBottom, SafeAreaView,
   NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createReduxBoundAddListener, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import BuildingStack from './src/BuildingListView';
@@ -125,8 +126,6 @@ const RootTabs = TabNavigator({
         { style: navStyle.header,
           labelStyle: navStyle.label,
           indicatorStyle: navStyle.indicator,
-          // showIcon: true, //this is default false on Android
-          // showLabel: true,
           activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF', 
           inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90', 
           pressColor: '#DDD' // Android ripple color onPress
@@ -152,7 +151,6 @@ const RootTabs = TabNavigator({
              }
            } else {
               tab.jumpToIndex(tab.scene.index);
-             // jumpToIndex(tab.index)
            }
          }
        })
@@ -174,6 +172,14 @@ const appReducer = combineReducers({
     ui: layoutReducer
 
 });
+
+// Note: createReactNavigationReduxMiddleware must be run before createReduxBoundAddListener
+const middleware = createReactNavigationReduxMiddleware(
+  "root",
+  state => state.nav,
+);
+
+const addListener = createReduxBoundAddListener("root");
 
 const mapStateToProps = (state) => ({
     nav: state.nav,
@@ -298,7 +304,8 @@ class App extends Component {
         dispatch,
         data,
         ui,
-        state: nav
+        state: nav,
+        addListener
     });
 
     StatusBar.setBarStyle('light-content', false);
