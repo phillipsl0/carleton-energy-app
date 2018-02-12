@@ -170,9 +170,6 @@ const mapStateToProps = (state) => ({
 });
 
 class App extends Component {
-    componentDidMount() {
-        BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-
     state = {
     isReady: false,
     isFirstLaunch: false,
