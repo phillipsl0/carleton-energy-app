@@ -5,18 +5,12 @@ import { Icon } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
 
 import MapCallout from './MapCallout';
-// import IndividualBuilding from './../IndividualBuilding'
 import OverviewCards from './../overview/OverviewCards';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import TopUtilities from './UtilityButtons';
-import HeatMapHeader from './HeatMapHeader';
+import EnergyMapTimestamp from './EnergyMapTimestamp';
 
-
-/*
-Google API Key:
-AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI 
-*/
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 var {screen_height, screen_width} = Dimensions.get('window');
 
@@ -38,7 +32,7 @@ const initialRegion = {
   longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
 }
 
-class HeatMapView extends Component {
+class EnergyMapView extends Component {
   constructor(props) {
     super(props);
     
@@ -201,9 +195,6 @@ class HeatMapView extends Component {
       loading: true
     };
     this.onRegionChange = this.onRegionChange.bind(this);
-    //this.moveToCarleton = this.moveToCarleton.bind(this);
-    //this.updateUtility = this.updateUtility.bind(this);
-    // this.setMapBoundaries = this.setMapBoundaries.bind(this) ({latitude: 44.4592961807, longitude: -93.15502781429046}, {latitude: 44.4592961807, longitude: -93.15502781429046});
   };
 
   // Assemble all of Carleton's buildings BEFORE rendering
@@ -212,13 +203,8 @@ class HeatMapView extends Component {
     this.getBuildingData();
     this.moveToCarleton();
     // this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
-    //console.log('HeatMapView component is mounting...');
+    //console.log('EnergyMapView component is mounting...');
     this.closeActivityIndicator();
-  };
-
-  // Called AFTER class completely renders
-  componentDidMount() {
-    //console.log("HeatMapView component did mount");
   };
 
   openActivityIndicator() {
@@ -248,7 +234,7 @@ class HeatMapView extends Component {
     }
   };
 
-  // Updates colors of heat map with new utility selection
+  // Updates colors of energy map with new utility selection
   updateUtility = (utilitySelected) => {
     // Begin to update map
     this.openActivityIndicator();
@@ -258,12 +244,13 @@ class HeatMapView extends Component {
     this.getBuildingData();
     this.moveToCarleton();
     this.closeActivityIndicator();
-    {this.props.navigation.setParams({ updated: "Updating time stamp..." })}
+    //{this.props.navigation.setParams({ updated: "Updating time stamp..." })}
   };
 
   onRegionChange = (region) => {
+    //this.setState({ region: region })
     //console.log('onRegionChange', region);
-    this.checkCalloutRender(region);
+    //this.checkCalloutRender(region);
   };
 
   onRegionChangeComplete = (region) => {
@@ -347,7 +334,7 @@ class HeatMapView extends Component {
 
   // Show callout when building polygon is pressed
   toggleCallout(polygon) {
-//    console.log('onPress', polygon.name);
+    // console.log('onPress', polygon.name);
     this.setState({lastBuildingPressed: polygon.name})
 
     if (polygon.open) {
@@ -407,7 +394,6 @@ class HeatMapView extends Component {
     return (
       <View style={styles.container}>
         <MapView
-          //control zooming
           //maxZoomLevel={5} // max in terms of how far IN you can zoon
           ref="map"
           provider = { PROVIDER_GOOGLE } // show buildings on OS
@@ -452,7 +438,7 @@ class HeatMapView extends Component {
                     <Callout
                       tooltip // enables customizable tooltip style
                       style={styles.callout}
-                      onPress={() => navigation.navigate('HeatBuildingView', {item:polygon})}>
+                      onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon})}>
                       <MapCallout
                         name={polygon.name}
                         image={'image'} // to be replaced with building image
@@ -463,9 +449,11 @@ class HeatMapView extends Component {
               </View>
             ))}
         </MapView>
+        <View style={styles.rightSwipeHack}></View>
+        <EnergyMapTimestamp />
         <TouchableOpacity
           // Button to go back to home location
-          style={styles.button}
+          style={styles.homeButton}
           onPress={() => this.moveMaptoLocation(initialRegion)}>
           <Icon
             // see: https://react-native-training.github.io/react-native-elements/API/icons/
@@ -506,10 +494,10 @@ class HeatMapView extends Component {
 */
 
 
-// Stack of HeatMap
-const HeatMapViewStack = StackNavigator({
-  HeatMapView: {
-    screen: HeatMapView,
+// Stack of EnergyMap
+const EnergyMapViewStack = StackNavigator({
+  EnergyMapView: {
+    screen: EnergyMapView,
      transitionConfig: () => ({
       // disable animation
       transitionSpec: {
@@ -518,15 +506,23 @@ const HeatMapViewStack = StackNavigator({
         easing: Easing.step0,
       }
     }),
-    navigationOptions: ({ navigation, updated }) => ({
-      headerTitle: <HeatMapHeader/>,
+    // navigationOptions: ({ navigation, updated }) => ({
+    //   headerTitle: <EnergyMapHeader/>,
+    //   headerStyle: {backgroundColor: '#0B5091'},
+    //   ...Platform.select({
+    //       android: { header: null }
+    //   }),
+    // })
+    navigationOptions: ({ navigation }) => ({
+      title: "Energy Map",
+      headerTintColor: 'white',
       headerStyle: {backgroundColor: '#0B5091'},
       ...Platform.select({
           android: { header: null }
       }),
     })
   },
-  HeatBuildingView: {
+  EnergyBuildingView: {
     screen: OverviewCards,
     path: 'buildings/:name',
     navigationOptions: ({ navigation }) => ({
@@ -554,11 +550,19 @@ const styles = StyleSheet.create({
     width: screen_width,
     height: screen_height
   },
+  rightSwipeHack: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: Dimensions.get('window').width - 20,
+    left: 0,
+    backgroundColor: 'transparent'
+  },
   callout: {
     flex: 1,
     position: 'relative'
   },
-  button: {
+  homeButton: {
     borderRadius: 10,
     padding: 10,
     backgroundColor: '#0B5091',
@@ -591,4 +595,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HeatMapViewStack;
+export default EnergyMapViewStack;
