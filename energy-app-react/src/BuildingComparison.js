@@ -90,7 +90,7 @@ class BuildingComparison extends Component {
         title='Compare'
         containerViewStyle={styles.button}
         backgroundColor='#0B5091'
-        onPress={() => navigate("Comparison", {screen: "ComparisonPage", building1:this.state.building1, building2:this.state.building2})}/>
+        onPress={() => navigate("ComparisonPage", {screen: "ComparisonPage", building1:this.state.building1, building2:this.state.building2})}/>
       </View>
       </View>
     );
@@ -103,14 +103,14 @@ const navStyles = StyleSheet.create({
     },
 })
 
-const ComparisonStack = StackNavigator({
-    BuildingComparison: {
-        screen: BuildingComparison,
-    }, 
-    Comparison: {
-        screen: ComparisonPage,
-    },
-});
+// const ComparisonStack = StackNavigator({
+//     BuildingComparison: {
+//         screen: BuildingComparison,
+//     }, 
+//     Comparison: {
+//         screen: ComparisonPage,
+//     },
+// });
 
 const styles = StyleSheet.create({
   card: {
@@ -190,4 +190,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default ComparisonStack;
+export default BuildingComparison;

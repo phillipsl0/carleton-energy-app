@@ -2,22 +2,20 @@ import BuildingComparison from './BuildingComparison';
 import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
 import React, { Component } from 'react';
 import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './helpers/ApiWrappers';
-import { AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, ScrollView } from 'react-native'
+import { Platform, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, ScrollView } from 'react-native'
 import { GetStyle } from './styling/Themes';
 import CurrTheme from './styling/CurrentTheme';
 import GraphDetail from './overview/GraphDetailCard';
-// import ExampleData from './overview/OverviewExampleData';
 import Utilities from './overview/UtilitiesMiniCards';
-import OverviewCards from './overview/OverviewCards';
 import { StackNavigator, SafeAreaView } from 'react-navigation';
-import  ComparisonPage from './ComparisonPage';
-
+import ComparisonPage from './ComparisonPage';
 
 export default class IndividualBuilding extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            selectedCard: 1,
             // graphData = 
             // buildingName = props.navigation.state.params.item.name;
             // curConsumption = (getCurrentBuildingUtilityConsumption("Burton", "water")/15).toFixed(2);
@@ -86,7 +84,6 @@ export default class IndividualBuilding extends Component {
         this.setState({ yearData: updatedYear });
     }
 
-
     getHeader = () => {
         const themeStyles = GetStyle(CurrTheme);
 
@@ -105,13 +102,8 @@ export default class IndividualBuilding extends Component {
       );
     }
 
-
-
-
-
-      getGraphScope = () => {
+    getGraphScope = () => {
         // graphData = navigation.data.comparison;
-
         if (this.state.view == 'day') {
             return this.state.dayData["data"];
         } else if (this.state.view == 'week') {
@@ -123,10 +115,16 @@ export default class IndividualBuilding extends Component {
         }
     }
 
+    // Handles time denominator buttons for graph
     scopeCallbackGraph = ( buttonView, buttonComparator, buttonIndex ) => {
         this.setState({ view: buttonView,
             viewNumber: buttonComparator,
             selectedCard: buttonIndex});
+    }
+
+    // Handles utilitie buttons
+    scopeCallbackUtilities = ( buttonIndex ) => {
+        this.setState({ selectedCard: buttonIndex});
     }
 
 
@@ -135,12 +133,9 @@ export default class IndividualBuilding extends Component {
         const themeStyles = GetStyle(CurrTheme);
         header = this.getHeader();
         const { navigate } = this.props.navigation;
-        // currData = this.getGraphScope();
-        //currData = this.getGraphScope(historicalData, cardType);
-
-
+  
         const {state} = this.props.navigation;
-        const tableHead = [' ','Electric', 'Water', 'Gas'];
+        var utilities = ["Gas", "Electric", "Heat", "Water"];
         
         const test = []
         for (var key in this.props.navigation.state.params.item) { 
@@ -158,16 +153,12 @@ export default class IndividualBuilding extends Component {
         test[4],
         test[5],
         test[6],
-
-
         ];
 
 
         return (
 
             <View style={[themeStyles.flex, themeStyles.list]}>
-
-
                 <Image style={themeStyles.header} 
                     source={{ uri: this.props.navigation.state.params.item.avatar }} />
 
@@ -175,137 +166,136 @@ export default class IndividualBuilding extends Component {
                 {header}
 
                 <ScrollView style={themeStyles.lightBlueBackground}>
-
                     <GraphDetail data={this.graphData}
                         callback={this.scopeCallbackGraph}
                         selected={this.state.selectedCard}/>                    
-                <Button
-                rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                fontSize={20}
-                title='Compare'
-                containerViewStyle={styles.button}
-                backgroundColor='#0B5091'
-                onPress={() => navigate("Comparison", {screen: "BuildingComparison"})}/>
-
+                    <Button
+                        rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
+                        fontSize={20}
+                        title='Compare'
+                        containerViewStyle={styles.button}
+                        backgroundColor='#0B5091'
+                        onPress={() => navigate("Comparison")}/>
                 </ScrollView>
-               
+                <Utilities callback={this.scopeCallbackUtilities}
+                    cardType={1}
+                    selected={this.state.selectedCard}
+                />
             </View>
         );
     }
 }
 
-export const SelectStack = StackNavigator({
-    IndividualBuilding: {
-        screen: IndividualBuilding,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Individual Building',
-            ...Platform.select({
-                android: { header: null }
-            }),
-            headerTintColor: 'white',
-            headerStyle: navStyles.header,
-        }),
-    }, 
-    Comparison: {
-        screen: BuildingComparison,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Building Comparison',
-            ...Platform.select({
-                android: { header: null }
-            }),
-            headerTintColor: 'white',
-            headerStyle: navStyles.header,
-        }),
-    },
-    Comparison_Page: {
-        screen: ComparisonPage,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Compare',
-            ...Platform.select({
-                android: { header: null }
-            }),
-            headerTintColor: 'white',
-            headerStyle: navStyles.header,
-        }),
-    },
-});
+/*
+*/
 
+// const SelectStack = StackNavigator({
+//     IndividualBuilding: {
+//         screen: IndividualBuilding,
+//         navigationOptions: ({ navigation }) => ({
+//             title: 'Individual Building',
+//             ...Platform.select({
+//                 android: { header: null }
+//             }),
+//             headerTintColor: 'white',
+//             headerStyle: navStyles.header,
+//         }),
+//     }, 
+    // Comparison: {
+    //     screen: BuildingComparison,
+    //     navigationOptions: ({ navigation }) => ({
+    //         title: 'Building Comparison',
+    //         ...Platform.select({
+    //             android: { header: null }
+    //         }),
+    //         headerTintColor: 'white',
+    //         headerStyle: navStyles.header,
+    //     }),
+    // },
+    // Comparison_Page: {
+    //     screen: ComparisonPage,
+    //     navigationOptions: ({ navigation }) => ({
+    //         title: 'Compare',
+    //         ...Platform.select({
+    //             android: { header: null }
+    //         }),
+    //         headerTintColor: 'white',
+    //         headerStyle: navStyles.header,
+    //     }),
+    // },
+// });
+
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    },
+})
 
 const styles = StyleSheet.create({
-  card: {
-    paddingTop: 20,
-  },
-  bigyellow: {
-    color: 'green',
-    fontWeight: 'bold',
-    fontSize: 30
+    card: {
+        paddingTop: 20,
     },
-  blue: {
-    color: 'blue',
-    fontWeight: 'bold',
+    blue: {
+        color: 'blue',
+        fontWeight: 'bold',
     },
     head: {
       backgroundColor: 'grey',
     },
     button: {
-    paddingTop: 20,
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingBottom: 100,
-  },
-  table: { 
-    width: 250,
-    marginLeft: 5, 
-    
-  },
-  text: { 
-    alignSelf: 'center',
-    marginLeft: 5, 
-    fontSize: 18,
-  },
-  listItem: {
-    height: 50,
-    backgroundColor: 'aqua',
-    borderBottomColor: '#c8c7cc',
-    borderBottomWidth: 0.5,
-    width: 300,
-    alignSelf: 'center',
-    paddingTop: 35,
-    paddingRight: 15,
-    paddingBottom: 55,
-
-  },
-  listImg: {
-    height: 30,
-    alignSelf: 'stretch',
-  },
-  listText: {
-    paddingLeft: 30,
-    marginLeft: 30,
-    fontSize: 24,
-  },
-  row: {
-    backgroundColor: 'orange',
-  },
-  view: {
-    alignItems: 'center',
-    backgroundColor: 'yellow'
-  },
-  img: {
-    alignSelf: 'stretch',
-    height: 100,
-  },
-  number: {
-    fontSize: 80,
-  },
-
-  textContainer: {
-    marginBottom: '5%',
-  },
-
-  words: {
-    fontSize: 20,
-    marginTop: '-2%',
-  },
+        paddingTop: 20,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingBottom: 100,
+    },
+    table: { 
+        width: 250,
+        marginLeft: 5, 
+    },
+    text: { 
+        alignSelf: 'center',
+        marginLeft: 5, 
+        fontSize: 18,
+    },
+    listItem: {
+        height: 50,
+        backgroundColor: 'aqua',
+        borderBottomColor: '#c8c7cc',
+        borderBottomWidth: 0.5,
+        width: 300,
+        alignSelf: 'center',
+        paddingTop: 35,
+        paddingRight: 15,
+        paddingBottom: 55,
+    },
+    listImg: {
+        height: 30,
+        alignSelf: 'stretch',
+    },
+    listText: {
+        paddingLeft: 30,
+        marginLeft: 30,
+        fontSize: 24,
+    },
+    row: {
+        backgroundColor: 'orange',
+    },
+    view: {
+        alignItems: 'center',
+        backgroundColor: 'yellow'
+    },
+    img: {
+        alignSelf: 'stretch',
+        height: 100,
+    },
+    number: {
+        fontSize: 80,
+    },
+    textContainer: {
+        marginBottom: '5%',
+    },
+    words: {
+        fontSize: 20,
+        marginTop: '-2%',
+    }
 })
-

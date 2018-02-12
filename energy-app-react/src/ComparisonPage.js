@@ -124,11 +124,11 @@ const navStyles = StyleSheet.create({
     },
 })
 
-const Building_Comparison = StackNavigator({
-    Buildings: {
-        screen: ComparisonPage,
-    },
-});
+// const Building_Comparison = StackNavigator({
+//     Buildings: {
+//         screen: ComparisonPage,
+//     },
+// });
 
 const styles = StyleSheet.create({
   card: {

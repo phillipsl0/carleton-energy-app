@@ -5,7 +5,7 @@ import { Icon } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
 
 import MapCallout from './MapCallout';
-import OverviewCards from './../overview/OverviewCards';
+import IndividualBuilding from './../IndividualBuilding';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import TopUtilities from './UtilityButtons';
@@ -301,6 +301,7 @@ class EnergyMapView extends Component {
     try {
       let polygons = buildings.map((building) => {
         return {
+          item: building,
           coordinates: building.coordinates,
           name: building.name,
           color: this.determineBuildingColor(building.name),
@@ -438,7 +439,7 @@ class EnergyMapView extends Component {
                     <Callout
                       tooltip // enables customizable tooltip style
                       style={styles.callout}
-                      onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon})}>
+                      onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon.item})}>
                       <MapCallout
                         name={polygon.name}
                         image={'image'} // to be replaced with building image
@@ -523,15 +524,31 @@ const EnergyMapViewStack = StackNavigator({
     })
   },
   EnergyBuildingView: {
-    screen: OverviewCards,
+    // screen: OverviewCards,
+    // path: 'buildings/:name',
+    // navigationOptions: ({ navigation }) => ({
+    //   title: `${navigation.state.params.item.name}`,
+    //   headerTintColor: 'white',
+    //   headerStyle: {backgroundColor: '#0B5091'},
+    // }),
+    screen: IndividualBuilding,
     path: 'buildings/:name',
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.item.name}`,
       headerTintColor: 'white',
-      headerStyle: {backgroundColor: '#0B5091'},
-    }),
+      headerStyle: navStyles.header,
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
+    }), 
   },
 });
+
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    },
+})
 
 const styles = StyleSheet.create({
   container: {
