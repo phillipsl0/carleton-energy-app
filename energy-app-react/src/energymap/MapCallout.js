@@ -12,7 +12,7 @@ export default class MapCallout extends Component {
     
     // Decide what units to render
     var units = ""
-    if (utility == 'electricity') {
+    if (utility == 'electric') {
       units = "kWh"
     } else if (utility == 'water') {
       units = "gal"

@@ -9,13 +9,13 @@ import IndividualBuilding from './../IndividualBuilding';
 import BuildingStack from './../BuildingListView';
 import buildings from './../Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
-import TopUtilities from './UtilityButtons';
+import TopUtilities from './EnergyMapUtilityButtons';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
 import ComparisonPage from './../ComparisonPage';
 import BuildingComparison from './../BuildingComparison';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
-var {screen_height, screen_width} = Dimensions.get('window');
+var {screenHeight, screenWidth} = Dimensions.get('window');
 
 /*
 Using tutorials:
@@ -27,6 +27,8 @@ Get lat/long: http://www.mapcoordinates.net/en
 */
 
 // ** if want to use user's location, set up geolocation in componentWillMount(): https://school.shoutem.com/lectures/geolocation-app-react-native/
+
+
 
 const initialRegion = {
   latitude: 44.4606925434,
@@ -47,7 +49,7 @@ class EnergyMapView extends Component {
       polygons: [],
       buildings_info: {
         "Burton": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -57,7 +59,7 @@ class EnergyMapView extends Component {
           },
         },
         "Cassat": {
-          "electricity": {
+          "electric": {
             "max": 40469,
             "min": 3137,
           },
@@ -67,7 +69,7 @@ class EnergyMapView extends Component {
           },
         },
         "Davis": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -77,7 +79,7 @@ class EnergyMapView extends Component {
           },
         },
         "Evans": {
-          "electricity": {
+          "electric": {
             "max": 47703,
             "min": 3228,
           },
@@ -87,7 +89,7 @@ class EnergyMapView extends Component {
           },
         },
         "Goodhue": {
-          "electricity": {
+          "electric": {
             "max": 38955,
             "min": 2427,
           },
@@ -97,7 +99,7 @@ class EnergyMapView extends Component {
           },
         },
         "Memo": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -107,7 +109,7 @@ class EnergyMapView extends Component {
           },
         },
         "Musser": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -117,7 +119,7 @@ class EnergyMapView extends Component {
           },
         },
         "Myers": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -127,7 +129,7 @@ class EnergyMapView extends Component {
           },
         },
         "Nourse": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -137,7 +139,7 @@ class EnergyMapView extends Component {
           },
         },
         "Sayles": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -147,7 +149,7 @@ class EnergyMapView extends Component {
           },
         },
         "Scoville": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -157,7 +159,7 @@ class EnergyMapView extends Component {
           },
         },
         "Severance": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -167,7 +169,7 @@ class EnergyMapView extends Component {
           },
         },
         "Watson": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -194,7 +196,7 @@ class EnergyMapView extends Component {
         longitude: -93.15502781429046
       },
       ready: true,
-      utilityNameShown: 'electricity',
+      utilityNameShown: 'electric',
       utilityIndexShown: 6, // for IndividualBuilding's UtilitiesMiniCard
       loading: true
     };
@@ -203,10 +205,8 @@ class EnergyMapView extends Component {
 
   // Assemble all of Carleton's buildings BEFORE rendering
   componentWillMount() {
-    //this.getNormalizationData();
-    this.getBuildingData();
+    this.getBuildingData('electric'); // Initialize with electric
     this.moveToCarleton();
-    // this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
     //console.log('EnergyMapView component is mounting...');
     this.closeActivityIndicator();
   };
@@ -239,11 +239,11 @@ class EnergyMapView extends Component {
   };
 
   // Maps utility name to its respective utility mini card index
-  utilityNameToIndex(utilityName) {
+  mapUtilityNameToIndex(utilityName) {
     if (utilityName == 'gas') {
       return (5);
     }
-    else if (utilityName == 'electricity') {
+    else if (utilityName == 'electric') {
       return (6);
     }
     else if (utilityName == 'heat') {
@@ -255,22 +255,33 @@ class EnergyMapView extends Component {
     return (1);
   };
 
+  mapUtilityNameToAPI(utilityName) {
+    if (utilityName == 'electric') {
+      return ('electricity');
+    }
+    else if (utilityName == 'water') {
+      return ('water');
+    }
+    return (utilityName);
+  };
+
   // Updates colors of energy map with new utility selection
   updateUtility = (utilitySelected) => {
     // Begin to update map
     this.openActivityIndicator();
-    utilityIndex = this.utilityNameToIndex(utilitySelected)
+    utilitySelected = utilitySelected.toLowerCase() // lower case
+    utilityIndex = this.mapUtilityNameToIndex(utilitySelected) // Get index for buildings
     this.setState({ utilityNameShown: utilitySelected, utilityIndexShown: utilityIndex });
     
     // Update map
-    this.getBuildingData();
+    //console.log("MAP updating utility with: ", this.state.utilityNameShown)
+    //console.log("MAP utility selected: ", utilitySelected)
+    this.getBuildingData(utilitySelected);
     this.moveToCarleton();
     this.closeActivityIndicator();
-    //{this.props.navigation.setParams({ updated: "Updating time stamp..." })}
   };
 
   onRegionChange = (region) => {
-    //this.setState({ region: region })
     //console.log('onRegionChange', region);
     //this.checkCalloutRender(region);
   };
@@ -286,22 +297,26 @@ class EnergyMapView extends Component {
   .5 : yellow
   1 : red
   */
-  determineBuildingColor(buildingName) {
-    //console.log("Rendering building colors with: ", this.state.utilityNameShown)
-    var use = getCurrentBuildingUtilityConsumption(buildingName, this.state.utilityNameShown).toFixed(1)
-    //var h = (1.0 - use) * 240
-    var building = this.state.buildings_info
-    building = building[buildingName][this.state.utilityNameShown]
-    var val = Math.abs(1 - ((use - building.min) / (building.max - building.min))) // taken from https://stats.stackexchange.com/questions/70801/how-to-normalize-data-to-0-1-range
-    //console.log("Normalizing " + buildingName, val)
-    var h = val * 85 // taken from: https://stackoverflow.com/questions/6660879/python-map-float-range-0-0-1-0-to-color-range-red-green
-    //return "hsl(" + h + ", 100%, 50%)";
+  determineBuildingColor(buildingName, utilitySelected) {
+    try {
+      var use = getCurrentBuildingUtilityConsumption(buildingName, this.mapUtilityNameToAPI(utilitySelected)).toFixed(1)
+      //var h = (1.0 - use) * 240
+      //console.log("Usage selected utility", use)
+      var building = this.state.buildings_info
+      building = building[buildingName][utilitySelected]
+      var val = Math.abs(1 - ((use - building.min) / (building.max - building.min))) // taken from https://stats.stackexchange.com/questions/70801/how-to-normalize-data-to-0-1-range
+      //console.log("Normalizing " + buildingName, val)
+      var h = val * 85 // taken from: https://stackoverflow.com/questions/6660879/python-map-float-range-0-0-1-0-to-color-range-red-green
+      return this.setColor(val);
 
-    return this.setColor(val);
+    } catch (err) {
+      console.log("Error in setting colors: ", err);
+      return ("lightgrey");
+    }
   };
 
-  // taken from: https://ux.stackexchange.com/questions/34875/how-to-translate-a-rating-range-into-red-yellow-green-colours
-  // Generates color from normalization of 0 to 10 scale
+  // Taken from: https://ux.stackexchange.com/questions/34875/how-to-translate-a-rating-range-into-red-yellow-green-colours
+  // Generates color of value normalizated on 0 to 10 scale
   setColor(value) {
     var color;
     var parts = (value > 5) ? (1-((value-5)/5)) : value/5;
@@ -318,41 +333,42 @@ class EnergyMapView extends Component {
     return "rgb(" + color.join(',') + ")";
 }
 
-  // Get current building data
-  async getBuildingData() {
+  // Get current building data - initializes with energetic
+  async getBuildingData(utilitySelected) {
+    // Call API
     try {
       let polygons = buildings.map((building) => {
         return {
           item: building,
           coordinates: building.coordinates,
           name: building.name,
-          color: this.determineBuildingColor(building.name),
+          color: this.determineBuildingColor(building.name, utilitySelected),
           marker_coordinate: building.marker_coordinate,
-          usage: getCurrentBuildingUtilityConsumption(building.name, this.state.utilityNameShown).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
+          usage: getCurrentBuildingUtilityConsumption(building.name, utilitySelected).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
         }
       });
       this.setState({polygons: polygons});
       return polygons;
     } catch(error) {
-        var introStr = "This is embarrassing... \n"
+        var introStr = "Error getting building data: \n"
         alert(introStr.concat(error))
     }
   };
 
-  getNormalizationData() {
-    try {
-      let normalization = buildings.reduce(function(map, building) {
-        map[building.name] = building.normalization;
-        return map;
-      }, {});
-      //console.log("Normalization: ", normalization)
-      this.setState({buildings_info: normalization})
-      var keys = Object.keys(this.state.buildings_info)
-    } catch(error) {
-        var introStr = "This is embarrassing...: "
-        alert(introStr.concat(error))
-    }
-  };
+  // getNormalizationData() {
+  //   try {
+  //     let normalization = buildings.reduce(function(map, building) {
+  //       map[building.name] = building.normalization;
+  //       return map;
+  //     }, {});
+  //     //console.log("Normalization: ", normalization)
+  //     this.setState({buildings_info: normalization})
+  //     var keys = Object.keys(this.state.buildings_info)
+  //   } catch(error) {
+  //       var introStr = "This is embarrassing...: "
+  //       alert(introStr.concat(error))
+  //   }
+  // };
 
 
   // Show callout when building polygon is pressed
@@ -587,14 +603,20 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: screen_width,
-    height: screen_height
+    ...Platform.select({
+      ios: { ...StyleSheet.absoluteFillObject },
+      android: {
+        flex: 1,
+        //...StyleSheet.absoluteFillObject,
+        height: screenHeight,
+        width: screenWidth,
+      },
+    }),
+    // position: 'absolute',
+    // top: 0,
+    // left: 0,
+    // right: 0,
+    // bottom: 0,
   },
   rightSwipeHack: {
     position: 'absolute',

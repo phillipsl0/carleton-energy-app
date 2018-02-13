@@ -24,7 +24,7 @@ export default class Utilities extends Component {
 
     sendToParent = ( buttonIndex ) => {
         this.props.callback(buttonIndex);
-        console.log("Button index selected: ", buttonIndex);
+        // console.log("Button index selected: ", buttonIndex);
     }
 
     getCardData = (data) => {

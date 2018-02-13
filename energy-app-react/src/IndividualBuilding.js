@@ -95,8 +95,12 @@ export default class IndividualBuilding extends Component {
 
     getHeader = () => {
         const themeStyles = GetStyle(CurrTheme);
-
-        headerText = (getCurrentBuildingUtilityConsumption("Burton", "water")/15).toFixed(1);
+        try {
+            headerText = (getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedCard))/15).toFixed(1);
+        } catch (error) {
+            console.log("Error in displaying IndividualBuilding header: ", error)
+            headerText = "N/A"
+        }
         subheaderText = "gal/min";
 
       return (
@@ -135,6 +139,23 @@ export default class IndividualBuilding extends Component {
     scopeCallbackUtilities = ( buttonIndex ) => {
         this.setState({ selectedCard: buttonIndex});
     }
+
+    // Maps utility name to its respective utility mini card index
+    mapUtilityNameToIndex(utilityName) {
+        if (utilityName == 'gas') {
+          return (5);
+        }
+        else if (utilityName == 'electric') {
+          return (6);
+        }
+        else if (utilityName == 'heat') {
+          return (7);
+        }
+        else if (utilityName == 'water') {
+          return (8);
+        }
+        return (1);
+    };
 
 
     render() {
