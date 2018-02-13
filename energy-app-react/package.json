@@ -21,7 +21,7 @@
   "dependencies": {
     "@shoutem/ui": "^0.23.2",
     "exp": "^49.2.2",
-    "expo": "24.0.0",
+    "expo": "24.0.2",
     "google-map-react": "^0.29.0",
     "prop-types": "^15.6.0",
     "react": "16.0.0",
