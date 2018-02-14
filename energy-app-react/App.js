@@ -132,15 +132,10 @@ const RootTabs = TabNavigator({
         },
      navigationOptions: ({ navigation }) => ( {
          tabBarOnPress: (tab, jumpToIndex) => {
-          // console.log("tab route", tab.scene.route)
-          // console.log("~")
-          // console.log("tab", tab)
           tab.jumpToIndex(tab.scene.index);
 
           // resets stack in tabs if their icon is tapped while focused
           // if (tab.scene.focused) {
-          //    console.log("~~ If Statement TRUE~~")
-          //    console.log(tab.scene)
           //   if (tab.scene.route.index !== 0) {
           //     navigation.dispatch(NavigationActions.reset({
           //       index: 0,
