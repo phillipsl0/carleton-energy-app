@@ -274,8 +274,6 @@ class EnergyMapView extends Component {
     this.setState({ utilityNameShown: utilitySelected, utilityIndexShown: utilityIndex });
     
     // Update map
-    //console.log("MAP updating utility with: ", this.state.utilityNameShown)
-    //console.log("MAP utility selected: ", utilitySelected)
     this.getBuildingData(utilitySelected);
     this.moveToCarleton();
     this.closeActivityIndicator();
@@ -333,7 +331,7 @@ class EnergyMapView extends Component {
     return "rgb(" + color.join(',') + ")";
 }
 
-  // Get current building data - initializes with energetic
+  // Calls API to get current building data - initializes with electric
   async getBuildingData(utilitySelected) {
     // Call API
     try {
