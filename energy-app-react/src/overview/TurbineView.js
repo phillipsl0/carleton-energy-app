@@ -33,6 +33,10 @@ export default class Windmill extends Component {
 
     }
 
+    numberWithCommas = (x) => {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
     render() {
         const themeStyles = GetStyle(CurrTheme);
         const { layout, currentData } = this.props;
@@ -48,7 +52,7 @@ export default class Windmill extends Component {
                     Currently generating
                 </Text>
                 <Text style={[styles.number, themeStyles.fontBold]}>
-                    {Number(turbineTotal).toLocaleString()}
+                    {this.numberWithCommas(turbineTotal)}
                 </Text>
                 <Text style={[styles.units, themeStyles.fontRegular]}>
                     kWh

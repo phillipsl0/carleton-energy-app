@@ -6,6 +6,7 @@ import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, Button } from 'react-native-elements'
 import { VictoryContainer, VictoryChart, VictoryTheme } from "victory-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
 import OverviewCards from './OverviewCards'
@@ -18,6 +19,7 @@ import CurrFont from './../styling/CurrentFont';
 import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './../helpers/ApiWrappers';
 import { default as CustomThemes } from './../visualizations/GraphThemes';
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
+import Comparator from './../helpers/Comparators';
 
 const themeStyles = GetStyle();
 
@@ -34,7 +36,7 @@ const themeStyles = GetStyle();
 
 class OverviewListView extends Component {
     returnScreen = ( item, navigation ) => {
-        if (item.title == "Turbine Energy") {
+        if (item.title == "Wind Turbine Energy") {
             navigation.navigate('TurbineView',
                 {graphType:item.graphType, data:item.data, title: item.title})
         } else if (item.title == "Energy Use") {
@@ -55,7 +57,6 @@ class OverviewListView extends Component {
         const { refresh, loading, currentData, layout } = this.props;
 
         return (
-//           <ScrollView>
            <List
             style={[styles.list, themeStyles.list, themeStyles.flex]}>
            <FlatList
@@ -81,35 +82,68 @@ class OverviewListView extends Component {
                     animating={loading}
                     size="large"/>}
 
-                 {item.title == "Turbine Energy" &&
-                  <Graph
-                    type={item.graphType}
-                    theme={CustomThemes.carleton}
-                    graphData={currentData.turbine}/>}
+                 {item.title == "Wind Turbine Energy" &&
+                  <Comparator
+                       width={moderateScale(255)}
+                       height={moderateScale(50 * 3)}
+                       data={currentData.turbine}
+                       unit={'kWh'}
+                       number={3}/>
+                    }
 
-                 {item.title != "Turbine Energy" &&
+                 {item.title == "Energy Use"  &&
                   <Graph
                     type={item.graphType}
+                    legend={true}
                     theme={CustomThemes.carleton}
                     graphData={item.title == "Energy Use" ? currentData.usage :
-                        currentData.generation}/>}
+                        currentData.generation}/>
+                  }
 
-                 <TouchableHighlight onPress={() => this.returnScreen(item, navigation)}
+                  {item.title == "Energy Generation"  &&
+                    <Graph
+                      type={item.graphType}
+                      legend={true}
+                      theme={CustomThemes.carleton}
+                      graphData={currentData.generation}/>
+                    }
+
+                 <TouchableHighlight
+                    onPress={() => this.returnScreen(item, navigation)}
                     underlayColor="transparent"
-                    style={styles.button}>
+                    style={[styles.button, {position: 'absolute', right: 0}]}>
                     <FontAwesome name="angle-right" size={moderateScale(40)} color="#0B5091" />
                  </TouchableHighlight>
-                 </View>
+
+                  </View>
                  </TouchableHighlight>
+                {item.title == "Energy Use"  &&
+                  <Comparator
+                     width={moderateScale(300)}
+                     height={moderateScale(40)}
+                     data={currentData.usage}
+                     unit={'kWh'}
+                     number={1}/>
+                  }
                </Card>
              )}
            />
            </List>
-//          </ScrollView>
        );
     }
 }
 
+//<Comparator
+//                    data={currentData.turbine}
+//                    unit={"kWh"}/>
+//                  <View style={[themeStyles.flexboxRow]}>
+//                    <MaterialCommunityIcons name=
+//{(item.title != "Wind Turbine Energy"  &&
+//                  <Graph
+//                    type={item.graphType}
+//                    theme={CustomThemes.carleton}
+//                    graphData={item.title == "Energy Use" ? currentData.usage :
+//                        currentData.generation}/>}
 const navigateOnce = (getStateForAction) => (action, state) => {
     const {type, routeName} = action;
 

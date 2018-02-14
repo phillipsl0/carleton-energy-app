@@ -82,7 +82,7 @@ const ExampleData = [
         graphType: 'pie' ,
     },
     {
-            title: 'Turbine Energy',
+            title: 'Wind Turbine Energy',
             data: {current: [{y: 8, x: "Turbine One"},
                              {y: 7, x: "Turbine Two"},],
                    comparison: {
