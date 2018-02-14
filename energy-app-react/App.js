@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
-import { Platform, StyleSheet, BackHandler, View, StatusBar, AsyncStorage} from 'react-native';
+import { Platform, StyleSheet, BackHandler, 
+  View, StatusBar, AsyncStorage} from 'react-native';
 import { TabNavigator, TabBarTop, TabBarBottom, SafeAreaView,
   NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { createReduxBoundAddListener, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
+import { createReduxBoundAddListener, 
+  createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import BuildingStack from './src/BuildingListView';
@@ -14,7 +16,8 @@ import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
 import { handler, dataReducer, layoutReducer } from './src/helpers/ReduxHandler'
-import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
+import { getCurrentGenerationGraphFormat, 
+  getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
 import IntroSlider from './src/IntroSlider';
 import { checkIfFirstLaunch } from './src/checkIfFirstLaunch';
@@ -261,8 +264,6 @@ class App extends Component {
   onBackPress = () => {
       const { dispatch, nav } = this.props;
       if (nav.index === 0) {
-          // console.log("Dispatch", dispatch)
-          // console.log("Nav", nav.routes[0].routes.length)
           if (nav.routes[0].routes.length != 1) {
             dispatch(NavigationActions.back());
             return true;
