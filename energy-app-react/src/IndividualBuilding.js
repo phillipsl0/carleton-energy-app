@@ -95,15 +95,42 @@ export default class IndividualBuilding extends Component {
         this.setState({ yearData: updatedYear });
     }
 
+    // Decide what units to render based on utility and time
+    getUnits(utility, time) {
+        var units = ""
+        if (utility == 6) { // electric
+          units = "kWh"
+        } else if (utility == 8) { // water
+          units = "gal"
+        } else if (utility == 5) { // gas
+          units = "kBTU"
+        } else if (utility == 7) { // heat
+          units = "thm"
+        }
+
+        var timePeriod = ""
+        if (time == 1) {
+            timePeriod = "/day"
+        } else if (time == 2) {
+            timePeriod = "/week"
+        } else if (time == 3) {
+            timePeriod = "/month"
+        } else if (time == 4) {
+            timePeriod = "/year"
+        }
+        return (units+timePeriod)
+    }
+
     getHeader = () => {
         const themeStyles = GetStyle(CurrTheme);
         try {
             headerText = (getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtilityCard))/15).toFixed(1);
+            subheaderText = this.getUnits(this.state.selectedUtilityCard, this.state.selectedTimeCard)
         } catch (error) {
             console.log("Error in displaying IndividualBuilding header: ", error)
             headerText = "N/A"
+            subheaderText = ""
         }
-        subheaderText = "gal/min";
 
       return (
           <View style={[styles.textContainer, themeStyles.centered]}>
