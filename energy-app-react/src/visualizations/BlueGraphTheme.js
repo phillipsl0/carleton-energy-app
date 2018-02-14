@@ -41,11 +41,10 @@ const baseProps = {
 const baseLabelStyles = {
   fontFamily: fontRegular,
   fontSize: 10,
-  letterSpacing: 90,
+  letterSpacing: 'normal',
   padding: 0,
   fill: carletonBlue,
   stroke: "transparent",
-  angle: 50,
 };
 
 const centeredLabelStyles = assign({ textAnchor: "middle" }, baseLabelStyles);
@@ -170,7 +169,7 @@ export default {
         stroke: "transparent",
         strokeWidth: 0
       },
-      labels: centeredLabelStyles
+      labels: baseLabelStyles
     }
   }, baseProps),
   stack: assign({

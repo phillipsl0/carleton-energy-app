@@ -57,7 +57,8 @@ class SustainListView extends Component {
 
 
         return (
-            <ScrollView>
+            <ScrollView style={{backgroundColor: '#fafafa'}}>
+                <View style={{paddingTop:5}} />
                 <Card containerStyle={[themeStyles.card, styles.card]}>
 
                     <View style={styles.header} >
@@ -120,13 +121,11 @@ class SustainListView extends Component {
                             )
                         }
                     </List>
-                    <Button
-                        title="More Events"
-                        rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                        fontSize={20}
-                        backgroundColor='#0B5091'
-                        buttonStyle={styles.button}
-                        onPress={() => Linking.openURL(links[4])} />
+                    <View>
+                        <Text 
+                            style={[styles.title, themeStyles.title, styles.button]}
+                            onPress={() => Linking.openURL(links[4])}>MORE EVENTS</Text>
+                    </View>
                 </Card>
 
                 <Card containerStyle={[themeStyles.card, styles.card]}>
@@ -155,15 +154,13 @@ class SustainListView extends Component {
                                 subtitleNumberOfLines={3} />
                         )}
                     </List>
-                    <Button
-                        title="More News"
-                        rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                        fontSize={20}
-                        backgroundColor='#0B5091'
-                        buttonStyle={styles.button}
-                        onPress={() => Linking.openURL(links[5])} />
+                    <View>
+                        <Text 
+                            style={[styles.title, themeStyles.title, styles.button]}
+                            onPress={() => Linking.openURL(links[5])}>MORE NEWS</Text>
+                    </View>
                 </Card>
-                <View style={{paddingTop:15}} />
+                <View style={{paddingTop:5}} />
             </ScrollView>
             );
 
@@ -195,21 +192,27 @@ const SustainStack = StackNavigator({
 const styles = StyleSheet.create({
     card: {
         paddingTop: 0,
+        marginBottom: 5,
     },
     header: {
         marginBottom: 25,
-        paddingLeft: 20,
+        paddingLeft: 18,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center'
     },
     button: {
-        marginBottom: 3
+        marginBottom: 3,
+        paddingRight: 25,
+        fontSize: 17,
+        fontWeight: 'bold',
+        textAlign: 'right',
+        color: '#529353'
     },
     image: {
-        width: moderateScale(55),
-        height: moderateScale(55),
+        width: moderateScale(40),
+        height: moderateScale(40),
     },
     list: {
         marginBottom: 12,
@@ -229,9 +232,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth
     },
     title: {
-        paddingLeft: 20,
+        paddingLeft: 12,
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: 'normal',
     },
 })
 

@@ -1,24 +1,26 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
-import { Platform, StyleSheet, BackHandler, View, StatusBar } from 'react-native';
+import { Platform, StyleSheet, BackHandler, View, StatusBar, AsyncStorage} from 'react-native';
 import { TabNavigator, TabBarTop, TabBarBottom, 
   NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import BuildingListView from './src/BuildingListView';
-import HeatMapViewStack from './src/heatmap/HeatMapView'
+import BuildingStack from './src/BuildingListView';
+import EnergyMapViewStack from './src/energymap/EnergyMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
 import { handler, dataReducer, layoutReducer } from './src/helpers/ReduxHandler'
-import { getCurrentGenerationGraphFormat, 
-  getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
+import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
+import IntroSlider from './src/IntroSlider';
+import { checkIfFirstLaunch } from './src/checkIfFirstLaunch';
 
 // const defaultFont = CurrFont+'-regular';
 // const defaultFontBold = CurrFont+'-bold';
+
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
 
@@ -62,6 +64,7 @@ tabStyle.tabStatusColors = {
     }
 
 
+// Bottom tab navigation
 const RootTabs = TabNavigator({
     Overview: {
       screen: OverviewStack,
@@ -73,7 +76,7 @@ const RootTabs = TabNavigator({
       },
     },
     Buildings: {
-      screen: BuildingListView,
+      screen: BuildingStack,
       navigationOptions: {
         tabBarLabel: 'Buildings',
         tabBarIcon: ({ tintColor, focused }) => (
@@ -90,10 +93,10 @@ const RootTabs = TabNavigator({
         ),
       },
     },
-    HeatMap: {
-        screen: HeatMapViewStack,
+    EnergyMap: {
+        screen: EnergyMapViewStack,
         navigationOptions: {
-          tabBarLabel: 'Heat Map',
+          tabBarLabel: 'Map',
           tabBarIcon: ({ tintColor, focused }) => (
             <FontAwesome name="fire" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
           ),
@@ -107,7 +110,7 @@ const RootTabs = TabNavigator({
         outputRange: [tabStyle.tabColors.tab0, 
                       tabStyle.tabColors.tab1, 
                       tabStyle.tabColors.tab2, 
-                      tabStyle.tabColors.tab3],  // alt blue 01579B
+                      tabStyle.tabColors.tab3]
       })
       return (
         Platform.OS === 'ios'
@@ -124,10 +127,8 @@ const RootTabs = TabNavigator({
           // showIcon: true, //this is default false on Android
           // showLabel: true,
           activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF', 
-          //navStyle.activeTintColor.color, // '#FFFFFF', //'#0B5091',
           inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90', 
-          //navStyle.inactiveTintColor, //'#9E9E9E', FFFFFFA0
-          pressColor: '#FFFFFF' // Android ripple color onPress
+          pressColor: '#DDD' // Android ripple color onPress
         },
      navigationOptions: ({ navigation }) => ( {
          tabBarOnPress: (tab, jumpToIndex) => {
@@ -172,76 +173,157 @@ const mapStateToProps = (state) => ({
 });
 
 class App extends Component {
-    componentDidMount() {
-        BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-    }
-
-    componentWillUnmount() {
-        BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
-    }
-
-    onBackPress = () => {
-        const { dispatch, nav } = this.props;
-        if (nav.index === 0) {
-            return false;
-        }
-
-        dispatch(NavigationActions.back());
-        return true;
-    };
-
     state = {
-        isReady: false,
+    isReady: false,
+    isFirstLaunch: false,
+    hasCheckedAsyncStorage: false,
+  };
+  
+  // componentWillMount() {
+  //   AsyncStorage.getItem('RANDOM2')
+  //     .then(res => {
+  //       if (res !== null) {
+  //         console.log("Not null random2");
+  //       } else {
+  //         this.isFirstLaunch = true;
+  //         console.log("Null random2");
+  //         console.log("Result: ", res)
+  //         AsyncStorage.setItem('RANDOM2', 'true');
+  //       }
+  //     })
+  //     .catch(err => alert("App mounting error: ", err));
+  //   console.log(this.state.isFirstLaunch);
+  //   if (this.state.isFirstLaunch == true) {
+  //     console.log('setting random2 to true');
+  //     AsyncStorage.setItem('RANDOM2', 'true');
+  //   }
+  // }
+  // Checks AsyncStorage to see if app has been launched already
+  /*
+  Great info about components mounting:
+  https://daveceddia.com/where-fetch-data-componentwillmount-vs-componentdidmount/
+  Put all data loading in component DID mount to avoid rerendering
+  */
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+    // checkIfFirstLaunch()
+    //   .then(res => this.setState({ isFirstLaunch: res, hasCheckedAsyncStorage: true }))
+    //   .catch(err => alert("An error occurred with async: ", err));
+    
+    try {
+      // AsyncStorage.getItem('RANDOM')
+      //   .then(res => {
+      //     if (res !== null) {
+      //       console.log("Not null random");
+      //       this.isFirstLaunch = false;
+      //     } else {
+      //       console.log("Null random");
+      //       this.isFirstLaunch = true;
+      //       console.log("Result: ", res)
+      //       AsyncStorage.setItem('RANDOM', 'true');
+      //       console.log("INSIDE of async, first launch:", this.state.isFirstLaunch);
+      //     }
+      //   })
+      //   .catch(err => alert("App mounting error: ", err));
+      const first = AsyncStorage.getItem('RANDOM');
+      if (first !== null) {
+        // console.log("We have data!")
+        this.setState({ hasCheckedAsyncStorage: true })
+        // console.log("INSIDE of async, first launch:", this.state.isFirstLaunch)
+      } else {
+        // console.log("First launch, random!")
+        this.state.isFirstLaunch = true;
+        this.setState({ isFirstLaunch: true, hasCheckedAsyncStorage: true })
+      }
+      // console.log("OUTSIDE of async, first launch:", this.state.isFirstLaunch);
+      AsyncStorage.setItem('RANDOM', 'true');
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  componentWillUnmount() {
+      BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+      AsyncStorage.setItem('RANDOM', 'true');
+  }
+
+  onBackPress = () => {
+      const { dispatch, nav } = this.props;
+      if (nav.index === 0) {
+          return false;
+      }
+
+      dispatch(NavigationActions.back());
+      return true;
+  };
+
+  async _cacheResourcesAsync() {
+    const fontAssets = cacheFonts([FontAwesome.font,
+        {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
+        {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
+    const imageAssets = cacheImages([require('./src/assets/windmill.png'),
+        require('./src/assets/windmillHeader.png')]);
+
+    await Promise.all([...imageAssets, ...fontAssets]);
+  }
+      
+  // Closes intro screen when done button is pressed
+  closeIntro = (onDonePress) => {
+    if (onDonePress == true) {
+      this.setState({ isFirstLaunch: false });
     };
+  }  
 
-    async _cacheResourcesAsync() {
-        const fontAssets = cacheFonts([FontAwesome.font,
-            {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
-            {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
-        const imageAssets = cacheImages([require('./src/assets/windmill.png'),
-            require('./src/assets/windmillHeader.png')]);
 
-        await Promise.all([...imageAssets, ...fontAssets]);
+  render() {
+    const { dispatch, nav, data, ui } = this.props;
+    const navigation = addNavigationHelpers({
+        dispatch,
+        data,
+        ui,
+        state: nav
+    });
+
+    StatusBar.setBarStyle('light-content', false);
+    if (Platform.OS === 'android') {
+      switch (this.props.nav.index){
+         case 0: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab0, true); break;
+         case 1: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab1, true); break;
+         case 2: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab2, true); break;
+         case 3: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab3, true); break;
+      }
     }
 
-    render() {
-        const { dispatch, nav, data, ui } = this.props;
-        const navigation = addNavigationHelpers({
-            dispatch,
-            data,
-            ui,
-            state: nav
-        });
-
-        // StatusBar.setBackgroundColor('#ff9800', true);
-        // console.log("\n\n~~!!New Render!!~~\n\n")
-        // console.log(this.props.nav.index)
-        // console.log(tabStyle.tabStatusColors);
-
-        StatusBar.setBarStyle('light-content', false);
-        if (Platform.OS === 'android') {
-          switch (this.props.nav.index){
-             case 0: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab0, true); break;
-             case 1: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab1, true); break;
-             case 2: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab2, true); break;
-             case 3: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab3, true); break;
-          }
-        }
-
-        if (!this.state.isReady) {
-            return(
-                <AppLoading
-                    startAsync={this._cacheResourcesAsync}
-                    onFinish={() => this.setState({ isReady: true })}
-                    onError={console.warn}/>
-            );
-        }
-
-        return(
-            <RootTabs navigation={navigation} />
-        );
-
+    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage) {
+      return(
+        <AppLoading
+            startAsync={this._cacheResourcesAsync}
+            onFinish={() => this.setState({ isReady: true })}
+            onError={console.warn}/>
+      );
     }
+
+    // if (!this.state.hasCheckedAsyncStorage) {
+    //   return( null )
+    // }
+
+    //Check if app has been launched for the first time
+    // console.log("Before first launch return, isFirstLaunch: ", this.state.isFirstLaunch);
+    // console.log("Before first launch return, checked Async: ", this.state.hasCheckedAsyncStorage)
+    // if (this.state.isFirstLaunch == true && this.state.hasCheckedAsyncStorage) {
+    //   // console.log("In first launch return, isFirstLaunch: ", this.state.isFirstLaunch);
+    //   // console.log("In first launch return, checked Async: ", this.state.hasCheckedAsyncStorage)
+    //   return (
+    //     <IntroSlider
+    //       onDone={this.closeIntro}
+    //     />
+    //   );
+    // }
+
+    return (
+      <RootTabs navigation={navigation} />
+    );
+  }
 }
 
 const AppWithNavigationState = connect(mapStateToProps)(App);

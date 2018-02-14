@@ -6,10 +6,10 @@ import { List, Card, ListItem, Button, Avatar, Header } from 'react-native-eleme
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
-
+import BuildingComparison from './BuildingComparison';
 import OverviewCards from './overview/OverviewCards';
 import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js';
-
+import  ComparisonPage from './ComparisonPage';
 
 class BuildingListView extends Component {
 
@@ -65,7 +65,7 @@ const BuildingStack = StackNavigator({
     },
 
     CardView: {
-      screen: OverviewCards,
+      screen: IndividualBuilding,
       path: 'buildings/:name',
       navigationOptions: ({ navigation }) => ({
               title: `${navigation.state.params.item.name}`,
@@ -76,10 +76,28 @@ const BuildingStack = StackNavigator({
               headerBackTitle: 'Back',
             }),
     },
-    // CardView: {
-    //   screen: IndividualBuilding,
-    //   // navigationOptions:
-    // },
+    Comparison: {
+        screen: BuildingComparison,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Building Comparison',
+            ...Platform.select({
+                android: { header: null }
+            }),
+            headerTintColor: 'white',
+            headerStyle: navStyles.header,
+        }),
+    },
+    ComparisonPage: {
+        screen: ComparisonPage,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Compare',
+            ...Platform.select({
+                android: { header: null }
+            }),
+            headerTintColor: 'white',
+            headerStyle: navStyles.header,
+        }),
+    },
 });
 
 const navStyles = StyleSheet.create({
@@ -87,16 +105,6 @@ const navStyles = StyleSheet.create({
         backgroundColor: '#0B5091',
     },
 })
-
-
-// styles.listItem
-// styles.text
-// styles.subtitleText
-// styles.listImg
-// navStyles.header
-// navStyles.header
-// navStyles.headerTitle
-// navStyles.headerTitle
 
 const styles = StyleSheet.create({
   card: {
