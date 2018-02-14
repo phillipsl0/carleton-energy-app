@@ -15,7 +15,9 @@ export default class IndividualBuilding extends Component {
         super(props);
 
         this.state = {
-            selectedCard: 1,
+            selectedUtilityCard: 1, // index for utility card
+            selectedTimeCard: 1, // index for time card - intialized to day
+            view: 'day',
             // graphData = 
             // buildingName = props.navigation.state.params.item.name;
             // curConsumption = (getCurrentBuildingUtilityConsumption("Burton", "water")/15).toFixed(2);
@@ -37,7 +39,7 @@ export default class IndividualBuilding extends Component {
     getUtility() {
         utilitySelected = this.props.navigation.state.params.selected;
         if (utilitySelected !== null) {
-            this.setState({ selectedCard:utilitySelected })
+            this.setState({ selectedUtilityCard:utilitySelected })
         }
     }
 
@@ -96,7 +98,7 @@ export default class IndividualBuilding extends Component {
     getHeader = () => {
         const themeStyles = GetStyle(CurrTheme);
         try {
-            headerText = (getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedCard))/15).toFixed(1);
+            headerText = (getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtilityCard))/15).toFixed(1);
         } catch (error) {
             console.log("Error in displaying IndividualBuilding header: ", error)
             headerText = "N/A"
@@ -132,12 +134,12 @@ export default class IndividualBuilding extends Component {
     scopeCallbackGraph = ( buttonView, buttonComparator, buttonIndex ) => {
         this.setState({ view: buttonView,
             viewNumber: buttonComparator,
-            selectedCard: buttonIndex});
+            selectedTimeCard: buttonIndex});
     }
 
     // Handles utilitie buttons
     scopeCallbackUtilities = ( buttonIndex ) => {
-        this.setState({ selectedCard: buttonIndex});
+        this.setState({ selectedUtilityCard: buttonIndex});
     }
 
     // Maps utility name to its respective utility mini card index
@@ -159,10 +161,8 @@ export default class IndividualBuilding extends Component {
 
 
     render() {
-        navigation = this.props.navigation;
         const themeStyles = GetStyle(CurrTheme);
         header = this.getHeader();  
-        const { state } = this.props.navigation;
         var utilities = ["Gas", "Electric", "Heat", "Water"];
         
         const test = []
@@ -194,7 +194,8 @@ export default class IndividualBuilding extends Component {
                 <ScrollView style={themeStyles.lightBlueBackground}>
                     <GraphDetail data={this.graphData}
                         callback={this.scopeCallbackGraph}
-                        selected={this.state.selectedCard}/>                    
+                        selected={this.state.selectedTimeCard} // button index must match selected
+                        type={1}/>                    
                     <Button
                         rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                         fontSize={20}
@@ -205,7 +206,7 @@ export default class IndividualBuilding extends Component {
                 </ScrollView>
                 <Utilities callback={this.scopeCallbackUtilities}
                     cardType={1}
-                    selected={this.state.selectedCard}
+                    selected={this.state.selectedUtilityCard}
                     //selected={5}
                 />
             </View>
