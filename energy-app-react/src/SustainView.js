@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, Linking, Platform,
+import { FlatList, AppRegistry, SectionList, Linking, Platform, Alert,
     StyleSheet, View, ScrollView, Text, Image, WebView, TouchableOpacity } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button } from 'react-native-elements';
@@ -16,7 +16,8 @@ class SustainListView extends Component {
         super(props);
         this.state = {
            newsData: '',
-           eventsData: ''
+           eventsData: '',
+           neverAlert: false
         }
     }
 
@@ -36,6 +37,21 @@ class SustainListView extends Component {
         await this.setStateAsync({newsData: newsJson})
     }
 
+    alertBrowser = (link) => {
+        if (this.state.neverAlert) {
+            Linking.openURL(link);
+        } else {
+            Alert.alert(
+                'Open in Browser',
+                'Open link in web browser?',
+                [{text: 'Always Open', onPress: () => 
+                    (console.log('Always Pressed'), Linking.openURL(link), this.setState({neverAlert: true}))},
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'Open', onPress: () => (console.log('OK Pressed'), Linking.openURL(link))},],
+                { cancelable: true }
+            );
+        }
+    }
 
     render() {
         events = getSustainabilityEventsBak();
@@ -76,15 +92,15 @@ class SustainListView extends Component {
                             containerStyle={[themeStyles.listItem, styles.listItem]}
                             title={"Our Campus"}
                             titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(links[1])} />
+                            onPress={() => this.alertBrowser(links[1])} />
                         <ListItem containerStyle={[themeStyles.listItem, styles.listItem]}
                             title={"Take Action"}
                             titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(links[2])} />
+                            onPress={() => this.alertBrowser(links[2])} />
                         <ListItem containerStyle={[themeStyles.listItem, styles.listItem]}
                             title={"People & Policies"}
                             titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(links[3])} />
+                            onPress={() => this.alertBrowser(links[3])} />
                     </List>
                 </Card>
 
@@ -109,7 +125,7 @@ class SustainListView extends Component {
                                 containerStyle={[themeStyles.listItem, styles.listItem]}
                                 title={item["title"]}
                                 titleNumberOfLines={3}
-                                onPress={() => Linking.openURL(item["link"])}
+                                onPress={() => this.alertBrowser(item["link"])}
                                 subtitleStyle={themeStyles.subtitle}
                                 subtitle={item["content"]} />
                             : <ListItem
@@ -117,14 +133,14 @@ class SustainListView extends Component {
                                 containerStyle={[themeStyles.listItem, styles.listItem]}
                                 title={item["title"]}
                                 titleNumberOfLines={3}
-                                onPress={() => Linking.openURL(item["link"])} />
+                                onPress={() => this.alertBrowser(item["link"])} />
                             )
                         }
                     </List>
                     <View>
                         <Text 
                             style={[styles.title, themeStyles.title, styles.button]}
-                            onPress={() => Linking.openURL(links[4])}>MORE EVENTS</Text>
+                            onPress={() => this.alertBrowser(links[4])}>MORE EVENTS</Text>
                     </View>
                 </Card>
 
@@ -148,7 +164,7 @@ class SustainListView extends Component {
                                 title={item["title"]}
                                 titleStyle={themeStyles.title}
                                 titleNumberOfLines={3}
-                                onPress={() => Linking.openURL(item["link"])}
+                                onPress={() => this.alertBrowser(item["link"])}
                                 subtitle={item["content"].replace(/<[^>]+>/g, '')}
                                 subtitleStyle={themeStyles.subtitle}
                                 subtitleNumberOfLines={3} />
@@ -157,7 +173,7 @@ class SustainListView extends Component {
                     <View>
                         <Text 
                             style={[styles.title, themeStyles.title, styles.button]}
-                            onPress={() => Linking.openURL(links[5])}>MORE NEWS</Text>
+                            onPress={() => this.alertBrowser(links[5])}>MORE NEWS</Text>
                     </View>
                 </Card>
                 <View style={{paddingTop:5}} />
