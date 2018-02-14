@@ -47,11 +47,13 @@ export default class IndividualBuilding extends Component {
         comparisonDate = new Date();
         comparisonDate.setDate(currDate.getDate()-7);
         
-        if (this.props.navigation.state.params.card == 1) {
-            updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
-        } else {
-            updatedDay = getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
-        }
+        // if (this.props.navigation.state.params.card == 1) {
+        //     updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
+        // } else {
+        //     updatedDay = getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
+        // }
+
+        updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
         
         this.setState({ dayData: updatedDay });
     }
@@ -60,12 +62,13 @@ export default class IndividualBuilding extends Component {
         comparisonDate = new Date();
         comparisonDate.setDate(currDate.getDate()-28);
         
-        if (this.props.navigation.state.params.card == 1) {
-            updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
-        } else {
-            updatedWeek = getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
-        }
-        
+        // if (this.props.navigation.state.params.card == 1) {
+        //     updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
+        // } else {
+        //     updatedWeek = getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
+        // }
+        updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
+
         this.setState({ weekData: updatedWeek });
     }
 
@@ -73,11 +76,13 @@ export default class IndividualBuilding extends Component {
         comparisonDate = new Date();
         comparisonDate.setMonth(currDate.getMonth()-11);
 
-        if (this.props.navigation.state.params.card == 1) {
-            updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
-        } else {
-            updatedMonth = getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
-        }
+        // if (this.props.navigation.state.params.card == 1) {
+        //     updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
+        // } else {
+        //     updatedMonth = getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
+        // }
+
+        updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
 
         this.setState({ monthData: updatedMonth });
     }
@@ -86,11 +91,13 @@ export default class IndividualBuilding extends Component {
         comparisonDate = new Date();
         comparisonDate.setYear(currDate.getFullYear()-5);
 
-        if (this.props.navigation.state.params.card == 1) {
-            updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
-        } else {
-            updatedYear = getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
-        }
+        // if (this.props.navigation.state.params.card == 1) {
+        //     updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
+        // } else {
+        //     updatedYear = getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
+        // }
+
+        updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);        
 
         this.setState({ yearData: updatedYear });
     }
@@ -124,7 +131,7 @@ export default class IndividualBuilding extends Component {
     getHeader = () => {
         const themeStyles = GetStyle(CurrTheme);
         try {
-            headerText = (getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtilityCard))/15).toFixed(1);
+            headerText = this.numberWithCommas((getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtilityCard))).toFixed(0))
             subheaderText = this.getUnits(this.state.selectedUtilityCard, this.state.selectedTimeCard)
         } catch (error) {
             console.log("Error in displaying IndividualBuilding header: ", error)
@@ -144,6 +151,7 @@ export default class IndividualBuilding extends Component {
       );
     }
 
+    // Returns data to be displayed
     getGraphScope = () => {
         // graphData = navigation.data.comparison;
         if (this.state.view == 'day') {
@@ -157,16 +165,21 @@ export default class IndividualBuilding extends Component {
         }
     }
 
-    // Handles time denominator buttons for graph
+    // Gets data from time denominator buttons for graph
     scopeCallbackGraph = ( buttonView, buttonComparator, buttonIndex ) => {
         this.setState({ view: buttonView,
             viewNumber: buttonComparator,
             selectedTimeCard: buttonIndex});
     }
 
-    // Handles utilitie buttons
+    // Gets data from utility button
     scopeCallbackUtilities = ( buttonIndex ) => {
         this.setState({ selectedUtilityCard: buttonIndex});
+    }
+
+    // Helper function to add commas to large numbers
+    numberWithCommas = (x) => {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     // Maps utility name to its respective utility mini card index
