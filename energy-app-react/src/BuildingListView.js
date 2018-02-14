@@ -37,6 +37,7 @@ class BuildingListView extends Component {
                 onPress={() => this.props.navigation.navigate('CardView', {item:item.item})}/>
         </View>
     }
+    
 
     render() {
         const {navigate} = this.props.navigation;
@@ -109,16 +110,6 @@ const navStyles = StyleSheet.create({
         backgroundColor: '#0B5091',
     },
 })
-
-
-// styles.listItem
-// styles.text
-// styles.subtitleText
-// styles.listImg
-// navStyles.header
-// navStyles.header
-// navStyles.headerTitle
-// navStyles.headerTitle
 
 const styles = StyleSheet.create({
   card: {
