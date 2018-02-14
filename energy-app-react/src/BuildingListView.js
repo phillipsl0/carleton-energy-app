@@ -107,16 +107,6 @@ const navStyles = StyleSheet.create({
     },
 })
 
-
-// styles.listItem
-// styles.text
-// styles.subtitleText
-// styles.listImg
-// navStyles.header
-// navStyles.header
-// navStyles.headerTitle
-// navStyles.headerTitle
-
 const styles = StyleSheet.create({
   card: {
     paddingTop: 20,
