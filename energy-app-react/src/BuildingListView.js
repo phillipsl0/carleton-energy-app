@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions,
   View, Text, Image, WebView, TouchableOpacity, Platform } from 'react-native'
-import { StackNavigator, SafeAreaView } from 'react-navigation';
+import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar, Header } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import buildings from './Buildings';
@@ -88,6 +88,16 @@ class BuildingListView extends Component {
     }
 }
 
+// Fix double navigation bug in stack
+const navigateOnce = (getStateForAction) => (action, state) => {
+    const {type, routeName} = action;
+
+    return (
+        state &&
+        type === NavigationActions.NAVIGATE &&
+        routeName === state.routes[state.routes.length - 1].routeName
+    ) ? null : getStateForAction(action, state);
+};
 
 const BuildingStack = StackNavigator({
   Buildings: {
@@ -166,12 +176,13 @@ const BuildingStack = StackNavigator({
   },
 });
 
+BuildingStack.router.getStateForAction = navigateOnce(BuildingStack.router.getStateForAction);
+
 const navStyles = StyleSheet.create({
     header: {
         backgroundColor: '#0B5091',
     },
 })
-
 
 const styles = StyleSheet.create({
   card: {

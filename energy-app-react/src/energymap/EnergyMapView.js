@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StyleSheet, Dimensions, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, NavigationActions } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
 
@@ -530,6 +530,16 @@ class EnergyMapView extends Component {
         </Text>
 */
 
+// Fix double navigation bug in stack
+const navigateOnce = (getStateForAction) => (action, state) => {
+    const {type, routeName} = action;
+
+    return (
+        state &&
+        type === NavigationActions.NAVIGATE &&
+        routeName === state.routes[state.routes.length - 1].routeName
+    ) ? null : getStateForAction(action, state);
+};
 
 // Stack of EnergyMap
 const EnergyMapViewStack = StackNavigator({
@@ -586,6 +596,8 @@ const EnergyMapViewStack = StackNavigator({
     }),
   },
 });
+
+EnergyMapViewStack.router.getStateForAction = navigateOnce(EnergyMapViewStack.router.getStateForAction);
 
 const navStyles = StyleSheet.create({
     header: {
