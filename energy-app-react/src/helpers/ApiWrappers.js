@@ -109,10 +109,9 @@ function getSpecificRandom(min, max, scaleFactor, otherFactor) {
 }
   function convertRSStoJSON(rssFeed) {
     baseURL = 'https://api.rss2json.com/v1/api.json';
+    formatURL = `${baseURL}?rss_url=${rssFeed}&api_key=${apiRSS2jsonKey}&count=${3}`;
 
-    constructedURL = baseURL + '?rss_url=' + rssFeed + '&api_key=' + apiRSS2jsonKey + '&count=2';
-
-    return fetch(constructedURL);
+    return fetch(formatURL);
 }
 
 // -------------------- Electricity Generation -------------------------

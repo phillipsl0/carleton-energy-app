@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, Linking, Platform,
+import { FlatList, AppRegistry, SectionList, Linking, Platform, Alert,
     StyleSheet, View, ScrollView, Text, Image, WebView, TouchableOpacity } from 'react-native'
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button } from 'react-native-elements';
@@ -16,7 +16,8 @@ class SustainListView extends Component {
         super(props);
         this.state = {
            newsData: '',
-           eventsData: ''
+           eventsData: '',
+           neverAlert: false
         }
     }
 
@@ -36,6 +37,26 @@ class SustainListView extends Component {
         await this.setStateAsync({newsData: newsJson})
     }
 
+    alertBrowser = (link) => {
+        if (this.state.neverAlert) {
+            Linking.openURL(link);
+        } else {
+            if (link.length > moderateScale(60)) {
+                linkTitle = link.substring(0, moderateScale(60)-5) + '...';
+            } else {
+                linkTitle = link;
+            }
+            Alert.alert(
+                linkTitle,
+                'Open link in web browser?',
+                [{text: 'Always Open', onPress: () =>
+                    (Linking.openURL(link), this.setState({neverAlert: true}))},
+                {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+                {text: 'Open', onPress: () => (Linking.openURL(link))},],
+                { cancelable: true }
+            );
+        }
+    }
 
     render() {
         events = getSustainabilityEventsBak();
@@ -59,7 +80,7 @@ class SustainListView extends Component {
         return (
             <ScrollView style={{backgroundColor: '#fafafa'}}>
                 <View style={{paddingTop:5}} />
-                <Card containerStyle={[themeStyles.card, styles.card]}>
+                <Card containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
 
                     <View style={styles.header} >
                         <Image
@@ -67,28 +88,32 @@ class SustainListView extends Component {
                             style={styles.image}
                             source={require('./assets/cfl.png')} />
                         <View>
-                            <Text style={[styles.title, themeStyles.title]}>Get Involved</Text>
+                            <Text style={styles.title}>Get Involved</Text>
                         </View>
                     </View>
 
                     <List containerStyle={styles.list}>
                         <ListItem
-                            containerStyle={[themeStyles.listItem, styles.listItem]}
+                            containerStyle={styles.listItem}
                             title={"Our Campus"}
+                            titleStyle={styles.listTitle}
                             titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(links[1])} />
-                        <ListItem containerStyle={[themeStyles.listItem, styles.listItem]}
+                            onPress={() => this.alertBrowser(links[1])} />
+                        <ListItem containerStyle={styles.listItem}
                             title={"Take Action"}
+                            titleStyle={styles.listTitle}
                             titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(links[2])} />
-                        <ListItem containerStyle={[themeStyles.listItem, styles.listItem]}
+                            onPress={() => this.alertBrowser(links[2])} />
+                        <ListItem containerStyle={styles.listItem}
                             title={"People & Policies"}
+                            titleStyle={styles.listTitle}
                             titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(links[3])} />
+                            onPress={() => this.alertBrowser(links[3])} />
+                        <View style={styles.listItem} />
                     </List>
                 </Card>
 
-                <Card containerStyle={[themeStyles.card, styles.card]}>
+                <Card containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
 
                     <View style={styles.header} >
                         <Image
@@ -96,39 +121,42 @@ class SustainListView extends Component {
                             style={styles.image}
                             source={require('./assets/calendar.png')} />
                         <View>
-                            <Text style={[styles.title, themeStyles.title]}>Upcoming Events</Text>
+                            <Text style={styles.title}>Upcoming Events</Text>
                         </View>
                         <View style={styles.image} />
                     </View>
 
                     <List containerStyle={styles.list}>
-                        { events["events"]["items"].map((item, key) => 
-                            item["content"] 
+                        { events["events"]["items"].map((item, key) =>
+                            item["content"]
                             ? <ListItem
                                 key={item["guid"]}
-                                containerStyle={[themeStyles.listItem, styles.listItem]}
+                                containerStyle={styles.listItem}
                                 title={item["title"]}
+                                titleStyle={styles.listTitle}
                                 titleNumberOfLines={3}
-                                onPress={() => Linking.openURL(item["link"])}
-                                subtitleStyle={themeStyles.subtitle}
+                                onPress={() => this.alertBrowser(item["link"])}
+                                subtitleStyle={styles.subtitle}
                                 subtitle={item["content"]} />
                             : <ListItem
                                 key={item["guid"]}
-                                containerStyle={[themeStyles.listItem, styles.listItem]}
+                                containerStyle={styles.listItem}
                                 title={item["title"]}
+                                titleStyle={styles.listTitle}
                                 titleNumberOfLines={3}
-                                onPress={() => Linking.openURL(item["link"])} />
+                                onPress={() => this.alertBrowser(item["link"])} />
                             )
                         }
+                        <View style={styles.listItem} />
                     </List>
                     <View>
-                        <Text 
-                            style={[styles.title, themeStyles.title, styles.button]}
-                            onPress={() => Linking.openURL(links[4])}>MORE EVENTS</Text>
+                        <Text
+                            style={[styles.title, styles.button]}
+                            onPress={() => this.alertBrowser(links[4])}>MORE EVENTS</Text>
                     </View>
                 </Card>
 
-                <Card containerStyle={[themeStyles.card, styles.card]}>
+                <Card containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
 
                     <View style={styles.header} >
                         <Image
@@ -136,28 +164,30 @@ class SustainListView extends Component {
                             style={styles.image}
                             source={require('./assets/news.png')} />
                         <View>
-                            <Text style={[styles.title, themeStyles.title]}>Recent News</Text>
+                            <Text style={styles.title}>Recent News</Text>
                         </View>
                     </View>
 
                     <List containerStyle={styles.list}>
-                        { news["news"]["items"].map((item, key) => 
+                        { news["news"]["items"].map((item, key) =>
                             <ListItem
                                 key={item["guid"]}
-                                containerStyle={[themeStyles.listItem, styles.listItem]}
+                                // ref={(thisItem) => this[`item-${item["guid"]}`] = thisItem}
+                                containerStyle={styles.listItem}
                                 title={item["title"]}
-                                titleStyle={themeStyles.title}
+                                titleStyle={styles.listTitle}
                                 titleNumberOfLines={3}
-                                onPress={() => Linking.openURL(item["link"])}
+                                onPress={() => this.alertBrowser(item["link"])}
                                 subtitle={item["content"].replace(/<[^>]+>/g, '')}
-                                subtitleStyle={themeStyles.subtitle}
-                                subtitleNumberOfLines={3} />
+                                subtitleStyle={styles.subtitle}
+                                subtitleNumberOfLines={3} />,
                         )}
+                        <View style={styles.listItem} />
                     </List>
                     <View>
-                        <Text 
-                            style={[styles.title, themeStyles.title, styles.button]}
-                            onPress={() => Linking.openURL(links[5])}>MORE NEWS</Text>
+                        <Text
+                            style={[styles.title, styles.button]}
+                            onPress={() => this.alertBrowser(links[5])}>MORE NEWS</Text>
                     </View>
                 </Card>
                 <View style={{paddingTop:5}} />
@@ -205,7 +235,7 @@ const styles = StyleSheet.create({
     button: {
         marginBottom: 3,
         paddingRight: 25,
-        fontSize: 17,
+        fontSize: moderateScale(16),
         fontWeight: 'bold',
         textAlign: 'right',
         color: '#529353'
@@ -217,24 +247,36 @@ const styles = StyleSheet.create({
     list: {
         marginBottom: 12,
         marginTop: -15,
-        marginLeft: 15,
-        marginRight: 20,
-        borderTopColor: '#cbd2d9',
-        borderBottomColor: '#cbd2d940',
-        borderTopWidth: StyleSheet.hairlineWidth, 
-        borderBottomWidth: StyleSheet.hairlineWidth
+        marginLeft: 7,
+        marginRight: 7,
+        borderWidth: 0,
+        borderTopWidth: 0,
     },
     listItem: {
-        marginLeft: -15,
-        marginRight: -10,
-        borderColor: '#cbd2d940',
-        borderTopWidth: StyleSheet.hairlineWidth,
-        borderBottomWidth: StyleSheet.hairlineWidth
+        ...Platform.select({
+            android: { marginRight: -5, },
+        }),
+        borderColor: '#cbd2d9',
+        borderBottomColor: '#cbd2d9',
+        borderBottomWidth: 0,
+        borderTopWidth: 2*StyleSheet.hairlineWidth,
     },
     title: {
         paddingLeft: 12,
-        fontSize: 18,
+        paddingTop: 3,
+        fontSize: moderateScale(18),
         fontWeight: 'normal',
+        color: 'darkslategrey',
+    },
+    listTitle: {
+        color: 'darkslategrey',
+        marginLeft: 3,
+    },
+    subtitle: {
+        color: 'slategray',
+        fontWeight: 'normal',
+        fontStyle: 'italic',
+        marginLeft: 3,
     },
 })
 
