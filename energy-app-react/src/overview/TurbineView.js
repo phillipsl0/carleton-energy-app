@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Platform, ScrollView, Text, FlatList } from 'react-native';
+import { StyleSheet, View, Image, Platform, Text } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 
@@ -7,54 +7,42 @@ import { connect } from 'react-redux';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import { fake } from './OverviewExampleData'
-import { moderateScale, verticalScale } from './../helpers/Scaling';
+import { moderateScale, verticalScale, roundNumber } from './../helpers/General';
 import CurrFont from './../styling/CurrentFont';
 
 const defaultFont = CurrFont+'-regular';
 const defaultFontBold = CurrFont+'-bold';
+const theme = GetStyle(CurrTheme);
 
 @connect(
     state => ({
-        layout: state.ui.layout,
         currentData: state.data.currentData,
-    }),
-    dispatch => ({
-        refresh: () => dispatch({type: 'GET_LAYOUT'}),
     }),
 )
 
 export default class Windmill extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            currImage: 0,
-            pause: 0,
-        };
-
     }
 
-    numberWithCommas = (x) => {
-          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
     render() {
-        const themeStyles = GetStyle(CurrTheme);
-        const { layout, currentData } = this.props;
+        
+        const { currentData } = this.props;
         var turbineTotal = Math.round(currentData.turbine[0]["y"]+currentData.turbine[1]["y"]);
 
         return (
-            <View style={[themeStyles.flex, styles.background]}>
+            <View style={[theme.flex, styles.background]}>
             <View style={[styles.background, styles.head, {alignItems: 'center'}]}>
                 <Image source={require('./../assets/windmill.png')}
-                    style={[themeStyles.header, styles.image]}/>
+                    style={[theme.header, styles.image]}/>
                 <View style={styles.textContainer}>
-                <Text style={[styles.units, themeStyles.fontRegular]}>
+                <Text style={[styles.units, theme.fontRegular]}>
                     Currently generating
                 </Text>
-                <Text style={[styles.number, themeStyles.fontBold]}>
-                    {this.numberWithCommas(turbineTotal)}
+                <Text style={[styles.number, theme.fontBold]}>
+                    {roundNumber(turbineTotal)}
                 </Text>
-                <Text style={[styles.units, themeStyles.fontRegular]}>
+                <Text style={[styles.units, theme.fontRegular]}>
                     kWh
                 </Text>
                 </View>
