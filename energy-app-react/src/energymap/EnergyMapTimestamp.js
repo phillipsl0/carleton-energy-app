@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StyleSheet, Dimensions, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 
-// Special header for HeatMap's StackNavigator
-export default class HeatMapHeader extends Component {
+// Timestamp for EnergyMap's Update
+export default class EnergyMapTimestamp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,41 +16,36 @@ export default class HeatMapHeader extends Component {
     var currTime = currDate.getHours() + ":"
       + currDate.getMinutes() + ":"
       + currDate.getSeconds() + ", "
-      + currDate.getDate() + "/"
       + (currDate.getMonth()+1) + "/"
+      + currDate.getDate() + "/"
       + currDate.getFullYear();
     return currTime
   }
 
   render() {
     return (
-      <View style={navStyles.header}>
-        <Text style={navStyles.titleText}>
-        Heat Map
-        </Text>
-        <Text style={navStyles.subTitleText}>
+      <View style={styles.container}>
+      <Text style={styles.text}>
         Last updated: {this.getTime()}
-        </Text>
+      </Text>
       </View>
     );
   }
 }
 
-const navStyles = StyleSheet.create({
-    header: {
-        flex: 1,
-        backgroundColor: '#0B5091',
-        alignItems: 'center',
-        justifyContent: 'center',
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
-    titleText: {
-      color: "white",
-      //fontWeight: "bold",
-      fontSize: 17,
-      alignSelf: 'center',
-    },
-    subTitleText: {
-      color: "white",
+    text: {
+      position: "absolute",
+      bottom: 10,
+      backgroundColor: 'rgba(255, 255, 255, 0.7)',
+      color: "black",
       fontSize: 15,
+      alignSelf: 'center',
+      padding: 5,
     }
 })

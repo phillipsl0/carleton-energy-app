@@ -20,14 +20,13 @@ const DefaultTheme = StyleSheet.create({
     card: {
         backgroundColor: 'white',
         borderColor: lightBlue,
-
         borderWidth: 1,
         borderRadius: 5,
         padding: 10,
-        // marginLeft: 10,
-        // marginRight: 10,
-        // marginTop: 5,
-        // marginBottom: 10,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 5,
+        marginBottom: 10,
 
         ...Platform.select({
               ios: {
@@ -111,10 +110,8 @@ const DefaultTheme = StyleSheet.create({
     },
 
     listItem: {
-        // borderTopColor: '#cbd2d9', 
-        // borderTopWidth: 0.7,
         borderColor: '#cbd2d940', 
-        borderBottomWidth: StyleSheet.hairlineWidth // 0.7
+        borderBottomWidth: StyleSheet.hairlineWidth
     },
 
     shadowed: {
@@ -126,7 +123,7 @@ const DefaultTheme = StyleSheet.create({
                 shadowOffset: { height: 0, width: 0 },
             },
             android: {
-                elevation: 1,
+                elevation: 2,
 
             },
         }),

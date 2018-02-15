@@ -42,6 +42,10 @@ export default class OverviewCards extends Component {
         this.setState({ selectedCard: buttonIndex});
     }
 
+    numberWithCommas = (x) => {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     getGraphScope = (data, cardType) => {
         if (cardType == 1) {
             if (this.state.view == 'day') {
@@ -88,24 +92,28 @@ export default class OverviewCards extends Component {
             viewNumber = this.state.viewNumber;
             view = this.state.view;
 
-            if (this.props.navigation.state.params.card == 1) {
+            if (cardType == 1) {
                 verb = 'use';
             } else {
                 verb = 'generation';
             }
 
-            subheaderText = "in " + verb + " compared to the past " + viewNumber
-                + " " + view + "s";
+            subheaderText = "in " + verb + " compared to the past ";
+            subheaderHighlight = viewNumber + " " + view + "s";
+            highlight = true;
 
         } else {
-            if (this.props.navigation.state.params.card == 1) {
+            if (cardType == 1) {
                 verb = 'usage';
             } else {
                 verb = 'generation';
             }
 
-            headerText = Number(currentData["usage"][this.state.selectedCard - 5]["y"]).toLocaleString();
+            headerText = this.numberWithCommas(currentData["usage"][this.state.selectedCard - 5]["y"]);
+
+//            headerText = Number(currentData["usage"][this.state.selectedCard - 5]["y"]).toLocaleString();
             subheaderText = units[this.state.selectedCard - 5];
+            highlight = false;
         }
 
 
@@ -115,10 +123,14 @@ export default class OverviewCards extends Component {
             <Text style={[styles.number, themeStyles.translucentText, themeStyles.fontBold]}>
                 {headerText}
             </Text>
-
+            <View style={themeStyles.flexboxRow}>
             <Text style={[styles.words, themeStyles.translucentText]}>
                 {subheaderText}
              </Text>
+             {highlight && <Text style={[styles.words, styles.highlight]}>
+             {subheaderHighlight}
+             </Text>}
+             </View>
           </View>
       );
     }
@@ -145,18 +157,18 @@ export default class OverviewCards extends Component {
              <ScrollView style={themeStyles.lightBlueBackground}>
                 <GraphDetail data={currData}
                     callback={this.scopeCallbackGraph}
-                    selected={this.state.selectedCard}/>
+                    selected={this.state.selectedCard}
+                    type={cardType}/>
              </ScrollView>
-             <Utilities callback={this.scopeCallbackUtilities}
-//              cards={cardType == 1 ? utilities : generators}
-                cardType={cardType}
-              selected={this.state.selectedCard}/>
              </View>
 
             );
     }
 }
-
+// <Utilities callback={this.scopeCallbackUtilities}
+////              cards={cardType == 1 ? utilities : generators}
+//                cardType={cardType}
+//              selected={this.state.selectedCard}/>
 const styles = StyleSheet.create({
     number: {
         fontSize: moderateScale(75),
@@ -170,4 +182,8 @@ const styles = StyleSheet.create({
     words: {
         fontSize: moderateScale(16),
     },
+    highlight: {
+        color: '#F3B61D',
+        backgroundColor: 'transparent'
+    }
 })

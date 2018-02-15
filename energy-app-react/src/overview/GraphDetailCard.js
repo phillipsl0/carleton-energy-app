@@ -17,8 +17,45 @@ export default class GraphDetail extends Component {
         this.props.callback(buttonView, buttonComparator, buttonIndex);
     }
 
+    getLabel = (label) => {
+        if (label === "x") {
+            switch (this.props.selected){
+                case 1:
+                    return "Day of Week";
+                case 2:
+                    return "Week";
+                case 3:
+                    return "Month";
+                case 4:
+                    return "Year";
+                default:
+                    return "";
+            }
+        } else {
+            var verb = this.props.type == 1 ? "usage" : "generation";
+            return "BTUs (aggregate " + verb + " in thousands)";
+//            switch (this.props.selected){
+//                case 1:
+//                    return "Day of Week";
+//                case 2:
+//                    return "Week";
+//                case 3:
+//                    return "Month";
+//                case 4:
+//                    return "Year";
+//                default:
+//                    return "";
+//            }
+        }
+
+    }
+
     render() {
         const themeStyles = GetStyle(CurrTheme);
+        console.log(this.props.selected);
+        var x = this.getLabel("x");
+        var y = this.getLabel("y");
+
 
         return(
             <View style={[themeStyles.centered]}>
@@ -26,38 +63,38 @@ export default class GraphDetail extends Component {
                     themeStyles.translucent]}>
                  <Graph
                      theme={CustomThemes.carleton}
-                     height={verticalScale(210)}
-                     width={moderateScale(275)}
+                     height={verticalScale(250)}
+                     width={moderateScale(300)}
                      type={'scatter'}
+                     xLabel={x}
+                     yLabel={y}
+                     overlap={true}
                      graphData={this.props.data}/>
-                <Text style={styles.subHead}>
-                    (aggregate energy usage in thousands)
-                </Text>
                 </View>
 
                 <View style={[themeStyles.flexboxRow, themeStyles.flexButtons, themeStyles.translucent]}>
-                    <GraphButton title='D'
+                    <GraphButton title='Day'
                         view='day'
                         comparator={7}
                         index={1}
                         callback={this.sendToParent}
                         selected={this.props.selected}/>
 
-                    <GraphButton title='W'
+                    <GraphButton title='Week'
                         view='week'
                         comparator={4}
                         index={2}
                         callback={this.sendToParent}
                         selected={this.props.selected}/>
 
-                    <GraphButton title='M'
+                    <GraphButton title='Month'
                         view='month'
                         comparator={12}
                         index={3}
                         callback={this.sendToParent}
                         selected={this.props.selected}/>
 
-                    <GraphButton title='Y'
+                    <GraphButton title='Year'
                         view='year'
                         comparator={5}
                         index={4}
@@ -71,14 +108,14 @@ export default class GraphDetail extends Component {
 
 const styles = StyleSheet.create({
     graphContainer: {
-        marginTop: '2%',
-        marginBottom: '3%',
+        marginTop: '5%',
+        marginBottom: '5%',
         paddingTop: '5%',
         paddingLeft: '3%',
         paddingRight: '3%',
         paddingBottom: '2%',
         borderRadius: 10,
-        width: moderateScale(300)
+        width: moderateScale(325)
     },
     subHead: {
         fontSize: 10,
