@@ -19,9 +19,8 @@ import { handler, dataReducer, layoutReducer } from './src/helpers/ReduxHandler'
 import { getCurrentGenerationGraphFormat, 
   getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
-import IntroSlider from './src/IntroSlider';
-import { checkIfFirstLaunch } from './src/checkIfFirstLaunch';
-
+import IntroSlider from './src/intro/IntroSlider';
+import { checkIfFirstLaunch } from './src/intro/checkIfFirstLaunch';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
@@ -137,19 +136,19 @@ const RootTabs = TabNavigator({
          tabBarOnPress: (tab, jumpToIndex) => {
           tab.jumpToIndex(tab.scene.index);
 
-          // resets stack in tabs if their icon is tapped while focused
-          // if (tab.scene.focused) {
-          //   if (tab.scene.route.index !== 0) {
-          //     navigation.dispatch(NavigationActions.reset({
-          //       index: 0,
-          //       actions: [
-          //         NavigationActions.navigate({ routeName: tab.scene.route.routes[0].routeName })
-          //       ]
-          //     }));
-          //   }
-          // } else {
-          //    tab.jumpToIndex(tab.scene.index);
-          // }
+//           resets stack in tabs if their icon is tapped while focused
+           if (tab.scene.focused) {
+             if (tab.scene.route.index !== 0) {
+               navigation.dispatch(NavigationActions.reset({
+                 index: 0,
+                 actions: [
+                   NavigationActions.navigate({ routeName: tab.scene.route.routes[0].routeName })
+                 ]
+               }));
+             }
+           } else {
+              tab.jumpToIndex(tab.scene.index);
+           }
          }
        })
 });

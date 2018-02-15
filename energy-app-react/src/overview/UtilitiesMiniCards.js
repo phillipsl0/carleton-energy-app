@@ -10,7 +10,6 @@ import Utility from './Utility';
     state => ({
         currentData: state.data.currentData,
         loading: state.data.loading,
-        layout: state.ui.layout,
     }),
     dispatch => ({
         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
@@ -24,6 +23,7 @@ export default class Utilities extends Component {
 
     sendToParent = ( buttonIndex ) => {
         this.props.callback(buttonIndex);
+        // console.log("Button index selected: ", buttonIndex);
     }
 
     getCardData = (data) => {
@@ -80,7 +80,7 @@ export default class Utilities extends Component {
 
     render() {
         const themeStyles = GetStyle(CurrTheme);
-        const { refresh, loading, currentData, layout } = this.props;
+        const { refresh, loading, currentData } = this.props;
         var cardType = this.props.cardType;
 
         return(
@@ -89,12 +89,12 @@ export default class Utilities extends Component {
            {cardType == 1 &&
             <View style={[themeStyles.flexboxRow]}>
                <Utility index={5}
-                    icon={"fire"}
-                    utilityType={"Gas"}
-                    number={'151'}
-                    unit={"thm"}
-                    callback={this.sendToParent}
-                    selected={this.props.selected}/>
+                  icon={"fire"}
+                  utilityType={"Gas"}
+                  number={'151'}
+                  unit={"thm"}
+                  callback={this.sendToParent}
+                  selected={this.props.selected}/>
 
                <Utility index={6}
                   icon={"lightbulb-o"}

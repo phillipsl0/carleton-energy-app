@@ -23,9 +23,9 @@ const slides = [
     type: 'ionicon'
   },
   {
-    key: 'Where',
-    title: "There's a heatmap!",
-    text: "Energy data right ",
+    key: 'Sustainability',
+    title: "Interested in being green?",
+    text: "Check out the Learn tab to stay up to date with the latest news from Carleton's Sustainability Office. Discover more about the Sustainability Office and how you can get involved with sustainability at Carleton.",
     icon: 'ios-sunny-outline',
     color: '#29ABE2',
     type: 'ionicon'

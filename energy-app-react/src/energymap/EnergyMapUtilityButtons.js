@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions, Heading, Overlay, TouchableHighlight } from 'react-native';
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import { Button } from 'react-native-elements'
+import { moderateScale } from './../helpers/Scaling';
 
-const UTILITIES = getUtilitiesList();
+//const UTILITIES = getUtilitiesList();
+const UTILITIES = ['Gas', 'Electric', 'Heat', 'Water'];
 
-class UtilityButton extends React.Component {
+// Class for individual buttons
+class UtilityButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,20 +17,25 @@ class UtilityButton extends React.Component {
   }
 
   render() {
+    const selected = this.props.selected.toLowerCase();
+    const utility = this.props.utility.toLowerCase();
+
     return (
         <Button
-          key={this.props.utility}
+          key={utility}
           title={this.props.utility}
-          onPress={() => this.props.onPress(this.props.utility)}
-          backgroundColor={this.props.selected ==  this.props.utility ? '#0B5091' : 'white'}
-          color={this.props.selected ==  this.props.utility ? 'white' : '#0B5091'}
+          onPress={() => this.props.onPress(utility)}
+          backgroundColor={selected == utility ? '#0B5091' : 'white'}
+          color={selected ==  utility ? 'white' : '#0B5091'}
+          textStyle={{ fontSize: moderateScale(10) }}
+          buttonStyle={{ borderWidth: 1, borderRadius: 10, borderColor: '#e1e8ee' }} // style based off of UtilitiesMiniCards
         />
       )
   }
 }
 
 
-// Generates horizontal buttons that fill the screen, side by side
+// Generates all horizontal buttons that fill the screen, side by side
 class TopUtilities extends Component {
   constructor(props) {
     super(props)
