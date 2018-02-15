@@ -3,7 +3,13 @@ import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 import { getAllHistoricalGraphData, getAllCurrentGraphData } from './ApiWrappers'
 
-// for redux
+/* Redux handles state for the app, including navigation
+ * When the app starts up, redux is called during the loading screen
+ * & the screen does not disappear until everything has been fetched
+ */
+
+/* When adding new redux calls that you want to happen at start up, call them in this handler
+ * but define them in their own reducer (see below) */
 export const handler = store => next => action => {
     next(action);
 
@@ -55,6 +61,7 @@ export const dataReducer = (state = { historicalGraphData: [], currentGraphData:
             return state;
     };
 }
+
 const initialState = {'height': 500, 'width': 500};
 
 export const layoutReducer = (state = {layout: []}, action) => {
