@@ -10,24 +10,24 @@ import BuildingComparison from './BuildingComparison';
 import OverviewCards from './overview/OverviewCards';
 import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js';
 import  ComparisonPage from './ComparisonPage';
+import { scale, moderateScale, verticalScale} from './helpers/Scaling';
 
 class BuildingListView extends Component {
 
     renderItem = (item) => {
-        return <View>
+        return <View style={{marginTop:7, marginLeft: 7, marginRight: 7, borderWidth: 1, borderColor:'#cbd2d9', borderRadius:3, backgroundColor:'white',}}>
             <Text style={styles.header}>{item.item.name}</Text>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: 'black',
-            borderBottomWidth: 1, backgroundColor: 'white'}}>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',}}>
                 <Image
-                style={{alignItems:'center', width:60, borderColor:'black', borderWidth:1, marginBottom:3, marginLeft:3}} source={{uri: item.item.avatar}}/>
+                style={{alignItems:'center', width:75, borderColor:'white', borderWidth:1, marginBottom:3, marginLeft:3}} source={{uri: item.item.avatar}}/>
                 <View style={{flex: 1, flexDirection: 'column', paddingTop:'2%'}}>
                     <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
                     <Text style={styles.text}>Water: {item.item.water}</Text>
                     <Text style={styles.text}>Heat: {item.item.heat}</Text>
                 </View>
                 <Button
-                    rightIcon={{name: "angle-right", type: 'font-awesome', size: 20}}
-                    fontSize={14}
+                    rightIcon={{name: "angle-right", type: 'font-awesome', size: moderateScale(20)}}
+                    fontSize={moderateScale(14)}
                     title='More Info'
                     style={{paddingBottom:20}}
                     containerViewStyle={styles.button}
@@ -130,7 +130,8 @@ const styles = StyleSheet.create({
   text: {
     alignSelf: 'flex-start',
     marginLeft: 5,
-    fontSize: 16,
+    fontSize: moderateScale(16),
+    color: 'darkslategrey',
   },
   listItem: {
     height: 50,
@@ -178,10 +179,12 @@ const styles = StyleSheet.create({
     height: 100,
   },
   header: {
-      backgroundColor:'#f4f8ff',
-      fontSize: 20,
+      fontSize: moderateScale(18),
+      color:'darkslategrey',
       paddingLeft: 3,
-      fontWeight: 'bold'
+      backgroundColor: 'white',
+      fontWeight: 'bold',
+      alignSelf: 'flex-start',
   }
 })
 
