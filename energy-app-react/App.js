@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
-import { Platform, StyleSheet, BackHandler, View, StatusBar, AsyncStorage} from 'react-native';
-import { TabNavigator, TabBarTop, TabBarBottom, 
+import { Platform, StyleSheet, BackHandler, 
+  View, StatusBar, AsyncStorage} from 'react-native';
+import { TabNavigator, TabBarTop, TabBarBottom, SafeAreaView,
   NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createReduxBoundAddListener, 
+  createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import BuildingStack from './src/BuildingListView';
@@ -13,13 +16,18 @@ import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
 import { handler, dataReducer, layoutReducer } from './src/helpers/ReduxHandler'
-import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
+import { getCurrentGenerationGraphFormat, 
+  getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
 import IntroSlider from './src/intro/IntroSlider';
 import { checkIfFirstLaunch } from './src/intro/checkIfFirstLaunch';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
+
+if (Platform.OS === 'android') {
+  SafeAreaView.setStatusBarHeight(0);
+}
 
 function cacheImages(images) {
   return images.map(image => {
@@ -116,32 +124,31 @@ const RootTabs = TabNavigator({
       );
     },
     // animationEnabled: false,
-    // lazy: true,
     tabBarOptions:
         { style: navStyle.header,
           labelStyle: navStyle.label,
           indicatorStyle: navStyle.indicator,
-          // showIcon: true, //this is default false on Android
-          // showLabel: true,
           activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF', 
           inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90', 
           pressColor: '#DDD' // Android ripple color onPress
         },
      navigationOptions: ({ navigation }) => ( {
          tabBarOnPress: (tab, jumpToIndex) => {
-           // resets stack in tabs if their icon is tapped while focused
-           if (tab.focused && (tab.index === 0 || tab.index === 1)) {
-             if (tab.route.index !== 0) {
-               navigation.dispatch(NavigationActions.reset({
-                 index: 0,
-                 actions: [
-                   NavigationActions.navigate({ routeName: tab.route.routes[0].routeName })
-                 ]
-               }))
-             }
-           } else {
-             jumpToIndex(tab.index)
-           }
+          tab.jumpToIndex(tab.scene.index);
+
+          // resets stack in tabs if their icon is tapped while focused
+          // if (tab.scene.focused) {
+          //   if (tab.scene.route.index !== 0) {
+          //     navigation.dispatch(NavigationActions.reset({
+          //       index: 0,
+          //       actions: [
+          //         NavigationActions.navigate({ routeName: tab.scene.route.routes[0].routeName })
+          //       ]
+          //     }));
+          //   }
+          // } else {
+          //    tab.jumpToIndex(tab.scene.index);
+          // }
          }
        })
 });
@@ -163,6 +170,14 @@ const appReducer = combineReducers({
 
 });
 
+// Note: createReactNavigationReduxMiddleware must be run before createReduxBoundAddListener
+const middleware = createReactNavigationReduxMiddleware(
+  "root",
+  state => state.nav,
+);
+
+const addListener = createReduxBoundAddListener("root");
+
 const mapStateToProps = (state) => ({
     nav: state.nav,
     data: state.data,
@@ -170,11 +185,12 @@ const mapStateToProps = (state) => ({
 });
 
 class App extends Component {
+
     state = {
-    isReady: false,
-    isFirstLaunch: false,
-    hasCheckedAsyncStorage: false,
-  };
+      isReady: false,
+      isFirstLaunch: false,
+      hasCheckedAsyncStorage: false,
+    };
   
   // componentWillMount() {
   //   AsyncStorage.getItem('RANDOM2')
@@ -247,7 +263,12 @@ class App extends Component {
   onBackPress = () => {
       const { dispatch, nav } = this.props;
       if (nav.index === 0) {
-          return false;
+          if (nav.routes[0].routes.length != 1) {
+            dispatch(NavigationActions.back());
+            return true;
+          } else {
+            return false;
+          }
       }
 
       dispatch(NavigationActions.back());
@@ -278,7 +299,8 @@ class App extends Component {
         dispatch,
         data,
         ui,
-        state: nav
+        state: nav,
+        addListener
     });
 
     StatusBar.setBarStyle('light-content', false);

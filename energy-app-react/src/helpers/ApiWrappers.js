@@ -19,6 +19,7 @@ import {
     turbine2WindMeter
 } from './ProductionMeters.js'
 
+import { getSpecificRandom } from './General';
 
 const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
 
@@ -100,19 +101,11 @@ export function getSustainabilityEventsBak() {
     return events;
 }
 
-function getSpecificRandom(min, max, scaleFactor, otherFactor) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-
-    temp = Math.floor(Math.random() * (max - min)) + min
-    return temp * scaleFactor * otherFactor;
-}
-  function convertRSStoJSON(rssFeed) {
+function convertRSStoJSON(rssFeed) {
     baseURL = 'https://api.rss2json.com/v1/api.json';
+    formatURL = `${baseURL}?rss_url=${rssFeed}&api_key=${apiRSS2jsonKey}&count=${3}`;
 
-    constructedURL = baseURL + '?rss_url=' + rssFeed + '&api_key=' + apiRSS2jsonKey + '&count=2';
-
-    return fetch(constructedURL);
+    return fetch(formatURL);
 }
 
 // -------------------- Electricity Generation -------------------------
@@ -335,23 +328,24 @@ export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, sca
     for (var i=solarTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
         currDate = new Date(solarTable[i]["date"]);
+
         switch (scaleFactor){
             case 1:
                 combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
                 break;
             case 7:
                 if (i==0) {
-                    combinedTable[i]["x"] = "-3";
+                    combinedTable[i]["x"] = "-3 Weeks";
                 } else if (i==1) {
-                    combinedTable[i]["x"] = "-2";
+                    combinedTable[i]["x"] = "-2 Weeks";
                 } else if (i==2) {
-                    combinedTable[i]["x"] = "-1";
+                    combinedTable[i]["x"] = "-1 Week";
                 } else if (i==3) {
-                    combinedTable[i]["x"] = "Current";
+                    combinedTable[i]["x"] = "This Week";
                 }
                 break;
             case 30:
-                combinedTable[i]["x"] = getMonth(currDate.getMonth());
+                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
                 break;
             case 365:
                 combinedTable[i]["x"] = currDate.getFullYear().toString();
@@ -366,7 +360,7 @@ export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, sca
 
         if (i==solarTable.length-1) {
             currData = combinedTable[i]["y"];
-        } else if (combinedTable[i]["y"] > currData) {
+        } else if (combinedTable[i]["y"] <= currData) {
             rank-=1;
         }
     }
@@ -576,6 +570,7 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
             case 1:
                 combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
                 break;
+
             case 7:
                 if (i==0) {
                     combinedTable[i]["x"] = "-3 Weeks";
@@ -589,12 +584,15 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
                     combinedTable[i]["x"] = "help";
                 }
                 break;
+
             case 30:
                 combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
                 break;
+
             case 365:
                 combinedTable[i]["x"] = currDate.getFullYear().toString();
                 break;
+
             default:
                 combinedTable[i]["x"] = waterTable[i]["date"];
                 break;
@@ -605,6 +603,7 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
 
         if (i==waterTable.length-1) {
             currData = combinedTable[i]["y"];
+
         } else if (combinedTable[i]["y"] < currData) {
             rank-=1;
         }
@@ -613,22 +612,11 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
     finalTable["rank"] = rank;
     finalTable["data"] = combinedTable;
 
-    // console.log(finalTable);
-
     return finalTable;
 }
 
 export function getTotalCampusUtilityConsumption(utility, timeStart, timeEnd) {
     // return total campus consumption of utility over specified time frame
-
-    // different utilities have different "typical" amounts
-//    var scaleFactor = scaleFactorOther;
-//
-//    if (utility == "water") {
-//        scaleFactor = scaleFactorWater;
-//    } else if (utility == "electricity") {
-//        scaleFactor = scaleFactorElectricity;
-//    }
 
     // calculate number of 15-min chunks b/w 'timeStart' and 'timeEnd'
     var timeframe = Math.abs(timeEnd - timeStart) / (60000 * 15); // 60,000ms per min * 15min
@@ -682,7 +670,7 @@ export function getEveryBuildingUtilityConsumption(utility) {
                 table[i][utility] = getRandomHeat();
                 break;
         }
-//        table[i][utility] = Math.random() * scaleFactor;
+
         total += table[i][utility];
     }
 

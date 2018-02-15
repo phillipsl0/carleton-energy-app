@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, Platform, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
+import { Svg } from 'react-native-svg';
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './GraphDetailCard';
 import Utilities from './UtilitiesMiniCards';
-import { getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './../helpers/ApiWrappers';
-import { moderateScale, verticalScale } from './../helpers/Scaling';
+import { moderateScale, verticalScale, roundNumber } from './../helpers/General';
+
+const USAGE_CARD = 1;
 
 @connect(
     state => ({
@@ -42,44 +44,69 @@ export default class OverviewCards extends Component {
         this.setState({ selectedCard: buttonIndex});
     }
 
-    numberWithCommas = (x) => {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
     getGraphScope = (data, cardType) => {
-        if (cardType == 1) {
-            if (this.state.view == 'day') {
-                return data["dayUsage"].data;
-            } else if (this.state.view == 'week') {
-                return data["weekUsage"].data;
-            } else if (this.state.view == 'month') {
-                return data["monthUsage"].data;
-            } else if (this.state.view == 'year') {
-                return data["yearUsage"].data;
+        if (cardType == USAGE_CARD) {
+            switch (this.state.view) {
+                case "day":
+                    return data["dayUsage"].data;
+
+                case "week":
+                    return data["weekUsage"].data;
+
+                case "month":
+                    return data["monthUsage"].data;
+
+                case "year":
+                    return data["yearUsage"].data;
             }
+
         } else {
-            if (this.state.view == 'day') {
-                return data["dayGeneration"].data;
-            } else if (this.state.view == 'week') {
-                return data["weekGeneration"].data;
-            } else if (this.state.view == 'month') {
-                return data["monthGeneration"].data;
-            } else if (this.state.view == 'year') {
-                return data["yearGeneration"].data;
+            switch (this.state.view) {
+                case "day":
+                    return data["dayGeneration"].data;
+
+                case "week":
+                    return data["weekGeneration"].data;
+
+                case "month":
+                    return data["monthGeneration"].data;
+
+                case "year":
+                    return data["yearGeneration"].data;
             }
         }
 
     }
 
     getRanking = (data, cardType) => {
-        if (this.state.view == 'day') {
-            return data["dayUsage"].rank;
-        } else if (this.state.view == 'week') {
-            return data["weekUsage"].rank;
-        } else if (this.state.view == 'month') {
-            return data["monthUsage"].rank;
-        } else if (this.state.view == 'year') {
-             return data["yearUsage"].rank;
+        if (cardType == USAGE_CARD) {
+            switch (this.state.view) {
+                case "day":
+                    return data["dayUsage"].rank;
+
+                case "week":
+                    return data["weekUsage"].rank;
+
+                case "month":
+                    return data["monthUsage"].rank;
+
+                case "year":
+                    return data["yearUsage"].rank;
+            }
+        } else {
+            switch (this.state.view) {
+                case "day":
+                    return data["dayGeneration"].rank;
+
+                case "week":
+                    return data["weekGeneration"].rank;
+
+                case "month":
+                    return data["monthGeneration"].rank;
+
+                case "year":
+                    return data["yearGeneration"].rank;
+            }
         }
     }
 
@@ -109,9 +136,8 @@ export default class OverviewCards extends Component {
                 verb = 'generation';
             }
 
-            headerText = this.numberWithCommas(currentData["usage"][this.state.selectedCard - 5]["y"]);
+            headerText = roundNumber(currentData["usage"][this.state.selectedCard - 5]["y"]);
 
-//            headerText = Number(currentData["usage"][this.state.selectedCard - 5]["y"]).toLocaleString();
             subheaderText = units[this.state.selectedCard - 5];
             highlight = false;
         }
@@ -147,12 +173,12 @@ export default class OverviewCards extends Component {
 
         return (
             <View style={[themeStyles.flex, themeStyles.list]}>
-            <View style={{ height: verticalScale(130) }}>
+            <Svg height={130} width={400}>
             <Image source={require('./../assets/windmillHeader.png')}
                 style={themeStyles.header}/>
             <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
             {header}
-            </View>
+            </Svg>
 
              <ScrollView style={themeStyles.lightBlueBackground}>
                 <GraphDetail data={currData}

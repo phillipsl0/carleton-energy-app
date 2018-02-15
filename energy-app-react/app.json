@@ -1,8 +1,11 @@
 {
   "expo": {
     "name": "Carleton College Energy Comps",
+    "icon": "./src/assets/icon.png",
+    "version": "0.1.0",
     "slug": "cc-energy-app",
     "sdkVersion": "24.0.0",
+    "privacy": "unlisted",
     "splash": {
       "image": "./src/assets/splash.png",
       "resizeMode": "cover",
@@ -10,10 +13,16 @@
     },
     "orientation": "portrait",
     "primaryColor": "#0B5091",
-    "icon": "./src/assets/icon.png",
     "androidStatusBar": {
-      "backgroundColor": "#527aa3",
+      "backgroundColor": "#0B5091",
       "barStyle": "light-content"
+    },
+    "ios": {
+      "bundleIdentifier": "edu.carleton.energy-app"
+    },
+    "android": {
+      "package": "edu.carleton.energy_app",
+      "versionCode": 1
     }
   }
 }

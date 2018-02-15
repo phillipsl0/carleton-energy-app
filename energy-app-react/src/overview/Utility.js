@@ -5,7 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import CurrFont from './../styling/CurrentFont';
-import { moderateScale } from './../helpers/Scaling';
+import { moderateScale } from './../helpers/General';
 const defaultFont = CurrFont+'-regular';
 const defaultFontBold = CurrFont+'-bold';
 
