@@ -455,7 +455,7 @@ class EnergyMapView extends Component {
           //onLayout={console.log("On layout!")}
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
-          toggleCallout={this.toggleCallout}
+          //toggleCallout={this.toggleCallout}
           displayUtility={utilityNameShown}
           style={styles.map}
           >
