@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, Linking, Platform, Alert,
-    StyleSheet, View, ScrollView, Text, Image, WebView, TouchableOpacity } from 'react-native'
-import { StackNavigator, SafeAreaView } from 'react-navigation';
-import { List, Card, ListItem, Button } from 'react-native-elements';
+import { Alert, Image, Linking, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { StackNavigator } from 'react-navigation';
+import { Card, List, ListItem } from 'react-native-elements';
 
-import { getSustainabilityEvents, getSustainabilityEventsBak,
-    getSustainabilityNews, getSustainabilityNewsBak } from './helpers/ApiWrappers.js';
-import { scale, moderateScale, verticalScale} from './helpers/Scaling';
+import {
+    getSustainabilityEvents,
+    getSustainabilityEventsBak,
+    getSustainabilityNews,
+    getSustainabilityNewsBak
+} from './helpers/ApiWrappers.js';
+import { moderateScale } from './helpers/Scaling';
 import { GetStyle } from './styling/Themes'
+
 const themeStyles = GetStyle();
 
 class SustainListView extends Component {
@@ -15,9 +19,9 @@ class SustainListView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           newsData: '',
-           eventsData: '',
-           neverAlert: false
+            newsData: '',
+            eventsData: '',
+            neverAlert: false
         }
     }
 
@@ -29,20 +33,22 @@ class SustainListView extends Component {
 
     async componentDidMount() {
         const events = await getSustainabilityEvents();
-        const eventsJson = await events.json()
-        await this.setStateAsync({eventsData: eventsJson})
+        const eventsJson = await events.json();
+        await this.setStateAsync({eventsData: eventsJson});
 
         const news = await getSustainabilityNews();
-        const newsJson = await news.json()
+        const newsJson = await news.json();
         await this.setStateAsync({newsData: newsJson})
     }
 
     alertBrowser = (link) => {
+
         if (this.state.neverAlert) {
             Linking.openURL(link);
         } else {
+            let linkTitle;
             if (link.length > moderateScale(60)) {
-                linkTitle = link.substring(0, moderateScale(60)-5) + '...';
+                linkTitle = link.substring(0, moderateScale(60) - 5) + '...';
             } else {
                 linkTitle = link;
             }
@@ -50,17 +56,16 @@ class SustainListView extends Component {
                 linkTitle,
                 'Open link in web browser?',
                 [{text: 'Always Open', onPress: () =>
-                    (Linking.openURL(link), this.setState({neverAlert: true}))},
+                        (Linking.openURL(link), this.setState({neverAlert: true}))},
                 {text: 'Cancel', onPress: () => {}, style: 'cancel'},
-                {text: 'Open', onPress: () => (Linking.openURL(link))},],
-                { cancelable: true }
+                {text: 'Open', onPress: () => (Linking.openURL(link))}]
             );
         }
-    }
+    };
 
     render() {
-        events = getSustainabilityEventsBak();
-        news = getSustainabilityNewsBak();
+        let events = getSustainabilityEventsBak();
+        let news = getSustainabilityNewsBak();
 
         if (this.state.eventsData) {
             events["events"] = this.state.eventsData;
@@ -69,12 +74,12 @@ class SustainListView extends Component {
             news["news"] = this.state.newsData;
         }
 
-        links = ['https://apps.carleton.edu/sustainability/',
-                'https://apps.carleton.edu/sustainability/campus/',
-                'https://apps.carleton.edu/sustainability/action/',
-                'https://apps.carleton.edu/sustainability/about/',
-                'https://apps.carleton.edu/sustainability/events/',
-                'https://apps.carleton.edu/sustainability/news/']
+        let links = ['https://apps.carleton.edu/sustainability/',
+            'https://apps.carleton.edu/sustainability/campus/',
+            'https://apps.carleton.edu/sustainability/action/',
+            'https://apps.carleton.edu/sustainability/about/',
+            'https://apps.carleton.edu/sustainability/events/',
+            'https://apps.carleton.edu/sustainability/news/'];
 
 
         return (
@@ -129,24 +134,23 @@ class SustainListView extends Component {
                     <List containerStyle={styles.list}>
                         { events["events"]["items"].map((item, key) =>
                             item["content"]
-                            ? <ListItem
-                                key={item["guid"]}
-                                containerStyle={styles.listItem}
-                                title={item["title"]}
-                                titleStyle={styles.listTitle}
-                                titleNumberOfLines={3}
-                                onPress={() => this.alertBrowser(item["link"])}
-                                subtitleStyle={styles.subtitle}
-                                subtitle={item["content"]} />
-                            : <ListItem
-                                key={item["guid"]}
-                                containerStyle={styles.listItem}
-                                title={item["title"]}
-                                titleStyle={styles.listTitle}
-                                titleNumberOfLines={3}
-                                onPress={() => this.alertBrowser(item["link"])} />
-                            )
-                        }
+                                ? <ListItem
+                                    key={item["guid"]}
+                                    containerStyle={styles.listItem}
+                                    title={item["title"]}
+                                    titleStyle={styles.listTitle}
+                                    titleNumberOfLines={3}
+                                    onPress={() => this.alertBrowser(item["link"])}
+                                    subtitleStyle={styles.subtitle}
+                                    subtitle={item["content"]} />
+                                : <ListItem
+                                    key={item["guid"]}
+                                    containerStyle={styles.listItem}
+                                    title={item["title"]}
+                                    titleStyle={styles.listTitle}
+                                    titleNumberOfLines={3}
+                                    onPress={() => this.alertBrowser(item["link"])} />
+                        )}
                         <View style={styles.listItem} />
                     </List>
                     <View>
@@ -172,7 +176,6 @@ class SustainListView extends Component {
                         { news["news"]["items"].map((item, key) =>
                             <ListItem
                                 key={item["guid"]}
-                                // ref={(thisItem) => this[`item-${item["guid"]}`] = thisItem}
                                 containerStyle={styles.listItem}
                                 title={item["title"]}
                                 titleStyle={styles.listTitle}
@@ -192,18 +195,11 @@ class SustainListView extends Component {
                 </Card>
                 <View style={{paddingTop:5}} />
             </ScrollView>
-            );
+        );
 
     }
 }
 
-
-
-const navStyles = StyleSheet.create({
-    header: {
-        backgroundColor: '#0B5091',
-    },
-})
 
 const SustainStack = StackNavigator({
     Sustain: {
@@ -214,12 +210,15 @@ const SustainStack = StackNavigator({
                 android: { header: null }
             }),
             headerTintColor: 'white',
-            headerStyle: navStyles.header,
+            headerStyle: styles.navHeader,
         }),
     }
 });
 
 const styles = StyleSheet.create({
+    navHeader: {
+        backgroundColor: '#0B5091',
+    },
     card: {
         paddingTop: 0,
         marginBottom: 5,
@@ -278,6 +277,6 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         marginLeft: 3,
     },
-})
+});
 
 export default SustainStack;
