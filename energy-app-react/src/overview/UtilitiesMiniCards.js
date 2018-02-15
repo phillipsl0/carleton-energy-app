@@ -10,7 +10,6 @@ import Utility from './Utility';
     state => ({
         currentData: state.data.currentData,
         loading: state.data.loading,
-        layout: state.ui.layout,
     }),
     dispatch => ({
         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
@@ -80,7 +79,7 @@ export default class Utilities extends Component {
 
     render() {
         const themeStyles = GetStyle(CurrTheme);
-        const { refresh, loading, currentData, layout } = this.props;
+        const { refresh, loading, currentData } = this.props;
         var cardType = this.props.cardType;
 
         return(
