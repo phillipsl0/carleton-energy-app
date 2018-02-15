@@ -123,7 +123,7 @@ const DefaultTheme = StyleSheet.create({
                 shadowOffset: { height: 0, width: 0 },
             },
             android: {
-                elevation: 1,
+                elevation: 2,
 
             },
         }),
