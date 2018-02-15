@@ -16,7 +16,12 @@ export default class MapCallout extends Component {
       units = "kWh"
     } else if (utility == 'water') {
       units = "gal"
+    } else if (utility == 'gas') {
+      units = "kBTU"
+    } else if (utility == 'heat') { 
+      units = "thm"
     }
+
 
     return (
       <View style={styles.container}>

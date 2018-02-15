@@ -52,7 +52,7 @@ export default class GraphDetail extends Component {
 
     render() {
         const themeStyles = GetStyle(CurrTheme);
-        console.log(this.props.selected);
+        //console.log(this.props.selected);
         var x = this.getLabel("x");
         var y = this.getLabel("y");
 

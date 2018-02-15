@@ -57,7 +57,7 @@ class BuildingListView extends Component {
             style={{paddingBottom:20}}
             containerViewStyle={styles.button}
             backgroundColor='#0B5091'
-            onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item, selected: 1})}/>
+            onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item})}/>
       </View>
     </View>
   }

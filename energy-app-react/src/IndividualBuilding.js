@@ -1,106 +1,119 @@
-import BuildingComparison from './BuildingComparison';
-import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
+import { List, Card, Button, Avatar } from 'react-native-elements';
 import React, { Component } from 'react';
-import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './helpers/ApiWrappers';
 import { Platform, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, ScrollView } from 'react-native'
+import { StackNavigator } from 'react-navigation';
+
+import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './helpers/ApiWrappers';
 import { GetStyle } from './styling/Themes';
 import CurrTheme from './styling/CurrentTheme';
 import GraphDetail from './overview/GraphDetailCard';
 import Utilities from './overview/UtilitiesMiniCards';
-import { StackNavigator, SafeAreaView } from 'react-navigation';
 import ComparisonPage from './ComparisonPage';
+import { connect } from 'react-redux';
+import { moderateScale, verticalScale } from './helpers/Scaling';
+import BuildingComparison from './BuildingComparison';
+
+@connect(
+    state => ({
+        historicalData: state.data.historicalData,
+        currentData: state.data.currentData,
+        loading: state.data.loading,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+    }),
+)
 
 export default class IndividualBuilding extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            selectedUtilityCard: 1, // index for utility card
+            selectedUtilityCard: 5, // index for utility card - itialized to gas
             selectedTimeCard: 1, // index for time card - intialized to day
             view: 'day',
-            // graphData = 
-            // buildingName = props.navigation.state.params.item.name;
-            // curConsumption = (getCurrentBuildingUtilityConsumption("Burton", "water")/15).toFixed(2);
         }
     }
 
     // This function gets called immediately after the component is mounted
     componentDidMount() {
-        currDate = new Date();
+        // currDate = new Date();
         
-        this.updateDay(currDate);
-        this.updateWeek(currDate);
-        this.updateMonth(currDate);
-        this.updateYear(currDate);
+        // this.updateDay(currDate);
+        // this.updateWeek(currDate);
+        // this.updateMonth(currDate);
+        // this.updateYear(currDate);
 
         this.getUtility(); // get utility from energy map selection, if present
     }
 
+    // Get utility selected from stack navigation
     getUtility() {
         utilitySelected = this.props.navigation.state.params.selected;
-        if (utilitySelected !== null) {
+        // If comes from map, utilitySelected specified upon navigation
+        if (utilitySelected !== undefined) {
             this.setState({ selectedUtilityCard:utilitySelected })
         }
     }
 
-    updateDay = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setDate(currDate.getDate()-7);
+    // updateDay = ( currDate ) => {
+    //     comparisonDate = new Date();
+    //     comparisonDate.setDate(currDate.getDate()-7);
         
-        // if (this.props.navigation.state.params.card == 1) {
-        //     updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
-        // } else {
-        //     updatedDay = getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
-        // }
+    //     // if (this.props.navigation.state.params.card == 1) {
+    //     //     updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
+    //     // } else {
+    //     //     updatedDay = getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
+    //     // }
 
-        updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
+    //     updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
         
-        this.setState({ dayData: updatedDay });
-    }
+    //     this.setState({ dayData: updatedDay });
+    // }
 
-    updateWeek = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setDate(currDate.getDate()-28);
+    // updateWeek = ( currDate ) => {
+    //     comparisonDate = new Date();
+    //     comparisonDate.setDate(currDate.getDate()-28);
         
-        // if (this.props.navigation.state.params.card == 1) {
-        //     updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
-        // } else {
-        //     updatedWeek = getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
-        // }
-        updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
+    //     // if (this.props.navigation.state.params.card == 1) {
+    //     //     updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
+    //     // } else {
+    //     //     updatedWeek = getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
+    //     // }
+    //     updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
 
-        this.setState({ weekData: updatedWeek });
-    }
+    //     this.setState({ weekData: updatedWeek });
+    // }
 
-    updateMonth = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setMonth(currDate.getMonth()-11);
+    // updateMonth = ( currDate ) => {
+    //     comparisonDate = new Date();
+    //     comparisonDate.setMonth(currDate.getMonth()-11);
 
-        // if (this.props.navigation.state.params.card == 1) {
-        //     updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
-        // } else {
-        //     updatedMonth = getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
-        // }
+    //     // if (this.props.navigation.state.params.card == 1) {
+    //     //     updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
+    //     // } else {
+    //     //     updatedMonth = getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
+    //     // }
 
-        updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
+    //     updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
 
-        this.setState({ monthData: updatedMonth });
-    }
+    //     this.setState({ monthData: updatedMonth });
+    // }
 
-    updateYear = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setYear(currDate.getFullYear()-5);
+    // updateYear = ( currDate ) => {
+    //     comparisonDate = new Date();
+    //     comparisonDate.setYear(currDate.getFullYear()-5);
 
-        // if (this.props.navigation.state.params.card == 1) {
-        //     updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
-        // } else {
-        //     updatedYear = getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
-        // }
+    //     // if (this.props.navigation.state.params.card == 1) {
+    //     //     updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
+    //     // } else {
+    //     //     updatedYear = getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
+    //     // }
 
-        updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);        
+    //     updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);        
 
-        this.setState({ yearData: updatedYear });
-    }
+    //     this.setState({ yearData: updatedYear });
+    // }
 
     // Decide what units to render based on utility and time
     getUnits(utility, time) {
@@ -114,7 +127,7 @@ export default class IndividualBuilding extends Component {
         } else if (utility == 7) { // heat
           units = "thm"
         }
-
+        // REMOVING TIMEPERIOD
         var timePeriod = ""
         if (time == 1) {
             timePeriod = "/day"
@@ -125,13 +138,18 @@ export default class IndividualBuilding extends Component {
         } else if (time == 4) {
             timePeriod = "/year"
         }
-        return (units+timePeriod)
+        return (units)
     }
 
-    getHeader = () => {
+    // Displays header showing current usage
+    getHeader = (currentData) => {
+        // Array of API data: [gas, electricity, heat, water]
         const themeStyles = GetStyle(CurrTheme);
         try {
-            headerText = this.numberWithCommas((getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtilityCard))).toFixed(0))
+            console.log("SelectedUtilityCard", this.state.selectedUtilityCard)
+            //headerText = this.numberWithCommas((getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtilityCard))).toFixed(0))
+            // shows value (hence "y", "x" would show label) of current data usage
+            headerText = this.numberWithCommas((currentData["usage"][this.state.selectedUtilityCard-5]["y"]).toFixed(0));
             subheaderText = this.getUnits(this.state.selectedUtilityCard, this.state.selectedTimeCard)
         } catch (error) {
             console.log("Error in displaying IndividualBuilding header: ", error)
@@ -140,28 +158,39 @@ export default class IndividualBuilding extends Component {
         }
 
       return (
-          <View style={[styles.textContainer, themeStyles.centered]}>
-             <Text style={[styles.number, themeStyles.translucentText]}>
+        <View style={[styles.textContainer, themeStyles.centered]}>
+            <Text style={[styles.number, themeStyles.translucentText]}>
                 {headerText}
-                <Text style={[styles.words, themeStyles.translucentText]}>
+            </Text>
+            <View style={themeStyles.flexboxRow}>
+                <Text style={[styles.subHeader, themeStyles.translucentText]}>
                     {subheaderText}
                  </Text>
-             </Text>
-          </View>
+            </View>
+        </View>
       );
     }
 
     // Returns data to be displayed
-    getGraphScope = () => {
-        // graphData = navigation.data.comparison;
+    getGraphScope = (data) => {
+        // if (this.state.view == 'day') {
+        //     return this.state.dayData["data"];
+        // } else if (this.state.view == 'week') {
+        //     return this.state.weekData["data"];
+        // } else if (this.state.view == 'month') {
+        //     return this.state.monthData["data"];
+        // } else if (this.state.view == 'year') {
+        //      return this.state.yearData["data"];
+        // }
+        // Updated redux data
         if (this.state.view == 'day') {
-            return this.state.dayData["data"];
+            return data["dayUsage"].data;
         } else if (this.state.view == 'week') {
-            return this.state.weekData["data"];
+            return data["weekUsage"].data;
         } else if (this.state.view == 'month') {
-            return this.state.monthData["data"];
+            return data["monthUsage"].data;
         } else if (this.state.view == 'year') {
-             return this.state.yearData["data"];
+            return data["yearUsage"].data;
         }
     }
 
@@ -202,40 +231,29 @@ export default class IndividualBuilding extends Component {
 
     render() {
         const themeStyles = GetStyle(CurrTheme);
-        header = this.getHeader();  
         var utilities = ["Gas", "Electric", "Heat", "Water"];
-        
-        const test = []
-        for (var key in this.props.navigation.state.params.item) { 
-          if (Array.isArray(this.props.navigation.state.params.item[key])) {
-            test.push(this.props.navigation.state.params.item[key])
-          }
-          
-        }
-        const num = (test.length - 1)
-        const tableData = [,
-        test[0], 
-        test[1], 
-        test[2],
-        test[3],
-        test[4],
-        test[5],
-        test[6],
-        ];
+        const { refresh, loading, historicalData, currentData } = this.props; // redux
+        currData = this.getGraphScope(historicalData);
+        header = this.getHeader(currentData);
 
         return (
             <View style={[themeStyles.flex, themeStyles.list]}>
-                <Image style={themeStyles.header} 
-                    source={{ uri: this.props.navigation.state.params.item.avatar }} />
-
-                <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
-                {header}
+                <View
+                    // controls height of header
+                    style={{ height: verticalScale(110) }}>
+                    <Image
+                        style={themeStyles.header} 
+                        source={{ uri: this.props.navigation.state.params.item.avatar }} />
+                    <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
+                    {header}
+                </View>
 
                 <ScrollView style={themeStyles.lightBlueBackground}>
-                    <GraphDetail data={this.graphData}
+                    <GraphDetail data={currData} // was graphData
                         callback={this.scopeCallbackGraph}
                         selected={this.state.selectedTimeCard} // button index must match selected
-                        type={1}/>                    
+                        type={1} // indicates energy usage, 2 is generation
+                    />                    
                     <Button
                         rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                         fontSize={20}
@@ -247,7 +265,6 @@ export default class IndividualBuilding extends Component {
                 <Utilities callback={this.scopeCallbackUtilities}
                     cardType={1}
                     selected={this.state.selectedUtilityCard}
-                    //selected={5}
                 />
             </View>
         );
@@ -261,70 +278,27 @@ const navStyles = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
-    card: {
-        paddingTop: 20,
-    },
-    blue: {
-        color: 'blue',
-        fontWeight: 'bold',
-    },
-    head: {
-      backgroundColor: 'grey',
-    },
     button: {
         paddingTop: 20,
         paddingLeft: 30,
         paddingRight: 30,
         paddingBottom: 100,
     },
-    table: { 
-        width: 250,
-        marginLeft: 5, 
-    },
-    text: { 
-        alignSelf: 'center',
-        marginLeft: 5, 
-        fontSize: 18,
-    },
-    listItem: {
-        height: 50,
-        backgroundColor: 'aqua',
-        borderBottomColor: '#c8c7cc',
-        borderBottomWidth: 0.5,
-        width: 300,
-        alignSelf: 'center',
-        paddingTop: 35,
-        paddingRight: 15,
-        paddingBottom: 55,
-    },
-    listImg: {
-        height: 30,
-        alignSelf: 'stretch',
-    },
-    listText: {
-        paddingLeft: 30,
-        marginLeft: 30,
-        fontSize: 24,
-    },
-    row: {
-        backgroundColor: 'orange',
-    },
-    view: {
-        alignItems: 'center',
-        backgroundColor: 'yellow'
-    },
     img: {
         alignSelf: 'stretch',
         height: 100,
     },
     number: {
-        fontSize: 80,
+        fontSize: moderateScale(70),
     },
     textContainer: {
-        marginBottom: '5%',
+        // marginBottom: '5%',
+        marginBottom: '2%',
+        marginTop: '2%'
     },
-    words: {
-        fontSize: 20,
-        marginTop: '-2%',
+    subHeader: {
+        //fontSize: 20,
+        // marginTop: '-2%',
+        fontSize: moderateScale(16),
     }
 })
