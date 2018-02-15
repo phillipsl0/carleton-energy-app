@@ -438,11 +438,9 @@ class EnergyMapView extends Component {
 
   render() {
     navigation = this.props.navigation;
-    utilityNameShown = this.state.utilityNameShown
-    loading = this.state.loading
-    //console.log("Utility displayed before return:", utilityNameShown)
-    //console.log("Loading?", loading)
-    isMapReady = false
+    utilityNameShown = this.state.utilityNameShown;
+    loading = this.state.loading;
+    isMapReady = false; // fix for Android latLang error
 
     return (
       <View style={styles.container}>
