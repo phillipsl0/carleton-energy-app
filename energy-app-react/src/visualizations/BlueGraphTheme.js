@@ -74,7 +74,11 @@ export default {
         strokeLinejoin
       },
       axisLabel: assign({}, centeredLabelStyles, {
-        padding: 25
+        padding: 30,
+        fontFamily: fontBold,
+        weight: 'bold',
+        fontSize: 11
+
       }),
       grid: {
         fill: "transparent",
