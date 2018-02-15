@@ -4,6 +4,7 @@ import { StackNavigator, NavigationActions } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
 
+import { connect } from 'react-redux';
 import MapCallout from './MapCallout';
 import IndividualBuilding from './../IndividualBuilding';
 import BuildingStack from './../BuildingListView';
@@ -26,8 +27,17 @@ Cool native app: https://themeteorchef.com/tutorials/how-to-build-a-react-native
 Get lat/long: http://www.mapcoordinates.net/en
 */
 
-// ** if want to use user's location, set up geolocation in componentWillMount(): https://school.shoutem.com/lectures/geolocation-app-react-native/
-
+// Get redux
+// @connect(
+//     state => ({
+//         historicalData: state.data.historicalData,
+//         currentData: state.data.currentData,
+//         loading: state.data.loading,
+//     }),
+//     dispatch => ({
+//         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+//     }),
+// )
 
 
 const initialRegion = {
