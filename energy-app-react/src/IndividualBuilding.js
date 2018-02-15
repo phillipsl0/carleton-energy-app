@@ -1,311 +1,304 @@
-import BuildingComparison from './BuildingComparison';
-import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
+import { List, Card, Button, Avatar } from 'react-native-elements';
 import React, { Component } from 'react';
+import { Platform, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, ScrollView } from 'react-native'
+import { StackNavigator } from 'react-navigation';
+
 import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './helpers/ApiWrappers';
-import { AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, ScrollView } from 'react-native'
 import { GetStyle } from './styling/Themes';
 import CurrTheme from './styling/CurrentTheme';
 import GraphDetail from './overview/GraphDetailCard';
-// import ExampleData from './overview/OverviewExampleData';
 import Utilities from './overview/UtilitiesMiniCards';
-import OverviewCards from './overview/OverviewCards';
-import { StackNavigator, SafeAreaView } from 'react-navigation';
-import  ComparisonPage from './ComparisonPage';
+import ComparisonPage from './ComparisonPage';
+import { connect } from 'react-redux';
+import { moderateScale, verticalScale } from './helpers/Scaling';
+import BuildingComparison from './BuildingComparison';
 
+@connect(
+    state => ({
+        historicalData: state.data.historicalData,
+        currentData: state.data.currentData,
+        loading: state.data.loading,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+    }),
+)
 
 export default class IndividualBuilding extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            // graphData = 
-            // buildingName = props.navigation.state.params.item.name;
-            // curConsumption = (getCurrentBuildingUtilityConsumption("Burton", "water")/15).toFixed(2);
+            selectedUtilityCard: 5, // index for utility card - itialized to gas
+            selectedTimeCard: 1, // index for time card - intialized to day
+            view: 'day',
         }
     }
 
     // This function gets called immediately after the component is mounted
     componentDidMount() {
-        currDate = new Date();
+        // currDate = new Date();
         
-        this.updateDay(currDate);
-        this.updateWeek(currDate);
-        this.updateMonth(currDate);
-        this.updateYear(currDate);
+        // this.updateDay(currDate);
+        // this.updateWeek(currDate);
+        // this.updateMonth(currDate);
+        // this.updateYear(currDate);
+
+        this.getUtility(); // get utility from energy map selection, if present
     }
 
-    updateDay = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setDate(currDate.getDate()-7);
-        
-        if (this.props.navigation.state.params.card == 1) {
-            updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
-        } else {
-            updatedDay = getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
+    // Get utility selected from stack navigation
+    getUtility() {
+        utilitySelected = this.props.navigation.state.params.selected;
+        // If comes from map, utilitySelected specified upon navigation
+        if (utilitySelected !== undefined) {
+            this.setState({ selectedUtilityCard:utilitySelected })
         }
+    }
+
+    // updateDay = ( currDate ) => {
+    //     comparisonDate = new Date();
+    //     comparisonDate.setDate(currDate.getDate()-7);
         
-        this.setState({ dayData: updatedDay });
-    }
+    //     // if (this.props.navigation.state.params.card == 1) {
+    //     //     updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
+    //     // } else {
+    //     //     updatedDay = getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
+    //     // }
 
-    updateWeek = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setDate(currDate.getDate()-28);
+    //     updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
         
-        if (this.props.navigation.state.params.card == 1) {
-            updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
-        } else {
-            updatedWeek = getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
-        }
+    //     this.setState({ dayData: updatedDay });
+    // }
+
+    // updateWeek = ( currDate ) => {
+    //     comparisonDate = new Date();
+    //     comparisonDate.setDate(currDate.getDate()-28);
         
-        this.setState({ weekData: updatedWeek });
-    }
+    //     // if (this.props.navigation.state.params.card == 1) {
+    //     //     updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
+    //     // } else {
+    //     //     updatedWeek = getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
+    //     // }
+    //     updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
 
-    updateMonth = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setMonth(currDate.getMonth()-11);
+    //     this.setState({ weekData: updatedWeek });
+    // }
 
-        if (this.props.navigation.state.params.card == 1) {
-            updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
-        } else {
-            updatedMonth = getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
+    // updateMonth = ( currDate ) => {
+    //     comparisonDate = new Date();
+    //     comparisonDate.setMonth(currDate.getMonth()-11);
+
+    //     // if (this.props.navigation.state.params.card == 1) {
+    //     //     updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
+    //     // } else {
+    //     //     updatedMonth = getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
+    //     // }
+
+    //     updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
+
+    //     this.setState({ monthData: updatedMonth });
+    // }
+
+    // updateYear = ( currDate ) => {
+    //     comparisonDate = new Date();
+    //     comparisonDate.setYear(currDate.getFullYear()-5);
+
+    //     // if (this.props.navigation.state.params.card == 1) {
+    //     //     updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
+    //     // } else {
+    //     //     updatedYear = getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
+    //     // }
+
+    //     updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);        
+
+    //     this.setState({ yearData: updatedYear });
+    // }
+
+    // Decide what units to render based on utility and time
+    getUnits(utility, time) {
+        var units = ""
+        if (utility == 6) { // electric
+          units = "kWh"
+        } else if (utility == 8) { // water
+          units = "gal"
+        } else if (utility == 5) { // gas
+          units = "kBTU"
+        } else if (utility == 7) { // heat
+          units = "thm"
         }
-
-        this.setState({ monthData: updatedMonth });
-    }
-
-    updateYear = ( currDate ) => {
-        comparisonDate = new Date();
-        comparisonDate.setYear(currDate.getFullYear()-5);
-
-        if (this.props.navigation.state.params.card == 1) {
-            updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
-        } else {
-            updatedYear = getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
+        // REMOVING TIMEPERIOD
+        var timePeriod = ""
+        if (time == 1) {
+            timePeriod = "/day"
+        } else if (time == 2) {
+            timePeriod = "/week"
+        } else if (time == 3) {
+            timePeriod = "/month"
+        } else if (time == 4) {
+            timePeriod = "/year"
         }
-
-        this.setState({ yearData: updatedYear });
+        return (units)
     }
 
-
-    getHeader = () => {
+    // Displays header showing current usage
+    getHeader = (currentData) => {
+        // Array of API data: [gas, electricity, heat, water]
         const themeStyles = GetStyle(CurrTheme);
-
-        headerText = (getCurrentBuildingUtilityConsumption("Burton", "water")/15).toFixed(1);
-        subheaderText = "gal/min";
+        try {
+            console.log("SelectedUtilityCard", this.state.selectedUtilityCard)
+            //headerText = this.numberWithCommas((getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtilityCard))).toFixed(0))
+            // shows value (hence "y", "x" would show label) of current data usage
+            headerText = this.numberWithCommas((currentData["usage"][this.state.selectedUtilityCard-5]["y"]).toFixed(0));
+            subheaderText = this.getUnits(this.state.selectedUtilityCard, this.state.selectedTimeCard)
+        } catch (error) {
+            console.log("Error in displaying IndividualBuilding header: ", error)
+            headerText = "N/A"
+            subheaderText = ""
+        }
 
       return (
-          <View style={[styles.textContainer, themeStyles.centered]}>
-             <Text style={[styles.number, themeStyles.translucentText]}>
+        <View style={[styles.textContainer, themeStyles.centered]}>
+            <Text style={[styles.number, themeStyles.translucentText]}>
                 {headerText}
-                <Text style={[styles.words, themeStyles.translucentText]}>
+            </Text>
+            <View style={themeStyles.flexboxRow}>
+                <Text style={[styles.subHeader, themeStyles.translucentText]}>
                     {subheaderText}
                  </Text>
-             </Text>
-          </View>
+            </View>
+        </View>
       );
     }
 
-
-
-
-
-      getGraphScope = () => {
-        // graphData = navigation.data.comparison;
-
+    // Returns data to be displayed
+    getGraphScope = (data) => {
+        // if (this.state.view == 'day') {
+        //     return this.state.dayData["data"];
+        // } else if (this.state.view == 'week') {
+        //     return this.state.weekData["data"];
+        // } else if (this.state.view == 'month') {
+        //     return this.state.monthData["data"];
+        // } else if (this.state.view == 'year') {
+        //      return this.state.yearData["data"];
+        // }
+        // Updated redux data
         if (this.state.view == 'day') {
-            return this.state.dayData["data"];
+            return data["dayUsage"].data;
         } else if (this.state.view == 'week') {
-            return this.state.weekData["data"];
+            return data["weekUsage"].data;
         } else if (this.state.view == 'month') {
-            return this.state.monthData["data"];
+            return data["monthUsage"].data;
         } else if (this.state.view == 'year') {
-             return this.state.yearData["data"];
+            return data["yearUsage"].data;
         }
     }
 
+    // Gets data from time denominator buttons for graph
     scopeCallbackGraph = ( buttonView, buttonComparator, buttonIndex ) => {
         this.setState({ view: buttonView,
             viewNumber: buttonComparator,
-            selectedCard: buttonIndex});
+            selectedTimeCard: buttonIndex});
     }
+
+    // Gets data from utility button
+    scopeCallbackUtilities = ( buttonIndex ) => {
+        this.setState({ selectedUtilityCard: buttonIndex});
+    }
+
+    // Helper function to add commas to large numbers
+    numberWithCommas = (x) => {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Maps utility name to its respective utility mini card index
+    mapUtilityNameToIndex(utilityName) {
+        if (utilityName == 'gas') {
+          return (5);
+        }
+        else if (utilityName == 'electric') {
+          return (6);
+        }
+        else if (utilityName == 'heat') {
+          return (7);
+        }
+        else if (utilityName == 'water') {
+          return (8);
+        }
+        return (1);
+    };
 
 
     render() {
-        navigation = this.props.navigation;
         const themeStyles = GetStyle(CurrTheme);
-        header = this.getHeader();
-        const { navigate } = this.props.navigation;
-        // currData = this.getGraphScope();
-        //currData = this.getGraphScope(historicalData, cardType);
-
-
-        const {state} = this.props.navigation;
-        const tableHead = [' ','Electric', 'Water', 'Gas'];
-        
-        const test = []
-        for (var key in this.props.navigation.state.params.item) { 
-          if (Array.isArray(this.props.navigation.state.params.item[key])) {
-            test.push(this.props.navigation.state.params.item[key])
-          }
-          
-        }
-        const num = (test.length - 1)
-        const tableData = [,
-        test[0], 
-        test[1], 
-        test[2],
-        test[3],
-        test[4],
-        test[5],
-        test[6],
-
-
-        ];
-
+        var utilities = ["Gas", "Electric", "Heat", "Water"];
+        const { refresh, loading, historicalData, currentData } = this.props; // redux
+        currData = this.getGraphScope(historicalData);
+        header = this.getHeader(currentData);
 
         return (
-
             <View style={[themeStyles.flex, themeStyles.list]}>
-
-
-                <Image style={themeStyles.header} 
-                    source={{ uri: this.props.navigation.state.params.item.avatar }} />
-
-                <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
-                {header}
+                <View
+                    // controls height of header
+                    style={{ height: verticalScale(110) }}>
+                    <Image
+                        style={themeStyles.header} 
+                        source={{ uri: this.props.navigation.state.params.item.avatar }} />
+                    <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
+                    {header}
+                </View>
 
                 <ScrollView style={themeStyles.lightBlueBackground}>
-
-                    <GraphDetail data={this.graphData}
+                    <GraphDetail data={currData} // was graphData
                         callback={this.scopeCallbackGraph}
-                        selected={this.state.selectedCard}/>                    
-                <Button
-                rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                fontSize={20}
-                title='Compare'
-                containerViewStyle={styles.button}
-                backgroundColor='#0B5091'
-                onPress={() => navigate("Comparison", {screen: "BuildingComparison"})}/>
-
+                        selected={this.state.selectedTimeCard} // button index must match selected
+                        type={1} // indicates energy usage, 2 is generation
+                    />                    
+                    <Button
+                        rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
+                        fontSize={20}
+                        title='Compare'
+                        containerViewStyle={styles.button}
+                        backgroundColor='#0B5091'
+                        onPress={() => this.props.navigation.navigate("Comparison")}/>
                 </ScrollView>
-               
+                <Utilities callback={this.scopeCallbackUtilities}
+                    cardType={1}
+                    selected={this.state.selectedUtilityCard}
+                />
             </View>
         );
     }
 }
 
-export const SelectStack = StackNavigator({
-    IndividualBuilding: {
-        screen: IndividualBuilding,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Individual Building',
-            ...Platform.select({
-                android: { header: null }
-            }),
-            headerTintColor: 'white',
-            headerStyle: navStyles.header,
-        }),
-    }, 
-    Comparison: {
-        screen: BuildingComparison,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Building Comparison',
-            ...Platform.select({
-                android: { header: null }
-            }),
-            headerTintColor: 'white',
-            headerStyle: navStyles.header,
-        }),
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
     },
-    Comparison_Page: {
-        screen: ComparisonPage,
-        navigationOptions: ({ navigation }) => ({
-            title: 'Compare',
-            ...Platform.select({
-                android: { header: null }
-            }),
-            headerTintColor: 'white',
-            headerStyle: navStyles.header,
-        }),
-    },
-});
-
-
-const styles = StyleSheet.create({
-  card: {
-    paddingTop: 20,
-  },
-  bigyellow: {
-    color: 'green',
-    fontWeight: 'bold',
-    fontSize: 30
-    },
-  blue: {
-    color: 'blue',
-    fontWeight: 'bold',
-    },
-    head: {
-      backgroundColor: 'grey',
-    },
-    button: {
-    paddingTop: 20,
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingBottom: 100,
-  },
-  table: { 
-    width: 250,
-    marginLeft: 5, 
-    
-  },
-  text: { 
-    alignSelf: 'center',
-    marginLeft: 5, 
-    fontSize: 18,
-  },
-  listItem: {
-    height: 50,
-    backgroundColor: 'aqua',
-    borderBottomColor: '#c8c7cc',
-    borderBottomWidth: 0.5,
-    width: 300,
-    alignSelf: 'center',
-    paddingTop: 35,
-    paddingRight: 15,
-    paddingBottom: 55,
-
-  },
-  listImg: {
-    height: 30,
-    alignSelf: 'stretch',
-  },
-  listText: {
-    paddingLeft: 30,
-    marginLeft: 30,
-    fontSize: 24,
-  },
-  row: {
-    backgroundColor: 'orange',
-  },
-  view: {
-    alignItems: 'center',
-    backgroundColor: 'yellow'
-  },
-  img: {
-    alignSelf: 'stretch',
-    height: 100,
-  },
-  number: {
-    fontSize: 80,
-  },
-
-  textContainer: {
-    marginBottom: '5%',
-  },
-
-  words: {
-    fontSize: 20,
-    marginTop: '-2%',
-  },
 })
 
+const styles = StyleSheet.create({
+    button: {
+        paddingTop: 20,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingBottom: 100,
+    },
+    img: {
+        alignSelf: 'stretch',
+        height: 100,
+    },
+    number: {
+        fontSize: moderateScale(70),
+    },
+    textContainer: {
+        // marginBottom: '5%',
+        marginBottom: '2%',
+        marginTop: '2%'
+    },
+    subHeader: {
+        //fontSize: 20,
+        // marginTop: '-2%',
+        fontSize: moderateScale(16),
+    }
+})

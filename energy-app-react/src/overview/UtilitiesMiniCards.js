@@ -23,6 +23,7 @@ export default class Utilities extends Component {
 
     sendToParent = ( buttonIndex ) => {
         this.props.callback(buttonIndex);
+        // console.log("Button index selected: ", buttonIndex);
     }
 
     getCardData = (data) => {
@@ -88,12 +89,12 @@ export default class Utilities extends Component {
            {cardType == 1 &&
             <View style={[themeStyles.flexboxRow]}>
                <Utility index={5}
-                    icon={"fire"}
-                    utilityType={"Gas"}
-                    number={'151'}
-                    unit={"thm"}
-                    callback={this.sendToParent}
-                    selected={this.props.selected}/>
+                  icon={"fire"}
+                  utilityType={"Gas"}
+                  number={'151'}
+                  unit={"thm"}
+                  callback={this.sendToParent}
+                  selected={this.props.selected}/>
 
                <Utility index={6}
                   icon={"lightbulb-o"}
