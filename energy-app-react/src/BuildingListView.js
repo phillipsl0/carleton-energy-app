@@ -10,6 +10,7 @@ import BuildingComparison from './BuildingComparison';
 import OverviewCards from './overview/OverviewCards';
 import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js';
 import  ComparisonPage from './ComparisonPage';
+import { scale, moderateScale, verticalScale} from './helpers/Scaling';
 
 class BuildingListView extends Component {
 
@@ -25,8 +26,8 @@ class BuildingListView extends Component {
                     <Text style={styles.text}>Heat: {item.item.heat}</Text>
                 </View>
                 <Button
-                    rightIcon={{name: "angle-right", type: 'font-awesome', size: 20}}
-                    fontSize={14}
+                    rightIcon={{name: "angle-right", type: 'font-awesome', size: moderateScale(20)}}
+                    fontSize={moderateScale(14)}
                     title='More Info'
                     style={{paddingBottom:20}}
                     containerViewStyle={styles.button}
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
   text: {
     alignSelf: 'flex-start',
     marginLeft: 5,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     color: 'darkslategrey',
   },
   listItem: {
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   header: {
-      fontSize: 18,
+      fontSize: moderateScale(18),
       color:'darkslategrey',
       paddingLeft: 3,
       backgroundColor: 'white',
