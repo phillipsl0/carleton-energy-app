@@ -197,14 +197,6 @@ class EnergyMapView extends Component {
         latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
         longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
       },
-      northEast: {
-        latitude: 44.462039722138684,
-        longitude: -93.1505049392581
-      },
-      southWest: {
-        latitude: 44.4592961807,
-        longitude: -93.15502781429046
-      },
       ready: true,
       utilityNameShown: 'electric',
       utilityIndexShown: 6, // for IndividualBuilding's UtilitiesMiniCard
@@ -213,12 +205,14 @@ class EnergyMapView extends Component {
     this.onRegionChange = this.onRegionChange.bind(this);
   };
 
+
   // Assemble all of Carleton's buildings BEFORE rendering
   componentWillMount() {
     this.getBuildingData('electric'); // Initialize with electric
     this.moveToCarleton();
     //console.log('EnergyMapView component is mounting...');
     this.closeActivityIndicator();
+    console.log("Component did mount")
   };
 
   openActivityIndicator() {
@@ -242,10 +236,10 @@ class EnergyMapView extends Component {
   };
 
   // Indicates when map is ready
-  onMapReady = (e) => {
-    if(!this.state.ready) {
-      this.setState({ready: true});
-    }
+  onMapReady = () => {
+    this.setState({ ready: true });
+    this.moveToCarleton();
+    console.log("Map ready: moving to Carleton")
   };
 
   // Maps utility name to its respective utility mini card index
@@ -318,6 +312,7 @@ class EnergyMapView extends Component {
       return this.setColor(val);
 
     } catch (err) {
+      // Returns grey if unable to get building data from API
       console.log("Error in setting colors: ", err);
       return ("lightgrey");
     }
@@ -343,14 +338,24 @@ class EnergyMapView extends Component {
 
   // Calls API to get current building data - initializes with electric
   async getBuildingData(utilitySelected) {
-    // Call API
     try {
       let polygons = buildings.map((building) => {
+        // Call API for building colors
+        var color = this.determineBuildingColor(building.name, utilitySelected)
+        // if no data avaiable, set buildings to light blue
+        if (color == 'lightgrey') {
+          outline = 'blue'
+        } else {
+          outline = color
+        }
+
         return {
           item: building,
           coordinates: building.coordinates,
           name: building.name,
-          color: this.determineBuildingColor(building.name, utilitySelected),
+          // colorBuilding: this.determineBuildingColor(building.name, utilitySelected),
+          colorBuilding: color,
+          colorOutline: outline,
           marker_coordinate: building.marker_coordinate,
           usage: getCurrentBuildingUtilityConsumption(building.name, utilitySelected).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
         }
@@ -437,6 +442,7 @@ class EnergyMapView extends Component {
     loading = this.state.loading
     //console.log("Utility displayed before return:", utilityNameShown)
     //console.log("Loading?", loading)
+    isMapReady = false
 
     return (
       <View style={styles.container}>
@@ -448,17 +454,15 @@ class EnergyMapView extends Component {
           showsTraffic={false}
           initialRegion={initialRegion}
           onMapReady={this.onMapReady}
+          //onLayout={console.log("On layout!")}
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
           toggleCallout={this.toggleCallout}
           displayUtility={utilityNameShown}
           style={styles.map}
-                  
-
-          // set map boundaries, NE by SW
-          //setMapBoundaries={ this.setBoundaries }     
           >
-            {this.state.polygons.map((polygon, index) => (
+            {isMapReady = true}
+            {isMapReady && this.state.polygons.map((polygon, index) => (
               /* Renders polygons from list */
               <View key={polygon.name}>
                 <Polygon
@@ -466,31 +470,31 @@ class EnergyMapView extends Component {
                   coordinates={polygon.coordinates}
                   
                   // sets color + fill + width
-                  strokeWidth={5}
-                  strokeColor={polygon.color}
-                  fillColor={polygon.color}
+                  strokeWidth={2}
+                  strokeColor={polygon.colorOutline}
+                  fillColor={polygon.colorBuilding}
                  
                   onPress={() => this.toggleCallout(polygon)}
-                />
+                  />
                   <Marker
                    ref={ref => polygon.marker = ref}
                    coordinate={polygon.marker_coordinate}
                    opacity={4} // hides markers at 0
                    key={polygon.name}
                   >
-                    <Image
-                      source={require('./../assets/mapMarker.png')}
-                      style={{ height:1, width:1 }}
-                    />
-                    <Callout
-                      tooltip // enables customizable tooltip style
-                      style={styles.callout}
-                      onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon.item, selected: this.state.utilityIndexShown })}>
-                      <MapCallout
-                        name={polygon.name}
-                        image={'image'} // to be replaced with building image
-                        number={polygon.usage}
-                        utility={utilityNameShown}/>
+                  <Image
+                    source={require('./../assets/mapMarker.png')}
+                    style={{ height:1, width:1 }}
+                  />
+                  <Callout
+                    tooltip // enables customizable tooltip style
+                    style={styles.callout}
+                    onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon.item, selected: this.state.utilityIndexShown })}>
+                    <MapCallout
+                      name={polygon.name}
+                      image={'image'} // to be replaced with building image
+                      number={polygon.usage}
+                      utility={utilityNameShown}/>
                     </Callout>
                   </Marker>
               </View>
@@ -525,20 +529,6 @@ class EnergyMapView extends Component {
   }
 }
 
-/*
-      {this.state.loading && 
-        <View style=styles.loading}>
-          <ActivityIndicator size='large' />
-        </View>
-      }
-        <Text style={{ position: 'absolute', bottom: 10 }}>
-          Latitude: {this.state.region.latitude}{'\n'}
-          Longitude: {this.state.region.longitude}{'\n'}
-          LatitudeDelta: {this.state.region.latitudeDelta}{'\n'}
-          LongitudeDelta: {this.state.region.longitudeDelta}{'\n'}
-          Last Building Pressed: {this.state.lastBuildingPressed}
-        </Text>
-*/
 
 // Fix double navigation bug in stack
 const navigateOnce = (getStateForAction) => (action, state) => {
@@ -632,11 +622,11 @@ const styles = StyleSheet.create({
         width: screenWidth,
       },
     }),
-    // position: 'absolute',
-    // top: 0,
-    // left: 0,
-    // right: 0,
-    // bottom: 0,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   rightSwipeHack: {
     position: 'absolute',
