@@ -479,6 +479,7 @@ class EnergyMapView extends Component {
                    coordinate={polygon.marker_coordinate}
                    opacity={4} // hides markers at 0
                    key={polygon.name}
+                   calloutAnchor={{ x: 0, y: -5 }} // anchor at which to center callout display over marker
                   >
                   <Image
                     source={require('./../assets/mapMarker.png')}
