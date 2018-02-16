@@ -45,8 +45,7 @@ class Graph extends Component {
                 }
 
                 return (
-                    <Svg width={this.props.width} height={this.props.height+20}
-                        style={theme.flexboxRow}>
+                    <View style={[theme.flexboxRow]}>
 
                     <VictoryPie
                         labels={() => null}
@@ -66,14 +65,14 @@ class Graph extends Component {
                          data={legendData}/>
                     }
 
-                     </Svg>
+                     </View>
                 );
 
                 break;
 
             case "bar":
                 return (
-                    <Svg width={this.props.width} height={this.props.height}>
+                    <View style={{width: moderateScale(250), height: moderateScale(225) }}>
                     <VictoryChart
                         height={this.props.height}
                         width={this.props.width}
@@ -85,7 +84,7 @@ class Graph extends Component {
                             data={this.props.graphData}/>
 
                     </VictoryChart>
-                    </Svg>
+                    </View>
                 );
 
                 break;
@@ -94,8 +93,7 @@ class Graph extends Component {
                 // Scatter plot needs axes in order to properly render units/time period
 
                 return (
-                    <Svg width={this.props.width} height={this.props.height}
-                        style={{ alignItems: 'flex-end' }}>
+                    <View style={{width: moderateScale(250), height: moderateScale(225), alignItems: 'flex-end' }}>
                     <VictoryChart
                         height={this.props.height}
                         width={this.props.width}
@@ -118,7 +116,7 @@ class Graph extends Component {
                             axisLabelComponent={<VictoryLabel dx={15} dy={-100}/>}/>
 
                     </VictoryChart>
-                    </Svg>
+                    </View>
                 );
 
                 break;
