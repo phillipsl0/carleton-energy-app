@@ -172,13 +172,11 @@ export default class OverviewCards extends Component {
         header = this.getHeader(historicalData, cardType, currentData);
 
         return (
-            <View style={[themeStyles.flex, themeStyles.list]}>
-            <Svg height={130} width={400}>
+            <View style={[themeStyles.list]}>
             <Image source={require('./../assets/windmillHeader.png')}
                 style={themeStyles.header}/>
             <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
             {header}
-            </Svg>
 
              <ScrollView style={themeStyles.lightBlueBackground}>
                 <GraphDetail data={currData}
