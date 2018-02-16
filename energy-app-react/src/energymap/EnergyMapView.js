@@ -273,13 +273,14 @@ class EnergyMapView extends Component {
   updateUtility = (utilitySelected) => {
     // Begin to update map
     this.openActivityIndicator();
+    this.moveToCarleton();  // Veronica, I moved this, it looks better on Android this way. - Martin
     utilitySelected = utilitySelected.toLowerCase() // lower case
     utilityIndex = this.mapUtilityNameToIndex(utilitySelected) // Get index for buildings
     this.setState({ utilityNameShown: utilitySelected, utilityIndexShown: utilityIndex });
     
     // Update map
     this.getBuildingData(utilitySelected);
-    this.moveToCarleton();
+    // this.moveToCarleton();
     this.closeActivityIndicator();
   };
 
@@ -455,7 +456,6 @@ class EnergyMapView extends Component {
           onLayout={this.onMapReady}
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
-          //toggleCallout={this.toggleCallout}
           displayUtility={utilityNameShown}
           style={styles.map}
           >
@@ -471,30 +471,40 @@ class EnergyMapView extends Component {
                   strokeWidth={2}
                   strokeColor={polygon.colorOutline}
                   fillColor={polygon.colorBuilding}
-                 
-                  onPress={() => this.toggleCallout(polygon)}
+                  // onPress={() => this.toggleCallout(polygon)}
                   />
+
                   <Marker
                    ref={ref => polygon.marker = ref}
                    coordinate={polygon.marker_coordinate}
                    opacity={4} // hides markers at 0
                    key={polygon.name}
-                   calloutAnchor={{ x: 0, y: -5 }} // anchor at which to center callout display over marker
+
+                   title={polygon.name}
+                   description={polygon.usage + ' + ' + utilityNameShown + ' >'}
+                   // centerOffset={{x: 100, y: 100}}
+                   onCalloutPress={() => navigation.navigate(
+                     'EnergyBuildingView', 
+                     {item:polygon.item, selected: this.state.utilityIndexShown })}
+
                   >
                   <Image
                     source={require('./../assets/mapMarker.png')}
                     style={{ height:1, width:1 }}
                   />
-                  <Callout
+                  {/*<Callout
                     tooltip // enables customizable tooltip style
                     style={styles.callout}
-                    onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon.item, selected: this.state.utilityIndexShown })}>
+                    onPress={() => navigation.navigate(
+                       'EnergyBuildingView', 
+                       {item:polygon.item, selected: this.state.utilityIndexShown })}>
+                    <Text>I'm text</Text>
                     <MapCallout
                       name={polygon.name}
                       image={'image'} // to be replaced with building image
                       number={polygon.usage}
                       utility={utilityNameShown}/>
-                    </Callout>
+                    </Callout>*/}
                   </Marker>
               </View>
             ))}
