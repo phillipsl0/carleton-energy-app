@@ -27,17 +27,8 @@ Cool native app: https://themeteorchef.com/tutorials/how-to-build-a-react-native
 Get lat/long: http://www.mapcoordinates.net/en
 */
 
-// Get redux
-// @connect(
-//     state => ({
-//         historicalData: state.data.historicalData,
-//         currentData: state.data.currentData,
-//         loading: state.data.loading,
-//     }),
-//     dispatch => ({
-//         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
-//     }),
-// )
+
+
 
 
 const initialRegion = {
@@ -47,6 +38,17 @@ const initialRegion = {
   longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
 }
 
+ //Get redux
+@connect(
+     state => ({
+         historicalData: state.data.historicalData,
+         currentData: state.data.currentData,
+         loading: state.data.loading,
+     }),
+     dispatch => ({
+         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+     }),
+ )
 class EnergyMapView extends Component {
   constructor(props) {
     super(props);
