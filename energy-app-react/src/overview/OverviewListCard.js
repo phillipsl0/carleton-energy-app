@@ -55,8 +55,13 @@ export default class OverviewListCard extends Component {
         switch (item.title) {
             case "Wind Turbine Energy":
                 return(
-                <View style={[theme.container, theme.flexboxRow]}>
-                  <View style={[{alignItems: 'center'}]}>
+                <View style={[theme.container, theme.flexboxRow, ]}>
+                  <View style={{ height: moderateScale(100), width: moderateScale(100), flex: 1 }}>
+                  <Image source={require('./../assets/turbine.png')}
+                    resizeMode="contain"
+                    style={{ flex:1 }} />
+                  </View>
+                  <View style={[{alignItems: 'center', flex: 1}]}>
 
                       <Text style={[ styles.font, { paddingTop: '0%' }]}>
                         Wind energy currently accounts
