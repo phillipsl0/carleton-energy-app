@@ -15,9 +15,6 @@ import EnergyMapTimestamp from './EnergyMapTimestamp';
 import ComparisonPage from './../ComparisonPage';
 import BuildingComparison from './../BuildingComparison';
 
-const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
-var {screenHeight, screenWidth} = Dimensions.get('window');
-
 /*
 Using tutorials:
 https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/#
@@ -27,18 +24,9 @@ Cool native app: https://themeteorchef.com/tutorials/how-to-build-a-react-native
 Get lat/long: http://www.mapcoordinates.net/en
 */
 
-// Get redux
-// @connect(
-//     state => ({
-//         historicalData: state.data.historicalData,
-//         currentData: state.data.currentData,
-//         loading: state.data.loading,
-//     }),
-//     dispatch => ({
-//         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
-//     }),
-// )
 
+const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
+var {screenHeight, screenWidth} = Dimensions.get('window');
 
 const initialRegion = {
   latitude: 44.4606925434,
@@ -46,6 +34,18 @@ const initialRegion = {
   latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
   longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
 }
+
+// Get redux
+@connect(
+    state => ({
+        historicalData: state.data.historicalData,
+        currentData: state.data.currentData,
+        loading: state.data.loading,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+    }),
+)
 
 class EnergyMapView extends Component {
   constructor(props) {
@@ -268,6 +268,21 @@ class EnergyMapView extends Component {
     }
     return (utilityName);
   };
+
+  // Decide what units to render
+  getUnits(utility) {
+    var units = ""
+    if (utility == 'electric') {
+      units = "kWh"
+    } else if (utility == 'water') {
+      units = "gal"
+    } else if (utility == 'gas') {
+      units = "kBTU"
+    } else if (utility == 'heat') { 
+      units = "thm"
+    }
+    return units
+  }
 
   // Updates colors of energy map with new utility selection
   updateUtility = (utilitySelected) => {
@@ -504,7 +519,7 @@ class EnergyMapView extends Component {
                      key={polygon.name}
 
                      title={polygon.name}
-                     description={polygon.usage + ' + ' + utilityNameShown}
+                     description={polygon.usage + ' ' + this.getUnits(utilityNameShown)}
                      onCalloutPress={() => navigation.navigate(
                        'EnergyBuildingView', 
                        {item:polygon.item, selected: this.state.utilityIndexShown })}

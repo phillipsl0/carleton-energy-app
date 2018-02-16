@@ -138,7 +138,7 @@ export default class IndividualBuilding extends Component {
         } else if (time == 4) {
             timePeriod = "/year"
         }
-        return (units)
+        return (units + timePeriod)
     }
 
     // Displays header showing current usage
