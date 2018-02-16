@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Alert, Image, Linking, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, NavigationActions } from 'react-navigation';
 import { Card, List, ListItem } from 'react-native-elements';
 
 import {
@@ -200,6 +200,17 @@ class SustainListView extends Component {
     }
 }
 
+/* Function to prevent StackNavigator from navigating multiple times when navigate button is pressed in succession
+ * (note that function also must be called below) */
+const navigateOnce = (getStateForAction) => (action, state) => {
+    const {type, routeName} = action;
+
+    return (
+        state &&
+        type === NavigationActions.NAVIGATE &&
+        routeName === state.routes[state.routes.length - 1].routeName
+    ) ? null : getStateForAction(action, state);
+};
 
 const SustainStack = StackNavigator({
     Sustain: {
@@ -214,6 +225,9 @@ const SustainStack = StackNavigator({
         }),
     }
 });
+
+// Calls the function that prevents multiple navigations
+SustainStack.router.getStateForAction = navigateOnce(SustainStack.router.getStateForAction);
 
 const styles = StyleSheet.create({
     navHeader: {

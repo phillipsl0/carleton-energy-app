@@ -120,7 +120,7 @@ const OverviewStack = StackNavigator({
     }},
 );
 
-// Calls the function that prevents multiple
+// Calls the function that prevents multiple navigations
 OverviewStack.router.getStateForAction = navigateOnce(OverviewStack.router.getStateForAction);
 
 const styles = StyleSheet.create({
