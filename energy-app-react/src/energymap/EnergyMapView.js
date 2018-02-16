@@ -451,6 +451,7 @@ class EnergyMapView extends Component {
           provider = { PROVIDER_GOOGLE } // show buildings on OS
           key={utilityNameShown} // key change needed to rerender map
           showsTraffic={false}
+          showsCompass={false}
           initialRegion={initialRegion}
           onMapReady={this.onMapReady}
           onLayout={this.onMapReady}
@@ -471,41 +472,49 @@ class EnergyMapView extends Component {
                   strokeWidth={2}
                   strokeColor={polygon.colorOutline}
                   fillColor={polygon.colorBuilding}
-                  // onPress={() => this.toggleCallout(polygon)}
+                  onPress={() => this.toggleCallout(polygon)}
                   />
+                  { (Platform.OS === 'ios') ?
+                    <Marker
+                     ref={ref => polygon.marker = ref}
+                     coordinate={polygon.marker_coordinate}
+                     opacity={0} // hides markers at 0
+                     key={polygon.name}
+                    >
+                      <Image
+                        source={require('./../assets/mapMarker.png')}
+                        style={{ height:1, width:1 }}
+                      />
+                      <Callout
+                        tooltip // enables customizable tooltip style
+                        style={styles.callout}
+                        onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon.item, selected: this.state.utilityIndexShown })}>
+                        <MapCallout
+                          name={polygon.name}
+                          image={'image'} // to be replaced with building image
+                          number={polygon.usage}
+                          utility={utilityNameShown}/>
+                      </Callout>
+                    </Marker>
+                  :
+                    <Marker
+                     ref={ref => polygon.marker = ref}
+                     coordinate={polygon.marker_coordinate}
+                     opacity={0} // hides markers at 0
+                     key={polygon.name}
 
-                  <Marker
-                   ref={ref => polygon.marker = ref}
-                   coordinate={polygon.marker_coordinate}
-                   opacity={4} // hides markers at 0
-                   key={polygon.name}
-
-                   title={polygon.name}
-                   description={polygon.usage + ' + ' + utilityNameShown + ' >'}
-                   // centerOffset={{x: 100, y: 100}}
-                   onCalloutPress={() => navigation.navigate(
-                     'EnergyBuildingView', 
-                     {item:polygon.item, selected: this.state.utilityIndexShown })}
-
-                  >
-                  <Image
-                    source={require('./../assets/mapMarker.png')}
-                    style={{ height:1, width:1 }}
-                  />
-                  {/*<Callout
-                    tooltip // enables customizable tooltip style
-                    style={styles.callout}
-                    onPress={() => navigation.navigate(
+                     title={polygon.name}
+                     description={polygon.usage + ' + ' + utilityNameShown}
+                     onCalloutPress={() => navigation.navigate(
                        'EnergyBuildingView', 
-                       {item:polygon.item, selected: this.state.utilityIndexShown })}>
-                    <Text>I'm text</Text>
-                    <MapCallout
-                      name={polygon.name}
-                      image={'image'} // to be replaced with building image
-                      number={polygon.usage}
-                      utility={utilityNameShown}/>
-                    </Callout>*/}
-                  </Marker>
+                       {item:polygon.item, selected: this.state.utilityIndexShown })}
+                    >
+                      <Image
+                        source={require('./../assets/mapMarker.png')}
+                        style={{ height:1, width:1 }}
+                      />
+                    </Marker>
+                  }
               </View>
             ))}
         </MapView>
