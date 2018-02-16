@@ -386,7 +386,7 @@ class EnergyMapView extends Component {
 
   // Show callout when building polygon is pressed
   toggleCallout(polygon) {
-    // console.log('onPress', polygon.name);
+    console.log('onPress', polygon.name);
     this.setState({lastBuildingPressed: polygon.name})
 
     if (polygon.open) {
@@ -452,7 +452,7 @@ class EnergyMapView extends Component {
           showsTraffic={false}
           initialRegion={initialRegion}
           onMapReady={this.onMapReady}
-          //onLayout={console.log("On layout!")}
+          onLayout={this.onMapReady}
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
           //toggleCallout={this.toggleCallout}
