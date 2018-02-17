@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Dimensions } from 'react-native'
+import { StyleSheet, View, Dimensions, Platform } from 'react-native'
 import Svg from "react-native-svg";
 import { VictoryPie, VictoryBar, VictoryChart, VictoryScatter,
          VictoryAxis, VictoryLegend, VictoryLabel } from "victory-native";
@@ -113,7 +113,8 @@ class Graph extends Component {
                         <VictoryAxis crossAxis dependentAxis
                             label={this.props.yLabel}
                             fixLabelOverlap={true}
-                            axisLabelComponent={<VictoryLabel dx={15} dy={-100}/>}/>
+                            axisLabelComponent={<VictoryLabel dx={Platform.OS === "android" ? 30 : 15}
+                                dy={Platform.OS === "android" ? -300 : -100}/>}/>
 
                     </VictoryChart>
                     </View>
