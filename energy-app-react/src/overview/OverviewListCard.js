@@ -55,28 +55,30 @@ export default class OverviewListCard extends Component {
         switch (item.title) {
             case "Wind Turbine Energy":
                 return(
-                <View style={[theme.container, theme.flexboxRow, ]}>
-                  <View style={{ height: moderateScale(100), width: moderateScale(100), flex: 1 }}>
-                  <Image source={require('./../assets/turbine.png')}
-                    resizeMode="contain"
-                    style={{ flex:1 }} />
+                  <View style={[{height: moderateScale(160), width: moderateScale(280)}]}>
+                  <View style={[theme.container, theme.centered, theme.flexboxRow]}>
+                    <Image source={require('./../assets/windmillCard.png')}
+                      resizeMode="contain"
+                      style={{ flex: 0.5, marginLeft: '-10%', height: moderateScale(150), width: moderateScale(102)}} />
+                    <View style={[{alignItems: 'center', marginLeft: '5%', paddingTop: '3%' }]}>
+                        <Text style={[ styles.font ]}>
+                          Wind energy currently
+                        </Text>
+                        <Text style={[ styles.font ]}>
+                          makes up for
+                        </Text>
+
+                        <Text style={[ styles.font, theme.fontBold, { fontSize: 16, color: '#0B5091' }]}>
+                          {windRatio["percentage"]}%
+                        </Text>
+
+                        <Text style={ styles.font }>
+                          of overall energy use.
+                        </Text>
+                    </View>
                   </View>
-                  <View style={[{alignItems: 'center', flex: 1}]}>
-
-                      <Text style={[ styles.font, { paddingTop: '0%' }]}>
-                        Wind energy currently accounts
-                      </Text>
-
-                      <Text style={[ styles.font, theme.fontBold]}>
-                        for {windRatio["percentage"]}%
-                      </Text>
-
-                      <Text style={ styles.font }>
-                        of overall energy use.
-                      </Text>
                   </View>
-                </View>
-            );
+              );
             break;
 
             case "Energy Use":
@@ -150,7 +152,7 @@ export default class OverviewListCard extends Component {
 
             {item.title === "Energy Generation" &&
                 <Comparator
-                     data={currentData.usage}
+                     data={currentData.generation}
                      cardType="generation"
                      number={1}/>
             }
@@ -161,21 +163,6 @@ export default class OverviewListCard extends Component {
     }
 }
 
-//<Svg width={200} style={[{ padding: '26%', overflow: 'hidden' } ]}>
-//                   <Image source={require('./../assets/windmill.png')}
-//                        style={{ position: 'absolute'}}/>
-//                      <Text style={[ styles.font, { paddingTop: '0%' }]}>
-//                        Wind energy currently accounts
-//                      </Text>
-//
-//                      <Text style={[ styles.font, theme.fontBold]}>
-//                        for {windRatio["percentage"]}%
-//                      </Text>
-//
-//                      <Text style={ styles.font }>
-//                        of overall energy use.
-//                      </Text>
-//                </Svg>
 const styles = StyleSheet.create({
   button: {
     marginRight: '3%',
@@ -183,27 +170,14 @@ const styles = StyleSheet.create({
     paddingBottom: '3%',
   },
 
-  card: {
-    borderWidth: 1,
-    borderRadius: 3,
-    paddingLeft: moderateScale(10),
-    paddingRight: moderateScale(10),
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginLeft: moderateScale(15),
-    marginRight: moderateScale(15),
-    marginTop: 10,
-    marginBottom: 0,
-  },
-
   divider: {
     marginBottom: 5,
   },
 
   font: {
-    fontSize: moderateScale(12),
+    fontSize: moderateScale(14),
     color: '#647C92',
-    paddingTop: '1%',
+    paddingBottom: '5%',
     backgroundColor: 'transparent',
   },
 
