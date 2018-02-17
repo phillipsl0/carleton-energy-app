@@ -73,7 +73,7 @@ export const calculateRatio = ( data ) => {
     combinedData[0] = {'x': 'Total Energy Use', 'y': totalUse};
     combinedData[1] = {'x': "Wind Generation", 'y': totalGeneration};
 
-    return {'percentage': roundNumber(totalGeneration/totalUse * 100), 'data': combinedData };
+    return {'percentage': roundNumberTwoDecimal(totalGeneration/totalUse * 100), 'data': combinedData };
 }
 
 // Combine different types of data into one total number
