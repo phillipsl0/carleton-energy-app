@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Platform } from 'react-native';
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
@@ -94,14 +94,18 @@ export default class GraphDetail extends Component {
 
 const styles = StyleSheet.create({
     graphContainer: {
-        marginTop: '3%',
-        marginBottom: '3%',
+        marginTop: '5%',
+        marginBottom: '4%',
         paddingTop: '1%',
         paddingLeft: '3%',
         paddingRight: '5%',
-//        paddingBottom: '2%',
         borderRadius: 10,
-//        width: moderateScale(320)
+        ...Platform.select({
+            android: {
+                marginTop: '2%',
+                marginBottom: '3%',
+            }
+        })
     },
 
     narrow: {

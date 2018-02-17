@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, Platform, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, Platform, ScrollView, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Svg } from 'react-native-svg';
 
@@ -111,7 +111,7 @@ export default class OverviewCards extends Component {
     }
 
     getHeader = (historicalData, cardType, currentData) => {
-        const themeStyles = GetStyle(CurrTheme);
+        const theme = GetStyle(CurrTheme);
         var units = ["thm", "kWh", "kBTU", "gal"];
 
         if (this.state.selectedCard <= 4) {
@@ -137,6 +137,7 @@ export default class OverviewCards extends Component {
             }
 
             headerText = roundNumber(currentData["usage"][this.state.selectedCard - 5]["y"]);
+            console.log(roundNumber(105005960.96978705));
 
             subheaderText = units[this.state.selectedCard - 5];
             highlight = false;
@@ -144,13 +145,13 @@ export default class OverviewCards extends Component {
 
 
       return (
-          <View style={[styles.textContainer, themeStyles.centered]}>
+          <View style={[styles.textContainer, theme.centered, {paddingBottom: '3%'}]}>
 
-            <Text style={[styles.number, themeStyles.translucentText, themeStyles.fontBold]}>
+            <Text style={[styles.number, theme.translucentText, theme.fontBold]}>
                 {headerText}
             </Text>
-            <View style={themeStyles.flexboxRow}>
-            <Text style={[styles.words, themeStyles.translucentText]}>
+            <View style={theme.flexboxRow}>
+            <Text style={[styles.words, theme.translucentText]}>
                 {subheaderText}
              </Text>
              {highlight && <Text style={[styles.words, styles.highlight]}>
@@ -162,7 +163,8 @@ export default class OverviewCards extends Component {
     }
 
     render() {
-        const themeStyles = GetStyle(CurrTheme);
+        const { width, height } = Dimensions.get('window');
+        const theme = GetStyle(CurrTheme);
         const { refresh, loading, historicalData, currentData } = this.props;
         var utilities = ["Gas", "Electric", "Heat", "Water"];
         var generators = ["Wind", "Solar", "Geothermal"]
@@ -172,27 +174,30 @@ export default class OverviewCards extends Component {
         header = this.getHeader(historicalData, cardType, currentData);
 
         return (
-            <View style={[themeStyles.list]}>
+            <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
+            <View style={[{width:width+5}, theme.centered, styles.height]}>
             <Image source={require('./../assets/windmillHeader.png')}
-                style={themeStyles.header}/>
-            <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
+                style={[styles.head, {width:width+5}, styles.height]}
+                resizeMode="cover"/>
+            <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
             {header}
-
-             <ScrollView style={themeStyles.lightBlueBackground}>
+            </View>
+             <ScrollView style={[theme.lightBlueBackground]}>
                 <GraphDetail data={currData}
                     callback={this.scopeCallbackGraph}
                     selected={this.state.selectedCard}
                     type={cardType}/>
              </ScrollView>
+            <Utilities callback={this.scopeCallbackUtilities}
+               cards={cardType == 1 ? utilities : generators}
+               cardType={cardType}
+               selected={this.state.selectedCard}/>
              </View>
 
             );
     }
 }
-// <Utilities callback={this.scopeCallbackUtilities}
-////              cards={cardType == 1 ? utilities : generators}
-//                cardType={cardType}
-//              selected={this.state.selectedCard}/>
+
 const styles = StyleSheet.create({
     number: {
         fontSize: moderateScale(75),
@@ -209,5 +214,21 @@ const styles = StyleSheet.create({
     highlight: {
         color: '#F3B61D',
         backgroundColor: 'transparent'
+    },
+    head : {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        opacity: 0.5,
+    },
+
+    height: {
+         height: moderateScale(125),
+         ...Platform.select({
+            android: {
+                height: moderateScale(105)
+            }
+         })
     }
 })
