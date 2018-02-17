@@ -47,8 +47,12 @@ export const convertGallons = (gallons) => {
 
 /* ---------- GENERAL MATH FUNCTIONS ---------- */
 
-export const roundNumber = (num) => {
+export const roundNumberTwoDecimal = (num) => {
     return (Math.round((num + 0.00001) * 100) / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export const roundNumber = (num) => {
+    return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 export const getSpecificRandom = (min, max, scaleFactor, otherFactor) => {
