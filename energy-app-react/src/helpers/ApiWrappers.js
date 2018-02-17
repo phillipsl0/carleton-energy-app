@@ -335,13 +335,13 @@ export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, sca
                 break;
             case 7:
                 if (i==0) {
-                    combinedTable[i]["x"] = "-3 Weeks";
+                    combinedTable[i]["x"] = "-3";
                 } else if (i==1) {
-                    combinedTable[i]["x"] = "-2 Weeks";
+                    combinedTable[i]["x"] = "-2";
                 } else if (i==2) {
-                    combinedTable[i]["x"] = "-1 Week";
+                    combinedTable[i]["x"] = "-1";
                 } else if (i==3) {
-                    combinedTable[i]["x"] = "This Week";
+                    combinedTable[i]["x"] = "Current";
                 }
                 break;
             case 30:
@@ -573,13 +573,13 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
 
             case 7:
                 if (i==0) {
-                    combinedTable[i]["x"] = "-3 Weeks";
+                    combinedTable[i]["x"] = "-3";
                 } else if (i==1) {
-                    combinedTable[i]["x"] = "-2 Weeks";
+                    combinedTable[i]["x"] = "-2";
                 } else if (i==2) {
-                    combinedTable[i]["x"] = "-1 Week";
+                    combinedTable[i]["x"] = "-1";
                 } else if (i==3) {
-                    combinedTable[i]["x"] = "This Week";
+                    combinedTable[i]["x"] = "Current";
                 } else {
                     combinedTable[i]["x"] = "help";
                 }

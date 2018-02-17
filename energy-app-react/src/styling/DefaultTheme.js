@@ -22,11 +22,11 @@ const DefaultTheme = StyleSheet.create({
         borderColor: lightBlue,
         borderWidth: 1,
         borderRadius: 5,
-        padding: 10,
-        marginLeft: 10,
-        marginRight: 10,
-        marginTop: 5,
-        marginBottom: 10,
+        padding: '3%',
+        marginLeft: '3%',
+        marginRight: '3%',
+        marginTop: '2%',
+        marginBottom: '3%',
 
         ...Platform.select({
               ios: {
@@ -55,8 +55,8 @@ const DefaultTheme = StyleSheet.create({
     },
 
     flexButtons: {
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingTop: '3%',
+        paddingBottom: '3%',
         marginLeft: '10%',
         marginRight: '10%',
         borderRadius: 10,
@@ -105,8 +105,8 @@ const DefaultTheme = StyleSheet.create({
 
     list: {
         backgroundColor: 'white',
-        // marginLeft: '3%',
-        // marginRight: '3%',
+         marginLeft: '3%',
+         marginRight: '3%',
     },
 
     listItem: {

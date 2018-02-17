@@ -251,7 +251,10 @@ const styles = StyleSheet.create({
         fontSize: moderateScale(16),
         fontWeight: 'bold',
         textAlign: 'right',
-        color: '#529353'
+        ...Platform.select({
+            android: { color: '#529353' },
+            ios: { color: '#0b5091' },
+        }),
     },
     image: {
         width: moderateScale(40),
