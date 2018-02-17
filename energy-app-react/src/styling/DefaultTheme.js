@@ -105,8 +105,8 @@ const DefaultTheme = StyleSheet.create({
 
     list: {
         backgroundColor: 'white',
-        // marginLeft: '3%',
-        // marginRight: '3%',
+         marginLeft: '3%',
+         marginRight: '3%',
     },
 
     listItem: {
