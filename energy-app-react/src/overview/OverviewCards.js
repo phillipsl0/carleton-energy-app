@@ -112,6 +112,8 @@ export default class OverviewCards extends Component {
 
     getHeader = (historicalData, cardType, currentData) => {
         const theme = GetStyle(CurrTheme);
+        const { width, height } = Dimensions.get('window');
+
         var units = ["thm", "kWh", "kBTU", "gal"];
 
         if (this.state.selectedCard <= 4) {
@@ -143,27 +145,46 @@ export default class OverviewCards extends Component {
             highlight = false;
         }
 
-
-      return (
+      if (height < 600) {
+        return (
           <View style={[styles.textContainer, theme.centered, {paddingBottom: '3%'}]}>
 
-            <Text style={[styles.number, theme.translucentText, theme.fontBold]}>
+            <Text style={[styles.smallNumber, theme.translucentText, theme.fontBold]}>
                 {headerText}
             </Text>
             <View style={theme.flexboxRow}>
-            <Text style={[styles.words, theme.translucentText]}>
+            <Text style={[styles.smallWords, theme.translucentText]}>
                 {subheaderText}
              </Text>
-             {highlight && <Text style={[styles.words, styles.highlight]}>
+             {highlight && <Text style={[styles.smallWords, styles.highlight]}>
              {subheaderHighlight}
              </Text>}
              </View>
           </View>
-      );
+        );
+      } else {
+          return (
+              <View style={[styles.textContainer, theme.centered, {paddingBottom: '3%'}]}>
+
+                <Text style={[styles.number, theme.translucentText, theme.fontBold]}>
+                    {headerText}
+                </Text>
+                <View style={theme.flexboxRow}>
+                <Text style={[styles.words, theme.translucentText]}>
+                    {subheaderText}
+                 </Text>
+                 {highlight && <Text style={[styles.words, styles.highlight]}>
+                 {subheaderHighlight}
+                 </Text>}
+                 </View>
+              </View>
+          );
+      }
     }
 
     render() {
         const { width, height } = Dimensions.get('window');
+        console.log(height);
         const theme = GetStyle(CurrTheme);
         const { refresh, loading, historicalData, currentData } = this.props;
         var utilities = ["Gas", "Electric", "Heat", "Water"];
@@ -173,28 +194,53 @@ export default class OverviewCards extends Component {
         currData = this.getGraphScope(historicalData, cardType);
         header = this.getHeader(historicalData, cardType, currentData);
 
-        return (
-            <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
-            <View style={[{width:width+5}, theme.centered, styles.height]}>
-            <Image source={require('./../assets/windmillHeader.png')}
-                style={[styles.head, {width:width+5}, styles.height]}
-                resizeMode="cover"/>
-            <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
-            {header}
-            </View>
-             <ScrollView style={[theme.lightBlueBackground]}>
-                <GraphDetail data={currData}
-                    callback={this.scopeCallbackGraph}
-                    selected={this.state.selectedCard}
-                    type={cardType}/>
-             </ScrollView>
-            <Utilities callback={this.scopeCallbackUtilities}
-               cards={cardType == 1 ? utilities : generators}
-               cardType={cardType}
-               selected={this.state.selectedCard}/>
-             </View>
+        if (height < 600) {
+            return(
+                <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
+                <View style={[{width:width+5}, styles.smallHeight, theme.centered]}>
+                <Image source={require('./../assets/windmillHeader.png')}
+                    style={[styles.head, {width:width+5}, styles.smallHeight,]}
+                    resizeMode="cover"/>
+                <View style={[{width:width+5}, styles.head, styles.smallHeight, theme.carletonBlueBackground]}/>
+                {header}
+                </View>
+                 <ScrollView style={[theme.lightBlueBackground]}>
+                    <GraphDetail data={currData}
+                        callback={this.scopeCallbackGraph}
+                        selected={this.state.selectedCard}
+                        type={cardType}/>
+                 </ScrollView>
+                <Utilities callback={this.scopeCallbackUtilities}
+                   cards={cardType == 1 ? utilities : generators}
+                   cardType={cardType}
+                   selected={this.state.selectedCard}/>
+                 </View>
 
             );
+        } else {
+            return (
+                <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
+                <View style={[{width:width+5}, theme.centered, styles.height]}>
+                <Image source={require('./../assets/windmillHeader.png')}
+                    style={[styles.head, {width:width+5}, styles.height]}
+                    resizeMode="cover"/>
+                <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
+                {header}
+                </View>
+                 <ScrollView style={[theme.lightBlueBackground], {height: height - 125}}>
+                    <GraphDetail data={currData}
+                        callback={this.scopeCallbackGraph}
+                        selected={this.state.selectedCard}
+                        type={cardType}/>
+                 </ScrollView>
+                <Utilities callback={this.scopeCallbackUtilities}
+                   cards={cardType == 1 ? utilities : generators}
+                   cardType={cardType}
+                   selected={this.state.selectedCard}/>
+                 </View>
+
+                );
+        }
     }
 }
 
@@ -230,5 +276,18 @@ const styles = StyleSheet.create({
                 height: moderateScale(105)
             }
          })
+    },
+
+    smallNumber: {
+        fontSize: moderateScale(65)
+    },
+
+    smallHeight: {
+        height: moderateScale(90),
+    },
+
+    smallWords: {
+        fontSize: moderateScale(14),
     }
+
 })
