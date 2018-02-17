@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Platform, Dimensions } from 'react-native';
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
@@ -46,9 +46,17 @@ export default class GraphDetail extends Component {
     }
 
     render() {
+        const { width, height } = Dimensions.get('window');
+        graphWidth = 250;
+        graphHeight = 225;
+
         var x = this.getLabel("x");
         var y = this.getLabel("y");
 
+        if (height < 600) {
+            graphWidth = 225;
+            graphHeight = 200;
+        }
 
         return(
             <View style={[theme.centered]}>
@@ -57,8 +65,8 @@ export default class GraphDetail extends Component {
 
                  <Graph
                      theme={CustomThemes.carleton}
-                     height={moderateScale(225)}
-                     width={moderateScale(250)}
+                     height={moderateScale(graphHeight)}
+                     width={moderateScale(graphWidth)}
                      type={'scatter'}
                      xLabel={x}
                      yLabel={y}
@@ -94,18 +102,18 @@ export default class GraphDetail extends Component {
 
 const styles = StyleSheet.create({
     graphContainer: {
-        marginTop: '3%',
-        marginBottom: '3%',
+        marginTop: '5%',
+        marginBottom: '4%',
         paddingTop: '1%',
         paddingLeft: '3%',
         paddingRight: '5%',
-//        paddingBottom: '2%',
         borderRadius: 10,
-//        width: moderateScale(320)
-    },
-
-    narrow: {
-        width: moderateScale(300)
+        ...Platform.select({
+            android: {
+                marginTop: '2%',
+                marginBottom: '3%',
+            }
+        })
     },
 
     subHead: {

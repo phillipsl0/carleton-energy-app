@@ -47,8 +47,12 @@ export const convertGallons = (gallons) => {
 
 /* ---------- GENERAL MATH FUNCTIONS ---------- */
 
-export const roundNumber = (num) => {
+export const roundNumberTwoDecimal = (num) => {
     return (Math.round((num + 0.00001) * 100) / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export const roundNumber = (num) => {
+    return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 export const getSpecificRandom = (min, max, scaleFactor, otherFactor) => {
@@ -69,7 +73,7 @@ export const calculateRatio = ( data ) => {
     combinedData[0] = {'x': 'Total Energy Use', 'y': totalUse};
     combinedData[1] = {'x': "Wind Generation", 'y': totalGeneration};
 
-    return {'percentage': roundNumber(totalGeneration/totalUse * 100), 'data': combinedData };
+    return {'percentage': roundNumberTwoDecimal(totalGeneration/totalUse * 100), 'data': combinedData };
 }
 
 // Combine different types of data into one total number
