@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions,
-  View, Text, Image, WebView, TouchableOpacity, Platform } from 'react-native'
+  View, Text, Image, TouchableOpacity, Platform } from 'react-native'
 import { StackNavigator, NavigationActions } from 'react-navigation';
-import { List, Card, ListItem, Button, Avatar, Header } from 'react-native-elements';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native-elements';
+
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
 import ComparisonPage from './ComparisonPage';
@@ -84,6 +84,21 @@ const BuildingStack = StackNavigator({
       title: `${navigation.state.params.item.name}`,
       headerTintColor: 'white',
       headerStyle: navStyles.header,
+      headerRight: (
+         <TouchableOpacity
+          // UPDATE ENERGYMAPVIEW IF CHANGE
+          // Navigate to comparison scree
+          style={styles.compareButton}
+          onPress={() => navigation.navigate("Comparison")}>
+          <Icon
+            // see: https://react-native-training.github.io/react-native-elements/API/icons/
+            name='compare-arrows'
+            color='white'
+            type='material-icons'
+            size={30}
+          />
+        </TouchableOpacity>
+      ),
       headerTitleStyle: navStyles.headerTitle,
       headerBackTitleStyle: navStyles.headerTitle,
       headerBackTitle: 'Back',
@@ -190,6 +205,9 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       fontWeight: 'bold',
       alignSelf: 'flex-start',
+  },
+  compareButton: {
+    marginRight: 10
   }
 })
 
