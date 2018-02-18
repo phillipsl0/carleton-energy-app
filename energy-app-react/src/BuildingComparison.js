@@ -3,7 +3,8 @@ import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebV
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
-import buildings from './Buildings';
+
+import buildings from './buildings/Buildings';
 import OverviewCards from './overview/OverviewCards';
 import ComparisonPage from './ComparisonPage';
 import { GetStyle } from './styling/Themes';

@@ -6,12 +6,11 @@ import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native
 
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
-import ComparisonPage from './ComparisonPage';
-import BuildingComparison from './BuildingComparison';
-// import SelectStack from './IndividualBuilding';
-import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js';
+import ComparisonPage from './../ComparisonPage';
+import BuildingComparison from './../BuildingComparison';
+import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
 
-import { scale, moderateScale, verticalScale} from './helpers/Scaling';
+import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 
 class BuildingListView extends Component {
   renderHeader = (headerItem) => {
