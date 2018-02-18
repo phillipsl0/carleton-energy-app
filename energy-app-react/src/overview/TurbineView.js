@@ -17,6 +17,9 @@ const theme = GetStyle(CurrTheme);
 @connect(
     state => ({
         currentData: state.data.currentData,
+        totals: state.data.currentTotals,
+        windSpeed: state.data.windSpeed,
+        windRatio: state.data.windRatio
     }),
 )
 
@@ -25,14 +28,27 @@ export default class Windmill extends Component {
         super(props);
     }
 
+    fetchData = () => {
+        var rightTitles = new Array(4);
+        rightTitles[0] = this.props.windRatio["percentage"] + "%";
+        rightTitles[1] = this.props.windSpeed + " mps";
+        rightTitles[2] = roundNumber(this.props.totals.turbine.generation) + " kWh";
+        rightTitles[3] = roundNumber(this.props.totals.turbine.consumption) + " kWh";
+        return rightTitles;
+    }
+
     render() {
         const { width, height } = Dimensions.get('window');
+        const { currentData, totals, windSpeed, windRatio } = this.props;
+        var rightTitles = this.fetchData();
+        var padding = '5%';
 
-        const { currentData } = this.props;
-        var turbineTotal = Math.round(currentData.turbine[0]["y"]+currentData.turbine[1]["y"]);
+        if (height < 600) {
+            padding = '4%';
+        }
 
         return (
-            <View style={[styles.main]}>
+            <View style={[styles.main, { position: 'absolute', bottom: 0}]}>
                 <ImageBackground source={require('./../assets/windmillFull.png')}
                     resizeMode="cover"
                     style={[{ width: width + 5, height: width*.8}, styles.image, styles.head]}>
@@ -40,24 +56,25 @@ export default class Windmill extends Component {
                     Currently generating
                 </Text>
                 <Text style={[styles.number, theme.fontBold]}>
-                    {roundNumber(turbineTotal)}
+                    {roundNumber(totals.turbine.generation)}
                 </Text>
                 <Text style={[styles.units, theme.fontRegular]}>
                     kWh
                 </Text>
                 </ImageBackground>
-                <List style={styles.list}>
+                <List style={[styles.list]}>
                   {
                     fake.map((item, i) => (
                       <ListItem
-                        style={styles.listItem}
+                        containerStyle={[ styles.listItem, { paddingTop: padding, paddingBottom: padding }]}
                         key={i}
                         title={item.title}
-                        rightTitle={item.x}
-                        rightTitleStyle={{ color: '#647C92', marginRight: 5 }}
-                        chevronColor={'transparent'}
+                        rightTitle={rightTitles[item.index]}
+                        rightTitleStyle={{ color: '#647C92' }}
+                        rightTitleContainerStyle={{ flex: 0.75 }}
+                        hideChevron={true}
                         fontFamily={defaultFontBold}
-                        leftIcon={{name: item.icon, type: 'material-community', color: '#647C92'}}
+                        leftIcon={{name: item.icon, type: item.type, color: '#647C92'}}
                       />
                     ))
                   }
@@ -107,11 +124,11 @@ const styles = StyleSheet.create({
     list: {
 //        borderTopColor: "#FFFFFF",
 //        borderTopWidth: 1,
-        marginTop: 0,
+        marginTop: '-3%',
         backgroundColor: '#E1E8EE',
         ...Platform.select({
             ios: {
-                paddingTop: '0x%',
+                paddingTop: '0%',
             }
         })
     },

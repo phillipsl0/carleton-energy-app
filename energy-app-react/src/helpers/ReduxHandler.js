@@ -1,7 +1,8 @@
 import { Platform, Dimensions } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
-import { getAllHistoricalGraphData, getAllCurrentGraphData } from './ApiWrappers'
+import { getAllHistoricalGraphData, getAllCurrentGraphData } from './ApiWrappers';
+import { calculateRatio } from './General';
 
 /* Redux handles state for the app, including navigation
  * When the app starts up, redux is called during the loading screen
@@ -17,12 +18,26 @@ export const handler = store => next => action => {
         case 'GET_GRAPH_DATA':
             store.dispatch({type: 'GET_GRAPH_DATA_LOADING'});
             try {
+//                var historical = getAllHistoricalGraphData();
+//                var historicalData = historical.data;
+//                var historicalTotals = historical.totals;
                 var historicalData = getAllHistoricalGraphData();
-                var currentData = getAllCurrentGraphData();
+
+                var current = getAllCurrentGraphData();
+                var currentData = current.data;
+                var currentTotals = current.totals;
+                console.log(currentTotals);
+                var windSpeed = currentData.windSpeed;
+                var windRatio = calculateRatio(currentData);
+
+
                 store.dispatch({
                     type: 'GET_GRAPH_DATA_RECEIVED',
                     historicalData,
-                    currentData
+                    currentData,
+                    currentTotals,
+                    windRatio,
+                    windSpeed
                 });
             } catch (error) {
                 next({
@@ -42,7 +57,8 @@ export const handler = store => next => action => {
     };
 }
 
-export const dataReducer = (state = { historicalGraphData: [], currentGraphData: [], loading: true }, action) => {
+export const dataReducer = (state = { historicalGraphData: [], currentGraphData: [], currentTotals: [], windRatio: [],
+                                      windSpeed: [], loading: true }, action) => {
     switch (action.type) {
         case 'GET_GRAPH_LOADING':
             return {
@@ -53,7 +69,10 @@ export const dataReducer = (state = { historicalGraphData: [], currentGraphData:
             return {
                 loading: false,
                 historicalData: action.historicalData,
-                currentData: action.currentData
+                currentData: action.currentData,
+                currentTotals: action.currentTotals,
+                windRatio: action.windRatio,
+                windSpeed: action.windSpeed
             };
         case 'GET_GRAPH_DATA_ERROR':
             return state;
