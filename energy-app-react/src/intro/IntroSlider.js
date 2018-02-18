@@ -16,7 +16,7 @@ const slides = [
   },
   {
     key: 'Data',
-    title: "Data at your touch",
+    title: "Data at your fingers",
     text: 'Get real-time data from key buildings on campus. Our app is reads data from various meters within each building.',
     icon: 'ios-options-outline',
     color: '#A3A1FF',

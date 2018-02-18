@@ -2,16 +2,16 @@ import { List, Card, Button, Avatar } from 'react-native-elements';
 import React, { Component } from 'react';
 import { Platform, AppRegistry, SectionList, StyleSheet, View, Text, Image, ScrollView, Dimensions } from 'react-native'
 import { StackNavigator } from 'react-navigation';
+import { connect } from 'react-redux';
 
-import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './helpers/ApiWrappers';
+import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './../helpers/ApiWrappers';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './../overview/GraphDetailCard';
 import Utilities from './../overview/UtilitiesMiniCards';
 import ComparisonPage from './../ComparisonPage';
-import { connect } from 'react-redux';
 import { moderateScale, verticalScale } from './../helpers/Scaling';
-import BuildingComparison from './BuildingComparison';
+import BuildingComparison from './../BuildingComparison';
 
 @connect(
     state => ({
