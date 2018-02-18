@@ -65,15 +65,15 @@ export const fake = [
 
     {
       title: 'Turbine Generation',
-      icon: "trending-up",
-      type: 'Feather',
+      icon: "battery-charging-90",
+      type: 'material-community',
       index: 2,
     },
 
     {
       title: 'Turbine Consumption',
-      icon: "trending-down",
-      type: 'Feather',
+      icon: "battery-negative",
+      type: 'material-community',
       index: 3,
     },
 
