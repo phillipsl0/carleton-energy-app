@@ -37,13 +37,6 @@ export default class IndividualBuilding extends Component {
 
     // This function gets called immediately after the component is mounted
     componentDidMount() {
-        // currDate = new Date();
-        
-        // this.updateDay(currDate);
-        // this.updateWeek(currDate);
-        // this.updateMonth(currDate);
-        // this.updateYear(currDate);
-
         this.getUtility(); // get utility from energy map selection, if present
     }
 
@@ -55,65 +48,6 @@ export default class IndividualBuilding extends Component {
             this.setState({ selectedUtilityCard:utilitySelected })
         }
     }
-
-    // updateDay = ( currDate ) => {
-    //     comparisonDate = new Date();
-    //     comparisonDate.setDate(currDate.getDate()-7);
-        
-    //     // if (this.props.navigation.state.params.card == 1) {
-    //     //     updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
-    //     // } else {
-    //     //     updatedDay = getTotalGenerationGraphFormat(comparisonDate, currDate, 1440);
-    //     // }
-
-    //     updatedDay = getTotalConsumptionGraphFormat(comparisonDate, currDate, 1440);
-        
-    //     this.setState({ dayData: updatedDay });
-    // }
-
-    // updateWeek = ( currDate ) => {
-    //     comparisonDate = new Date();
-    //     comparisonDate.setDate(currDate.getDate()-28);
-        
-    //     // if (this.props.navigation.state.params.card == 1) {
-    //     //     updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
-    //     // } else {
-    //     //     updatedWeek = getTotalGenerationGraphFormat(comparisonDate, currDate, 10080);
-    //     // }
-    //     updatedWeek = getTotalConsumptionGraphFormat(comparisonDate, currDate, 10080);
-
-    //     this.setState({ weekData: updatedWeek });
-    // }
-
-    // updateMonth = ( currDate ) => {
-    //     comparisonDate = new Date();
-    //     comparisonDate.setMonth(currDate.getMonth()-11);
-
-    //     // if (this.props.navigation.state.params.card == 1) {
-    //     //     updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
-    //     // } else {
-    //     //     updatedMonth = getTotalGenerationGraphFormat(comparisonDate, currDate, 41760);
-    //     // }
-
-    //     updatedMonth = getTotalConsumptionGraphFormat(comparisonDate, currDate, 41760);
-
-    //     this.setState({ monthData: updatedMonth });
-    // }
-
-    // updateYear = ( currDate ) => {
-    //     comparisonDate = new Date();
-    //     comparisonDate.setYear(currDate.getFullYear()-5);
-
-    //     // if (this.props.navigation.state.params.card == 1) {
-    //     //     updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);
-    //     // } else {
-    //     //     updatedYear = getTotalGenerationGraphFormat(comparisonDate, currDate, 525600);
-    //     // }
-
-    //     updatedYear = getTotalConsumptionGraphFormat(comparisonDate, currDate, 525600);        
-
-    //     this.setState({ yearData: updatedYear });
-    // }
 
     // Decide what units to render based on utility and time
     getBuildingUnits(utility, time) {
@@ -254,6 +188,9 @@ export default class IndividualBuilding extends Component {
                         selected={this.state.selectedTimeCard} // button index must match selected
                         type={1} // indicates energy usage, 2 is generation
                     />                    
+                </ScrollView
+                /*
+                    // Old comparison button
                     <Button
                         rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
                         fontSize={20}
@@ -261,7 +198,9 @@ export default class IndividualBuilding extends Component {
                         containerViewStyle={styles.button}
                         backgroundColor='#0B5091'
                         onPress={() => this.props.navigation.navigate("Comparison")}/>
-                </ScrollView>
+                */
+
+                >
                 <Utilities callback={this.scopeCallbackUtilities}
                     cardType={1}
                     selected={this.state.selectedUtilityCard}

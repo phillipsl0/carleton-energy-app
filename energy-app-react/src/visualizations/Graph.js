@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Dimensions } from 'react-native'
+import { StyleSheet, View, Dimensions, Platform } from 'react-native'
 import Svg from "react-native-svg";
 import { VictoryPie, VictoryBar, VictoryChart, VictoryScatter,
          VictoryAxis, VictoryLegend, VictoryLabel } from "victory-native";
@@ -45,8 +45,7 @@ class Graph extends Component {
                 }
 
                 return (
-                    <Svg width={this.props.width} height={this.props.height+20}
-                        style={theme.flexboxRow}>
+                    <View style={[theme.flexboxRow]}>
 
                     <VictoryPie
                         labels={() => null}
@@ -66,14 +65,14 @@ class Graph extends Component {
                          data={legendData}/>
                     }
 
-                     </Svg>
+                     </View>
                 );
 
                 break;
 
             case "bar":
                 return (
-                    <Svg width={this.props.width} height={this.props.height}>
+                    <View style={{width: moderateScale(250), height: moderateScale(225) }}>
                     <VictoryChart
                         height={this.props.height}
                         width={this.props.width}
@@ -85,22 +84,40 @@ class Graph extends Component {
                             data={this.props.graphData}/>
 
                     </VictoryChart>
-                    </Svg>
+                    </View>
                 );
 
                 break;
 
             case "scatter":
                 // Scatter plot needs axes in order to properly render units/time period
+                const { width, height } = Dimensions.get('window');
+                var dx = 0;
+                var dy = 0;
+
+
+                if (Platform.OS == 'android') {
+                    dx = verticalScale(30);
+                    dy = verticalScale(-300);
+                } else {
+                    dx = verticalScale(15);
+                    dy = verticalScale(-110);
+                }
+
+                if (height < 600) {
+                    dy = verticalScale(dy-10);
+                }
+
+
 
                 return (
-                    <Svg width={this.props.width} height={this.props.height}
-                        style={{ alignItems: 'flex-end' }}>
+                    <View style={{width: moderateScale(this.props.width), height: moderateScale(this.props.height), alignItems: 'flex-end' }}>
                     <VictoryChart
-                        height={this.props.height}
-                        width={this.props.width}
+                        height={moderateScale(this.props.height)}
+                        width={moderateScale(this.props.width)}
                         theme={this.props.theme}
-                        padding={{ top: 30, bottom: 50, left: 50, right: 10}}
+                        padding={{ top: moderateScale(30), bottom: moderateScale(50),
+                                   left: moderateScale(50), right: moderateScale(10)}}
                         domainPadding={10}>
 
                         <VictoryScatter
@@ -115,10 +132,10 @@ class Graph extends Component {
                         <VictoryAxis crossAxis dependentAxis
                             label={this.props.yLabel}
                             fixLabelOverlap={true}
-                            axisLabelComponent={<VictoryLabel dx={15} dy={-100}/>}/>
+                            axisLabelComponent={<VictoryLabel dx={dx} dy={dy}/>}/>
 
                     </VictoryChart>
-                    </Svg>
+                    </View>
                 );
 
                 break;

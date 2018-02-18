@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Platform, Text } from 'react-native';
+import { StyleSheet, View, ImageBackground, Platform, Text, Dimensions } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 
@@ -26,16 +26,16 @@ export default class Windmill extends Component {
     }
 
     render() {
-        
+        const { width, height } = Dimensions.get('window');
+
         const { currentData } = this.props;
         var turbineTotal = Math.round(currentData.turbine[0]["y"]+currentData.turbine[1]["y"]);
 
         return (
-            <View style={[theme.flex, styles.background]}>
-            <View style={[styles.background, styles.head, {alignItems: 'center'}]}>
-                <Image source={require('./../assets/windmill.png')}
-                    style={[theme.header, styles.image]}/>
-                <View style={styles.textContainer}>
+            <View style={[styles.main]}>
+                <ImageBackground source={require('./../assets/windmillFull.png')}
+                    resizeMode="cover"
+                    style={[{ width: width + 5, height: width*.8}, styles.image, styles.head]}>
                 <Text style={[styles.units, theme.fontRegular]}>
                     Currently generating
                 </Text>
@@ -45,8 +45,7 @@ export default class Windmill extends Component {
                 <Text style={[styles.units, theme.fontRegular]}>
                     kWh
                 </Text>
-                </View>
-                </View>
+                </ImageBackground>
                 <List style={styles.list}>
                   {
                     fake.map((item, i) => (
@@ -88,25 +87,20 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     image: {
-        height: verticalScale(310),
-        left: -2,
-        opacity: 0.9,
-        ...Platform.select({
-            android: {
-                top: '-5%',
-                width: 415,
-                height: verticalScale(350),
-            }
-        }),
+        alignItems: 'center',
+        justifyContent: 'center',
+        left: '-1%',
+        top: '-3%'
     },
+
     main: {
         backgroundColor: '#E1E8EE',
     },
     head: {
-        height: verticalScale(310),
         ...Platform.select({
             android: {
-                height: verticalScale(310),
+                height: verticalScale(290),
+                top: '-5%'
             }
         })
     },
@@ -117,7 +111,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#E1E8EE',
         ...Platform.select({
             ios: {
-                paddingTop: '2%',
+                paddingTop: '0x%',
             }
         })
     },

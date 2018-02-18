@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, Platform, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, Platform, ScrollView, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Svg } from 'react-native-svg';
 
@@ -111,7 +111,9 @@ export default class OverviewCards extends Component {
     }
 
     getHeader = (historicalData, cardType, currentData) => {
-        const themeStyles = GetStyle(CurrTheme);
+        const theme = GetStyle(CurrTheme);
+        const { width, height } = Dimensions.get('window');
+
         var units = ["thm", "kWh", "kBTU", "gal"];
 
         if (this.state.selectedCard <= 4) {
@@ -137,32 +139,53 @@ export default class OverviewCards extends Component {
             }
 
             headerText = roundNumber(currentData["usage"][this.state.selectedCard - 5]["y"]);
+            console.log(roundNumber(105005960.96978705));
 
             subheaderText = units[this.state.selectedCard - 5];
             highlight = false;
         }
 
+      if (height < 600) {
+        return (
+          <View style={[styles.textContainer, theme.centered, {paddingBottom: '3%'}]}>
 
-      return (
-          <View style={[styles.textContainer, themeStyles.centered]}>
-
-            <Text style={[styles.number, themeStyles.translucentText, themeStyles.fontBold]}>
+            <Text style={[styles.smallNumber, theme.translucentText, theme.fontBold]}>
                 {headerText}
             </Text>
-            <View style={themeStyles.flexboxRow}>
-            <Text style={[styles.words, themeStyles.translucentText]}>
+            <View style={theme.flexboxRow}>
+            <Text style={[styles.smallWords, theme.translucentText]}>
                 {subheaderText}
              </Text>
-             {highlight && <Text style={[styles.words, styles.highlight]}>
+             {highlight && <Text style={[styles.smallWords, styles.highlight]}>
              {subheaderHighlight}
              </Text>}
              </View>
           </View>
-      );
+        );
+      } else {
+          return (
+              <View style={[styles.textContainer, theme.centered, {paddingBottom: '3%'}]}>
+
+                <Text style={[styles.number, theme.translucentText, theme.fontBold]}>
+                    {headerText}
+                </Text>
+                <View style={theme.flexboxRow}>
+                <Text style={[styles.words, theme.translucentText]}>
+                    {subheaderText}
+                 </Text>
+                 {highlight && <Text style={[styles.words, styles.highlight]}>
+                 {subheaderHighlight}
+                 </Text>}
+                 </View>
+              </View>
+          );
+      }
     }
 
     render() {
-        const themeStyles = GetStyle(CurrTheme);
+        const { width, height } = Dimensions.get('window');
+        console.log(height);
+        const theme = GetStyle(CurrTheme);
         const { refresh, loading, historicalData, currentData } = this.props;
         var utilities = ["Gas", "Electric", "Heat", "Water"];
         var generators = ["Wind", "Solar", "Geothermal"]
@@ -171,30 +194,56 @@ export default class OverviewCards extends Component {
         currData = this.getGraphScope(historicalData, cardType);
         header = this.getHeader(historicalData, cardType, currentData);
 
-        return (
-            <View style={[themeStyles.flex, themeStyles.list]}>
-            <Svg height={130} width={400}>
-            <Image source={require('./../assets/windmillHeader.png')}
-                style={themeStyles.header}/>
-            <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
-            {header}
-            </Svg>
-
-             <ScrollView style={themeStyles.lightBlueBackground}>
-                <GraphDetail data={currData}
-                    callback={this.scopeCallbackGraph}
-                    selected={this.state.selectedCard}
-                    type={cardType}/>
-             </ScrollView>
-             </View>
+        if (height < 600) {
+            return(
+                <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
+                <View style={[{width:width+5}, styles.smallHeight, theme.centered]}>
+                <Image source={require('./../assets/windmillHeader.png')}
+                    style={[styles.head, {width:width+5}, styles.smallHeight,]}
+                    resizeMode="cover"/>
+                <View style={[{width:width+5}, styles.head, styles.smallHeight, theme.carletonBlueBackground]}/>
+                {header}
+                </View>
+                 <ScrollView style={[theme.lightBlueBackground]}>
+                    <GraphDetail data={currData}
+                        callback={this.scopeCallbackGraph}
+                        selected={this.state.selectedCard}
+                        type={cardType}/>
+                 </ScrollView>
+                <Utilities callback={this.scopeCallbackUtilities}
+                   cards={cardType == 1 ? utilities : generators}
+                   cardType={cardType}
+                   selected={this.state.selectedCard}/>
+                 </View>
 
             );
+        } else {
+            return (
+                <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
+                <View style={[{width:width+5}, theme.centered, styles.height]}>
+                <Image source={require('./../assets/windmillHeader.png')}
+                    style={[styles.head, {width:width+5}, styles.height]}
+                    resizeMode="cover"/>
+                <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
+                {header}
+                </View>
+                 <ScrollView style={[theme.lightBlueBackground], {height: height - 125}}>
+                    <GraphDetail data={currData}
+                        callback={this.scopeCallbackGraph}
+                        selected={this.state.selectedCard}
+                        type={cardType}/>
+                 </ScrollView>
+                <Utilities callback={this.scopeCallbackUtilities}
+                   cards={cardType == 1 ? utilities : generators}
+                   cardType={cardType}
+                   selected={this.state.selectedCard}/>
+                 </View>
+
+                );
+        }
     }
 }
-// <Utilities callback={this.scopeCallbackUtilities}
-////              cards={cardType == 1 ? utilities : generators}
-//                cardType={cardType}
-//              selected={this.state.selectedCard}/>
+
 const styles = StyleSheet.create({
     number: {
         fontSize: moderateScale(75),
@@ -211,5 +260,34 @@ const styles = StyleSheet.create({
     highlight: {
         color: '#F3B61D',
         backgroundColor: 'transparent'
+    },
+    head : {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        opacity: 0.5,
+    },
+
+    height: {
+         height: moderateScale(125),
+         ...Platform.select({
+            android: {
+                height: moderateScale(105)
+            }
+         })
+    },
+
+    smallNumber: {
+        fontSize: moderateScale(65)
+    },
+
+    smallHeight: {
+        height: moderateScale(90),
+    },
+
+    smallWords: {
+        fontSize: moderateScale(14),
     }
+
 })

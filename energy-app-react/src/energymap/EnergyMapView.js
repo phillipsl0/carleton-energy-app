@@ -36,17 +36,18 @@ const initialRegion = {
   longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
 }
 
-// Get redux
+
+//Get redux
 @connect(
-    state => ({
-        historicalData: state.data.historicalData,
-        currentData: state.data.currentData,
-        loading: state.data.loading,
-    }),
-    dispatch => ({
-        refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
-    }),
-)
+     state => ({
+         historicalData: state.data.historicalData,
+         currentData: state.data.currentData,
+         loading: state.data.loading,
+     }),
+     dispatch => ({
+         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+     }),
+ )
 
 class EnergyMapView extends Component {
   constructor(props) {
@@ -213,7 +214,7 @@ class EnergyMapView extends Component {
     this.moveToCarleton();
     //console.log('EnergyMapView component is mounting...');
     this.closeActivityIndicator();
-    console.log("Component did mount")
+    //console.log("Component did mount")
   };
 
   openActivityIndicator() {
@@ -240,7 +241,7 @@ class EnergyMapView extends Component {
   onMapReady = () => {
     this.setState({ ready: true });
     this.moveToCarleton();
-    console.log("Map ready: moving to Carleton")
+    //console.log("Map ready: moving to Carleton")
   };
 
   // Maps utility name to its respective utility mini card index
@@ -593,6 +594,20 @@ const EnergyMapViewStack = StackNavigator({
       headerTitleStyle: navStyles.headerTitle,
       headerBackTitleStyle: navStyles.headerTitle,
       headerBackTitle: 'Back',
+      headerRight: (
+         <TouchableOpacity
+          style={styles.compareButton}
+          // Navigate to comparison screen
+          onPress={() => navigation.navigate("Comparison")}>
+          <Icon
+            // see: https://react-native-training.github.io/react-native-elements/API/icons/
+            name='compare-arrows'
+            color='white'
+            type='material-icons'
+            size={30}
+          />
+        </TouchableOpacity>
+      ),
     }), 
   },
   Comparison: {
@@ -691,6 +706,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#F5FCFF88'
+  },
+  compareButton: {
+    marginRight: 10
   }
 });
 
