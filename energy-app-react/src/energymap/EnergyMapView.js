@@ -14,6 +14,7 @@ import TopUtilities from './EnergyMapUtilityButtons';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
 import ComparisonPage from './../ComparisonPage';
 import BuildingComparison from './../BuildingComparison';
+import { getUnits } from './../helpers/General';
 
 /*
 Using tutorials:
@@ -200,7 +201,7 @@ class EnergyMapView extends Component {
       ready: true,
       utilityNameShown: 'electric',
       utilityIndexShown: 6, // for IndividualBuilding's UtilitiesMiniCard
-      loading: true
+      mapLoading: true
     };
     this.onRegionChange = this.onRegionChange.bind(this);
   };
@@ -216,13 +217,13 @@ class EnergyMapView extends Component {
   };
 
   openActivityIndicator() {
-    this.setState({ loading: true });
+    this.setState({ mapLoading: true });
   };
 
   // Closes activity indicator with 2 second delay after call
   closeActivityIndicator() {
     setTimeout(() => this.setState({
-      loading: false }), 2000);
+      mapLoading: false }), 2000);
   };
 
   setRegion(region) {
@@ -269,20 +270,6 @@ class EnergyMapView extends Component {
     return (utilityName);
   };
 
-  // Decide what units to render
-  getUnits(utility) {
-    var units = ""
-    if (utility == 'electric') {
-      units = "kWh"
-    } else if (utility == 'water') {
-      units = "gal"
-    } else if (utility == 'gas') {
-      units = "kBTU"
-    } else if (utility == 'heat') { 
-      units = "thm"
-    }
-    return units
-  }
 
   // Updates colors of energy map with new utility selection
   updateUtility = (utilitySelected) => {
@@ -455,7 +442,8 @@ class EnergyMapView extends Component {
   render() {
     navigation = this.props.navigation;
     utilityNameShown = this.state.utilityNameShown;
-    loading = this.state.loading;
+    mapLoading = this.state.mapLoading;
+    const { refresh, loading, historicalData, currentData } = this.props; // redux
     isMapReady = false; // fix for Android latLang error
 
     return (
@@ -519,7 +507,7 @@ class EnergyMapView extends Component {
                      key={polygon.name}
 
                      title={polygon.name}
-                     description={polygon.usage + ' ' + this.getUnits(utilityNameShown)}
+                     description={polygon.usage + ' ' + getUnits(utilityNameShown)}
                      onCalloutPress={() => navigation.navigate(
                        'EnergyBuildingView', 
                        {item:polygon.item, selected: this.state.utilityIndexShown })}
@@ -550,11 +538,11 @@ class EnergyMapView extends Component {
           // top utilities
           onUtilitySelect={this.updateUtility}
           selected={this.state.utilityNameShown} />
-        {this.state.loading && <View style={styles.loading} accessibe={false}>
+        {this.state.mapLoading && <View style={styles.loading} accessibe={false}>
           <ActivityIndicator
             size='large'
             color='#0000ff'
-            animating={this.state.loading} />
+            animating={this.state.mapLoading} />
         </View>
         }
       </View>

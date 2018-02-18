@@ -116,7 +116,7 @@ export default class IndividualBuilding extends Component {
     // }
 
     // Decide what units to render based on utility and time
-    getUnits(utility, time) {
+    getBuildingUnits(utility, time) {
         var units = ""
         if (utility == 6) { // electric
           units = "kWh"
@@ -150,7 +150,7 @@ export default class IndividualBuilding extends Component {
             //headerText = this.numberWithCommas((getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtilityCard))).toFixed(0))
             // shows value (hence "y", "x" would show label) of current data usage
             headerText = this.numberWithCommas((currentData["usage"][this.state.selectedUtilityCard-5]["y"]).toFixed(0));
-            subheaderText = this.getUnits(this.state.selectedUtilityCard, this.state.selectedTimeCard)
+            subheaderText = this.getBuildingUnits(this.state.selectedUtilityCard, this.state.selectedTimeCard)
         } catch (error) {
             console.log("Error in displaying IndividualBuilding header: ", error)
             headerText = "N/A"
