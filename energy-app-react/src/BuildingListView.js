@@ -12,9 +12,6 @@ import BuildingComparison from './BuildingComparison';
 import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js';
 
 import { scale, moderateScale, verticalScale} from './helpers/Scaling';
-import { GetStyle } from './styling/Themes'
-
-const themeStyles = GetStyle();
 
 class BuildingListView extends Component {
   renderHeader = (headerItem) => {
@@ -22,7 +19,7 @@ class BuildingListView extends Component {
   }
 
   renderItem = (item) => {
-    return <View style={[themeStyles.card, themeStyles.shadowed, styles.card]}>
+    return <View style={{marginTop:7, marginLeft: 7, marginRight: 7, borderWidth: 1, borderColor:'#cbd2d9', borderRadius:3, backgroundColor:'white',}}>
         <Text style={styles.header}>{item.item.name}</Text>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',}}>
             <Image
@@ -48,14 +45,11 @@ class BuildingListView extends Component {
     const {navigate} = this.props.navigation;
 
     return (
-      <View>
-        <View style={{paddingTop:8}} />
-        <FlatList
-            data = {buildings}
-            renderItem={this.renderItem}
-            keyExtractor = {(item) => item.name}
-        />
-      </View>
+      <FlatList
+          data = {buildings}
+          renderItem={this.renderItem}
+          keyExtractor = {(item) => item.name}
+      />
     );
   }
 }
@@ -143,19 +137,8 @@ const navStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   card: {
-    marginTop: 0, 
-    marginLeft: 6, 
-    marginRight: 6, 
-    paddingLeft: 5,
-    paddingRight: 5,
-    // borderWidth: 1, 
-    // borderColor:'#cbd2d9', 
-    // borderRadius:3, 
-    // backgroundColor:'white'
+    paddingTop: 20,
   },
-  // card: {
-  //   paddingTop: 20,
-  // },
   head: {
       backgroundColor: 'grey',
     },
