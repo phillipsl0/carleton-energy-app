@@ -69,12 +69,12 @@ const BuildingStack = StackNavigator({
   Buildings: {
       screen: BuildingListView,
       navigationOptions: ({ navigation }) => ({
-          title: 'Buildings',
-          ...Platform.select({
-              android: { header: null }
-          }),
-          headerTintColor: 'white',
-          headerStyle: navStyles.header,
+        title: 'Buildings',
+        ...Platform.select({
+            android: { header: null }
+        }),
+        headerTintColor: 'white',
+        headerStyle: navStyles.header,
       }),
   },
   BuildingCardView: {
