@@ -94,7 +94,7 @@ const RootTabs = TabNavigator({
       navigationOptions: {
         tabBarLabel: 'Learn',
         tabBarIcon: ({ tintColor, focused }) => (
-          <FontAwesome name="bolt" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+          <FontAwesome name="graduation-cap" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
         ),
       },
     },
@@ -103,7 +103,7 @@ const RootTabs = TabNavigator({
         navigationOptions: {
           tabBarLabel: 'Map',
           tabBarIcon: ({ tintColor, focused }) => (
-            <FontAwesome name="fire" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+            <FontAwesome name="map" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
           ),
         },
       }
