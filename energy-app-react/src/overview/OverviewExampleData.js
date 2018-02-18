@@ -51,28 +51,31 @@ const turbineData = [
 
 export const fake = [
     {
+      title: '% of Total Energy Use',
+      icon: "progress-two",
+      type: 'entypo',
+      index: 0,
+    },
+    {
       title: 'Wind Speed',
-      x: '6.2 mph',
       icon: "weather-windy",
+      type: 'material-community',
+      index: 1,
     },
 
     {
       title: 'Turbine Generation',
-      x: '583,389 kWh',
-      icon: "airplane-takeoff",
+      icon: "trending-up",
+      type: 'Feather',
+      index: 2,
     },
 
     {
       title: 'Turbine Consumption',
-      x: '750 kWh',
-      icon: "airplane-landing",
+      icon: "trending-down",
+      type: 'Feather',
+      index: 3,
     },
-
-    {
-          title: 'Other',
-          x: '?????',
-          icon: "leaf",
-        },
 
 ]
 

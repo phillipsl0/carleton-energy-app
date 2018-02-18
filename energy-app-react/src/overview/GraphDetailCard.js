@@ -47,8 +47,10 @@ export default class GraphDetail extends Component {
 
     render() {
         const { width, height } = Dimensions.get('window');
-        graphWidth = 250;
-        graphHeight = 225;
+        var graphWidth = 250;
+        var graphHeight = 225;
+        var marginBottom = '3%';
+        var marginTop = '4%';
 
         var x = this.getLabel("x");
         var y = this.getLabel("y");
@@ -56,12 +58,14 @@ export default class GraphDetail extends Component {
         if (height < 600) {
             graphWidth = 225;
             graphHeight = 200;
+            marginBottom = '5%';
+            marginTop = '5%';
         }
 
         return(
             <View style={[theme.centered]}>
                 <View pointerEvents="none" style={[styles.graphContainer, theme.centered,
-                    theme.translucent]}>
+                    theme.translucent, { marginBottom: marginBottom, marginTop: marginTop }]}>
 
                  <Graph
                      theme={CustomThemes.carleton}
@@ -103,7 +107,6 @@ export default class GraphDetail extends Component {
 const styles = StyleSheet.create({
     graphContainer: {
         marginTop: '5%',
-        marginBottom: '4%',
         paddingTop: '1%',
         paddingLeft: '3%',
         paddingRight: '5%',

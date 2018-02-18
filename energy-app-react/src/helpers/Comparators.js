@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { moderateScale, verticalScale } from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
-import {roundNumber, convertGallons, convertKbtus, convertThms, getSpecificRandom, combineData } from './General';
+import {roundNumber, getSpecificRandom, combineData } from './General';
 
 // all equivalencies from https://www.epa.gov/energy/greenhouse-gas-equivalencies-calculator
 // [2][3][11]
@@ -28,7 +28,7 @@ export default class Comparator extends Component {
     convertData = (data) => {
         var newData = {};
         var comparators = new Array(3);
-        var dataNumber = combineData(data);
+        var dataNumber = this.props.total;
 
         dataNumber = dataNumber/1000;
         newData["total"] = dataNumber;
