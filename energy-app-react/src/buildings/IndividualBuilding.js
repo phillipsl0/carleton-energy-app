@@ -1,17 +1,17 @@
 import { List, Card, Button, Avatar } from 'react-native-elements';
 import React, { Component } from 'react';
-import { Platform, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebView, ScrollView } from 'react-native'
+import { Platform, AppRegistry, SectionList, StyleSheet, View, Text, Image, ScrollView, Dimensions } from 'react-native'
 import { StackNavigator } from 'react-navigation';
-
-import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './helpers/ApiWrappers';
-import { GetStyle } from './styling/Themes';
-import CurrTheme from './styling/CurrentTheme';
-import GraphDetail from './overview/GraphDetailCard';
-import Utilities from './overview/UtilitiesMiniCards';
-import ComparisonPage from './ComparisonPage';
 import { connect } from 'react-redux';
-import { moderateScale, verticalScale } from './helpers/Scaling';
-import BuildingComparison from './BuildingComparison';
+
+import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './../helpers/ApiWrappers';
+import { GetStyle } from './../styling/Themes';
+import CurrTheme from './../styling/CurrentTheme';
+import GraphDetail from './../overview/GraphDetailCard';
+import Utilities from './../overview/UtilitiesMiniCards';
+import ComparisonPage from './../ComparisonPage';
+import { moderateScale, verticalScale } from './../helpers/Scaling';
+import BuildingComparison from './../BuildingComparison';
 
 @connect(
     state => ({
@@ -27,7 +27,6 @@ import BuildingComparison from './BuildingComparison';
 export default class IndividualBuilding extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             selectedUtilityCard: 5, // index for utility card - itialized to gas
             selectedTimeCard: 1, // index for time card - intialized to day
@@ -78,9 +77,11 @@ export default class IndividualBuilding extends Component {
     // Displays header showing current usage
     getHeader = (currentData) => {
         // Array of API data: [gas, electricity, heat, water]
-        const themeStyles = GetStyle(CurrTheme);
+        const theme = GetStyle(CurrTheme);
+        const { width, height } = Dimensions.get('window');
+        
         try {
-            console.log("SelectedUtilityCard", this.state.selectedUtilityCard)
+            //console.log("SelectedUtilityCard", this.state.selectedUtilityCard)
             //headerText = this.numberWithCommas((getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtilityCard))).toFixed(0))
             // shows value (hence "y", "x" would show label) of current data usage
             headerText = this.numberWithCommas((currentData["usage"][this.state.selectedUtilityCard-5]["y"]).toFixed(0));
@@ -91,18 +92,33 @@ export default class IndividualBuilding extends Component {
             subheaderText = ""
         }
 
-      return (
-        <View style={[styles.textContainer, themeStyles.centered]}>
-            <Text style={[styles.number, themeStyles.translucentText]}>
-                {headerText}
-            </Text>
-            <View style={themeStyles.flexboxRow}>
-                <Text style={[styles.subHeader, themeStyles.translucentText]}>
-                    {subheaderText}
-                 </Text>
-            </View>
-        </View>
-      );
+        if (height < 600) {
+            return (
+                <View style={[styles.textContainer, theme.centered, {paddingBottom: '3%'}]}>
+                    <Text style={[styles.smallNumber, theme.translucentText, theme.fontBold]}>
+                        {headerText}
+                    </Text>
+                    <View style={theme.flexboxRow}>
+                        <Text style={[styles.smallWords, styles.highlight]}>
+                            {subheaderText}
+                        </Text>
+                    </View>
+                </View>
+            );
+        } else {
+            return (
+                <View style={[styles.textContainer, theme.centered, {paddingBottom: '3%'}]}>
+                    <Text style={[styles.number, theme.translucentText, theme.fontBold]}>
+                        {headerText}
+                    </Text>
+                    <View style={theme.flexboxRow}>
+                        <Text style={[styles.words, styles.highlight]}>
+                            {subheaderText}
+                        </Text>
+                    </View>
+                </View>
+            );
+        }
     }
 
     // Returns data to be displayed
@@ -164,49 +180,64 @@ export default class IndividualBuilding extends Component {
 
 
     render() {
-        const themeStyles = GetStyle(CurrTheme);
-        var utilities = ["Gas", "Electric", "Heat", "Water"];
+        const theme = GetStyle(CurrTheme);
+        const { width, height } = Dimensions.get('window');
         const { refresh, loading, historicalData, currentData } = this.props; // redux
+        var utilities = ["Gas", "Electric", "Heat", "Water"];
+
         currData = this.getGraphScope(historicalData);
         header = this.getHeader(currentData);
 
-        return (
-            <View style={[themeStyles.flex, themeStyles.list]}>
-                <View
-                    // controls height of header
-                    style={{ height: verticalScale(110) }}>
-                    <Image
-                        style={themeStyles.header} 
-                        source={{ uri: this.props.navigation.state.params.item.avatar }} />
-                    <View style={[themeStyles.header, themeStyles.carletonBlueBackground]}/>
-                    {header}
+        if (height < 600) {
+            return (
+                <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
+                    <View style={[{width:width+5}, styles.smallHeight, theme.centered]}>
+                        <Image
+                            resizeMode="cover"
+                            style={[styles.head, {width:width+5}, styles.smallHeight]}
+                            source={{ uri: this.props.navigation.state.params.item.avatar }} />
+                        <View style={[{width:width+5}, styles.head, styles.smallHeight, theme.carletonBlueBackground]}/>
+                        {header}
+                    </View>
+                    <View style={[theme.lightBlueBackground]}>
+                        <GraphDetail data={currData} // was graphData
+                            callback={this.scopeCallbackGraph}
+                            selected={this.state.selectedTimeCard} // button index must match selected
+                            type={1} // indicates energy usage, 2 is generation
+                        /> 
+                    </View>
+                    <Utilities callback={this.scopeCallbackUtilities}
+                       cards={utilities}
+                       cardType={1} // usage
+                       selected={this.state.selectedCard}/>
                 </View>
 
-                <ScrollView style={themeStyles.lightBlueBackground}>
-                    <GraphDetail data={currData} // was graphData
-                        callback={this.scopeCallbackGraph}
-                        selected={this.state.selectedTimeCard} // button index must match selected
-                        type={1} // indicates energy usage, 2 is generation
-                    />                    
-                </ScrollView
-                /*
-                    // Old comparison button
-                    <Button
-                        rightIcon={{name: "angle-right", type: 'font-awesome', size: 24}}
-                        fontSize={20}
-                        title='Compare'
-                        containerViewStyle={styles.button}
-                        backgroundColor='#0B5091'
-                        onPress={() => this.props.navigation.navigate("Comparison")}/>
-                */
-
-                >
-                <Utilities callback={this.scopeCallbackUtilities}
-                    cardType={1}
-                    selected={this.state.selectedUtilityCard}
-                />
-            </View>
-        );
+            );
+        } else {
+            return (
+                <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
+                    <View style={[theme.centered, styles.height]}>
+                        <Image
+                            source={{ uri: this.props.navigation.state.params.item.avatar }} 
+                            style={[styles.head, {width:380}, styles.height]}
+                            resizeMode="cover"/>
+                        <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
+                        {header}
+                    </View>
+                     <View style={[theme.lightBlueBackground], {height: height - 125}}>
+                            <GraphDetail data={currData} // was graphData
+                                callback={this.scopeCallbackGraph}
+                                selected={this.state.selectedTimeCard} // button index must match selected
+                                type={1} // indicates energy usage, 2 is generation
+                            /> 
+                     </View>
+                    <Utilities callback={this.scopeCallbackUtilities}
+                       cards={utilities}
+                       cardType={1} // usage
+                       selected={this.state.selectedCard}/>
+                </View>
+            );
+        }
     }
 }
 
@@ -223,21 +254,50 @@ const styles = StyleSheet.create({
         paddingRight: 30,
         paddingBottom: 100,
     },
+    highlight: {
+        color: '#F3B61D',
+        backgroundColor: 'transparent'
+    },
     img: {
         alignSelf: 'stretch',
         height: 100,
     },
     number: {
-        fontSize: moderateScale(70),
+        fontSize: moderateScale(75),
     },
     textContainer: {
-        // marginBottom: '5%',
         marginBottom: '2%',
         marginTop: '2%'
     },
-    subHeader: {
-        //fontSize: 20,
-        // marginTop: '-2%',
+    words: {
         fontSize: moderateScale(16),
+    },
+    head: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        opacity: 0.5,
+    },
+
+    height: {
+         height: moderateScale(125),
+         ...Platform.select({
+            android: {
+                height: moderateScale(105)
+            }
+         })
+    },
+
+    smallNumber: {
+        fontSize: moderateScale(65)
+    },
+
+    smallHeight: {
+        height: moderateScale(90),
+    },
+
+    smallWords: {
+        fontSize: moderateScale(14),
     }
 })
