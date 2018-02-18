@@ -19,7 +19,7 @@ import {
     turbine2WindMeter
 } from './ProductionMeters.js'
 
-import { getSpecificRandom } from './General';
+import { getSpecificRandom, combineData } from './General';
 
 const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
 
@@ -216,6 +216,10 @@ export function getTotalWindGeneration(timeStart, timeEnd) {
     return getEnergyGeneration(timeStart, timeEnd)["wind"];
 }
 
+export function getTotalWindConsumption(timeStart, timeEnd) {
+    return getEnergyGeneration(timeStart, timeEnd)["wind"]*.25;
+}
+
 export function getTotalSolarGeneration(timeStart, timeEnd) {
     return getEnergyGeneration(timeStart, timeEnd)["solar"];
 }
@@ -234,6 +238,18 @@ export function getCurrentWindGeneration() {
     var timeEnd = new Date();
 
     return getTotalWindGeneration(timeStart, timeEnd);
+}
+
+export function getCurrentWindConsumption() {
+    var timeStart = new Date();
+    timeStart.setMinutes(timeStart.getMinutes() - 15);
+    var timeEnd = new Date();
+
+    return getTotalWindConsumption(timeStart, timeEnd);
+}
+
+export function getCurrentWindSpeed() {
+    return getSpecificRandom(0.2, 9, 1, 1);
 }
 
 export function getCurrentSolarGeneration() {
@@ -265,6 +281,7 @@ export function getCurrentWindGenerationGraphFormat() {
     var windTable = new Array(2);
     windTable[0] = {};
     windTable[1] = {};
+    var wind = {};
 
     windTable[0]["x"] = "One (kWh)";
     windTable[0]["y"] = getCurrentWindGeneration();
@@ -272,7 +289,10 @@ export function getCurrentWindGenerationGraphFormat() {
     windTable[1]["x"] = "Two (kWh)";
     windTable[1]["y"] = getCurrentWindGeneration();
 
-    return windTable;
+    wind["data"] = windTable;
+    wind["total"] = windTable[0]['y'] + windTable[1]['y'];
+
+    return wind;
 }
 
 export function getTotalWindGenerationGraphFormat(timeStart, timeEnd, timeScale, scaleFactor) {
@@ -307,12 +327,15 @@ export function getCurrentGenerationGraphFormat() {
     var totalWind = getCurrentWindGeneration();
     var totalGeothermal = getCurrentGeothermalGeneration();
     var data = new Array(3);
+    var generation = {};
 
     data[0] = {'x': 'Solar (kWh)', 'y': totalSolar};
     data[1] = {'x': 'Geothermal (kWh)', 'y': totalGeothermal};
     data[2] = {'x': 'Wind (kWh)', 'y': totalWind};
 
-    return data;
+    generation["data"] = data;
+    generation["total"] = data[0]['y'] + data[1]['y'] + data[2]['y'];
+    return generation;
 }
 
 export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, scaleFactor) {
@@ -471,6 +494,7 @@ export function getCurrentConsumptionGraphFormat() {
     var totalHeat = 0;
     var totalGas = 0;
     var data = new Array(4);
+    var consumption = {};
     var buildings = getBuildingsList();
 
     buildings.forEach(function(building) {
@@ -485,7 +509,11 @@ export function getCurrentConsumptionGraphFormat() {
     data[2] = {'x': 'Heat (kBTU)', 'y': totalHeat};
     data[3] = {'x': 'Water (gal)', 'y': totalWater};
 
-    return data;
+    total = combineData(data);
+    consumption["total"] = total;
+    consumption["data"] = data;
+
+    return consumption;
 }
 
 export function reformatDate(date){
@@ -750,15 +778,28 @@ export function getAllHistoricalGraphData() {
 
 export function getAllCurrentGraphData() {
     var currData = {};
+    var data = {};
+    var totals = {};
 
     var usage = getCurrentConsumptionGraphFormat();
     var generation = getCurrentGenerationGraphFormat();
-    var turbine = getCurrentWindGenerationGraphFormat();
+    var turbineGeneration = getCurrentWindGenerationGraphFormat();
+    var turbineConsumption = getCurrentWindConsumption();
+    var wind = getCurrentWindSpeed();
 
-    currData["usage"] = usage;
-    currData["generation"] = generation;
-    currData["turbine"] = turbine;
+    data["usage"] = usage.data;
+    data["generation"] = generation.data;
+    data["turbine"] = turbineGeneration.data;
+    data["windSpeed"] = wind;
 
+    totals["usage"] = usage.total;
+    totals["generation"] = generation.total;
+    totals["turbine"] = {};
+    totals["turbine"]["generation"] = turbineGeneration.total;
+    totals["turbine"]["consumption"] = turbineConsumption;
+
+    currData["data"] = data;
+    currData["totals"] = totals;
     return currData;
 }
 

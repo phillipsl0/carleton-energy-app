@@ -139,7 +139,6 @@ export default class OverviewCards extends Component {
             }
 
             headerText = roundNumber(currentData["usage"][this.state.selectedCard - 5]["y"]);
-            console.log(roundNumber(105005960.96978705));
 
             subheaderText = units[this.state.selectedCard - 5];
             highlight = false;

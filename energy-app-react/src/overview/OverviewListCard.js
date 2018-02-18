@@ -9,14 +9,16 @@ import Graph from './../visualizations/Graph';
 import { default as CustomThemes } from './../visualizations/GraphThemes';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
-import { moderateScale, calculateRatio, combineData } from './../helpers/General';
+import { moderateScale } from './../helpers/General';
 
 const theme = GetStyle(CurrTheme);
 
 @connect(
     state => ({
         currentData: state.data.currentData,
+        totals: state.data.currentTotals,
         loading: state.data.loading,
+        windRatio: state.data.windRatio,
     }),
     dispatch => ({
         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
@@ -48,32 +50,31 @@ export default class OverviewListCard extends Component {
     }
 
     // Return different views based on the card type
-    returnUnique = (currentData) => {
+    returnUnique = () => {
         item = this.props.cardItem;
-        var windRatio = calculateRatio(currentData);
 
         switch (item.title) {
             case "Wind Turbine Energy":
                 return(
                   <View style={[{height: moderateScale(160), width: moderateScale(280)}]}>
-                  <View style={[theme.container, theme.centered, theme.flexboxRow]}>
+                  <View style={[theme.container, { alignItems: 'center' }, theme.flexboxRow]}>
                     <Image source={require('./../assets/windmillCard.png')}
                       resizeMode="contain"
-                      style={{ flex: 0.5, marginLeft: '-10%', height: moderateScale(150), width: moderateScale(102)}} />
-                    <View style={[{alignItems: 'center', marginLeft: '5%', paddingTop: '3%' }]}>
+                      style={{ flex: 0.5, height: moderateScale(150), width: moderateScale(102), marginLeft: '-15%'}} />
+                    <View style={[{alignItems: 'center', marginLeft: '-50%', marginTop: '15%', flex: 0.5 }]}>
                         <Text style={[ styles.font ]}>
-                          Wind energy currently
+                          Carleton is currently
                         </Text>
                         <Text style={[ styles.font ]}>
-                          makes up for
+                          running on
                         </Text>
 
                         <Text style={[ styles.font, theme.fontBold, { fontSize: 16, color: '#0B5091' }]}>
-                          {windRatio["percentage"]}%
+                          {this.props.windRatio["percentage"]}%
                         </Text>
 
                         <Text style={ styles.font }>
-                          of overall energy use.
+                          wind energy.
                         </Text>
                     </View>
                   </View>
@@ -87,7 +88,7 @@ export default class OverviewListCard extends Component {
                         type={item.graphType}
                         legend={true}
                         theme={CustomThemes.carleton}
-                        graphData={currentData.usage}/>
+                        graphData={this.props.currentData.usage}/>
                 );
                 break;
 
@@ -97,14 +98,15 @@ export default class OverviewListCard extends Component {
                       type={item.graphType}
                       legend={true}
                       theme={CustomThemes.carleton}
-                      graphData={currentData.generation}/>
+                      graphData={this.props.currentData.generation}/>
                 );
                 break;
 
             case "Comparison Facts":
                 return(
                     <Comparator
-                       data={currentData.turbine}
+                       data={this.props.currentData.turbine}
+                       total={this.props.totals.turbine}
                        number={3}/>
                 );
             default:
@@ -115,8 +117,8 @@ export default class OverviewListCard extends Component {
     render() {
         var item = this.props.cardItem;
         var navigation = this.props.cardNavigation;
-        const { refresh, loading, currentData } = this.props;
-        var uniquePortion = this.returnUnique(currentData);
+        const { refresh, loading, currentData, windRatio, totals } = this.props;
+        var uniquePortion = this.returnUnique();
 
         return(
             <Card
@@ -146,6 +148,7 @@ export default class OverviewListCard extends Component {
             {item.title === "Energy Use" &&
                 <Comparator
                      data={currentData.usage}
+                     total={totals.usage}
                      cardType="use"
                      number={1}/>
             }
@@ -153,6 +156,7 @@ export default class OverviewListCard extends Component {
             {item.title === "Energy Generation" &&
                 <Comparator
                      data={currentData.generation}
+                     total={totals.generation}
                      cardType="generation"
                      number={1}/>
             }
@@ -177,7 +181,7 @@ const styles = StyleSheet.create({
   font: {
     fontSize: moderateScale(14),
     color: '#647C92',
-    paddingBottom: '5%',
+    paddingBottom: '3%',
     backgroundColor: 'transparent',
   },
 
