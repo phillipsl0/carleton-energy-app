@@ -3,12 +3,12 @@ import { FlatList, AppRegistry, SectionList, StyleSheet, View, Text, Image, WebV
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
-
-import buildings from './buildings/Buildings';
-import OverviewCards from './overview/OverviewCards';
+import buildings from './Buildings';
+import OverviewCards from './../overview/OverviewCards';
 import ComparisonPage from './ComparisonPage';
-import { GetStyle } from './styling/Themes';
-import CurrTheme from './styling/CurrentTheme';
+import { GetStyle } from './../styling/Themes';
+import CurrTheme from './../styling/CurrentTheme';
+import { getBuildingsList } from './../helpers/ApiWrappers.js';
 
 class BuildingComparison extends Component {
   static navigationOptions = {
@@ -19,7 +19,7 @@ class BuildingComparison extends Component {
       super(props);
 
    this.state = {
-      building1: 'Burton',
+      building1: this.props.navigation.state.params.item,
       building2: 'Burton',
    }
    
@@ -29,11 +29,10 @@ class BuildingComparison extends Component {
   render() {
     const themeStyles = GetStyle(CurrTheme);
     const { navigate } = this.props.navigation;
-    
+    const buildings = getBuildingsList()
     return (
       <View style={{
         flex: 1,
-        backgroundColor: '#F3B61D',
         flexDirection: 'column',
       }}>
       <View style={{
@@ -41,45 +40,27 @@ class BuildingComparison extends Component {
         flexDirection: 'row',
         paddingTop: 50,
       }}>
-        <View style={{width: 190, height: 250}}>
+        <View style={{width: 190, height: 300}}>
         <Card
            containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}>
           <Picker selectedValue={this.state.building1}
+            mode = 'dialog'
             onValueChange={(itemValue, itemIndex) => this.setState({building1: itemValue})}>
-            <Picker.Item label="Burton" value="Burton" />
-            <Picker.Item label="Sayles" value="Sayles" />
-            <Picker.Item label="Severence" value="Severence" />
-            <Picker.Item label="Davis" value="Davis" />
-            <Picker.Item label="Musser" value="Musser" />
-            <Picker.Item label="Myers" value="Myers" />
-            <Picker.Item label="Cassat" value="Cassat" />
-            <Picker.Item label="Memo" value="Memo" />
-            <Picker.Item label="Nourse" value="Nourse" />
-            <Picker.Item label="Evans" value="Evans" />
-            <Picker.Item label="Goodhue" value="Goodhue" />
-            <Picker.Item label="Watson" value="Watson" />
-            <Picker.Item label="Scoville" value="Scoville" />
+            {buildings.map((item,index) => {
+              return(<Picker.Item label={item} value={item} key={item}/>);
+            })}
         </Picker>
         </Card>
         </View>
-        <View style={{width: 190, height: 250}}>
+        <View style={{width: 190, height: 300}}>
         <Card
            containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}>
           <Picker selectedValue={this.state.building2}
+            mode = 'dialog'
             onValueChange={(itemValue, itemIndex) => this.setState({building2: itemValue})}>
-            <Picker.Item label="Burton" value="Burton" />
-            <Picker.Item label="Sayles" value="Sayles" />
-            <Picker.Item label="Severence" value="Severence" />
-            <Picker.Item label="Davis" value="Davis" />
-            <Picker.Item label="Musser" value="Musser" />
-            <Picker.Item label="Myers" value="Myers" />
-            <Picker.Item label="Cassat" value="Cassat" />
-            <Picker.Item label="Memo" value="Memo" />
-            <Picker.Item label="Nourse" value="Nourse" />
-            <Picker.Item label="Evans" value="Evans" />
-            <Picker.Item label="Goodhue" value="Goodhue" />
-            <Picker.Item label="Watson" value="Watson" />
-            <Picker.Item label="Scoville" value="Scoville" />
+            {buildings.map((item,index) => {
+              return(<Picker.Item label={item} value={item} key={item}/>);
+            })}
         </Picker>
         </Card>
         </View>
@@ -92,6 +73,8 @@ class BuildingComparison extends Component {
         containerViewStyle={styles.button}
         backgroundColor='#0B5091'
         onPress={() => navigate("ComparisonPage", {screen: "ComparisonPage", building1:this.state.building1, building2:this.state.building2})}/>
+      </View>
+       <View>
       </View>
       </View>
     );

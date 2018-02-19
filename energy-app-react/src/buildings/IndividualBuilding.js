@@ -9,9 +9,9 @@ import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './../overview/GraphDetailCard';
 import Utilities from './../overview/UtilitiesMiniCards';
-import ComparisonPage from './../ComparisonPage';
+import ComparisonPage from './ComparisonPage';
 import { moderateScale, verticalScale } from './../helpers/Scaling';
-import BuildingComparison from './../BuildingComparison';
+import BuildingComparison from './BuildingComparison';
 
 @connect(
     state => ({

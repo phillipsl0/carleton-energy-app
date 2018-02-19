@@ -444,5 +444,12 @@ const buildings = [
     },
 ]
 
+export function getAvatar(buildingName) {
+  for(var i=0; i < buildings.length; i++) {
+    if(buildings[i].name == buildingName) {
+      return buildings[i].avatar
+    }
+  }
+}
 
 export default buildings
