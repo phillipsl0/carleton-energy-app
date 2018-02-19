@@ -45,6 +45,40 @@ var scaleFactorWater = 400;
 var scaleFactorElectricity = 150;
 var scaleFactorOther = 60;
 
+export function dateToTimestamp(date) {
+    year = date.getFullYear();
+    month = date.getMonth()+1;
+    day = date.getDate();
+    hours = date.getHours();
+
+    if (month < 10) {
+        month = '0'+month;
+    }
+
+    if (day < 10) {
+        day = '0'+day;
+    }
+
+    if (hours < 10) {
+        hours = '0'+hours;
+    }
+
+    timestamp = year+'-'+month+'-'+day+'%20'+hours+':00:00';
+
+    return timestamp;
+}
+
+export const cleanupData = (data) => {
+    //TODO: change to not be hardcoded
+    var total = 0;
+
+    for (var i=0; i < data.length; i++) {
+        total += data[i]["pointvalue"];
+    }
+
+    return total;
+}
+
 export function getBuildingsList() {
     // return list of every building name with data (e.g. "Burton", "Sayles", etc.)
     // /api/buildings/names

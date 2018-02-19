@@ -19,7 +19,9 @@ const theme = GetStyle(CurrTheme);
         currentData: state.data.currentData,
         totals: state.data.currentTotals,
         windSpeed: state.data.windSpeed,
-        windRatio: state.data.windRatio
+        windRatio: state.data.windRatio,
+        loading: state.loading,
+        turbine: state.turbine,
     }),
 )
 
@@ -39,7 +41,7 @@ export default class Windmill extends Component {
 
     render() {
         const { width, height } = Dimensions.get('window');
-        const { currentData, totals, windSpeed, windRatio } = this.props;
+        const { currentData, totals, windSpeed, windRatio, turbine } = this.props;
         var rightTitles = this.fetchData();
         var padding = '5%';
 

@@ -203,12 +203,12 @@ export default class OverviewCards extends Component {
                 <View style={[{width:width+5}, styles.head, styles.smallHeight, theme.carletonBlueBackground]}/>
                 {header}
                 </View>
-                 <ScrollView style={[theme.lightBlueBackground]}>
+                 <View style={[theme.lightBlueBackground]}>
                     <GraphDetail data={currData}
                         callback={this.scopeCallbackGraph}
                         selected={this.state.selectedCard}
                         type={cardType}/>
-                 </ScrollView>
+                 </View>
                 <Utilities callback={this.scopeCallbackUtilities}
                    cards={cardType == 1 ? utilities : generators}
                    cardType={cardType}
