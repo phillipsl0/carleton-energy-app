@@ -11,7 +11,7 @@ import { createReduxBoundAddListener,
 //import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
-import BuildingStack from './src/BuildingListView';
+import BuildingStack from './src/buildings/BuildingListView';
 import EnergyMapViewStack from './src/energymap/EnergyMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
@@ -25,6 +25,7 @@ import { checkIfFirstLaunch } from './src/intro/checkIfFirstLaunch';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
+const HAS_LAUNCHED = 'HAS_LAUNCHED'
 
 if (Platform.OS === 'android') {
   SafeAreaView.setStatusBarHeight(0);
@@ -188,33 +189,12 @@ const mapStateToProps = (state) => ({
 });
 
 class App extends Component {
-
-    state = {
-      isReady: false,
-      isFirstLaunch: false,
-      hasCheckedAsyncStorage: false,
-    };
+  state = {
+    isReady: false,
+    isFirstLaunch: true,
+    hasCheckedAsyncStorage: false,
+  };
   
-  // componentWillMount() {
-  //   AsyncStorage.getItem('RANDOM2')
-  //     .then(res => {
-  //       if (res !== null) {
-  //         console.log("Not null random2");
-  //       } else {
-  //         this.isFirstLaunch = true;
-  //         console.log("Null random2");
-  //         console.log("Result: ", res)
-  //         AsyncStorage.setItem('RANDOM2', 'true');
-  //       }
-  //     })
-  //     .catch(err => alert("App mounting error: ", err));
-  //   console.log(this.state.isFirstLaunch);
-  //   if (this.state.isFirstLaunch == true) {
-  //     console.log('setting random2 to true');
-  //     AsyncStorage.setItem('RANDOM2', 'true');
-  //   }
-  // }
-  // Checks AsyncStorage to see if app has been launched already
   /*
   Great info about components mounting:
   https://daveceddia.com/where-fetch-data-componentwillmount-vs-componentdidmount/
@@ -241,26 +221,24 @@ class App extends Component {
       //     }
       //   })
       //   .catch(err => alert("App mounting error: ", err));
-      const first = AsyncStorage.getItem('RANDOM');
+      const first = AsyncStorage.getItem(HAS_LAUNCHED);
+      // Check if value present, if so not first launched
       if (first !== null) {
-        // console.log("We have data!")
-        this.setState({ hasCheckedAsyncStorage: true })
+        this.setState({ isFirstLaunch: false, hasCheckedAsyncStorage: true });
         // console.log("INSIDE of async, first launch:", this.state.isFirstLaunch)
       } else {
-        // console.log("First launch, random!")
-        this.state.isFirstLaunch = true;
-        this.setState({ isFirstLaunch: true, hasCheckedAsyncStorage: true })
+        this.setState({ isFirstLaunch: true, hasCheckedAsyncStorage: true });
       }
-      // console.log("OUTSIDE of async, first launch:", this.state.isFirstLaunch);
-      AsyncStorage.setItem('RANDOM', 'true');
+      this.setState({ isFirstLaunch: true })
+      AsyncStorage.setItem(HAS_LAUNCHED, 'true');
     } catch (error) {
       console.log(error)
     }
   }
 
   componentWillUnmount() {
-      BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
-      AsyncStorage.setItem('RANDOM', 'true');
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+    AsyncStorage.setItem(HAS_LAUNCHED, 'true');
   }
 
   onBackPress = () => {
@@ -330,19 +308,18 @@ class App extends Component {
     // if (!this.state.hasCheckedAsyncStorage) {
     //   return( null )
     // }
-
-    //Check if app has been launched for the first time
+    // Check if app has been launched for the first time
     // console.log("Before first launch return, isFirstLaunch: ", this.state.isFirstLaunch);
     // console.log("Before first launch return, checked Async: ", this.state.hasCheckedAsyncStorage)
-    // if (this.state.isFirstLaunch == true && this.state.hasCheckedAsyncStorage) {
-    //   // console.log("In first launch return, isFirstLaunch: ", this.state.isFirstLaunch);
-    //   // console.log("In first launch return, checked Async: ", this.state.hasCheckedAsyncStorage)
-    //   return (
-    //     <IntroSlider
-    //       onDone={this.closeIntro}
-    //     />
-    //   );
-    // }
+        // makes Intro screen appear
+    // if (this.state.isFirstLaunch && this.state.hasCheckedAsyncStorage) {
+      if (this.state.isFirstLaunch) {
+      return (
+        <IntroSlider
+          onDone={this.closeIntro}
+        />
+      );
+    }
 
     return (
       <RootTabs navigation={navigation} />

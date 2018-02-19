@@ -8,10 +8,12 @@ import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
 import ComparisonPage from './ComparisonPage';
 import BuildingComparison from './BuildingComparison';
-// import SelectStack from './IndividualBuilding';
-import { getCurrentBuildingUtilityConsumption } from './helpers/ApiWrappers.js';
+import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
 
-import { scale, moderateScale, verticalScale} from './helpers/Scaling';
+import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
+import { GetStyle } from './../styling/Themes'
+
+const themeStyles = GetStyle();
 
 class BuildingListView extends Component {
   renderHeader = (headerItem) => {
@@ -19,7 +21,7 @@ class BuildingListView extends Component {
   }
 
   renderItem = (item) => {
-    return <View style={{marginTop:7, marginLeft: 7, marginRight: 7, borderWidth: 1, borderColor:'#cbd2d9', borderRadius:3, backgroundColor:'white',}}>
+    return <View style={[themeStyles.card, themeStyles.shadowed, styles.card]}>
         <Text style={styles.header}>{item.item.name}</Text>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',}}>
             <Image
@@ -45,11 +47,14 @@ class BuildingListView extends Component {
     const {navigate} = this.props.navigation;
 
     return (
-      <FlatList
-          data = {buildings}
-          renderItem={this.renderItem}
-          keyExtractor = {(item) => item.name}
-      />
+      <View>
+        <View style={{paddingTop:8}} />
+        <FlatList
+            data = {buildings}
+            renderItem={this.renderItem}
+            keyExtractor = {(item) => item.name}
+        />
+      </View>
     );
   }
 }
@@ -69,12 +74,12 @@ const BuildingStack = StackNavigator({
   Buildings: {
       screen: BuildingListView,
       navigationOptions: ({ navigation }) => ({
-          title: 'Buildings',
-          ...Platform.select({
-              android: { header: null }
-          }),
-          headerTintColor: 'white',
-          headerStyle: navStyles.header,
+        title: 'Buildings',
+        ...Platform.select({
+            android: { header: null }
+        }),
+        headerTintColor: 'white',
+        headerStyle: navStyles.header,
       }),
   },
   BuildingCardView: {
@@ -89,7 +94,7 @@ const BuildingStack = StackNavigator({
           // UPDATE ENERGYMAPVIEW IF CHANGE
           // Navigate to comparison scree
           style={styles.compareButton}
-          onPress={() => navigation.navigate("Comparison")}>
+          onPress={() => navigation.navigate("Comparison", {item:navigation.state.params.item.name})}>
           <Icon
             // see: https://react-native-training.github.io/react-native-elements/API/icons/
             name='compare-arrows'
@@ -137,8 +142,19 @@ const navStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   card: {
-    paddingTop: 20,
+    marginTop: 0, 
+    marginLeft: 6, 
+    marginRight: 6, 
+    paddingLeft: 5,
+    paddingRight: 5,
+    // borderWidth: 1, 
+    // borderColor:'#cbd2d9', 
+    // borderRadius:3, 
+    // backgroundColor:'white'
   },
+  // card: {
+  //   paddingTop: 20,
+  // },
   head: {
       backgroundColor: 'grey',
     },
