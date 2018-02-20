@@ -6,8 +6,8 @@ import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native
 
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
-import ComparisonPage from './../ComparisonPage';
-import BuildingComparison from './../BuildingComparison';
+import ComparisonPage from './ComparisonPage';
+import BuildingComparison from './BuildingComparison';
 import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
 
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
@@ -94,7 +94,7 @@ const BuildingStack = StackNavigator({
           // UPDATE ENERGYMAPVIEW IF CHANGE
           // Navigate to comparison scree
           style={styles.compareButton}
-          onPress={() => navigation.navigate("Comparison")}>
+          onPress={() => navigation.navigate("Comparison", {item:navigation.state.params.item.name})}>
           <Icon
             // see: https://react-native-training.github.io/react-native-elements/API/icons/
             name='compare-arrows'

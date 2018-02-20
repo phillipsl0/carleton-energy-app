@@ -8,7 +8,7 @@ import CurrTheme from './../styling/CurrentTheme';
 import {roundNumber, getSpecificRandom, combineData } from './General';
 
 // all equivalencies from https://www.epa.gov/energy/greenhouse-gas-equivalencies-calculator
-// [2][3][11]
+
 // 1000 kWh equivalent to -> kWhComparison[i] + comparisons[i]
 var kWhComparison = [0.16, 1824, 0.259, 0.037, 83.7, 814, 0.01, 0.08, 0.0002, 0.112,
     0.004, 24.9, 1.7, 30.4, 19.3, 37];
@@ -117,7 +117,7 @@ export default class Comparator extends Component {
                         <View style={[theme.centered, theme.flexBoxColumn, {paddingTop: '2%'}]}>
 
                         <Text style={[ theme.fontBold ]}> Total: </Text>
-                        <Text style={ styles.oneFont }>
+                        <Text style={ [styles.oneFont, { fontSize: font }]}>
                             {roundNumber(converted["total"])} MWh in the last hour
                         </Text>
                         <Text style={[ theme.fontBold ]}> Compare to... </Text>

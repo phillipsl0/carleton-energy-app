@@ -12,8 +12,8 @@ import buildings from './../buildings/Buildings'
 import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import TopUtilities from './EnergyMapUtilityButtons';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
-import ComparisonPage from './../ComparisonPage';
-import BuildingComparison from './../BuildingComparison';
+import ComparisonPage from './../buildings/ComparisonPage';
+import BuildingComparison from './../buildings/BuildingComparison';
 import { getUnits } from './../helpers/General';
 
 /*

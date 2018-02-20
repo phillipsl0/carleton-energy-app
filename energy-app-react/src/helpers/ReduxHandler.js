@@ -1,7 +1,7 @@
 import { Platform, Dimensions } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
-import { getAllHistoricalGraphData, getAllCurrentGraphData } from './ApiWrappers';
+import { getAllHistoricalGraphData, getAllCurrentGraphData, dateToTimestamp, cleanupData } from './ApiWrappers';
 import { calculateRatio } from './General';
 
 /* Redux handles state for the app, including navigation
@@ -18,18 +18,12 @@ export const handler = store => next => action => {
         case 'GET_GRAPH_DATA':
             store.dispatch({type: 'GET_GRAPH_DATA_LOADING'});
             try {
-//                var historical = getAllHistoricalGraphData();
-//                var historicalData = historical.data;
-//                var historicalTotals = historical.totals;
                 var historicalData = getAllHistoricalGraphData();
-
                 var current = getAllCurrentGraphData();
                 var currentData = current.data;
                 var currentTotals = current.totals;
-                console.log(currentTotals);
                 var windSpeed = currentData.windSpeed;
                 var windRatio = calculateRatio(currentData);
-
 
                 store.dispatch({
                     type: 'GET_GRAPH_DATA_RECEIVED',
@@ -52,9 +46,57 @@ export const handler = store => next => action => {
                 type: 'GET_LAYOUT_RECEIVED',
                 layout,
             });
+            break;
+        case 'GET_TURBINE':
+            store.dispatch({type: 'GET_TURBINE_DATA_LOADING'});
+            var timeEnd = new Date();
+            var timeStart = new Date();
+            timeStart.setHours(timeEnd.getHours()-1);
+
+            var start = dateToTimestamp(timeStart);
+            var end = dateToTimestamp(timeEnd);
+
+            var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/55/'+start+'/'+end;
+
+            fetch(url)
+                .then((response) => response.json())
+                .then((jsonData) => {
+                    jsonData = cleanupData(jsonData);
+                    return jsonData;
+                })
+                .then(turbineData => next({
+                    type: 'GET_TURBINE_DATA_RECEIVED',
+                    turbineData
+                }))
+                .catch(error => next({
+                    type: 'GET_TURBINE_DATA_ERROR',
+                    error
+                }))
+                break;
         default:
             break;
     };
+}
+
+export const apiReducer = (state = { turbineData: [], loading: true}, action) => {
+    switch (action.type) {
+            case 'GET_TURBINE_LOADING':
+                return {
+                    ...state,
+                    loading: true,
+                };
+            case 'GET_TURBINE_DATA_RECEIVED':
+                console.log(action.turbineData);
+                return {
+                    loading: false,
+                    turbineData: action.turbineData,
+                };
+            case 'GET_TURBINE_DATA_ERROR':
+                return state;
+
+            default:
+                return state;
+        };
 }
 
 export const dataReducer = (state = { historicalGraphData: [], currentGraphData: [], currentTotals: [], windRatio: [],
@@ -84,7 +126,7 @@ export const dataReducer = (state = { historicalGraphData: [], currentGraphData:
 const initialState = {'height': 500, 'width': 500};
 
 export const layoutReducer = (state = {layout: []}, action) => {
-//    const layout = Dimensions.get('screen');
+    const layout = Dimensions.get('screen');
     switch (action.type) {
         case 'GET_LAYOUT_RECEIVED':
             return {

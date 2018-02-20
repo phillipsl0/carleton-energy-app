@@ -8,14 +8,15 @@ import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { createReduxBoundAddListener, 
   createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+//import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
 import BuildingStack from './src/buildings/BuildingListView';
 import EnergyMapViewStack from './src/energymap/EnergyMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
-import { handler, dataReducer, layoutReducer } from './src/helpers/ReduxHandler'
+import { handler, dataReducer, layoutReducer, apiReducer } from './src/helpers/ReduxHandler'
 import { getCurrentGenerationGraphFormat, 
   getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
@@ -167,7 +168,8 @@ const navReducer = (state = initialState, action) => {
 const appReducer = combineReducers({
     nav: navReducer,
     data: dataReducer,
-    ui: layoutReducer
+    layout: layoutReducer,
+    turbine: apiReducer
 
 });
 
@@ -182,7 +184,8 @@ const addListener = createReduxBoundAddListener("root");
 const mapStateToProps = (state) => ({
     nav: state.nav,
     data: state.data,
-    ui: state.layout,
+    layout: state.layout,
+    turbine: state.turbine
 });
 
 class App extends Component {
@@ -254,11 +257,12 @@ class App extends Component {
   };
 
   async _cacheResourcesAsync() {
-    const fontAssets = cacheFonts([FontAwesome.font,
+    const fontAssets = cacheFonts([FontAwesome.font, MaterialCommunityIcons.font, Entypo.font,
         {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
         {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
-    const imageAssets = cacheImages([require('./src/assets/windmill.png'),
-        require('./src/assets/windmillHeader.png')]);
+
+    const imageAssets = cacheImages([require('./src/assets/windmillCard.png'),
+        require('./src/assets/windmillHeader.png'), require('./src/assets/windmillFull.png')]);
 
     await Promise.all([...imageAssets, ...fontAssets]);
   }
@@ -272,13 +276,14 @@ class App extends Component {
 
 
   render() {
-    const { dispatch, nav, data, ui } = this.props;
+    const { dispatch, nav, data, ui, turbine } = this.props;
+//    console.log(turbine.loading);
     const navigation = addNavigationHelpers({
         dispatch,
         data,
         ui,
         state: nav,
-        addListener
+        addListener,
     });
 
     StatusBar.setBarStyle('light-content', false);
@@ -291,7 +296,7 @@ class App extends Component {
       }
     }
 
-    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage) {
+    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || turbine.loading) {
       return(
         <AppLoading
             startAsync={this._cacheResourcesAsync}
@@ -327,6 +332,7 @@ const AppWithNavigationState = connect(mapStateToProps)(App);
 const store = createStore(appReducer, {}, applyMiddleware(handler));
 store.dispatch({type: 'GET_GRAPH_DATA'});
 store.dispatch({type: 'GET_LAYOUT'});
+store.dispatch({type: 'GET_TURBINE'});
 
 
 export default class Root extends Component {
