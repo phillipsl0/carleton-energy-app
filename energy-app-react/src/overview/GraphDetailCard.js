@@ -6,6 +6,7 @@ import CurrTheme from './../styling/CurrentTheme';
 import Graph from './../visualizations/Graph';
 import { default as CustomThemes } from './../visualizations/GraphThemes';
 import GraphButton from './GraphButton';
+import Utilities from './UtilitiesMiniCards';
 import { moderateScale, verticalScale } from './../helpers/General';
 
 const theme = GetStyle(CurrTheme);
@@ -20,13 +21,17 @@ export default class GraphDetail extends Component {
         var views = ["day", "week", "month", "year"];
         var comparators = [7, 4, 12, 5];
 
-        this.props.callback(views[buttonIndex-1], comparators[buttonIndex-1], buttonIndex);
+        this.props.graphCallback(views[buttonIndex-1], comparators[buttonIndex-1], buttonIndex);
+    }
+
+    scopeCallbackUtilities = (buttonIndex) => {
+        this.props.utilityCallback(buttonIndex)
     }
 
     getLabel = (label) => {
         // Labels for the scatter plot axes depend on the x axis
         if (label === "x") {
-            switch (this.props.selected){
+            switch (this.props.timeSelected){
                 case 1:
                     return "Day of Week";
                 case 2:
@@ -47,10 +52,13 @@ export default class GraphDetail extends Component {
 
     render() {
         const { width, height } = Dimensions.get('window');
+        var utilities = ["Gas", "Electric", "Heat", "Water"];
+        var generators = ["Wind", "Solar", "Geothermal"]
         var graphWidth = 250;
         var graphHeight = 225;
         var marginBottom = '3%';
         var marginTop = '4%';
+        console.log("data: " + this.props.data);
 
         var x = this.getLabel("x");
         var y = this.getLabel("y");
@@ -63,7 +71,7 @@ export default class GraphDetail extends Component {
         }
 
         return(
-            <View style={[theme.centered]}>
+            <View style={[theme.centered, {flex:1}]}>
                 <View pointerEvents="none" style={[styles.graphContainer, theme.centered,
                     theme.translucent, { marginBottom: marginBottom, marginTop: marginTop }]}>
 
@@ -78,28 +86,32 @@ export default class GraphDetail extends Component {
 
                 </View>
 
-                <View style={[theme.flexboxRow, theme.flexButtons, theme.translucent]}>
+                <View style={[theme.flexboxRow, theme.flexButtons, theme.translucent, {marginBottom: '3%'} ]}>
                     <GraphButton title='Day'
                         index={1}
                         callback={this.sendToParent}
-                        selected={this.props.selected}/>
+                        selected={this.props.timeSelected}/>
 
                     <GraphButton title='Week'
                         index={2}
                         callback={this.sendToParent}
-                        selected={this.props.selected}/>
+                        selected={this.props.timeSelected}/>
 
                     <GraphButton title='Month'
                         index={3}
                         callback={this.sendToParent}
-                        selected={this.props.selected}/>
+                        selected={this.props.timeSelected}/>
 
                     <GraphButton title='Year'
                         index={4}
                         callback={this.sendToParent}
-                        selected={this.props.selected}/>
+                        selected={this.props.timeSelected}/>
 
                </View>
+               <Utilities callback={this.scopeCallbackUtilities}
+                  cards={this.props.cardType == 1 ? utilities : generators}
+                  cardType={this.props.type}
+                  selected={this.props.utilitySelected}/>
             </View>);
     }
 }
