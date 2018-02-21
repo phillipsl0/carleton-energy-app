@@ -28,8 +28,8 @@ export default class IndividualBuilding extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedUtilityCard: 5, // index for utility card - itialized to gas
-            selectedTimeCard: 1, // index for time card - intialized to day
+            selectedUtility: 1, // index for utility card - itialized to gas
+            selectedTime: 1, // index for time card - intialized to day
             view: 'day',
         }
     }
@@ -44,21 +44,22 @@ export default class IndividualBuilding extends Component {
         utilitySelected = this.props.navigation.state.params.selected;
         // If comes from map, utilitySelected specified upon navigation
         if (utilitySelected !== undefined) {
-            this.setState({ selectedUtilityCard:utilitySelected })
+            this.setState({ selectedUtility:utilitySelected })
         }
     }
 
     // Decide what units to render based on utility and time
     getBuildingUnits(utility, time) {
         var units = ""
-        if (utility == 6) { // electric
+        console.log(utility);
+        if (utility == 1) { // total
+          units = "BTU"
+        } else if (utility == 2) { // gas
+          units = "BTU"
+        } else if (utility == 3) { // electricity
           units = "kWh"
-        } else if (utility == 8) { // water
+        } else if (utility == 4) { // water
           units = "gal"
-        } else if (utility == 5) { // gas
-          units = "kBTU"
-        } else if (utility == 7) { // heat
-          units = "thm"
         }
         // REMOVING TIMEPERIOD
         var timePeriod = ""
@@ -81,11 +82,11 @@ export default class IndividualBuilding extends Component {
         const { width, height } = Dimensions.get('window');
         
         try {
-            //console.log("SelectedUtilityCard", this.state.selectedUtilityCard)
-            //headerText = this.numberWithCommas((getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtilityCard))).toFixed(0))
+            //console.log("selectedUtility", this.state.selectedUtility)
+            //headerText = this.numberWithCommas((getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtility))).toFixed(0))
             // shows value (hence "y", "x" would show label) of current data usage
-            headerText = this.numberWithCommas((currentData["usage"][this.state.selectedUtilityCard-5]["y"]).toFixed(0));
-            subheaderText = this.getBuildingUnits(this.state.selectedUtilityCard, this.state.selectedTimeCard)
+            headerText = this.numberWithCommas((currentData["usage"][this.state.selectedUtility]["y"]).toFixed(0));
+            subheaderText = this.getBuildingUnits(this.state.selectedUtility, this.state.selectedTime)
         } catch (error) {
             console.log("Error in displaying IndividualBuilding header: ", error)
             headerText = "N/A"
@@ -148,12 +149,12 @@ export default class IndividualBuilding extends Component {
     scopeCallbackGraph = ( buttonView, buttonComparator, buttonIndex ) => {
         this.setState({ view: buttonView,
             viewNumber: buttonComparator,
-            selectedTimeCard: buttonIndex});
+            selectedTime: buttonIndex});
     }
 
     // Gets data from utility button
     scopeCallbackUtilities = ( buttonIndex ) => {
-        this.setState({ selectedUtilityCard: buttonIndex});
+        this.setState({ selectedUtility: buttonIndex});
     }
 
     // Helper function to add commas to large numbers
@@ -199,17 +200,13 @@ export default class IndividualBuilding extends Component {
                         <View style={[{width:width+5}, styles.head, styles.smallHeight, theme.carletonBlueBackground]}/>
                         {header}
                     </View>
-                    <View style={[theme.lightBlueBackground]}>
-                        <GraphDetail data={currData} // was graphData
-                            callback={this.scopeCallbackGraph}
-                            selected={this.state.selectedTimeCard} // button index must match selected
-                            type={1} // indicates energy usage, 2 is generation
-                        /> 
-                    </View>
-                    <Utilities callback={this.scopeCallbackUtilities}
-                       cards={utilities}
-                       cardType={1} // usage
-                       selected={this.state.selectedCard}/>
+                    <GraphDetail data={currData} // was graphData
+                        utilityCallback={this.scopeCallbackUtilities}
+                        graphCallback={this.scopeCallbackGraph}
+                        timeSelected={this.state.selectedTime}
+                        utilitySelected={this.state.selectedUtility}
+                        type={1} // indicates energy usage, 2 is generation
+                    />
                 </View>
 
             );
@@ -224,17 +221,13 @@ export default class IndividualBuilding extends Component {
                         <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
                         {header}
                     </View>
-                     <View style={[theme.lightBlueBackground], {height: height - 125}}>
-                            <GraphDetail data={currData} // was graphData
-                                callback={this.scopeCallbackGraph}
-                                selected={this.state.selectedTimeCard} // button index must match selected
-                                type={1} // indicates energy usage, 2 is generation
-                            /> 
-                     </View>
-                    <Utilities callback={this.scopeCallbackUtilities}
-                       cards={utilities}
-                       cardType={1} // usage
-                       selected={this.state.selectedCard}/>
+                    <GraphDetail data={currData} // was graphData
+                        utilityCallback={this.scopeCallbackUtilities}
+                        graphCallback={this.scopeCallbackGraph}
+                        timeSelected={this.state.selectedTime}
+                        utilitySelected={this.state.selectedUtility}
+                        type={1} // indicates energy usage, 2 is generation
+                    />
                 </View>
             );
         }
