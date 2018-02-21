@@ -4,7 +4,7 @@ import { Platform, AppRegistry, SectionList, StyleSheet, View, Text, Image, Scro
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import { getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getTotalGenerationGraphFormat } from './../helpers/ApiWrappers';
+import { getEveryBuildingUtilityConsumption, getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getCurrentBuildingUtilityConsumptionGraphFormat } from './../helpers/ApiWrappers';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './../overview/GraphDetailCard';
@@ -209,7 +209,7 @@ export default class IndividualBuilding extends Component {
                     <Utilities callback={this.scopeCallbackUtilities}
                        cards={utilities}
                        cardType={1} // usage
-                       selected={this.state.selectedCard}/>
+                       selected={this.state.selectedUtilityCard}/>
                 </View>
 
             );
@@ -234,7 +234,7 @@ export default class IndividualBuilding extends Component {
                     <Utilities callback={this.scopeCallbackUtilities}
                        cards={utilities}
                        cardType={1} // usage
-                       selected={this.state.selectedCard}/>
+                       selected={this.state.selectedUtilityCard}/>
                 </View>
             );
         }
