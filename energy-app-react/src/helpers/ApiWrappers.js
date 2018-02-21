@@ -562,7 +562,10 @@ export function getCurrentBuildingUtilityConsumptionGraphFormat(building1, build
     data[1] = {'x': building2, 'y': utility2};
     return data;
 }
-// added function to get usage I need
+
+/*
+Data of current total consumption of all buildings on campus by utility
+*/
 export function getCurrentConsumptionGraphFormat() {
     var totalWater = 0;
     var totalElectricity = 0;
@@ -809,7 +812,11 @@ export function getCurrentCampusUtilityConsumption(utility) {
     return getTotalCampusUtilityConsumption(utility, building, timeStart, timeEnd);
 }
 
-export function getEveryBuildingUtilityConsumption(utility) {
+/*
+Returns array of current consumption of every building given a utility in order of
+highest to least percentage of total used
+*/
+export function getEveryBuildingUtilityConsumptionRanked(utility) {
     var buildings = getBuildingsList();
 
     var total = 0;
@@ -845,6 +852,62 @@ export function getEveryBuildingUtilityConsumption(utility) {
     return table;
 }
 
+/*
+Returns dictionary of current consumption of every building given a utility
+*/
+export function getEveryBuildingUtilityConsumption(utility) {
+    var buildings = getBuildingsList();
+
+    var total = 0;
+    var table = {};
+
+    for (var i = 0; i < buildings.length; i++) {
+        var building = buildings[i];
+        table[building] = {};
+        switch (utility) {
+            case 'electricity':
+                table[building][utility] = getRandomElectric();
+                break;
+            case 'water':
+                table[building][utility] = getRandomWater();
+                break;
+            case 'gas':
+                table[building][utility] = getRandomGas();
+                break;
+            case 'heat':
+                table[building][utility] = getRandomHeat();
+                break;
+        }
+
+        total += table[building][utility];
+    }
+
+    for (var i = 0; i < buildings.length; i++) {
+        var building = buildings[i];
+        table[building]["percent"] = table[building][utility] / total;
+    }
+
+    return table;
+}
+
+/*
+Returns consumption of every building for all utilites
+*/
+export function getEveryBuildingEveryUtilityConsumption() {
+    var buildings = getBuildingsList();
+    var table = {};
+
+    for (var i = 0; i < buildings.length; i++) {
+        var building = buildings[i];
+        table[building] = {};
+
+        table[building]['electricity'] = getRandomElectric();
+        table[building]['water'] = getRandomWater();
+        table[building]['gas'] = getRandomGas();
+        table[building]['heat'] = getRandomHeat();
+    }
+    return table;
+}
 
 // Helper function to sory the building list (in descending order)
 function sortByKey(array, key) {

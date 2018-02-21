@@ -9,7 +9,7 @@ import MapCallout from './MapCallout';
 import IndividualBuilding from './../buildings/IndividualBuilding';
 import BuildingStack from './../buildings/BuildingListView';
 import buildings from './../buildings/Buildings'
-import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
+import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
 import TopUtilities from './EnergyMapUtilityButtons';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
 import ComparisonPage from './../buildings/ComparisonPage';
@@ -390,7 +390,6 @@ class EnergyMapView extends Component {
 
   // Show callout when building polygon is pressed
   toggleCallout(polygon) {
-    console.log('onPress', polygon.name);
     this.setState({lastBuildingPressed: polygon.name})
 
     if (polygon.open) {
@@ -598,7 +597,7 @@ const EnergyMapViewStack = StackNavigator({
          <TouchableOpacity
           style={styles.compareButton}
           // Navigate to comparison screen
-          onPress={() => navigation.navigate("Comparison")}>
+          onPress={() => navigation.navigate("Comparison", {item:navigation.state.params.item.name})}>
           <Icon
             // see: https://react-native-training.github.io/react-native-elements/API/icons/
             name='compare-arrows'
