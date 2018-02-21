@@ -11,9 +11,6 @@ const ExampleData = [
         title: 'Energy Generation',
         graphType: 'pie' ,
     },
-    {
-        title: 'Comparison Facts'
-    }
 ]
 
 const turbineData = [

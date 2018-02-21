@@ -60,21 +60,19 @@ export default class OverviewListCard extends Component {
                   <View style={[theme.container, { alignItems: 'center' }, theme.flexboxRow]}>
                     <Image source={require('./../assets/windmillCard.png')}
                       resizeMode="contain"
-                      style={{ flex: 0.5, height: moderateScale(150), width: moderateScale(102), marginLeft: '-15%'}} />
-                    <View style={[{alignItems: 'center', marginLeft: '-50%', marginTop: '15%', flex: 0.5 }]}>
-                        <Text style={[ styles.font ]}>
-                          Carleton is currently
+                      style={{ flex: 0.5, height: moderateScale(150), width: moderateScale(102), marginLeft: '-20%'}} />
+                    <View style={[{alignItems: 'center', marginLeft: '-45%', marginTop: '15%', flex: 0.5 }]}>
+                        <Text style={[ styles.font, { color: 'black' } ]}>
+                          Wind energy currently
                         </Text>
-                        <Text style={[ styles.font ]}>
-                          running on
+                        <Text style={[ styles.font, { color: 'black' } ]}>
+                          makes up
                         </Text>
-
                         <Text style={[ styles.font, theme.fontBold, { fontSize: 16, color: '#0B5091' }]}>
                           {this.props.windRatio["percentage"]}%
                         </Text>
-
-                        <Text style={ styles.font }>
-                          wind energy.
+                        <Text style={[ styles.font, { color: 'black' } ]}>
+                          of overall energy use.
                         </Text>
                     </View>
                   </View>
@@ -102,13 +100,6 @@ export default class OverviewListCard extends Component {
                 );
                 break;
 
-            case "Comparison Facts":
-                return(
-                    <Comparator
-                       data={this.props.currentData.turbine}
-                       total={this.props.totals.turbine}
-                       number={3}/>
-                );
             default:
                 break;
         }

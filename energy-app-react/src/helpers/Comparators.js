@@ -67,95 +67,38 @@ export default class Comparator extends Component {
 
         var converted = this.convertData(data);
 
-        if (this.props.number == 3) {
-                if (converted["fontSmaller"]) {
-                    font = 10;
-                    icon = 18;
-                }
-
-                return(
-                <View style={ styles.threeContainer }>
-                <View style={ theme.flexboxRow }>
-
-                  <MaterialCommunityIcons color="#0B5091" size={moderateScale(icon)} name={icons[converted["comparators"][0]]}/>
-                  <Text style={[ styles.threeFont, { fontSize: moderateScale(font) }] }>
-                  {roundNumber(kWhComparison[converted["comparators"][0]]* converted["total"])} {comparisons[converted["comparators"][0]]}
-                  </Text>
-
-                </View>
-                <View style={[ theme.flexboxRow ]}>
-
-                  <MaterialCommunityIcons color="#0B5091" size={moderateScale(icon)} name={icons[converted["comparators"][1]]}/>
-                  <Text style={[ styles.threeFont, { fontSize: moderateScale(font) }] }>
-                  {roundNumber(kWhComparison[converted["comparators"][1]]* converted["total"])} {comparisons[converted["comparators"][1]]}
-                  </Text>
-
-                </View>
-                <View style={[ theme.flexboxRow ]}>
-
-                  <MaterialCommunityIcons color="#0B5091" size={moderateScale(icon)} name={icons[converted["comparators"][2]] }/>
-                  <Text style={[ styles.threeFont, { fontSize: moderateScale(font) }] }>
-                  {roundNumber(kWhComparison[converted["comparators"][2]]* converted["total"])} {comparisons[converted["comparators"][2]]}
-                  </Text>
-
-                </View>
-                </View>
-                );
-         } else if (this.props.number == 1) {
-                if (converted["comparators"][0] == 2 || converted["comparators"][0] == 3
-                    || converted["comparators"][0] == 11) {
-                    font = 11;
-                    icon = 18;
-                }
-
-                if (cardType === "use") {
-                    return(
-                        <View style={ styles.oneContainer }>
-
-                        <View style={ styles.divider }></View>
-
-                        <View style={[theme.centered, theme.flexBoxColumn, {paddingTop: '2%'}]}>
-
-                        <Text style={[ theme.fontBold ]}> Total: </Text>
-                        <Text style={ [styles.oneFont, { fontSize: font }]}>
-                            {roundNumber(converted["total"])} MWh in the last hour
-                        </Text>
-                        <Text style={[ theme.fontBold ]}> Compare to... </Text>
-
-                        <View style={[ theme.flexboxRow ]}>
-
-                          <MaterialCommunityIcons color="#0B5091" size={moderateScale(icon)} name={icons[converted["comparators"][0]]}/>
-                          <Text style={[ styles.oneFont, { fontSize: moderateScale(font) }] }>
-                          {roundNumber(kWhComparison[converted["comparators"][0]]* converted["total"])} {comparisons[converted["comparators"][0]]}
-                          </Text>
-
-                        </View>
-                        </View>
-                        </View>
-                        );
-                } else {
-                    return(
-                        <View style={ styles.oneContainer }>
-                        <View style={ styles.divider }>
-                        </View>
-                        <View style={[theme.centered, {paddingTop: '2%'}]}>
-
-                        <Text style={[ theme.fontBold ]}> Compare to... </Text>
-
-                        <View style={[ theme.flexboxRow ]}>
-
-                          <MaterialCommunityIcons color="#0B5091" size={moderateScale(icon)} name={icons[converted["comparators"][0]]}/>
-                          <Text style={[ styles.oneFont, { fontSize: moderateScale(font) }] }>
-                          {roundNumber(kWhComparison[converted["comparators"][0]]* converted["total"])} {comparisons[converted["comparators"][0]]}
-                          </Text>
-
-                        </View>
-                        </View>
-                        </View>
-                        );
-                }
-            }
+        if (converted["comparators"][0] == 2 || converted["comparators"][0] == 3
+            || converted["comparators"][0] == 11) {
+            font = 11;
+            icon = 18;
         }
+
+        return(
+            <View style={ styles.oneContainer }>
+
+            <View style={ styles.divider }></View>
+
+            <View style={[theme.centered, {paddingTop: '2%', flex: 1}]}>
+
+            <Text style={[ theme.fontBold ]}> Total: </Text>
+            <Text style={ [styles.oneFont, { fontSize: font, flex: 1 }]}>
+                {roundNumber(converted["total"])} MWh in the last hour
+            </Text>
+            <Text style={[ theme.fontBold ]}> Compare to... </Text>
+
+            <View style={[ theme.flexboxRow ]}>
+
+              <MaterialCommunityIcons color="#0B5091" size={moderateScale(icon)} name={icons[converted["comparators"][0]]}/>
+              <Text style={[ styles.oneFont, { fontSize: moderateScale(font) }] }>
+              {roundNumber(kWhComparison[converted["comparators"][0]]* converted["total"])} {comparisons[converted["comparators"][0]]}
+              </Text>
+
+            </View>
+            </View>
+            </View>
+        );
+
+    }
 
     render() {
         comparison = this.getComparison(this.props.data, this.props.cardType);
@@ -179,6 +122,7 @@ const styles = StyleSheet.create({
     oneContainer: {
         backgroundColor: '#F5FCFF',
         paddingTop: '1%',
+        flex: 1
     },
 
     oneFont: {
@@ -188,20 +132,5 @@ const styles = StyleSheet.create({
         paddingLeft: '2%',
         paddingRight: '3%',
         color: '#647C92',
-    },
-
-    threeContainer: {
-        flex: 1,
-        width: moderateScale(255),
-        height: moderateScale(50 * 3),
-        paddingLeft: '5%',
-        paddingRight: '3%'
-    },
-
-    threeFont: {
-        fontSize: moderateScale(11),
-        flexWrap: 'wrap',
-        padding: '5%',
-        color: '#647C92'
     },
 })
