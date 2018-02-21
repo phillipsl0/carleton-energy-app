@@ -191,6 +191,18 @@ export function getWindGenerationOverTime(timeStart, timeEnd, timeScale) {
     return table;
 }
 
+export function getWindGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale) {
+    var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
+    var table = [];
+    for (var i = 0; i < totals.length; i++) {
+        table[i] = {};
+        table[i]["x"] = totals[i]["date"];
+        table[i]["y"] = totals[i]["wind"];
+    }
+
+    return table;
+}
+
 export function getSolarGenerationOverTime(timeStart, timeEnd, timeScale) {
     var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
     var table = [];
@@ -198,6 +210,18 @@ export function getSolarGenerationOverTime(timeStart, timeEnd, timeScale) {
         table[i] = {};
         table[i]["date"] = totals[i]["date"];
         table[i]["solar"] = totals[i]["solar"];
+    }
+
+    return table;
+}
+
+export function getSolarGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale) {
+    var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
+    var table = [];
+    for (var i = 0; i < totals.length; i++) {
+        table[i] = {};
+        table[i]["x"] = totals[i]["date"];
+        table[i]["y"] = totals[i]["solar"];
     }
 
     return table;
@@ -211,6 +235,19 @@ export function getGeothermalGenerationOverTime(timeStart, timeEnd, timeScale) {
         table[i] = {};
         table[i]["date"] = totals[i]["date"];
         table[i]["geothermal"] = totals[i]["geothermal"];
+    }
+
+    return table;
+}
+
+export function getGeothermalGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale) {
+    var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
+    var table = [];
+
+    for (var i = 0; i < totals.length; i++) {
+        table[i] = {};
+        table[i]["x"] = totals[i]["date"];
+        table[i]["y"] = totals[i]["geothermal"];
     }
 
     return table;
@@ -373,9 +410,9 @@ export function getCurrentGenerationGraphFormat() {
 }
 
 export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, scaleFactor) {
-    var solarTable = getSolarGenerationOverTime(timeStart, timeEnd, timeScale);
-    var windTable = getWindGenerationOverTime(timeStart, timeEnd, timeScale);
-    var geoTable = getGeothermalGenerationOverTime(timeStart, timeEnd, timeScale);
+    var solarTable = getSolarGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale);
+    var windTable = getWindGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale);
+    var geoTable = getGeothermalGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale);
 
     var combinedTable = new Array(solarTable.length);
     var finalTable = {};
@@ -384,7 +421,7 @@ export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, sca
 
     for (var i=solarTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
-        currDate = new Date(solarTable[i]["date"]);
+        currDate = new Date(solarTable[i]["x"]);
 
         switch (scaleFactor){
             case 1:
@@ -412,8 +449,8 @@ export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, sca
                 break;
         }
 
-        combinedTable[i]["y"] = (solarTable[i]["solar"] + windTable[i]["wind"]
-                                    + geoTable[i]["geothermal"]) * scaleFactor /1000;
+        combinedTable[i]["y"] = (solarTable[i]["y"] + windTable[i]["y"]
+                                    + geoTable[i]["y"]) * scaleFactor /1000;
 
         if (i==solarTable.length-1) {
             currData = combinedTable[i]["y"];
@@ -422,8 +459,12 @@ export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, sca
         }
     }
 
+    finalTable["data"] = {};
+    finalTable["data"]["wind"] = windTable;
+    finalTable["data"]["solar"] = solarTable;
+    finalTable["data"]["geo"] = geoTable;
     finalTable["rank"] = rank;
-    finalTable["data"] = combinedTable;
+    finalTable["total"] = combinedTable;
 
     return finalTable;
 }
@@ -615,21 +656,69 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
     return table;
 }
 
+export function getCampusUtilityConsumptionOverTimeGraphFormat(utility, timeStart, timeEnd, timeScale) {
+    var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
+    var currentTime = new Date(timeEnd);
+    var reformattedDate = reformatDate(currentTime);
+
+    var table = new Array(numberEntries);
+    for (var i = numberEntries-1; i >= 0; i--) {
+        reformattedDate = reformatDate(currentTime);
+
+        table[i] = {};
+        table[i]["x"] = reformattedDate.toString();
+
+        var utilityTable = wTable;
+
+        switch (utility) {
+            case 'electricity':
+                utilityTable = eTable;
+                break;
+            case 'water':
+                utilityTable = wTable;
+                break;
+            case 'gas':
+                utilityTable = sTable;
+                break;
+            case 'heat':
+                utilityTable = sTable;
+                break;
+        }
+
+        var dataPt = JanData[utilityTable["Burton"]][reformattedDate];
+
+
+        if (typeof dataPt == 'undefined') {
+            console.log('UNDEFINED DATA POINT (ApiWrappers.js):' + reformattedDate);
+
+            dataPt = "0";
+        }
+
+        table[i]["y"] = Number(dataPt);
+
+        currentTime.setMinutes(currentTime.getMinutes() - timeScale);
+    }
+
+    return table;
+}
+
 // Added wrapper to get data the way I need it
 export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, scaleFactor) {
-    var waterTable = getCampusUtilityConsumptionOverTime("water", timeStart, timeEnd, timeScale);
-    var electricityTable = getCampusUtilityConsumptionOverTime("electricity", timeStart, timeEnd, timeScale);
-    var gasTable = getCampusUtilityConsumptionOverTime("gas", timeStart, timeEnd, timeScale);
-    var heatTable = getCampusUtilityConsumptionOverTime("heat", timeStart, timeEnd, timeScale);
+    var waterTable = getCampusUtilityConsumptionOverTimeGraphFormat("water", timeStart, timeEnd, timeScale);
+    var electricityTable = getCampusUtilityConsumptionOverTimeGraphFormat("electricity", timeStart, timeEnd, timeScale);
+    var gasTable = getCampusUtilityConsumptionOverTimeGraphFormat("gas", timeStart, timeEnd, timeScale);
+    var heatTable = getCampusUtilityConsumptionOverTimeGraphFormat("heat", timeStart, timeEnd, timeScale);
 
     var combinedTable = new Array(waterTable.length);
     var finalTable = {};
     var currData = 0;
     var rank = waterTable.length;
+    var year = 2018;
+    var month = 4;
 
     for (var i=waterTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
-        currDate = new Date(waterTable[i]["date"]);
+        currDate = new Date(waterTable[i]["x"]);
 
         switch (scaleFactor){
             case 1:
@@ -651,11 +740,17 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
                 break;
 
             case 30:
-                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                // quick fix
+                combinedTable[i]["x"] = month + "/" + '18';
+                month --;
+//                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
                 break;
 
             case 365:
-                combinedTable[i]["x"] = currDate.getFullYear().toString();
+                // quick fix
+                combinedTable[i]["x"] = year.toString();
+                year --;
+//                combinedTable[i]["x"] = currDate.getFullYear().toString();
                 break;
 
             default:
@@ -663,8 +758,8 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
                 break;
         }
 
-        combinedTable[i]["y"] = (waterTable[i]["water"] + electricityTable[i]["electricity"]
-                                    + gasTable[i]["gas"] + heatTable[i]["heat"]) * scaleFactor /1000;
+        combinedTable[i]["y"] = (waterTable[i]["y"] + electricityTable[i]["y"]
+                                    + gasTable[i]["y"] + heatTable[i]["y"]) * scaleFactor /1000;
 
         if (i==waterTable.length-1) {
             currData = combinedTable[i]["y"];
@@ -674,8 +769,13 @@ export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, sc
         }
     }
 
+    finalTable["data"] = {}
+    finalTable["data"]["water"] = waterTable;
+    finalTable["data"]["electricity"] = electricityTable;
+    finalTable["data"]["gas"] = gasTable;
+
     finalTable["rank"] = rank;
-    finalTable["data"] = combinedTable;
+    finalTable["total"] = combinedTable;
 
     return finalTable;
 }

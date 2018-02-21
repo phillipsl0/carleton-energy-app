@@ -6,6 +6,7 @@ import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import Utility from './Utility';
 
+const USAGE_CARD = 1;
 @connect(
     state => ({
         currentData: state.data.currentData,
@@ -23,140 +24,77 @@ export default class Utilities extends Component {
 
     sendToParent = ( buttonIndex ) => {
         this.props.callback(buttonIndex);
-        // console.log("Button index selected: ", buttonIndex);
-    }
-
-    getCardData = (data) => {
-        var result = new Array(data.length);
-
-        for (var i = 0; i < data.length; i++) {
-            var name = {};
-            name["name"] = data[i]["x"];
-            result[i] = name;
-        }
-
-        return result;
-    }
-
-    getUtilities() {
-        var utilitiesArray = [
-          {
-            type: "Gas",
-            unit: "thm",
-            icon: "fire",
-          },
-          {
-            type: "Electric",
-            unit: "kWh",
-            icon: "lightbulb-o",
-          },
-          {
-            type: "Heat",
-            unit: "kBTU",
-            icon: "thermometer",
-          },
-          {
-            type: "Water",
-            unit: "gal",
-            icon: "shower",
-          },
-          {
-            type: "Wind",
-            unit: "kWh",
-            icon: "leaf",
-          },
-          {
-            type: "Geothermal",
-            unit: "kWh",
-            icon: "fire",
-          },
-          {
-            type: "Solar",
-            unit: "kWh",
-            icon: "sun-o",
-          }
-        ];
     }
 
     render() {
-        const themeStyles = GetStyle(CurrTheme);
+        const theme = GetStyle(CurrTheme);
         const { refresh, loading, currentData } = this.props;
         var cardType = this.props.cardType;
 
-        return(
-        <View style={[themeStyles.centered, themeStyles.translucent, styles.panel]}>
+        if (cardType == USAGE_CARD) {
+            return (
+                <View style={[theme.flexboxRow, theme.translucent, theme.centered, styles.panel]}>
+                   <Utility index={1}
+                       icon={"leaf"}
+                       utilityType={"Total"}
+                       callback={this.sendToParent}
+                       selected={this.props.selected}/>
+                   <Utility index={2}
+                      icon={"fire"}
+                      utilityType={"Gas"}
+                      callback={this.sendToParent}
+                      selected={this.props.selected}/>
 
-           {cardType == 1 &&
-            <View style={[themeStyles.flexboxRow]}>
-               <Utility index={5}
-                  icon={"fire"}
-                  utilityType={"Gas"}
-                  number={'151'}
-                  unit={"thm"}
-                  callback={this.sendToParent}
-                  selected={this.props.selected}/>
+                   <Utility index={3}
+                      icon={"lightbulb-o"}
+                      utilityType={"Electric"}
+                      callback={this.sendToParent}
+                      selected={this.props.selected}/>
 
-               <Utility index={6}
-                  icon={"lightbulb-o"}
-                  utilityType={"Electric"}
-                  number={'61,178'}
-                  unit={"kWh"}
-                  callback={this.sendToParent}
-                  selected={this.props.selected}/>
+                    <Utility index={4}
+                       icon={"shower"}
+                       utilityType={"Water"}
+                       callback={this.sendToParent}
+                       selected={this.props.selected}/>
+                </View>
+            );
+        } else {
+            return (
+                <View style={[theme.flexboxRow, theme.translucent, theme.centered, styles.panel]}>
+                   <Utility index={1}
+                    icon={"leaf"}
+                    utilityType={"Total"}
+                    callback={this.sendToParent}
+                    selected={this.props.selected}/>
 
-                <Utility index={7}
-                   icon={"thermometer"}
-                   utilityType={"Heat"}
-                   number={'6,027,397'}
-                   unit={"kBTU"}
-                   callback={this.sendToParent}
-                   selected={this.props.selected}/>
+                   <Utility index={2}
+                    icon={"leaf"}
+                    utilityType={"Wind"}
+                    callback={this.sendToParent}
+                    selected={this.props.selected}/>
 
-                <Utility index={8}
-                   icon={"shower"}
-                   utilityType={"Water"}
-                   number={'676,684'}
-                   unit={"gal"}
-                   callback={this.sendToParent}
-                   selected={this.props.selected}/>
-            </View>}
+                   <Utility index={3}
+                      icon={"sun-o"}
+                      utilityType={"Solar"}
+                      callback={this.sendToParent}
+                      selected={this.props.selected}/>
 
-         {cardType == 2 &&
-           <View style={[themeStyles.flexboxRow]}>
-           <Utility index={5}
-            icon={"leaf"}
-            utilityType={"Wind"}
-            number={'151'}
-            unit={"kWh"}
-            callback={this.sendToParent}
-            selected={this.props.selected}/>
-
-           <Utility index={6}
-              icon={"sun-o"}
-              utilityType={"Solar"}
-              number={'61,178'}
-              unit={"kWh"}
-              callback={this.sendToParent}
-              selected={this.props.selected}/>
-
-            <Utility index={7}
-               icon={"fire"}
-               utilityType={"Geo"}
-               number={'6,027,397'}
-               unit={"kBTU"}
-               callback={this.sendToParent}
-               selected={this.props.selected}/>
-            </View>}
-        </View>);
+                    <Utility index={4}
+                       icon={"fire"}
+                       utilityType={"Geo"}
+                       callback={this.sendToParent}
+                       selected={this.props.selected}/>
+                </View>
+            );
+        }
     }
 }
 
 const styles = StyleSheet.create({
     panel : {
         paddingBottom: '3%',
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
+        marginLeft: '1%',
+        marginRight: '1%',
+        borderRadius: 10
     }
 })
