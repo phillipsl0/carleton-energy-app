@@ -41,7 +41,7 @@ export default class Utilities extends Component {
                        selected={this.props.selected}/>
                    <Utility index={2}
                       icon={"fire"}
-                      utilityType={"Gas"}
+                      utilityType={"Heat"}
                       callback={this.sendToParent}
                       selected={this.props.selected}/>
 
@@ -93,8 +93,8 @@ export default class Utilities extends Component {
 const styles = StyleSheet.create({
     panel : {
         paddingBottom: '3%',
-        marginLeft: '1%',
-        marginRight: '1%',
+        marginLeft: '2%',
+        marginRight: '2%',
         borderRadius: 10
     }
 })

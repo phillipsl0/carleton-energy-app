@@ -85,20 +85,20 @@ export default class Comparator extends Component {
 
             <View style={ styles.divider }></View>
 
-            <View style={[theme.centered, {paddingTop: '2%', flex: 1, width: moderateScale(300)}]}>
+            <View style={[theme.centered, {paddingTop: '2%', flex: 1, }]}>
 
             <Text style={[ theme.fontBold ]}> Total: </Text>
-            <Text style={ [styles.oneFont, { fontSize: font, flex: 1 }]}>
+            <Text style={ [styles.oneFont, { fontSize: font, flex: 1 }, theme.fontRegular]}>
                 {roundNumber(converted["total"])} MWh in the last hour
             </Text>
             </View>
-            <View style={[theme.centered, {paddingTop: '2%', flex: 1, width: moderateScale(300)}]}>
+            <View style={[theme.centered, {paddingTop: '2%', flex: 1,}]}>
             <Text style={[ theme.fontBold ]}> Compare to... </Text>
 
             <View style={[ theme.flexboxRow ]}>
 
               <MaterialCommunityIcons color="#0B5091" size={moderateScale(icon)} name={icons[converted["comparators"][0]]}/>
-              <Text style={[ styles.oneFont, { fontSize: moderateScale(font) }] }>
+              <Text style={[ styles.oneFont, theme.fontRegular, { fontSize: moderateScale(font) }] }>
               {roundNumber(kWhComparison[converted["comparators"][0]]* converted["total"])} {comparisons[converted["comparators"][0]]}
               </Text>
 
