@@ -168,7 +168,7 @@ const navReducer = (state = initialState, action) => {
 const appReducer = combineReducers({
     nav: navReducer,
     data: dataReducer,
-    layout: layoutReducer,
+    ui: layoutReducer,
     turbine: apiReducer
 
 });
@@ -184,7 +184,7 @@ const addListener = createReduxBoundAddListener("root");
 const mapStateToProps = (state) => ({
     nav: state.nav,
     data: state.data,
-    layout: state.layout,
+    ui: state.layout,
     turbine: state.turbine
 });
 
@@ -277,7 +277,6 @@ class App extends Component {
 
   render() {
     const { dispatch, nav, data, ui, turbine } = this.props;
-//    console.log(turbine.loading);
     const navigation = addNavigationHelpers({
         dispatch,
         data,
