@@ -80,7 +80,7 @@ const navStyles = StyleSheet.create({
 })
 
 const BuildingStack = StackNavigator({
-  Buildings: {
+  BuildingsListView: {
       screen: BuildingListView,
       navigationOptions: ({ navigation }) => ({
         title: 'Buildings',
@@ -116,9 +116,6 @@ const BuildingStack = StackNavigator({
           />
         </TouchableOpacity>
       ),
-      headerTitleStyle: navStyles.headerTitle,
-      headerBackTitleStyle: navStyles.headerTitle,
-      headerBackTitle: 'Back',
       headerTitleStyle: navStyles.headerTitle,
       headerBackTitleStyle: navStyles.headerTitle,
       headerBackTitle: 'Back',

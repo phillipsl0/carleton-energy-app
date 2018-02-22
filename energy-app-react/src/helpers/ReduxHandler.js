@@ -147,7 +147,6 @@ export const apiReducer = (state = { turbineData: [], solarData: [], loading: tr
                     loading: true,
                 };
             case 'GET_SOLAR_DATA_RECEIVED':
-                console.log(action.solarData);
                 return {
                     loading: false,
                     solarData: action.solarData,
