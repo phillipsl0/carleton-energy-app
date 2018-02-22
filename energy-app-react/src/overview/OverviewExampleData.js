@@ -61,19 +61,18 @@ export const fake = [
     },
 
     {
-      title: 'Turbine Generation',
-      icon: "battery-charging-90",
+      title: 'Current Consumption',
+      icon: "battery-negative",
       type: 'material-community',
       index: 2,
     },
 
     {
-      title: 'Turbine Consumption',
-      icon: "battery-negative",
-      type: 'material-community',
+      title: "Week's High",
+      icon: "star",
+      type: "entypo",
       index: 3,
     },
-
 ]
 
 //data: {current: [{y: 8, x: "Solar"},

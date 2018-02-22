@@ -19,6 +19,7 @@ const theme = GetStyle(CurrTheme);
         totals: state.data.currentTotals,
         loading: state.data.loading,
         windRatio: state.data.windRatio,
+        ui: state.ui
     }),
     dispatch => ({
         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
@@ -108,12 +109,19 @@ export default class OverviewListCard extends Component {
     render() {
         var item = this.props.cardItem;
         var navigation = this.props.cardNavigation;
-        const { refresh, loading, currentData, windRatio, totals } = this.props;
+
+        const { refresh, loading, currentData, windRatio, totals, ui } = this.props;
         var uniquePortion = this.returnUnique();
+
+        var margins = '3%';
+        if (ui.layout.height < 600) {
+            margins = '0%';
+        }
+
 
         return(
             <Card
-             containerStyle={[theme.card, theme.flex]}
+             containerStyle={[theme.card, theme.flex, { marginRight: margins, marginLeft: margins}]}
              title={item.title}
              titleStyle={styles.title}
              dividerStyle={styles.divider}>

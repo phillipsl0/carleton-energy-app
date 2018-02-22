@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ImageBackground, Platform, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, ImageBackground, Platform, Text } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 
@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import { fake } from './OverviewExampleData'
-import { moderateScale, verticalScale, roundNumber } from './../helpers/General';
+import { moderateScale, verticalScale, roundNumber, getSpecificRandom } from './../helpers/General';
 import CurrFont from './../styling/CurrentFont';
 
 const defaultFont = CurrFont+'-regular';
@@ -22,6 +22,7 @@ const theme = GetStyle(CurrTheme);
         windRatio: state.data.windRatio,
         loading: state.loading,
         turbine: state.turbine,
+        ui: state.ui,
     }),
 )
 
@@ -30,21 +31,27 @@ export default class Windmill extends Component {
         super(props);
     }
 
-    fetchData = () => {
+    fetchData = (low) => {
         var rightTitles = new Array(4);
         rightTitles[0] = this.props.windRatio["percentage"] + "%";
         rightTitles[1] = this.props.windSpeed + " mps";
-        rightTitles[2] = roundNumber(this.props.totals.turbine.generation) + " kWh";
-        rightTitles[3] = roundNumber(this.props.totals.turbine.consumption) + " kWh";
+        rightTitles[2] = roundNumber(getSpecificRandom(500, low, 1, 1)) + " kW";
+        rightTitles[3] = roundNumber(getSpecificRandom(low+132, low+1000, 1, 1)) + " kW";
         return rightTitles;
     }
 
     render() {
-        const { width, height } = Dimensions.get('window');
-        const { currentData, totals, windSpeed, windRatio, turbine } = this.props;
-        var rightTitles = this.fetchData();
-        var padding = '5%';
+        const { currentData, totals, windSpeed, windRatio, turbine, ui } = this.props;
+        const { width, height } = ui.layout;
 
+        turbineGeneration = turbine.turbineData;
+        if (turbine.turbineData == 0) {
+            turbineGeneration = getSpecificRandom(2, 1500, 1, 1);
+        }
+
+        var rightTitles = this.fetchData(turbineGeneration);
+
+        var padding = '5%';
         if (height < 600) {
             padding = '4%';
         }
@@ -58,10 +65,10 @@ export default class Windmill extends Component {
                     Currently generating
                 </Text>
                 <Text style={[styles.number, theme.fontBold]}>
-                    {roundNumber(totals.turbine.generation)}
+                    {roundNumber(turbineGeneration)}
                 </Text>
                 <Text style={[styles.units, theme.fontRegular]}>
-                    kWh
+                    kW
                 </Text>
                 </ImageBackground>
                 <List style={[styles.list]}>
