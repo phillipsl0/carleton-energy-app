@@ -69,7 +69,7 @@ export default class Comparator extends Component {
         const { width, height } = ui.layout;
 
         if (width < 350) {
-            font = 11;
+            font = 10;
         }
 
         var converted = this.convertData(data);
@@ -85,12 +85,14 @@ export default class Comparator extends Component {
 
             <View style={ styles.divider }></View>
 
-            <View style={[theme.centered, {paddingTop: '2%', flex: 1}]}>
+            <View style={[theme.centered, {paddingTop: '2%', flex: 1, width: moderateScale(300)}]}>
 
             <Text style={[ theme.fontBold ]}> Total: </Text>
             <Text style={ [styles.oneFont, { fontSize: font, flex: 1 }]}>
                 {roundNumber(converted["total"])} MWh in the last hour
             </Text>
+            </View>
+            <View style={[theme.centered, {paddingTop: '2%', flex: 1, width: moderateScale(300)}]}>
             <Text style={[ theme.fontBold ]}> Compare to... </Text>
 
             <View style={[ theme.flexboxRow ]}>
