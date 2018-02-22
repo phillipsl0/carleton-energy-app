@@ -246,17 +246,17 @@ class EnergyMapView extends Component {
 
   // Maps utility name to its respective utility mini card index
   mapUtilityNameToIndex(utilityName) {
-    if (utilityName == 'gas') {
-      return (5);
-    }
-    else if (utilityName == 'electric') {
-      return (6);
+    if (utilityName == 'total') {
+      return (1);
     }
     else if (utilityName == 'heat') {
-      return (7);
+      return (2);
+    }
+    else if (utilityName == 'electric') {
+      return (3);
     }
     else if (utilityName == 'water') {
-      return (8);
+      return (4);
     }
     return (1);
   };

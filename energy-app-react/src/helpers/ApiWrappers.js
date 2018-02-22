@@ -495,11 +495,47 @@ export function getBuildingUtilityConsumptionOverTime(building, utility, timeSta
     for (var i = numberEntries-1; i >= 0; i--) {
         table[i] = {};
         table[i]["date"] = currentTime.toString();
-        table[i][utility] = Math.random() * scaleFactor * timeframe;
+        // timeframe is not defined anywhere, see replacement below
+        //table[i][utility] = Math.random() * scaleFactor * timeframe;
+        table[i][utility] = Math.random() * scaleFactor * numberEntries;
+
 
         currentTime.setMinutes(currentTime.getMinutes() - timeScale);
     }
+    return table;
+}
 
+export function getBuildingUtilityConsumptionOverTimeGraphFormat(building, utility, timeStart, timeEnd, timeScale) {
+
+    // different utilities have different "typical" amounts
+    var scaleFactor = scaleFactorOther;
+
+    if (utility == "water") {
+        scaleFactor = scaleFactorWater;
+    } else if (utility == "electricity") {
+        scaleFactor = scaleFactorElectricity;
+    }
+
+    var buildings = getBuildingsList();
+
+    if (buildings.indexOf(building) % 2 == 0) {
+        scaleFactor *= 2;
+    }
+
+    var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
+    var currentTime = new Date(timeEnd);
+
+    var table = new Array(numberEntries);
+    for (var i = numberEntries-1; i >= 0; i--) {
+        table[i] = {};
+        table[i]["x"] = currentTime.toString();
+        // timeframe is not defined anywhere, see replacement below
+        //table[i][utility] = Math.random() * scaleFactor * timeframe;
+        table[i]["y"] = Math.random() * scaleFactor * numberEntries;
+
+
+        currentTime.setMinutes(currentTime.getMinutes() - timeScale);
+    }
     return table;
 }
 
@@ -557,24 +593,23 @@ export function getCurrentBuildingUtilityConsumption(building, utility) {
 Returns historical data in form for building card graphs to use: {totals, data > [utility] }
 */
 export function getTotalBuildingConsumptionGraphFormat(timeStart, timeEnd, timeScale, scaleFactor, building) {    
-    var waterTable = getBuildingUtilityConsumptionOverTime(building, "water", timeStart, timeEnd, timeScale);
-    var electricityTable = getBuildingUtilityConsumptionOverTime(building, "electricity", timeStart, timeEnd, timeScale);
-    var gasTable = getBuildingUtilityConsumptionOverTime(building, "gas", timeStart, timeEnd, timeScale);
-    var heatTable = getBuildingUtilityConsumptionOverTime(building, "heat", timeStart, timeEnd, timeScale);
+    var waterTable = getBuildingUtilityConsumptionOverTimeGraphFormat(building, "water", timeStart, timeEnd, timeScale);
+    var electricityTable = getBuildingUtilityConsumptionOverTimeGraphFormat(building, "electricity", timeStart, timeEnd, timeScale);
+    var gasTable = getBuildingUtilityConsumptionOverTimeGraphFormat(building, "gas", timeStart, timeEnd, timeScale);
+    var heatTable = getBuildingUtilityConsumptionOverTimeGraphFormat(building, "heat", timeStart, timeEnd, timeScale);
 
     var combinedTable = new Array(waterTable.length);
     var finalTable = {};
     var currData = 0;
     var year = 2018;
-    var month = 4;
+    var month = 12;
 
     for (var i=waterTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
-        currDate = new Date(waterTable[i]["x"]);
 
         switch (scaleFactor){
             case 1:
-                combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
+                combinedTable[i]["x"] = waterTable[i]["x"];
                 break;
 
             case 7:
@@ -618,7 +653,10 @@ export function getTotalBuildingConsumptionGraphFormat(timeStart, timeEnd, timeS
     finalTable["data"]["water"] = waterTable;
     finalTable["data"]["electricity"] = electricityTable;
     finalTable["data"]["gas"] = gasTable;
+    finalTable["data"]["heat"] = heatTable;
     finalTable["total"] = combinedTable;
+
+    // console.log("Total building consumption", finalTable)
 
     return finalTable;
 }
@@ -1142,7 +1180,7 @@ export function getAllHistoricalBuildingGraphData() {
         historicalBuildingData[building]["yearUsage"] = yearUsageData;
 
     }
-    return historicalData;
+    return historicalBuildingData;
 }
 
 /*
@@ -1156,9 +1194,8 @@ export function getAllCurrentBuildingGraphData() {
     var buildings = getBuildingsList();
 
     buildings.forEach(function(building) {
-        var usage = getCurrentBuildingConsumptionGraphFormat(building);
-        currData[building]['data'] = usage.data;
-        currData[Building]['totals'] = usage.total;
+        var usage = NEWgetCurrentBuildingUtilityConsumptionGraphFormat(building);
+        currData[building] = usage;
     });
     return currData;
 }
@@ -1246,9 +1283,11 @@ function getYearGraph(currDate, type) {
 
 /*           TIME GRAPHS FOR BUILDING GRAPH DATA              */
 
+
 function getDayBuildingGraph(currDate, building) {
     var comparisonDate = new Date();
     comparisonDate.setDate(currDate.getDate()-7);
+    // console.log("Day building", getTotalBuildingConsumptionGraphFormat(comparisonDate, currDate, 1440, 1, building))
     return getTotalBuildingConsumptionGraphFormat(comparisonDate, currDate, 1440, 1, building);
 }
 
