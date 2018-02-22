@@ -127,7 +127,7 @@ export const handler = store => next => action => {
     };
 }
 
-export const apiReducer = (state = { turbineData: [], loading: true}, action) => {
+export const apiReducer = (state = { turbineData: [], solarData: [], loading: true}, action) => {
     switch (action.type) {
             case 'GET_TURBINE_LOADING':
                 return {
@@ -149,10 +149,10 @@ export const apiReducer = (state = { turbineData: [], loading: true}, action) =>
                     loading: true,
                 };
             case 'GET_SOLAR_DATA_RECEIVED':
-                console.log(action.turbineData);
+                console.log(action.solarData);
                 return {
                     loading: false,
-                    turbineData: action.turbineData,
+                    solarData: action.solarData,
                 };
             case 'GET_SOLAR_DATA_ERROR':
                 return state;

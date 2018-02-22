@@ -169,7 +169,7 @@ const appReducer = combineReducers({
     nav: navReducer,
     data: dataReducer,
     layout: layoutReducer,
-    turbine: apiReducer
+    api: apiReducer,
 
 });
 
@@ -185,7 +185,7 @@ const mapStateToProps = (state) => ({
     nav: state.nav,
     data: state.data,
     layout: state.layout,
-    turbine: state.turbine
+    api: state.api,
 });
 
 class App extends Component {
@@ -276,7 +276,7 @@ class App extends Component {
 
 
   render() {
-    const { dispatch, nav, data, ui, turbine } = this.props;
+    const { dispatch, nav, data, ui, api } = this.props;
 //    console.log(turbine.loading);
     const navigation = addNavigationHelpers({
         dispatch,
@@ -295,8 +295,9 @@ class App extends Component {
          case 3: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab3, true); break;
       }
     }
+    console.log(api);
 
-    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || turbine.loading) {
+    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || api.loading) {
       return(
         <AppLoading
             startAsync={this._cacheResourcesAsync}
@@ -333,6 +334,7 @@ const store = createStore(appReducer, {}, applyMiddleware(handler));
 store.dispatch({type: 'GET_GRAPH_DATA'});
 store.dispatch({type: 'GET_LAYOUT'});
 store.dispatch({type: 'GET_TURBINE'});
+store.dispatch({type: 'GET_SOLAR'});
 
 
 export default class Root extends Component {
