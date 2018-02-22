@@ -108,6 +108,26 @@ export default class OverviewCards extends Component {
         }
     }
 
+    getUnits = (indexData) => {
+        if (indexData["three"]){
+            switch(indexData["indices"][2]){
+                case "gas":
+                    return "BTU";
+                    break;
+
+                case "water":
+                    return "gal";
+                    break;
+
+                default:
+                    return "kWh";
+                    break;
+            }
+        } else {
+            return "kWh";
+        }
+    }
+
     getIndices = () => {
         var data = {};
         var indices = new Array(3);
@@ -215,13 +235,13 @@ export default class OverviewCards extends Component {
         if (indexData["three"]){
             index = historicalData[firstIndex][secondIndex][thirdIndex].length-1;
             headerText = roundNumber(historicalData[firstIndex][secondIndex][thirdIndex][index]["y"]);
-            subheaderText = units[0] + " in the past ";
+            subheaderText = this.getUnits(indexData) + " in the past ";
             subheaderHighlight = this.state.view;
 
         } else {
             index = historicalData[firstIndex][secondIndex].length-1;
             headerText = roundNumber(historicalData[firstIndex][secondIndex][index]["y"]);
-            subheaderText = units[0] + " in the past ";
+            subheaderText = this.getUnits(indexData) + " in the past ";
             subheaderHighlight = this.state.view;
         }
 
