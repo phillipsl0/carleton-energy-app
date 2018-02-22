@@ -69,7 +69,6 @@ export const handler = store => next => action => {
             var timeEnd = new Date();
             var timeStart = new Date();
             timeStart.setHours(timeEnd.getHours()-1);
-
             var start = dateToTimestamp(timeStart);
             var end = dateToTimestamp(timeEnd);
 
@@ -103,7 +102,6 @@ export const apiReducer = (state = { turbineData: [], loading: true}, action) =>
                     loading: true,
                 };
             case 'GET_TURBINE_DATA_RECEIVED':
-                console.log(action.turbineData);
                 return {
                     loading: false,
                     turbineData: action.turbineData,
@@ -143,7 +141,7 @@ export const dataReducer = (state = { historicalGraphData: [], currentGraphData:
 const initialState = {'height': 500, 'width': 500};
 
 export const layoutReducer = (state = {layout: []}, action) => {
-    const layout = Dimensions.get('screen');
+    const ui = Dimensions.get('screen');
     switch (action.type) {
         case 'GET_LAYOUT_RECEIVED':
             return {

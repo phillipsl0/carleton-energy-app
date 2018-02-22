@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Platform, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Platform } from 'react-native';
+import { connect } from 'react-redux';
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
@@ -11,6 +12,11 @@ import { moderateScale, verticalScale } from './../helpers/General';
 
 const theme = GetStyle(CurrTheme);
 
+@connect(
+    state => ({
+        ui: state.ui
+    }),
+)
 export default class GraphDetail extends Component {
     constructor(props) {
             super(props);
@@ -51,20 +57,20 @@ export default class GraphDetail extends Component {
     }
 
     render() {
-        const { width, height } = Dimensions.get('window');
+        const { ui } = this.props;
+        const { width, height } = ui.layout;
         var utilities = ["Gas", "Electric", "Heat", "Water"];
         var generators = ["Wind", "Solar", "Geothermal"]
         var graphWidth = 250;
         var graphHeight = 225;
         var marginBottom = '3%';
         var marginTop = '4%';
-        console.log("data: " + this.props.data);
 
         var x = this.getLabel("x");
         var y = this.getLabel("y");
 
         if (height < 600) {
-            graphWidth = 225;
+            graphWidth = 250;
             graphHeight = 200;
             marginBottom = '5%';
             marginTop = '5%';
