@@ -5,8 +5,6 @@ import { moderateScale } from './../helpers/Scaling';
 import CurrFont from './../styling/CurrentFont';
 const defaultFont = CurrFont+'-regular';
 
-
-
 //const UTILITIES = getUtilitiesList();
 // const UTILITIES = ['Gas', 'Electric', 'Heat', 'Water'];
 const UTILITIES = ['Total', 'Gas', 'Electric', 'Water'];

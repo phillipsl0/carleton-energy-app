@@ -20,7 +20,6 @@ export const handler = store => next => action => {
             try {
                 var historicalBuildingData = getAllHistoricalBuildingGraphData();
                 var currentBuildingData = getAllCurrentBuildingGraphData();
-
                 store.dispatch({
                     type: 'GET_BUILDING_GRAPH_DATA_RECEIVED',
                     historicalBuildingData,
