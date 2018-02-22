@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Dimensions, Platform } from 'react-native'
+import { StyleSheet, View, Platform } from 'react-native'
 import Svg from "react-native-svg";
 import { VictoryPie, VictoryBar, VictoryChart, VictoryScatter,
          VictoryAxis, VictoryLegend, VictoryLabel } from "victory-native";
+import { connect } from 'react-redux';
 
 import { moderateScale, verticalScale} from './../helpers/General';
 import { GetStyle } from './../styling/Themes'
@@ -13,6 +14,11 @@ import Comparator from './../helpers/Comparators';
 
 const theme = GetStyle(CurrTheme);
 
+@connect(
+    state => ({
+        ui: state.ui
+    }),
+)
 class Graph extends Component {
     // Scrapes legend information from the array of data
     getLegendData = (data) => {
@@ -28,6 +34,9 @@ class Graph extends Component {
     }
 
     render() {
+        const { ui } = this.props;
+        const { width, height } = ui.layout;
+
         // Returns correct type of graph/chart depending on input
         switch (this.props.type) {
             case "pie":
@@ -91,7 +100,6 @@ class Graph extends Component {
 
             case "scatter":
                 // Scatter plot needs axes in order to properly render units/time period
-                const { width, height } = Dimensions.get('window');
                 var dx = 0;
                 var dy = 0;
 
@@ -117,7 +125,7 @@ class Graph extends Component {
                         width={moderateScale(this.props.width)}
                         theme={this.props.theme}
                         padding={{ top: moderateScale(30), bottom: moderateScale(50),
-                                   left: moderateScale(50), right: moderateScale(10)}}
+                                   left: moderateScale(40), right: moderateScale(10)}}
                         domainPadding={10}>
 
                         <VictoryScatter

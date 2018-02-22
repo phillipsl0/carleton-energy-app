@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, Platform, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Image, Platform, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { Svg } from 'react-native-svg';
 
@@ -30,6 +30,7 @@ const GEO = 4;
         historicalData: state.data.historicalData,
         currentData: state.data.currentData,
         loading: state.data.loading,
+        ui: state.ui,
     }),
     dispatch => ({
         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
@@ -201,7 +202,8 @@ export default class OverviewCards extends Component {
 
     getHeader = (historicalData, cardType, currentData) => {
         const theme = GetStyle(CurrTheme);
-        const { width, height } = Dimensions.get('window');
+        const { ui } = this.props;
+        const { width, height } = ui.layout;
         var units = ["thm", "kWh", "kBTU", "gal"];
 
         var indexData = this.getIndices();
@@ -264,15 +266,14 @@ export default class OverviewCards extends Component {
 
 
     render() {
-        const { width, height } = Dimensions.get('window');
-        console.log(height);
+        const { ui } = this.props;
+        const { width, height } = ui.layout;
         const theme = GetStyle(CurrTheme);
         const { refresh, loading, historicalData, currentData } = this.props;
 
         cardType = this.props.navigation.state.params.card;
         currData = this.getGraphScope(historicalData, cardType);
         header = this.getHeader(historicalData, cardType, currentData);
-//        currData = this.state.graphData;
 
         if (height < 600) {
             return(
