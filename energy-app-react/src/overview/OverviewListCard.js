@@ -192,6 +192,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: moderateScale(18),
     marginBottom: 10,
+    fontWeight: 'normal'
   },
 
   card: {
