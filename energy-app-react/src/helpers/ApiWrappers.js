@@ -984,7 +984,7 @@ export function getEveryBuildingUtilityConsumptionRanked(utility) {
     return table;
 }
 
-/*
+/* 
 Returns dictionary of current consumption of every building given a utility
 */
 export function getEveryBuildingUtilityConsumption(utility) {
