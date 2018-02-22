@@ -13,11 +13,20 @@ import ComparisonPage from './ComparisonPage';
 import { moderateScale, verticalScale } from './../helpers/Scaling';
 import BuildingComparison from './BuildingComparison';
 
+// @connect(
+//     state => ({
+//         historicalData: state.data.historicalBuildingData,
+//         currentData: state.data.currentBuildingData,
+//     }),
+//     dispatch => ({
+//         refresh: () => dispatch({type: 'GET_BUILDING_GRAPH_DATA'}),
+//     }),
+// )
+
 @connect(
     state => ({
         historicalData: state.data.historicalData,
         currentData: state.data.currentData,
-        loading: state.data.loading,
     }),
     dispatch => ({
         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
@@ -28,6 +37,7 @@ export default class IndividualBuilding extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            buildingName: this.props.navigation.state.params.item.name,
             selectedUtility: 1, // index for utility card - itialized to gas
             selectedTime: 1, // index for time card - intialized to day
             view: 'day',
@@ -183,10 +193,10 @@ export default class IndividualBuilding extends Component {
     render() {
         const theme = GetStyle(CurrTheme);
         const { width, height } = Dimensions.get('window');
-        const { refresh, loading, historicalData, currentData } = this.props; // redux
+        const { refresh, historicalData, currentData } = this.props; // redux
         var utilities = ["Gas", "Electric", "Heat", "Water"];
 
-        currData = this.getGraphScope(historicalData);
+        currData = historicalData["dayUsage"]["total"]
         header = this.getHeader(currentData);
 
         if (height < 600) {
