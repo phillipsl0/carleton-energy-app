@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions,
+import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions, ScrollView,
   View, Text, Image, TouchableOpacity, Platform } from 'react-native'
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native-elements';
@@ -47,14 +47,15 @@ class BuildingListView extends Component {
     const {navigate} = this.props.navigation;
 
     return (
-      <View>
+      <ScrollView>
         <View style={{paddingTop:8}} />
         <FlatList
             data = {buildings}
             renderItem={this.renderItem}
             keyExtractor = {(item) => item.name}
         />
-      </View>
+        <View style={{paddingTop:3}} />
+      </ScrollView>
     );
   }
 }
@@ -124,9 +125,6 @@ const BuildingStack = StackNavigator({
   Comparison: {
     screen: BuildingComparison,
     navigationOptions: ({ navigation }) => ({
-      ...Platform.select({
-          android: { header: null }
-      }),
       headerTintColor: 'white',
       headerStyle: navStyles.header,
       headerTitleStyle: navStyles.headerTitle,
@@ -137,10 +135,6 @@ const BuildingStack = StackNavigator({
   ComparisonPage: {
     screen: ComparisonPage,
     navigationOptions: ({ navigation }) => ({
-        title: 'Comparison',
-        ...Platform.select({
-            android: { header: null }
-      }),
       headerTintColor: 'white',
       headerStyle: navStyles.header,
       headerTitleStyle: navStyles.headerTitle,
@@ -154,7 +148,8 @@ BuildingStack.router.getStateForAction = navigateOnce(BuildingStack.router.getSt
 
 const styles = StyleSheet.create({
   card: {
-    marginTop: 0, 
+    marginTop: 3, 
+    marginBottom: 6,
     marginLeft: 6, 
     marginRight: 6, 
     paddingLeft: 5,
