@@ -23,8 +23,8 @@ export const getUnits = (utility) => {
       units = "gal"
     } else if (utility == 'gas') {
       units = "kBTU"
-    } else if (utility == 'heat') { 
-      units = "thm"
+    } else if (utility == 'total') { 
+      units = "BTUs"
     }
     return units
 }

@@ -63,7 +63,7 @@ export default class IndividualBuilding extends Component {
         var units = ""
         console.log(utility);
         if (utility == 1) { // total
-          units = "BTU"
+          units = "BTUs"
         } else if (utility == 2) { // gas
           units = "BTU"
         } else if (utility == 3) { // electricity
