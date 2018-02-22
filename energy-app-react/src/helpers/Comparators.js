@@ -122,7 +122,7 @@ export default class Comparator extends Component {
 
 const styles = StyleSheet.create({
     divider: {
-        borderTopColor: '#d3d3d3',
+        borderTopColor: '#e1e8ee',
         borderTopWidth: 1,
         marginLeft: '5%',
         marginRight: '5%'
