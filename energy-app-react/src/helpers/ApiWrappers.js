@@ -623,10 +623,19 @@ export function getTotalBuildingConsumptionGraphFormat(timeStart, timeEnd, timeS
     return finalTable;
 }
 
+export function getCurrentBuildingUtilityConsumptionGraphFormat(building1, building2, utility) {
+    var utility1 = getCurrentBuildingUtilityConsumption(building1, utility);
+    var utility2 = getCurrentBuildingUtilityConsumption(building2, utility)
+    var data = new Array(2);
+    data[0] = {'x': building1, 'y': utility1};
+    data[1] = {'x': building2, 'y': utility2};
+    return data;
+}
+
 /*
 Returns current data in form for building card graphs to use
 */
-export function getCurrentBuildingUtilityConsumptionGraphFormat(building) {
+export function NEWgetCurrentBuildingUtilityConsumptionGraphFormat(building) {
     var totalWater = 0;
     var totalElectricity = 0;
     var totalHeat = 0;
