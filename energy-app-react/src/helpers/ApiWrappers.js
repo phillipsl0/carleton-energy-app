@@ -191,12 +191,38 @@ export function getWindGenerationOverTime(timeStart, timeEnd, timeScale) {
     return table;
 }
 
-export function getWindGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale) {
+export function getWindGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, timeView) {
     var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
     var table = [];
     for (var i = 0; i < totals.length; i++) {
         table[i] = {};
-        table[i]["x"] = totals[i]["date"];
+        currDate = new Date(totals[i]["date"]);
+        switch (timeView) {
+            case 1:
+                table[i]["x"] = getDayOfWeek(currDate.getDay());
+                break;
+
+            case 7:
+                if (i==0) {
+                    table[i]["x"] = "-3";
+                } else if (i==1) {
+                    table[i]["x"] = "-2";
+                } else if (i==2) {
+                    table[i]["x"] = "-1";
+                } else if (i==3) {
+                    table[i]["x"] = "Current";
+                }
+                break;
+
+            case 30:
+                table[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                break;
+
+            case 365:
+                table[i]["x"] = currDate.getFullYear().toString();
+                break;
+        }
+
         table[i]["y"] = totals[i]["wind"];
     }
 
@@ -215,12 +241,38 @@ export function getSolarGenerationOverTime(timeStart, timeEnd, timeScale) {
     return table;
 }
 
-export function getSolarGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale) {
+export function getSolarGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, timeView) {
     var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
     var table = [];
     for (var i = 0; i < totals.length; i++) {
         table[i] = {};
-        table[i]["x"] = totals[i]["date"];
+
+        currDate = new Date(totals[i]["date"]);
+        switch (timeView) {
+            case 1:
+                table[i]["x"] = getDayOfWeek(currDate.getDay());
+                break;
+
+            case 7:
+                if (i==0) {
+                    table[i]["x"] = "-3";
+                } else if (i==1) {
+                    table[i]["x"] = "-2";
+                } else if (i==2) {
+                    table[i]["x"] = "-1";
+                } else if (i==3) {
+                    table[i]["x"] = "Current";
+                }
+                break;
+
+            case 30:
+                table[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                break;
+
+            case 365:
+                table[i]["x"] = currDate.getFullYear().toString();
+                break;
+        }
         table[i]["y"] = totals[i]["solar"];
     }
 
@@ -240,13 +292,40 @@ export function getGeothermalGenerationOverTime(timeStart, timeEnd, timeScale) {
     return table;
 }
 
-export function getGeothermalGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale) {
+export function getGeothermalGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, timeView) {
     var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
     var table = [];
 
     for (var i = 0; i < totals.length; i++) {
         table[i] = {};
-        table[i]["x"] = totals[i]["date"];
+        currDate = new Date(totals[i]["date"]);
+
+        switch (timeView) {
+            case 1:
+                table[i]["x"] = getDayOfWeek(currDate.getDay());
+                break;
+
+            case 7:
+                if (i==0) {
+                    table[i]["x"] = "-3";
+                } else if (i==1) {
+                    table[i]["x"] = "-2";
+                } else if (i==2) {
+                    table[i]["x"] = "-1";
+                } else if (i==3) {
+                    table[i]["x"] = "Current";
+                }
+                break;
+
+            case 30:
+                table[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                break;
+
+            case 365:
+                table[i]["x"] = currDate.getFullYear().toString();
+                break;
+        }
+
         table[i]["y"] = totals[i]["geothermal"];
     }
 
@@ -410,9 +489,9 @@ export function getCurrentGenerationGraphFormat() {
 }
 
 export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, scaleFactor) {
-    var solarTable = getSolarGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale);
-    var windTable = getWindGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale);
-    var geoTable = getGeothermalGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale);
+    var solarTable = getSolarGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, scaleFactor);
+    var windTable = getWindGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, scaleFactor);
+    var geoTable = getGeothermalGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, scaleFactor);
 
     var combinedTable = new Array(solarTable.length);
     var finalTable = {};
@@ -421,33 +500,34 @@ export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, sca
 
     for (var i=solarTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
-        currDate = new Date(solarTable[i]["x"]);
+        combinedTable[i]["x"] = solarTable[i]["x"];
+//        currDate = new Date(solarTable[i]["x"]);
 
-        switch (scaleFactor){
-            case 1:
-                combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
-                break;
-            case 7:
-                if (i==0) {
-                    combinedTable[i]["x"] = "-3";
-                } else if (i==1) {
-                    combinedTable[i]["x"] = "-2";
-                } else if (i==2) {
-                    combinedTable[i]["x"] = "-1";
-                } else if (i==3) {
-                    combinedTable[i]["x"] = "Current";
-                }
-                break;
-            case 30:
-                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
-                break;
-            case 365:
-                combinedTable[i]["x"] = currDate.getFullYear().toString();
-                break;
-            default:
-                combinedTable[i]["x"] = solarTable[i]["date"];
-                break;
-        }
+//        switch (scaleFactor){
+//            case 1:
+//                combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
+//                break;
+//            case 7:
+//                if (i==0) {
+//                    combinedTable[i]["x"] = "-3";
+//                } else if (i==1) {
+//                    combinedTable[i]["x"] = "-2";
+//                } else if (i==2) {
+//                    combinedTable[i]["x"] = "-1";
+//                } else if (i==3) {
+//                    combinedTable[i]["x"] = "Current";
+//                }
+//                break;
+//            case 30:
+//                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+//                break;
+//            case 365:
+//                combinedTable[i]["x"] = currDate.getFullYear().toString();
+//                break;
+//            default:
+//                combinedTable[i]["x"] = solarTable[i]["date"];
+//                break;
+//        }
 
         combinedTable[i]["y"] = (solarTable[i]["y"] + windTable[i]["y"]
                                     + geoTable[i]["y"]) * scaleFactor /1000;
