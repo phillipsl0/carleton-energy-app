@@ -1,7 +1,7 @@
 import { Platform, Dimensions } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
-import { getAllHistoricalGraphData, getAllCurrentGraphData, dateToTimestamp, cleanupData } from './ApiWrappers';
+import { getAllHistoricalGraphData, getAllCurrentGraphData, dateToTimestamp, cleanupData, getEveryBuildingEveryUtilityConsumption } from './ApiWrappers';
 import { calculateRatio } from './General';
 
 /* Redux handles state for the app, including navigation
@@ -15,6 +15,23 @@ export const handler = store => next => action => {
     next(action);
 
     switch (action.type) {
+        case 'GET_BUILDING_GRAPH_DATA':
+            store.dispatch({type: 'GET_BUILDING_GRAPH_DATA_LOADING'});
+            try {
+                var historicalBuildingData = 100
+                var currentBuildingData = getEveryBuildingEveryUtilityConsumption();
+
+                store.dispatch({
+                    type: 'GET_BUILDING_GRAPH_DATA_RECEIVED',
+                    historicalBuildingData,
+                    currentBuildingData
+                });
+            } catch (error) {
+                next({
+                    type: 'GET_BUILDING_GRAPH_DATA_ERROR'
+                });
+            }
+            break;
         case 'GET_GRAPH_DATA':
             store.dispatch({type: 'GET_GRAPH_DATA_LOADING'});
             try {
