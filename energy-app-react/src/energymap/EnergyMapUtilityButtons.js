@@ -5,7 +5,9 @@ import { Button } from 'react-native-elements'
 import { moderateScale } from './../helpers/Scaling';
 
 //const UTILITIES = getUtilitiesList();
-const UTILITIES = ['Gas', 'Electric', 'Heat', 'Water'];
+// const UTILITIES = ['Gas', 'Electric', 'Heat', 'Water'];
+const UTILITIES = ['Total', 'Gas', 'Electric', 'Water'];
+
 
 // Class for individual buttons
 class UtilityButton extends Component {

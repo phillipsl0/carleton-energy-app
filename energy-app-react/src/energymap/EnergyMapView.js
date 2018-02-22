@@ -201,7 +201,7 @@ class EnergyMapView extends Component {
       },
       ready: true,
       utilityNameShown: 'electric',
-      utilityIndexShown: 6, // for IndividualBuilding's UtilitiesMiniCard
+      utilityIndexShown: 3, // for IndividualBuilding's UtilitiesMiniCard
       mapLoading: true
     };
     this.onRegionChange = this.onRegionChange.bind(this);
