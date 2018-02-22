@@ -11,9 +11,6 @@ const ExampleData = [
         title: 'Energy Generation',
         graphType: 'pie' ,
     },
-    {
-        title: 'Comparison Facts'
-    }
 ]
 
 const turbineData = [
@@ -51,29 +48,31 @@ const turbineData = [
 
 export const fake = [
     {
+      title: '% of Total Energy Use',
+      icon: "progress-two",
+      type: 'entypo',
+      index: 0,
+    },
+    {
       title: 'Wind Speed',
-      x: '6.2 mph',
       icon: "weather-windy",
+      type: 'material-community',
+      index: 1,
     },
 
     {
-      title: 'Turbine Generation',
-      x: '583,389 kWh',
-      icon: "airplane-takeoff",
+      title: 'Current Consumption',
+      icon: "battery-negative",
+      type: 'material-community',
+      index: 2,
     },
 
     {
-      title: 'Turbine Consumption',
-      x: '750 kWh',
-      icon: "airplane-landing",
+      title: "Week's High",
+      icon: "star",
+      type: "entypo",
+      index: 3,
     },
-
-    {
-          title: 'Other',
-          x: '?????',
-          icon: "leaf",
-        },
-
 ]
 
 //data: {current: [{y: 8, x: "Solar"},

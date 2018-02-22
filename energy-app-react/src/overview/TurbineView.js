@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ImageBackground, Platform, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, ImageBackground, Platform, Text } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 
@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import { fake } from './OverviewExampleData'
-import { moderateScale, verticalScale, roundNumber } from './../helpers/General';
+import { moderateScale, verticalScale, roundNumber, getSpecificRandom } from './../helpers/General';
 import CurrFont from './../styling/CurrentFont';
 
 const defaultFont = CurrFont+'-regular';
@@ -17,6 +17,12 @@ const theme = GetStyle(CurrTheme);
 @connect(
     state => ({
         currentData: state.data.currentData,
+        totals: state.data.currentTotals,
+        windSpeed: state.data.windSpeed,
+        windRatio: state.data.windRatio,
+        loading: state.loading,
+        turbine: state.turbine,
+        ui: state.ui,
     }),
 )
 
@@ -25,14 +31,33 @@ export default class Windmill extends Component {
         super(props);
     }
 
-    render() {
-        const { width, height } = Dimensions.get('window');
+    fetchData = (low) => {
+        var rightTitles = new Array(4);
+        rightTitles[0] = this.props.windRatio["percentage"] + "%";
+        rightTitles[1] = this.props.windSpeed + " mps";
+        rightTitles[2] = roundNumber(getSpecificRandom(500, low, 1, 1)) + " kW";
+        rightTitles[3] = roundNumber(getSpecificRandom(low+132, low+1000, 1, 1)) + " kW";
+        return rightTitles;
+    }
 
-        const { currentData } = this.props;
-        var turbineTotal = Math.round(currentData.turbine[0]["y"]+currentData.turbine[1]["y"]);
+    render() {
+        const { currentData, totals, windSpeed, windRatio, turbine, ui } = this.props;
+        const { width, height } = ui.layout;
+
+        turbineGeneration = turbine.turbineData;
+        if (turbine.turbineData == 0) {
+            turbineGeneration = getSpecificRandom(2, 1500, 1, 1);
+        }
+
+        var rightTitles = this.fetchData(turbineGeneration);
+
+        var padding = '5%';
+        if (height < 600) {
+            padding = '4%';
+        }
 
         return (
-            <View style={[styles.main]}>
+            <View style={[styles.main, { position: 'absolute', bottom: 0}]}>
                 <ImageBackground source={require('./../assets/windmillFull.png')}
                     resizeMode="cover"
                     style={[{ width: width + 5, height: width*.8}, styles.image, styles.head]}>
@@ -40,24 +65,25 @@ export default class Windmill extends Component {
                     Currently generating
                 </Text>
                 <Text style={[styles.number, theme.fontBold]}>
-                    {roundNumber(turbineTotal)}
+                    {roundNumber(turbineGeneration)}
                 </Text>
                 <Text style={[styles.units, theme.fontRegular]}>
-                    kWh
+                    kW
                 </Text>
                 </ImageBackground>
-                <List style={styles.list}>
+                <List style={[styles.list]}>
                   {
                     fake.map((item, i) => (
                       <ListItem
-                        style={styles.listItem}
+                        containerStyle={[ styles.listItem, { paddingTop: padding, paddingBottom: padding }]}
                         key={i}
                         title={item.title}
-                        rightTitle={item.x}
-                        rightTitleStyle={{ color: '#647C92', marginRight: 5 }}
-                        chevronColor={'transparent'}
+                        rightTitle={rightTitles[item.index]}
+                        rightTitleStyle={{ color: '#647C92' }}
+                        rightTitleContainerStyle={{ flex: 0.75 }}
+                        hideChevron={true}
                         fontFamily={defaultFontBold}
-                        leftIcon={{name: item.icon, type: 'material-community', color: '#647C92'}}
+                        leftIcon={{name: item.icon, type: item.type, color: '#647C92'}}
                       />
                     ))
                   }
@@ -107,11 +133,11 @@ const styles = StyleSheet.create({
     list: {
 //        borderTopColor: "#FFFFFF",
 //        borderTopWidth: 1,
-        marginTop: 0,
+        marginTop: '-3%',
         backgroundColor: '#E1E8EE',
         ...Platform.select({
             ios: {
-                paddingTop: '0x%',
+                paddingTop: '0%',
             }
         })
     },

@@ -13,6 +13,22 @@ const moderateScale = (size, factor = 0.5) => size + ( scale(size) - size ) * fa
 
 export {scale, verticalScale, moderateScale};
 
+/* -------------- FUNCTIONS FOR UTILITY TEXT --------------- */
+
+export const getUnits = (utility) => {
+    var units = ""
+    if (utility == 'electric') {
+      units = "kWh"
+    } else if (utility == 'water') {
+      units = "gal"
+    } else if (utility == 'gas') {
+      units = "kBTU"
+    } else if (utility == 'heat') { 
+      units = "thm"
+    }
+    return units
+}
+
 
 /* -------------- FUNCTIONS FOR CONVERSION TO kWh --------------- */
 /*

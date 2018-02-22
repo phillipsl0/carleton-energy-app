@@ -55,8 +55,8 @@ const DefaultTheme = StyleSheet.create({
     },
 
     flexButtons: {
-        paddingTop: '3%',
-        paddingBottom: '3%',
+//        paddingTop: '3%',
+//        paddingBottom: '3%',
         marginLeft: '10%',
         marginRight: '10%',
         borderRadius: 10,
@@ -105,8 +105,6 @@ const DefaultTheme = StyleSheet.create({
 
     list: {
         backgroundColor: 'white',
-         marginLeft: '3%',
-         marginRight: '3%',
     },
 
     listItem: {

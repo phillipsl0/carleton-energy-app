@@ -1,21 +1,36 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, Platform, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Image, Platform, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { Svg } from 'react-native-svg';
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './GraphDetailCard';
-import Utilities from './UtilitiesMiniCards';
 import { moderateScale, verticalScale, roundNumber } from './../helpers/General';
 
 const USAGE_CARD = 1;
+
+const DAY = 1;
+const WEEK = 2;
+const MONTH = 3;
+const YEAR = 4;
+
+const TOTAL = 1;
+
+const GAS = 2;
+const ELECTRIC = 3;
+const WATER = 4;
+
+const WIND = 2;
+const SOLAR = 3;
+const GEO = 4;
 
 @connect(
     state => ({
         historicalData: state.data.historicalData,
         currentData: state.data.currentData,
         loading: state.data.loading,
+        ui: state.ui,
     }),
     dispatch => ({
         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
@@ -30,50 +45,33 @@ export default class OverviewCards extends Component {
         this.state = {
             view: 'day',
             viewNumber: 7,
-            selectedCard: 1,
+            selectedTime: 1,
+            selectedUtility: 1,
+            graphData: null,
         };
     }
 
     scopeCallbackGraph = ( buttonView, buttonComparator, buttonIndex ) => {
         this.setState({ view: buttonView,
             viewNumber: buttonComparator,
-            selectedCard: buttonIndex});
+            selectedTime: buttonIndex});
     }
 
     scopeCallbackUtilities = ( buttonIndex ) => {
-        this.setState({ selectedCard: buttonIndex});
+        this.setState({ selectedUtility: buttonIndex});
     }
 
     getGraphScope = (data, cardType) => {
-        if (cardType == USAGE_CARD) {
-            switch (this.state.view) {
-                case "day":
-                    return data["dayUsage"].data;
+        var indexData = this.getIndices();
+        var firstIndex = indexData["indices"][0];
+        var secondIndex = indexData["indices"][1];
+        var thirdIndex = indexData["indices"][2];
 
-                case "week":
-                    return data["weekUsage"].data;
-
-                case "month":
-                    return data["monthUsage"].data;
-
-                case "year":
-                    return data["yearUsage"].data;
-            }
+        if (indexData["three"]){
+            return this.props.historicalData[firstIndex][secondIndex][thirdIndex];
 
         } else {
-            switch (this.state.view) {
-                case "day":
-                    return data["dayGeneration"].data;
-
-                case "week":
-                    return data["weekGeneration"].data;
-
-                case "month":
-                    return data["monthGeneration"].data;
-
-                case "year":
-                    return data["yearGeneration"].data;
-            }
+            return this.props.historicalData[firstIndex][secondIndex];
         }
 
     }
@@ -110,40 +108,143 @@ export default class OverviewCards extends Component {
         }
     }
 
+    getUnits = (indexData) => {
+        if (indexData["three"]){
+            switch(indexData["indices"][2]){
+                case "gas":
+                    return "BTU";
+                    break;
+
+                case "water":
+                    return "gal";
+                    break;
+
+                default:
+                    return "kWh";
+                    break;
+            }
+        } else {
+            return "kWh";
+        }
+    }
+
+    getIndices = () => {
+        var data = {};
+        var indices = new Array(3);
+
+        switch(this.state.selectedTime) {
+            case 1:
+                if (cardType == 1){
+                    indices[0] = 'dayUsage';
+                } else {
+                    indices[0] = 'dayGeneration';
+                }
+
+                break;
+
+            case 2:
+                if (cardType == 1){
+                    indices[0] = 'weekUsage';
+                } else {
+                    indices[0] = 'weekGeneration';
+                }
+
+                break;
+
+            case 3:
+                if (cardType == 1){
+                    indices[0] = 'monthUsage';
+                } else {
+                    indices[0] = 'monthGeneration';
+                }
+
+                break;
+
+            case 4:
+                if (cardType == 1){
+                    indices[0] = 'yearUsage';
+                } else {
+                    indices[0] = 'yearGeneration';
+                }
+
+                break;
+        }
+
+        if (this.state.selectedUtility != 1) {
+            data["three"] = true;
+        } else {
+            data["three"] = false;
+        }
+
+        switch (this.state.selectedUtility) {
+            case 1:
+                indices[1] = 'total';
+                break;
+
+            case 2:
+                indices[1] = 'data';
+
+                if (cardType == USAGE_CARD) {
+                    indices[2] = 'gas';
+
+                } else {
+                    indices[2] = 'wind';
+                }
+                break;
+
+            case 3:
+                indices[1] = 'data';
+
+                if (cardType == USAGE_CARD) {
+                    indices[2] = 'electricity';
+
+                } else {
+                    indices[2] = 'solar';
+
+                }
+                break;
+
+            case 4:
+                indices[1] = 'data';
+
+                if (cardType == USAGE_CARD) {
+                    indices[2] = 'water';
+                } else {
+                    indices[2] = 'geo';
+                }
+                break;
+           }
+
+            data["indices"] = indices;
+
+            return data;
+    }
+
     getHeader = (historicalData, cardType, currentData) => {
         const theme = GetStyle(CurrTheme);
-        const { width, height } = Dimensions.get('window');
-
+        const { ui } = this.props;
+        const { width, height } = ui.layout;
         var units = ["thm", "kWh", "kBTU", "gal"];
 
-        if (this.state.selectedCard <= 4) {
-            headerText = this.getRanking(historicalData, cardType);
-            viewNumber = this.state.viewNumber;
-            view = this.state.view;
+        var indexData = this.getIndices();
+        var firstIndex = indexData["indices"][0];
+        var secondIndex = indexData["indices"][1];
+        var thirdIndex = indexData["indices"][2];
+        var index;
 
-            if (cardType == 1) {
-                verb = 'use';
-            } else {
-                verb = 'generation';
-            }
-
-            subheaderText = "in " + verb + " compared to the past ";
-            subheaderHighlight = viewNumber + " " + view + "s";
-            highlight = true;
+        if (indexData["three"]){
+            index = historicalData[firstIndex][secondIndex][thirdIndex].length-1;
+            headerText = roundNumber(historicalData[firstIndex][secondIndex][thirdIndex][index]["y"]);
+            subheaderText = this.getUnits(indexData) + " in the past ";
+            subheaderHighlight = this.state.view;
 
         } else {
-            if (cardType == 1) {
-                verb = 'usage';
-            } else {
-                verb = 'generation';
-            }
-
-            headerText = roundNumber(currentData["usage"][this.state.selectedCard - 5]["y"]);
-            console.log(roundNumber(105005960.96978705));
-
-            subheaderText = units[this.state.selectedCard - 5];
-            highlight = false;
+            index = historicalData[firstIndex][secondIndex].length-1;
+            headerText = roundNumber(historicalData[firstIndex][secondIndex][index]["y"]);
+            subheaderText = this.getUnits(indexData) + " in the past ";
+            subheaderHighlight = this.state.view;
         }
+
 
       if (height < 600) {
         return (
@@ -156,9 +257,9 @@ export default class OverviewCards extends Component {
             <Text style={[styles.smallWords, theme.translucentText]}>
                 {subheaderText}
              </Text>
-             {highlight && <Text style={[styles.smallWords, styles.highlight]}>
+             <Text style={[styles.smallWords, styles.highlight]}>
              {subheaderHighlight}
-             </Text>}
+             </Text>
              </View>
           </View>
         );
@@ -173,22 +274,22 @@ export default class OverviewCards extends Component {
                 <Text style={[styles.words, theme.translucentText]}>
                     {subheaderText}
                  </Text>
-                 {highlight && <Text style={[styles.words, styles.highlight]}>
+                 <Text style={[styles.words, styles.highlight]}>
                  {subheaderHighlight}
-                 </Text>}
+                 </Text>
                  </View>
               </View>
           );
       }
     }
 
+
+
     render() {
-        const { width, height } = Dimensions.get('window');
-        console.log(height);
+        const { ui } = this.props;
+        const { width, height } = ui.layout;
         const theme = GetStyle(CurrTheme);
         const { refresh, loading, historicalData, currentData } = this.props;
-        var utilities = ["Gas", "Electric", "Heat", "Water"];
-        var generators = ["Wind", "Solar", "Geothermal"]
 
         cardType = this.props.navigation.state.params.card;
         currData = this.getGraphScope(historicalData, cardType);
@@ -204,40 +305,32 @@ export default class OverviewCards extends Component {
                 <View style={[{width:width+5}, styles.head, styles.smallHeight, theme.carletonBlueBackground]}/>
                 {header}
                 </View>
-                 <ScrollView style={[theme.lightBlueBackground]}>
                     <GraphDetail data={currData}
-                        callback={this.scopeCallbackGraph}
-                        selected={this.state.selectedCard}
+                        utilityCallback={this.scopeCallbackUtilities}
+                        graphCallback={this.scopeCallbackGraph}
+                        timeSelected={this.state.selectedTime}
+                        utilitySelected={this.state.selectedUtility}
                         type={cardType}/>
-                 </ScrollView>
-                <Utilities callback={this.scopeCallbackUtilities}
-                   cards={cardType == 1 ? utilities : generators}
-                   cardType={cardType}
-                   selected={this.state.selectedCard}/>
-                 </View>
+                </View>
 
             );
         } else {
             return (
-                <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
-                <View style={[{width:width+5}, theme.centered, styles.height]}>
-                <Image source={require('./../assets/windmillHeader.png')}
-                    style={[styles.head, {width:width+5}, styles.height]}
-                    resizeMode="cover"/>
-                <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
-                {header}
-                </View>
-                 <ScrollView style={[theme.lightBlueBackground], {height: height - 125}}>
+                    <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
+                    <View style={[{width:width+5}, theme.centered, styles.height]}>
+                    <Image source={require('./../assets/windmillHeader.png')}
+                        style={[styles.head, {width:width+5}, styles.height]}
+                        resizeMode="cover"/>
+                    <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
+                    {header}
+                    </View>
                     <GraphDetail data={currData}
-                        callback={this.scopeCallbackGraph}
-                        selected={this.state.selectedCard}
+                        utilityCallback={this.scopeCallbackUtilities}
+                        graphCallback={this.scopeCallbackGraph}
+                        timeSelected={this.state.selectedTime}
+                        utilitySelected={this.state.selectedUtility}
                         type={cardType}/>
-                 </ScrollView>
-                <Utilities callback={this.scopeCallbackUtilities}
-                   cards={cardType == 1 ? utilities : generators}
-                   cardType={cardType}
-                   selected={this.state.selectedCard}/>
-                 </View>
+                    </View>
 
                 );
         }

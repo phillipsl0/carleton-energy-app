@@ -11,24 +11,40 @@ const slides = [
     title: "Welcome to our comps",
     text: "Explore Carleton's energy usage at anytime. View energy, heat, and water consumption and generation by building or across campus. Don't forget about the turbines!",
     icon: 'tree',
-    color: '#00b33c',
+    color: '#29ABE2',
     type: 'entypo'
   },
   {
     key: 'Data',
-    title: "Data at your touch",
+    title: "Data at your fingers",
     text: 'Get real-time data from key buildings on campus. Our app is reads data from various meters within each building.',
     icon: 'ios-options-outline',
     color: '#A3A1FF',
     type: 'ionicon'
   },
   {
+    key: 'Compare',
+    title: "Compare buildings",
+    text: "See how different buildings on campus compare in terms of energy use and generation. Select this compare icon on the top right of a building's information page to compare two buildings.",
+    icon: 'compare-arrows',
+    color: '#1a5fce',
+    type: 'material-icons'
+  },
+  {
+    key: 'Map',
+    title: "Explore with an energy map",
+    text: "View how all buildings are doing in terms of a utility consumption of your choice. Tap on a building to get the exact number in a callout, and then tap the callout to get more information on its building.",
+    icon: 'map',
+    color: '#ce197f',
+    type: 'font-awesome'
+  },
+  {
     key: 'Sustainability',
     title: "Interested in being green?",
     text: "Check out the Learn tab to stay up to date with the latest news from Carleton's Sustainability Office. Discover more about the Sustainability Office and how you can get involved with sustainability at Carleton.",
-    icon: 'ios-sunny-outline',
-    color: '#29ABE2',
-    type: 'ionicon'
+    icon: 'graduation-cap',
+    color: '#00b33c',
+    type: 'font-awesome'
   },
 ];
 

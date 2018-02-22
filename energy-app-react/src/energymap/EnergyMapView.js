@@ -6,17 +6,15 @@ import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native
 
 import { connect } from 'react-redux';
 import MapCallout from './MapCallout';
-import IndividualBuilding from './../IndividualBuilding';
-import BuildingStack from './../BuildingListView';
-import buildings from './../Buildings'
-import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
+import IndividualBuilding from './../buildings/IndividualBuilding';
+import BuildingStack from './../buildings/BuildingListView';
+import buildings from './../buildings/Buildings'
+import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
 import TopUtilities from './EnergyMapUtilityButtons';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
-import ComparisonPage from './../ComparisonPage';
-import BuildingComparison from './../BuildingComparison';
-
-const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
-var {screenHeight, screenWidth} = Dimensions.get('window');
+import ComparisonPage from './../buildings/ComparisonPage';
+import BuildingComparison from './../buildings/BuildingComparison';
+import { getUnits } from './../helpers/General';
 
 /*
 Using tutorials:
@@ -28,8 +26,8 @@ Get lat/long: http://www.mapcoordinates.net/en
 */
 
 
-
-
+const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
+var {screenHeight, screenWidth} = Dimensions.get('window');
 
 const initialRegion = {
   latitude: 44.4606925434,
@@ -38,7 +36,8 @@ const initialRegion = {
   longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
 }
 
- //Get redux
+
+//Get redux
 @connect(
      state => ({
          historicalData: state.data.historicalData,
@@ -49,6 +48,7 @@ const initialRegion = {
          refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
      }),
  )
+
 class EnergyMapView extends Component {
   constructor(props) {
     super(props);
@@ -202,7 +202,7 @@ class EnergyMapView extends Component {
       ready: true,
       utilityNameShown: 'electric',
       utilityIndexShown: 6, // for IndividualBuilding's UtilitiesMiniCard
-      loading: true
+      mapLoading: true
     };
     this.onRegionChange = this.onRegionChange.bind(this);
   };
@@ -214,17 +214,17 @@ class EnergyMapView extends Component {
     this.moveToCarleton();
     //console.log('EnergyMapView component is mounting...');
     this.closeActivityIndicator();
-    console.log("Component did mount")
+    //console.log("Component did mount")
   };
 
   openActivityIndicator() {
-    this.setState({ loading: true });
+    this.setState({ mapLoading: true });
   };
 
   // Closes activity indicator with 2 second delay after call
   closeActivityIndicator() {
     setTimeout(() => this.setState({
-      loading: false }), 2000);
+      mapLoading: false }), 2000);
   };
 
   setRegion(region) {
@@ -241,7 +241,7 @@ class EnergyMapView extends Component {
   onMapReady = () => {
     this.setState({ ready: true });
     this.moveToCarleton();
-    console.log("Map ready: moving to Carleton")
+    //console.log("Map ready: moving to Carleton")
   };
 
   // Maps utility name to its respective utility mini card index
@@ -271,17 +271,19 @@ class EnergyMapView extends Component {
     return (utilityName);
   };
 
+
   // Updates colors of energy map with new utility selection
   updateUtility = (utilitySelected) => {
     // Begin to update map
     this.openActivityIndicator();
+    this.moveToCarleton();  // Veronica, I moved this, it looks better on Android this way. - Martin
     utilitySelected = utilitySelected.toLowerCase() // lower case
     utilityIndex = this.mapUtilityNameToIndex(utilitySelected) // Get index for buildings
     this.setState({ utilityNameShown: utilitySelected, utilityIndexShown: utilityIndex });
     
     // Update map
     this.getBuildingData(utilitySelected);
-    this.moveToCarleton();
+    // this.moveToCarleton();
     this.closeActivityIndicator();
   };
 
@@ -388,7 +390,6 @@ class EnergyMapView extends Component {
 
   // Show callout when building polygon is pressed
   toggleCallout(polygon) {
-    // console.log('onPress', polygon.name);
     this.setState({lastBuildingPressed: polygon.name})
 
     if (polygon.open) {
@@ -440,11 +441,10 @@ class EnergyMapView extends Component {
 
   render() {
     navigation = this.props.navigation;
-    utilityNameShown = this.state.utilityNameShown
-    loading = this.state.loading
-    //console.log("Utility displayed before return:", utilityNameShown)
-    //console.log("Loading?", loading)
-    isMapReady = false
+    utilityNameShown = this.state.utilityNameShown;
+    mapLoading = this.state.mapLoading;
+    const { refresh, loading, historicalData, currentData } = this.props; // redux
+    isMapReady = false; // fix for Android latLang error
 
     return (
       <View style={styles.container}>
@@ -454,12 +454,12 @@ class EnergyMapView extends Component {
           provider = { PROVIDER_GOOGLE } // show buildings on OS
           key={utilityNameShown} // key change needed to rerender map
           showsTraffic={false}
+          showsCompass={false}
           initialRegion={initialRegion}
           onMapReady={this.onMapReady}
-          //onLayout={console.log("On layout!")}
+          onLayout={this.onMapReady}
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
-          toggleCallout={this.toggleCallout}
           displayUtility={utilityNameShown}
           style={styles.map}
           >
@@ -475,30 +475,49 @@ class EnergyMapView extends Component {
                   strokeWidth={2}
                   strokeColor={polygon.colorOutline}
                   fillColor={polygon.colorBuilding}
-                 
                   onPress={() => this.toggleCallout(polygon)}
                   />
-                  <Marker
-                   ref={ref => polygon.marker = ref}
-                   coordinate={polygon.marker_coordinate}
-                   opacity={4} // hides markers at 0
-                   key={polygon.name}
-                  >
-                  <Image
-                    source={require('./../assets/mapMarker.png')}
-                    style={{ height:1, width:1 }}
-                  />
-                  <Callout
-                    tooltip // enables customizable tooltip style
-                    style={styles.callout}
-                    onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon.item, selected: this.state.utilityIndexShown })}>
-                    <MapCallout
-                      name={polygon.name}
-                      image={'image'} // to be replaced with building image
-                      number={polygon.usage}
-                      utility={utilityNameShown}/>
-                    </Callout>
-                  </Marker>
+                  { (Platform.OS === 'ios') ?
+                    <Marker
+                     ref={ref => polygon.marker = ref}
+                     coordinate={polygon.marker_coordinate}
+                     opacity={0} // hides markers at 0
+                     key={polygon.name}
+                    >
+                      <Image
+                        source={require('./../assets/mapMarker.png')}
+                        style={{ height:1, width:1 }}
+                      />
+                      <Callout
+                        tooltip // enables customizable tooltip style
+                        style={styles.callout}
+                        onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon.item, selected: this.state.utilityIndexShown })}>
+                        <MapCallout
+                          name={polygon.name}
+                          image={'image'} // to be replaced with building image
+                          number={polygon.usage}
+                          utility={utilityNameShown}/>
+                      </Callout>
+                    </Marker>
+                  :
+                    <Marker
+                     ref={ref => polygon.marker = ref}
+                     coordinate={polygon.marker_coordinate}
+                     opacity={0} // hides markers at 0
+                     key={polygon.name}
+
+                     title={polygon.name}
+                     description={polygon.usage + ' ' + getUnits(utilityNameShown)}
+                     onCalloutPress={() => navigation.navigate(
+                       'EnergyBuildingView', 
+                       {item:polygon.item, selected: this.state.utilityIndexShown })}
+                    >
+                      <Image
+                        source={require('./../assets/mapMarker.png')}
+                        style={{ height:1, width:1 }}
+                      />
+                    </Marker>
+                  }
               </View>
             ))}
         </MapView>
@@ -519,11 +538,11 @@ class EnergyMapView extends Component {
           // top utilities
           onUtilitySelect={this.updateUtility}
           selected={this.state.utilityNameShown} />
-        {this.state.loading && <View style={styles.loading} accessibe={false}>
+        {this.state.mapLoading && <View style={styles.loading} accessibe={false}>
           <ActivityIndicator
             size='large'
             color='#0000ff'
-            animating={this.state.loading} />
+            animating={this.state.mapLoading} />
         </View>
         }
       </View>
@@ -574,6 +593,20 @@ const EnergyMapViewStack = StackNavigator({
       headerTitleStyle: navStyles.headerTitle,
       headerBackTitleStyle: navStyles.headerTitle,
       headerBackTitle: 'Back',
+      headerRight: (
+         <TouchableOpacity
+          style={styles.compareButton}
+          // Navigate to comparison screen
+          onPress={() => navigation.navigate("Comparison", {item:navigation.state.params.item.name})}>
+          <Icon
+            // see: https://react-native-training.github.io/react-native-elements/API/icons/
+            name='compare-arrows'
+            color='white'
+            type='material-icons'
+            size={30}
+          />
+        </TouchableOpacity>
+      ),
     }), 
   },
   Comparison: {
@@ -672,6 +705,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#F5FCFF88'
+  },
+  compareButton: {
+    marginRight: 10
   }
 });
 

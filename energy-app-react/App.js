@@ -8,14 +8,15 @@ import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { createReduxBoundAddListener, 
   createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+//import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
-import BuildingStack from './src/BuildingListView';
+import BuildingStack from './src/buildings/BuildingListView';
 import EnergyMapViewStack from './src/energymap/EnergyMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
-import { handler, dataReducer, layoutReducer } from './src/helpers/ReduxHandler'
+import { handler, dataReducer, layoutReducer, apiReducer } from './src/helpers/ReduxHandler'
 import { getCurrentGenerationGraphFormat, 
   getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
@@ -24,6 +25,7 @@ import { checkIfFirstLaunch } from './src/intro/checkIfFirstLaunch';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
+const HAS_LAUNCHED = 'HAS_LAUNCHED'
 
 if (Platform.OS === 'android') {
   SafeAreaView.setStatusBarHeight(0);
@@ -94,7 +96,7 @@ const RootTabs = TabNavigator({
       navigationOptions: {
         tabBarLabel: 'Learn',
         tabBarIcon: ({ tintColor, focused }) => (
-          <FontAwesome name="bolt" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+          <FontAwesome name="graduation-cap" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
         ),
       },
     },
@@ -103,7 +105,7 @@ const RootTabs = TabNavigator({
         navigationOptions: {
           tabBarLabel: 'Map',
           tabBarIcon: ({ tintColor, focused }) => (
-            <FontAwesome name="fire" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+            <FontAwesome name="map" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
           ),
         },
       }
@@ -166,7 +168,8 @@ const navReducer = (state = initialState, action) => {
 const appReducer = combineReducers({
     nav: navReducer,
     data: dataReducer,
-    ui: layoutReducer
+    ui: layoutReducer,
+    turbine: apiReducer
 
 });
 
@@ -182,36 +185,16 @@ const mapStateToProps = (state) => ({
     nav: state.nav,
     data: state.data,
     ui: state.layout,
+    turbine: state.turbine
 });
 
 class App extends Component {
-
-    state = {
-      isReady: false,
-      isFirstLaunch: false,
-      hasCheckedAsyncStorage: false,
-    };
+  state = {
+    isReady: false,
+    isFirstLaunch: true,
+    hasCheckedAsyncStorage: false,
+  };
   
-  // componentWillMount() {
-  //   AsyncStorage.getItem('RANDOM2')
-  //     .then(res => {
-  //       if (res !== null) {
-  //         console.log("Not null random2");
-  //       } else {
-  //         this.isFirstLaunch = true;
-  //         console.log("Null random2");
-  //         console.log("Result: ", res)
-  //         AsyncStorage.setItem('RANDOM2', 'true');
-  //       }
-  //     })
-  //     .catch(err => alert("App mounting error: ", err));
-  //   console.log(this.state.isFirstLaunch);
-  //   if (this.state.isFirstLaunch == true) {
-  //     console.log('setting random2 to true');
-  //     AsyncStorage.setItem('RANDOM2', 'true');
-  //   }
-  // }
-  // Checks AsyncStorage to see if app has been launched already
   /*
   Great info about components mounting:
   https://daveceddia.com/where-fetch-data-componentwillmount-vs-componentdidmount/
@@ -238,26 +221,24 @@ class App extends Component {
       //     }
       //   })
       //   .catch(err => alert("App mounting error: ", err));
-      const first = AsyncStorage.getItem('RANDOM');
+      const first = AsyncStorage.getItem(HAS_LAUNCHED);
+      // Check if value present, if so not first launched
       if (first !== null) {
-        // console.log("We have data!")
-        this.setState({ hasCheckedAsyncStorage: true })
+        this.setState({ isFirstLaunch: false, hasCheckedAsyncStorage: true });
         // console.log("INSIDE of async, first launch:", this.state.isFirstLaunch)
       } else {
-        // console.log("First launch, random!")
-        this.state.isFirstLaunch = true;
-        this.setState({ isFirstLaunch: true, hasCheckedAsyncStorage: true })
+        this.setState({ isFirstLaunch: true, hasCheckedAsyncStorage: true });
       }
-      // console.log("OUTSIDE of async, first launch:", this.state.isFirstLaunch);
-      AsyncStorage.setItem('RANDOM', 'true');
+      this.setState({ isFirstLaunch: true })
+      AsyncStorage.setItem(HAS_LAUNCHED, 'true');
     } catch (error) {
       console.log(error)
     }
   }
 
   componentWillUnmount() {
-      BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
-      AsyncStorage.setItem('RANDOM', 'true');
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+    AsyncStorage.setItem(HAS_LAUNCHED, 'true');
   }
 
   onBackPress = () => {
@@ -276,11 +257,12 @@ class App extends Component {
   };
 
   async _cacheResourcesAsync() {
-    const fontAssets = cacheFonts([FontAwesome.font,
+    const fontAssets = cacheFonts([FontAwesome.font, MaterialCommunityIcons.font, Entypo.font,
         {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
         {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
-    const imageAssets = cacheImages([require('./src/assets/windmill.png'),
-        require('./src/assets/windmillHeader.png')]);
+
+    const imageAssets = cacheImages([require('./src/assets/windmillCard.png'),
+        require('./src/assets/windmillHeader.png'), require('./src/assets/windmillFull.png')]);
 
     await Promise.all([...imageAssets, ...fontAssets]);
   }
@@ -294,13 +276,13 @@ class App extends Component {
 
 
   render() {
-    const { dispatch, nav, data, ui } = this.props;
+    const { dispatch, nav, data, ui, turbine } = this.props;
     const navigation = addNavigationHelpers({
         dispatch,
         data,
         ui,
         state: nav,
-        addListener
+        addListener,
     });
 
     StatusBar.setBarStyle('light-content', false);
@@ -313,7 +295,7 @@ class App extends Component {
       }
     }
 
-    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage) {
+    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || turbine.loading) {
       return(
         <AppLoading
             startAsync={this._cacheResourcesAsync}
@@ -325,19 +307,18 @@ class App extends Component {
     // if (!this.state.hasCheckedAsyncStorage) {
     //   return( null )
     // }
-
-    //Check if app has been launched for the first time
+    // Check if app has been launched for the first time
     // console.log("Before first launch return, isFirstLaunch: ", this.state.isFirstLaunch);
     // console.log("Before first launch return, checked Async: ", this.state.hasCheckedAsyncStorage)
-    // if (this.state.isFirstLaunch == true && this.state.hasCheckedAsyncStorage) {
-    //   // console.log("In first launch return, isFirstLaunch: ", this.state.isFirstLaunch);
-    //   // console.log("In first launch return, checked Async: ", this.state.hasCheckedAsyncStorage)
-    //   return (
-    //     <IntroSlider
-    //       onDone={this.closeIntro}
-    //     />
-    //   );
-    // }
+        // makes Intro screen appear
+    // if (this.state.isFirstLaunch && this.state.hasCheckedAsyncStorage) {
+      if (this.state.isFirstLaunch) {
+      return (
+        <IntroSlider
+          onDone={this.closeIntro}
+        />
+      );
+    }
 
     return (
       <RootTabs navigation={navigation} />
@@ -350,6 +331,7 @@ const AppWithNavigationState = connect(mapStateToProps)(App);
 const store = createStore(appReducer, {}, applyMiddleware(handler));
 store.dispatch({type: 'GET_GRAPH_DATA'});
 store.dispatch({type: 'GET_LAYOUT'});
+store.dispatch({type: 'GET_TURBINE'});
 
 
 export default class Root extends Component {
