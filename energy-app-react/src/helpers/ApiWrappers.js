@@ -653,17 +653,57 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
     return table;
 }
 
-export function getCampusUtilityConsumptionOverTimeGraphFormat(utility, timeStart, timeEnd, timeScale) {
+export function getCampusUtilityConsumptionOverTimeGraphFormat(utility, timeStart, timeEnd, timeScale, scaleFactor) {
     var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
-    var currentTime = new Date(timeEnd);
-    var reformattedDate = reformatDate(currentTime);
+    var currDate = new Date(timeEnd);
+    var reformattedDate = reformatDate(currDate);
 
     var table = new Array(numberEntries);
+    var year = 2018;
+    var month = 12;
+
     for (var i = numberEntries-1; i >= 0; i--) {
-        reformattedDate = reformatDate(currentTime);
+        reformattedDate = reformatDate(currDate);
 
         table[i] = {};
-        table[i]["x"] = reformattedDate.toString();
+
+        switch (scaleFactor){
+            case 1:
+                table[i]["x"]  = getDayOfWeek(currDate.getDay());
+                break;
+
+            case 7:
+                if (i==0) {
+                    table[i]["x"] = "-3";
+                } else if (i==1) {
+                    table[i]["x"] = "-2";
+                } else if (i==2) {
+                    table[i]["x"] = "-1";
+                } else if (i==3) {
+                    table[i]["x"] = "Current";
+                } else {
+                    table[i]["x"] = "help";
+                }
+                break;
+
+            case 30:
+                // quick fix
+                table[i]["x"] = month + "/" + '18';
+                month --;
+//                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                break;
+
+            case 365:
+                // quick fix
+                table[i]["x"] = year.toString();
+                year --;
+//                combinedTable[i]["x"] = currDate.getFullYear().toString();
+                break;
+
+            default:
+                table[i]["x"] = waterTable[i]["date"];
+                break;
+        }
 
         var utilityTable = wTable;
 
@@ -693,7 +733,7 @@ export function getCampusUtilityConsumptionOverTimeGraphFormat(utility, timeStar
 
         table[i]["y"] = Number(dataPt);
 
-        currentTime.setMinutes(currentTime.getMinutes() - timeScale);
+        currDate.setMinutes(currDate.getMinutes() - timeScale);
     }
 
     return table;
@@ -701,25 +741,24 @@ export function getCampusUtilityConsumptionOverTimeGraphFormat(utility, timeStar
 
 // Added wrapper to get data the way I need it
 export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, scaleFactor) {
-    var waterTable = getCampusUtilityConsumptionOverTimeGraphFormat("water", timeStart, timeEnd, timeScale);
-    var electricityTable = getCampusUtilityConsumptionOverTimeGraphFormat("electricity", timeStart, timeEnd, timeScale);
-    var gasTable = getCampusUtilityConsumptionOverTimeGraphFormat("gas", timeStart, timeEnd, timeScale);
-    var heatTable = getCampusUtilityConsumptionOverTimeGraphFormat("heat", timeStart, timeEnd, timeScale);
+    var waterTable = getCampusUtilityConsumptionOverTimeGraphFormat("water", timeStart, timeEnd, timeScale, scaleFactor);
+    var electricityTable = getCampusUtilityConsumptionOverTimeGraphFormat("electricity", timeStart, timeEnd, timeScale, scaleFactor);
+    var gasTable = getCampusUtilityConsumptionOverTimeGraphFormat("gas", timeStart, timeEnd, timeScale, scaleFactor);
+    var heatTable = getCampusUtilityConsumptionOverTimeGraphFormat("heat", timeStart, timeEnd, timeScale, scaleFactor);
 
     var combinedTable = new Array(waterTable.length);
     var finalTable = {};
     var currData = 0;
     var rank = waterTable.length;
     var year = 2018;
-    var month = 4;
+    var month = 12;
 
     for (var i=waterTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
-        currDate = new Date(waterTable[i]["x"]);
 
         switch (scaleFactor){
             case 1:
-                combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
+                combinedTable[i]["x"] = waterTable[i]["x"];
                 break;
 
             case 7:
