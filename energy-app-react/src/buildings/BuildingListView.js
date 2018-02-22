@@ -13,7 +13,7 @@ import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.j
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
 
-const themeStyles = GetStyle();
+const theme = GetStyle();
 
 class BuildingListView extends Component {
   renderHeader = (headerItem) => {
@@ -21,7 +21,7 @@ class BuildingListView extends Component {
   }
 
   renderItem = (item) => {
-    return <View style={[themeStyles.card, themeStyles.shadowed, styles.card]}>
+    return <View style={[theme.card, theme.shadowed, styles.card]}>
         <Text style={styles.header}>{item.item.name}</Text>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',}}>
             <Image
@@ -70,6 +70,15 @@ const navigateOnce = (getStateForAction) => (action, state) => {
     ) ? null : getStateForAction(action, state);
 };
 
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    },
+    headerTitle: {
+            fontFamily: theme.font,
+    }
+})
+
 const BuildingStack = StackNavigator({
   Buildings: {
       screen: BuildingListView,
@@ -80,6 +89,9 @@ const BuildingStack = StackNavigator({
         }),
         headerTintColor: 'white',
         headerStyle: navStyles.header,
+        headerTitleStyle: navStyles.headerTitle,
+        headerBackTitleStyle: navStyles.headerTitle,
+        headerBackTitle: 'Back',
       }),
   },
   BuildingCardView: {
@@ -107,6 +119,9 @@ const BuildingStack = StackNavigator({
       headerTitleStyle: navStyles.headerTitle,
       headerBackTitleStyle: navStyles.headerTitle,
       headerBackTitle: 'Back',
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
     }), 
   },
   Comparison: {
@@ -117,6 +132,9 @@ const BuildingStack = StackNavigator({
       }),
       headerTintColor: 'white',
       headerStyle: navStyles.header,
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
     }),
   },
   ComparisonPage: {
@@ -128,17 +146,14 @@ const BuildingStack = StackNavigator({
       }),
       headerTintColor: 'white',
       headerStyle: navStyles.header,
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
     }),
   },
 });
 
 BuildingStack.router.getStateForAction = navigateOnce(BuildingStack.router.getStateForAction);
-
-const navStyles = StyleSheet.create({
-    header: {
-        backgroundColor: '#0B5091',
-    },
-})
 
 const styles = StyleSheet.create({
   card: {
@@ -219,7 +234,7 @@ const styles = StyleSheet.create({
       color:'darkslategrey',
       paddingLeft: 3,
       backgroundColor: 'white',
-      fontWeight: 'bold',
+//      fontWeight: 'bold',
       alignSelf: 'flex-start',
   },
   compareButton: {

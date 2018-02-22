@@ -578,6 +578,9 @@ const EnergyMapViewStack = StackNavigator({
       title: "Energy Map",
       headerTintColor: 'white',
       headerStyle: {backgroundColor: '#0B5091'},
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
       ...Platform.select({
           android: { header: null }
       }),
@@ -617,6 +620,9 @@ const EnergyMapViewStack = StackNavigator({
       }),
       headerTintColor: 'white',
       headerStyle: navStyles.header,
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
     }),
   },
   ComparisonPage: {
@@ -628,6 +634,9 @@ const EnergyMapViewStack = StackNavigator({
         }),
         headerTintColor: 'white',
         headerStyle: navStyles.header,
+        headerTitleStyle: navStyles.headerTitle,
+        headerBackTitleStyle: navStyles.headerTitle,
+        headerBackTitle: 'Back',
     }),
   },
 });
@@ -638,6 +647,9 @@ const navStyles = StyleSheet.create({
     header: {
         backgroundColor: '#0B5091',
     },
+    headerTitle: {
+        fontFamily: theme.font,
+    }
 })
 
 const styles = StyleSheet.create({

@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 14,
+    fontSize: moderateScale(18),
     marginBottom: 10,
   },
 

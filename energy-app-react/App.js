@@ -279,7 +279,6 @@ class App extends Component {
 
   render() {
     const { dispatch, nav, data, ui, api } = this.props;
-//    console.log(turbine.loading);
 
     const navigation = addNavigationHelpers({
         dispatch,
@@ -298,7 +297,6 @@ class App extends Component {
          case 3: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab3, true); break;
       }
     }
-    console.log(api);
 
     if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || api.loading) {
       return(
