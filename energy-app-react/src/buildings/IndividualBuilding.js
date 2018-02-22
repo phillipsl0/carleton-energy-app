@@ -4,7 +4,7 @@ import { Platform, AppRegistry, SectionList, StyleSheet, View, Text, Image, Scro
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import { getEveryBuildingUtilityConsumption, getCurrentBuildingUtilityConsumption, getTotalConsumptionGraphFormat, getCurrentBuildingUtilityConsumptionGraphFormat } from './../helpers/ApiWrappers';
+// import { getAllCurrentBuildingGraphData } from './../helpers/ApiWrappers';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './../overview/GraphDetailCard';
@@ -13,21 +13,30 @@ import ComparisonPage from './ComparisonPage';
 import { moderateScale, verticalScale } from './../helpers/Scaling';
 import BuildingComparison from './BuildingComparison';
 
+// @connect(
+//     state => ({
+//         historicalData: state.data.historicalData,
+//         currentData: state.data.currentData,
+//     }),
+//     dispatch => ({
+//         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+//     }),
+// )
+
 @connect(
     state => ({
-        historicalData: state.data.historicalData,
-        currentData: state.data.currentData,
-        loading: state.data.loading,
+        historicalBuildingData: state.buildings.historicalBuildingData,
+        currentBuildingData: state.buildings.currentBuildingData,
     }),
     dispatch => ({
-        refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+        refresh: () => dispatch({type: 'GET_BUILDING_GRAPH_DATA'}),
     }),
 )
-
 export default class IndividualBuilding extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            buildingName: this.props.navigation.state.params.item.name,
             selectedUtility: 1, // index for utility card - itialized to gas
             selectedTime: 1, // index for time card - intialized to day
             view: 'day',
@@ -51,17 +60,15 @@ export default class IndividualBuilding extends Component {
     // Decide what units to render based on utility and time
     getBuildingUnits(utility, time) {
         var units = ""
-        console.log(utility);
         if (utility == 1) { // total
           units = "BTU"
-        } else if (utility == 2) { // gas
-          units = "BTU"
+        } else if (utility == 2) { // heat
+          units = "kBTU"
         } else if (utility == 3) { // electricity
           units = "kWh"
         } else if (utility == 4) { // water
           units = "gal"
         }
-        // REMOVING TIMEPERIOD
         var timePeriod = ""
         if (time == 1) {
             timePeriod = "/day"
@@ -77,15 +84,11 @@ export default class IndividualBuilding extends Component {
 
     // Displays header showing current usage
     getHeader = (currentData) => {
-        // Array of API data: [gas, electricity, heat, water]
+        // Array of API data ['data']['usage']: [gas, electiricy, heat, water]
         const theme = GetStyle(CurrTheme);
-        const { width, height } = Dimensions.get('window');
-        
+        const { width, height } = Dimensions.get('window');        
         try {
-            //console.log("selectedUtility", this.state.selectedUtility)
-            //headerText = this.numberWithCommas((getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.item.name, this.mapUtilityNameToIndex(this.state.selectedUtility))).toFixed(0))
-            // shows value (hence "y", "x" would show label) of current data usage
-            headerText = this.numberWithCommas((currentData["usage"][this.state.selectedUtility]["y"]).toFixed(0));
+            headerText = this.numberWithCommas((this.getHeaderText(currentData, this.state.selectedUtility)).toFixed(0));
             subheaderText = this.getBuildingUnits(this.state.selectedUtility, this.state.selectedTime)
         } catch (error) {
             console.log("Error in displaying IndividualBuilding header: ", error)
@@ -122,34 +125,80 @@ export default class IndividualBuilding extends Component {
         }
     }
 
-    // Returns data to be displayed
-    getGraphScope = (data) => {
-        // if (this.state.view == 'day') {
-        //     return this.state.dayData["data"];
-        // } else if (this.state.view == 'week') {
-        //     return this.state.weekData["data"];
-        // } else if (this.state.view == 'month') {
-        //     return this.state.monthData["data"];
-        // } else if (this.state.view == 'year') {
-        //      return this.state.yearData["data"];
-        // }
-        // Updated redux data
-        if (this.state.view == 'day') {
-            return data["dayUsage"].data;
-        } else if (this.state.view == 'week') {
-            return data["weekUsage"].data;
-        } else if (this.state.view == 'month') {
-            return data["monthUsage"].data;
-        } else if (this.state.view == 'year') {
-            return data["yearUsage"].data;
+    // Helper function to add commas to large numbers
+    numberWithCommas = (x) => {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Maps utility name to its respective API placement
+    getHeaderText(currentData, utilityIndex) {
+        if (utilityIndex == 1) {
+          // total
+          return (currentData["total"]);
         }
+        else if (utilityIndex == 2) {
+          // heat
+          return (currentData['data'][2]["y"]);
+        }
+        else if (utilityIndex == 3) {
+          // electric
+          return (currentData['data'][1]["y"]);
+        }
+        else if (utilityIndex == 4) {
+          // water
+          return (currentData['data'][3]["y"]);
+        }
+        return (currentData["total"]);
+    };
+
+    mapUtilityIndexToAPIName(utilityIndex) {
+        if (utilityIndex == 2) {
+          // heat
+          return ("heat");
+        }
+        else if (utilityIndex == 3) {
+          // electric
+          return ("electricity");
+        }
+        else if (utilityIndex == 4) {
+          // water
+          return ("water");
+        }
+        return ("electricity");
+    };
+
+    // Returns data to be displayed in graph following redux format
+    getGraphScope = (data) => {
+        if (this.state.selectedUtility == 1) {
+            if (this.state.view == 'day') {
+                return data["dayUsage"]["total"];
+            } else if (this.state.view == 'week') {
+                return data["weekUsage"]["total"];
+            } else if (this.state.view == 'month') {
+                return data["monthUsage"]["total"];
+            } else if (this.state.view == 'year') {
+                return data["yearUsage"]["total"];
+            }
+        } else {
+            utilityName = this.mapUtilityIndexToAPIName(this.state.selectedUtility)
+            if (this.state.view == 'day') {
+                return data["dayUsage"]["data"][utilityName];
+            } else if (this.state.view == 'week') {
+                return data["weekUsage"]["data"][utilityName];
+            } else if (this.state.view == 'month') {
+                return data["monthUsage"]["data"][utilityName];
+            } else if (this.state.view == 'year') {
+                return data["yearUsage"]["data"][utilityName];
+            }
+        };
     }
 
     // Gets data from time denominator buttons for graph
     scopeCallbackGraph = ( buttonView, buttonComparator, buttonIndex ) => {
         this.setState({ view: buttonView,
             viewNumber: buttonComparator,
-            selectedTime: buttonIndex});
+            selectedTime: buttonIndex
+        });
     }
 
     // Gets data from utility button
@@ -157,37 +206,15 @@ export default class IndividualBuilding extends Component {
         this.setState({ selectedUtility: buttonIndex});
     }
 
-    // Helper function to add commas to large numbers
-    numberWithCommas = (x) => {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    // Maps utility name to its respective utility mini card index
-    mapUtilityNameToIndex(utilityName) {
-        if (utilityName == 'gas') {
-          return (5);
-        }
-        else if (utilityName == 'electric') {
-          return (6);
-        }
-        else if (utilityName == 'heat') {
-          return (7);
-        }
-        else if (utilityName == 'water') {
-          return (8);
-        }
-        return (1);
-    };
-
-
     render() {
         const theme = GetStyle(CurrTheme);
         const { width, height } = Dimensions.get('window');
-        const { refresh, loading, historicalData, currentData } = this.props; // redux
+        const { refresh, historicalBuildingData, currentBuildingData } = this.props; // redux
         var utilities = ["Gas", "Electric", "Heat", "Water"];
 
-        currData = this.getGraphScope(historicalData);
-        header = this.getHeader(currentData);
+        graphData = this.getGraphScope(historicalBuildingData[this.state.buildingName])
+        // console.log("Graph data", graphData)
+        header = this.getHeader(currentBuildingData[this.state.buildingName]);
 
         if (height < 600) {
             return (
@@ -200,7 +227,7 @@ export default class IndividualBuilding extends Component {
                         <View style={[{width:width+5}, styles.head, styles.smallHeight, theme.carletonBlueBackground]}/>
                         {header}
                     </View>
-                    <GraphDetail data={currData} // was graphData
+                    <GraphDetail data={graphData}
                         utilityCallback={this.scopeCallbackUtilities}
                         graphCallback={this.scopeCallbackGraph}
                         timeSelected={this.state.selectedTime}
@@ -221,7 +248,7 @@ export default class IndividualBuilding extends Component {
                         <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
                         {header}
                     </View>
-                    <GraphDetail data={currData} // was graphData
+                    <GraphDetail data={graphData}
                         utilityCallback={this.scopeCallbackUtilities}
                         graphCallback={this.scopeCallbackGraph}
                         timeSelected={this.state.selectedTime}

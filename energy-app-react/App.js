@@ -16,7 +16,7 @@ import EnergyMapViewStack from './src/energymap/EnergyMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
-import { handler, dataReducer, layoutReducer, apiReducer } from './src/helpers/ReduxHandler'
+import { handler, dataReducer, layoutReducer, apiReducer, buildingDataReducer } from './src/helpers/ReduxHandler'
 import { getCurrentGenerationGraphFormat, 
   getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
@@ -168,8 +168,9 @@ const navReducer = (state = initialState, action) => {
 const appReducer = combineReducers({
     nav: navReducer,
     data: dataReducer,
-    layout: layoutReducer,
     api: apiReducer,
+    ui: layoutReducer,
+    buildings: buildingDataReducer
 
 });
 
@@ -184,8 +185,9 @@ const addListener = createReduxBoundAddListener("root");
 const mapStateToProps = (state) => ({
     nav: state.nav,
     data: state.data,
-    layout: state.layout,
+    ui: state.layout,
     api: state.api,
+    buildings: state.buildings
 });
 
 class App extends Component {
@@ -278,6 +280,7 @@ class App extends Component {
   render() {
     const { dispatch, nav, data, ui, api } = this.props;
 //    console.log(turbine.loading);
+
     const navigation = addNavigationHelpers({
         dispatch,
         data,
@@ -332,6 +335,7 @@ const AppWithNavigationState = connect(mapStateToProps)(App);
 
 const store = createStore(appReducer, {}, applyMiddleware(handler));
 store.dispatch({type: 'GET_GRAPH_DATA'});
+store.dispatch({type: 'GET_BUILDING_GRAPH_DATA'});
 store.dispatch({type: 'GET_LAYOUT'});
 store.dispatch({type: 'GET_TURBINE'});
 store.dispatch({type: 'GET_SOLAR'});

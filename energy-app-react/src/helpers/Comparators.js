@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { connect } from 'react-redux';
 
 import { moderateScale, verticalScale } from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes';
@@ -23,6 +24,11 @@ var comparisons = ["cars driven for 1 year", "miles driven by an average car", "
 var icons = ["car", "car", "delete-empty", "delete-empty", "gas-station", "fire", "truck", "home-modern", "weather-windy",
     "home-modern", "train", "lightbulb-on-outline", "barrel", "gas-cylinder", "tree", "hamburger"];
 
+@connect(
+    state => ({
+        ui: state.ui
+    }),
+)
 export default class Comparator extends Component {
     // combine the data into one total, and get random comparators
     convertData = (data) => {
@@ -59,10 +65,11 @@ export default class Comparator extends Component {
         var font = 12;
         var icon = 20;
 
-        const { width, height } = Dimensions.get('window');
+        const { ui } = this.props;
+        const { width, height } = ui.layout;
 
         if (width < 350) {
-            font = 11;
+            font = 10;
         }
 
         var converted = this.convertData(data);
@@ -78,18 +85,20 @@ export default class Comparator extends Component {
 
             <View style={ styles.divider }></View>
 
-            <View style={[theme.centered, {paddingTop: '2%', flex: 1}]}>
+            <View style={[theme.centered, {paddingTop: '2%', flex: 1, }]}>
 
             <Text style={[ theme.fontBold ]}> Total: </Text>
-            <Text style={ [styles.oneFont, { fontSize: font, flex: 1 }]}>
+            <Text style={ [styles.oneFont, { fontSize: font, flex: 1 }, theme.fontRegular]}>
                 {roundNumber(converted["total"])} MWh in the last hour
             </Text>
+            </View>
+            <View style={[theme.centered, {paddingTop: '2%', flex: 1,}]}>
             <Text style={[ theme.fontBold ]}> Compare to... </Text>
 
             <View style={[ theme.flexboxRow ]}>
 
               <MaterialCommunityIcons color="#0B5091" size={moderateScale(icon)} name={icons[converted["comparators"][0]]}/>
-              <Text style={[ styles.oneFont, { fontSize: moderateScale(font) }] }>
+              <Text style={[ styles.oneFont, theme.fontRegular, { fontSize: moderateScale(font) }] }>
               {roundNumber(kWhComparison[converted["comparators"][0]]* converted["total"])} {comparisons[converted["comparators"][0]]}
               </Text>
 

@@ -1,7 +1,7 @@
 import { Platform, Dimensions } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
-import { getAllHistoricalGraphData, getAllCurrentGraphData, dateToTimestamp, cleanupData, getEveryBuildingEveryUtilityConsumption } from './ApiWrappers';
+import { getAllHistoricalGraphData, getAllCurrentGraphData, dateToTimestamp, cleanupData, getAllHistoricalBuildingGraphData, getAllCurrentBuildingGraphData } from './ApiWrappers';
 import { calculateRatio } from './General';
 
 /* Redux handles state for the app, including navigation
@@ -18,9 +18,8 @@ export const handler = store => next => action => {
         case 'GET_BUILDING_GRAPH_DATA':
             store.dispatch({type: 'GET_BUILDING_GRAPH_DATA_LOADING'});
             try {
-                var historicalBuildingData = 100
-                var currentBuildingData = getEveryBuildingEveryUtilityConsumption();
-
+                var historicalBuildingData = getAllHistoricalBuildingGraphData();
+                var currentBuildingData = getAllCurrentBuildingGraphData();
                 store.dispatch({
                     type: 'GET_BUILDING_GRAPH_DATA_RECEIVED',
                     historicalBuildingData,
@@ -28,9 +27,10 @@ export const handler = store => next => action => {
                 });
             } catch (error) {
                 next({
-                    type: 'GET_BUILDING_GRAPH_DATA_ERROR'
+                    type: 'GET_BUILDING_GRAPH_DATA_ERROR',
                 });
             }
+
             break;
         case 'GET_GRAPH_DATA':
             store.dispatch({type: 'GET_GRAPH_DATA_LOADING'});
@@ -69,7 +69,6 @@ export const handler = store => next => action => {
             var timeEnd = new Date();
             var timeStart = new Date();
             timeStart.setHours(timeEnd.getHours()-1);
-
             var start = dateToTimestamp(timeStart);
             var end = dateToTimestamp(timeEnd);
 
@@ -135,7 +134,6 @@ export const apiReducer = (state = { turbineData: [], solarData: [], loading: tr
                     loading: true,
                 };
             case 'GET_TURBINE_DATA_RECEIVED':
-                console.log(action.turbineData);
                 return {
                     loading: false,
                     turbineData: action.turbineData,
@@ -159,6 +157,26 @@ export const apiReducer = (state = { turbineData: [], solarData: [], loading: tr
 
             default:
                 return state;
+        };
+}
+
+export const buildingDataReducer = (state = { historicalBuildingGraphData: [], currentBuildingGraphData: [], loading: true}, action) => {
+    switch (action.type) {
+        case 'GET_BUILDING_GRAPH_DATA_LOADING':
+            return {
+                ...state,
+                loading:true,
+            };
+        case 'GET_BUILDING_GRAPH_DATA_RECEIVED':
+            return {
+                loading: false,
+                historicalBuildingData: action.historicalBuildingData,
+                currentBuildingData: action.currentBuildingData
+            };
+        case 'GET_BUILDING_GRAPH_DATA_ERROR':
+            return state;
+        default:
+            return state;
         };
 }
 
@@ -189,7 +207,7 @@ export const dataReducer = (state = { historicalGraphData: [], currentGraphData:
 const initialState = {'height': 500, 'width': 500};
 
 export const layoutReducer = (state = {layout: []}, action) => {
-    const layout = Dimensions.get('screen');
+    const ui = Dimensions.get('screen');
     switch (action.type) {
         case 'GET_LAYOUT_RECEIVED':
             return {

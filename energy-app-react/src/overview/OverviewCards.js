@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, Platform, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Image, Platform, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { Svg } from 'react-native-svg';
 
@@ -30,6 +30,7 @@ const GEO = 4;
         historicalData: state.data.historicalData,
         currentData: state.data.currentData,
         loading: state.data.loading,
+        ui: state.ui,
     }),
     dispatch => ({
         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
@@ -104,6 +105,26 @@ export default class OverviewCards extends Component {
                 case "year":
                     return data["yearGeneration"].rank;
             }
+        }
+    }
+
+    getUnits = (indexData) => {
+        if (indexData["three"]){
+            switch(indexData["indices"][2]){
+                case "gas":
+                    return "BTU";
+                    break;
+
+                case "water":
+                    return "gal";
+                    break;
+
+                default:
+                    return "kWh";
+                    break;
+            }
+        } else {
+            return "kWh";
         }
     }
 
@@ -201,7 +222,8 @@ export default class OverviewCards extends Component {
 
     getHeader = (historicalData, cardType, currentData) => {
         const theme = GetStyle(CurrTheme);
-        const { width, height } = Dimensions.get('window');
+        const { ui } = this.props;
+        const { width, height } = ui.layout;
         var units = ["thm", "kWh", "kBTU", "gal"];
 
         var indexData = this.getIndices();
@@ -213,13 +235,13 @@ export default class OverviewCards extends Component {
         if (indexData["three"]){
             index = historicalData[firstIndex][secondIndex][thirdIndex].length-1;
             headerText = roundNumber(historicalData[firstIndex][secondIndex][thirdIndex][index]["y"]);
-            subheaderText = units[0] + " in the past ";
+            subheaderText = this.getUnits(indexData) + " in the past ";
             subheaderHighlight = this.state.view;
 
         } else {
             index = historicalData[firstIndex][secondIndex].length-1;
             headerText = roundNumber(historicalData[firstIndex][secondIndex][index]["y"]);
-            subheaderText = units[0] + " in the past ";
+            subheaderText = this.getUnits(indexData) + " in the past ";
             subheaderHighlight = this.state.view;
         }
 
@@ -264,15 +286,14 @@ export default class OverviewCards extends Component {
 
 
     render() {
-        const { width, height } = Dimensions.get('window');
-        console.log(height);
+        const { ui } = this.props;
+        const { width, height } = ui.layout;
         const theme = GetStyle(CurrTheme);
         const { refresh, loading, historicalData, currentData } = this.props;
 
         cardType = this.props.navigation.state.params.card;
         currData = this.getGraphScope(historicalData, cardType);
         header = this.getHeader(historicalData, cardType, currentData);
-//        currData = this.state.graphData;
 
         if (height < 600) {
             return(
