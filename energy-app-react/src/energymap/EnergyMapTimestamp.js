@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StyleSheet, Dimensions, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { connect } from 'react-redux';
 
 // Timestamp for EnergyMap's Update
+
+@connect(
+    state => ({
+        ui: state.ui,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+    }),
+)
 export default class EnergyMapTimestamp extends Component {
   constructor(props) {
     super(props);
@@ -23,8 +33,16 @@ export default class EnergyMapTimestamp extends Component {
   }
 
   render() {
+    const { ui } = this.props;
+    const { width, height } = ui.layout;
+    var marginRight = "0%";
+
+    if (height < 600) {
+        marginRight = '10%';
+    }
+
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { marginRight: marginRight}]}>
       <Text style={styles.text}>
         Last updated: {this.getTime()}
       </Text>

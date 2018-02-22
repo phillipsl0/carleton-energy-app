@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions, Heading, Overlay, TouchableHighlight } from 'react-native';
 import { Button } from 'react-native-elements'
+import { connect } from 'react-redux';
+
 import { moderateScale } from './../helpers/Scaling';
 import CurrFont from './../styling/CurrentFont';
 const defaultFont = CurrFont+'-regular';
 
 //const UTILITIES = getUtilitiesList();
-// const UTILITIES = ['Gas', 'Electric', 'Heat', 'Water'];
-const UTILITIES = ['Total', 'Gas', 'Electric', 'Water'];
-
+const UTILITIES = ['Total', 'Heat', 'Electric', 'Water'];
 
 // Class for individual buttons
+
+@connect(
+    state => ({
+        ui: state.ui,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+    }),
+)
 class UtilityButton extends Component {
   constructor(props) {
     super(props);
@@ -20,8 +29,19 @@ class UtilityButton extends Component {
   }
 
   render() {
+    const { ui } = this.props;
+    const { width, height } = ui.layout;
     const selected = this.props.selected.toLowerCase();
     const utility = this.props.utility.toLowerCase();
+    var fontSize = 10;
+    var paddingLeft = 12;
+    var paddingRight = 12;
+
+    if (height < 600) {
+        fontSize = 8;
+        paddingRight = 3;
+        paddingLeft = 3;
+    }
 
     return (
         <Button
@@ -31,7 +51,8 @@ class UtilityButton extends Component {
           backgroundColor={selected == utility ? '#0B5091' : 'white'}
           color={selected ==  utility ? 'white' : '#0B5091'}
           textStyle={ styles.text }
-          buttonStyle={{ borderWidth: 1, borderRadius: 10, borderColor: '#e1e8ee' }} // style based off of UtilitiesMiniCards
+          buttonStyle={{ borderWidth: 1, borderRadius: 10, borderColor: '#e1e8ee',
+           paddingRight: paddingRight, paddingLeft: paddingLeft }} // style based off of UtilitiesMiniCards
         />
       )
   }
@@ -69,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     top: 20,
     position: 'absolute'
   },
