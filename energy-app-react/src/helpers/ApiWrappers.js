@@ -1308,3 +1308,278 @@ function getYearBuildingGraph(currDate, building) {
     comparisonDate.setYear(currDate.getFullYear()-4);
     return getTotalBuildingConsumptionGraphFormat(comparisonDate, currDate, 525600, 365, building);
 }
+
+export function getBuildingIDs() {
+    var buildings = {"Burton":39, "Sayles":10, "Severance":61, "Davis":44, "Musser":57, 
+                    "Myers":58, "Cassat":40, "Memo":50, "Nourse":59, "Evans":45, 
+                    "Goodhue":47, "Watson":64, "Scoville":60};
+    return buildings;
+}
+
+export function getConsumptionDataTableAllBuildings(date) {
+    // Return a table of all relevant data for ALL buildings
+    // Table will have a row for each building
+    var buildings = getBuildingIDs();
+
+    table = {};
+    for (var i=0; i<buildings.length; i++){
+        table[i] = getConsumptionDataTableForBuilding(buildings[i], date);
+    }
+
+    return table;
+}
+
+export function getConsumptionDataTableForBuilding(building, date) {
+    // Data we need FOR EACH UTILITY TYPE (3 utilities): 
+    // • 7 datapoints: value @ this time of day (hour) over the last 7 days
+    // • 12 datapoints: value @ this time (hour) on this day of the month (1st - 30th) over the last 12 months
+    // • 4 datapoints: value @ this time (hour) on this day of the week (mon/tue/wed)over the last 4 weeks
+    // • 5 datapoints: value @ this day of the year (DD/MM) over the past 5 years
+
+    var table = {};
+    // Here's a visual reference for the layout of the data "table" (object, really)
+    table[building] = {
+        electricity:{
+            days: [],
+            weeks: [],
+            months: [],
+            years: []
+        },
+        water:{
+            days: [],
+            weeks: [],
+            months: [],
+            years: []},
+        heat:{
+            days: [],
+            weeks: [],
+            months: [],
+            years: []}
+    };
+
+    var buildingID = getBuildingIDs()[building];
+
+    // Historical data dump only went up until the beginning of 2018
+    // If we pass in a date beyond then, we'll get no data back from the API
+    if (date.getFullYear() > 2017){
+        date = new Date("2017", "00", "01", "00", "00", "00", "00");
+    }
+
+    // get data for last 7 days (value on this hour yesterday, day before,...)
+    for (let daysAgo=0; daysAgo<7; daysAgo++){
+        var start = new Date(date);
+        var end = new Date(date);
+
+        start.setDate(date.getDate()-daysAgo);
+        end.setDate(date.getDate()-daysAgo);
+        end.setHours(start.getHours() + 1);
+
+        startStamp = dateToTimestamp(start);
+        endStamp = dateToTimestamp(end);
+        var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+    
+        console.log(url);
+        fetch(url).then((response) => response.json()).then((responseJson) => {
+
+            console.log(responseJson.length);
+
+            if (responseJson.length == 0) {
+                console.log("NO DATA: " + url);
+                // TO DO: fill in the table with NULL or 0 values rather than completely skipping them
+            }
+
+            for (let i =0; i < responseJson.length ; i++) {
+
+                obj = responseJson[i];
+                // name = obj.name.substring(15,24)
+                val = obj.pointvalue.toFixed(2)
+                units = obj.units;
+
+                switch (units) {
+                    case "kWh":
+                        table[building].electricity.days.push(val);
+                        console.log(table);
+                        break;
+                    case "kBTU":
+                        table[building].heat.days.push(val);
+                        console.log(table);
+                        break;
+                    case "gal":
+                        table[building].water.days.push(val);
+                        console.log(table);
+                        break;
+                }
+
+            }
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+    }
+
+
+    // get data for last 12 months (value on this hour of this day last month, month before,...)
+    for(let monthsAgo=0; monthsAgo<12; monthsAgo++){
+        var start = new Date(date);
+        var end = new Date(date);
+
+        start.setMonth(date.getMonth()-monthsAgo);
+        end.setMonth(date.getMonth()-monthsAgo);
+        end.setHours(start.getHours() + 1);
+
+        startStamp = dateToTimestamp(start);
+        endStamp = dateToTimestamp(end);
+        var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+    
+        console.log(url);
+        fetch(url).then((response) => response.json()).then((responseJson) => {
+
+            console.log(responseJson.length);
+
+            if (responseJson.length == 0) {
+                console.log("NO DATA: " + url);
+                // TO DO: fill in the table with NULL or 0 values rather than completely skipping them
+            }
+
+            for (let i =0; i < responseJson.length ; i++) {
+
+                obj = responseJson[i];
+                // name = obj.name.substring(15,24)
+                val = obj.pointvalue.toFixed(2)
+                units = obj.units;
+
+                switch (units) {
+                    case "kWh":
+                        table[building].electricity.months.push(val);
+                        console.log(table);
+                        break;
+                    case "kBTU":
+                        table[building].heat.months.push(val);
+                        console.log(table);
+                        break;
+                    case "gal":
+                        table[building].water.months.push(val);
+                        console.log(table);
+                        break;
+                }
+
+            }
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+    // get data for last 4 weeks (value on this hour of this day last week, week before,...)
+    for(let weeksAgo=0; weeksAgo<4; weeksAgo++){
+        var start = new Date(date);
+        var end = new Date(date);
+
+        start.setDate(date.getDate()-7*weeksAgo);
+        end.setDate(date.getDate()-7*weeksAgo);
+        end.setHours(start.getHours() + 1);
+
+        startStamp = dateToTimestamp(start);
+        endStamp = dateToTimestamp(end);
+        var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+    
+        console.log(url);
+        fetch(url).then((response) => response.json()).then((responseJson) => {
+
+            console.log(responseJson.length);
+
+            if (responseJson.length == 0) {
+                console.log("NO DATA: " + url);
+                // TO DO: fill in the table with NULL or 0 values rather than completely skipping them
+            }
+
+            for (let i =0; i < responseJson.length ; i++) {
+
+                obj = responseJson[i];
+                // name = obj.name.substring(15,24)
+                val = obj.pointvalue.toFixed(2)
+                units = obj.units;
+
+                switch (units) {
+                    case "kWh":
+                        table[building].electricity.weeks.push(val);
+                        console.log(table);
+                        break;
+                    case "kBTU":
+                        table[building].heat.weeks.push(val);
+                        console.log(table);
+                        break;
+                    case "gal":
+                        table[building].water.weeks.push(val);
+                        console.log(table);
+                        break;
+                }
+
+            }
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+
+    // get data for last 5 years (value on this hour of this day last year, year before,...)
+    for(let yearsAgo=0; yearsAgo<5; yearsAgo++){
+        var start = new Date(date);
+        var end = new Date(date);
+
+        start.setFullYear(date.getFullYear()-yearsAgo);
+        end.setFullYear(date.getFullYear()-yearsAgo);
+        end.setHours(start.getHours() + 1);
+
+        startStamp = dateToTimestamp(start);
+        endStamp = dateToTimestamp(end);
+        var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+    
+        console.log(url);
+        fetch(url).then((response) => response.json()).then((responseJson) => {
+
+            console.log(responseJson.length);
+
+            if (responseJson.length == 0) {
+                console.log("NO DATA: " + url);
+                // TO DO: fill in the table with NULL or 0 values rather than completely skipping them 
+            }
+
+            for (let i =0; i < responseJson.length ; i++) {
+
+                obj = responseJson[i];
+                // name = obj.name.substring(15,24)
+                val = obj.pointvalue.toFixed(2)
+                units = obj.units;
+
+                switch (units) {
+                    case "kWh":
+                        table[building].electricity.years.push(val);
+                        console.log(table);
+                        break;
+                    case "kBTU":
+                        table[building].heat.years.push(val);
+                        console.log(table);
+                        break;
+                    case "gal":
+                        table[building].water.years.push(val);
+                        console.log(table);
+                        break;
+                }
+
+            }
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+}
+
+
