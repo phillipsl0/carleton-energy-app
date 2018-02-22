@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions, Heading, Overlay, TouchableHighlight } from 'react-native';
-import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
 import { Button } from 'react-native-elements'
 import { moderateScale } from './../helpers/Scaling';
+import CurrFont from './../styling/CurrentFont';
+const defaultFont = CurrFont+'-regular';
+
+
 
 //const UTILITIES = getUtilitiesList();
 // const UTILITIES = ['Gas', 'Electric', 'Heat', 'Water'];
@@ -29,7 +32,7 @@ class UtilityButton extends Component {
           onPress={() => this.props.onPress(utility)}
           backgroundColor={selected == utility ? '#0B5091' : 'white'}
           color={selected ==  utility ? 'white' : '#0B5091'}
-          textStyle={{ fontSize: moderateScale(10) }}
+          textStyle={ styles.text }
           buttonStyle={{ borderWidth: 1, borderRadius: 10, borderColor: '#e1e8ee' }} // style based off of UtilitiesMiniCards
         />
       )
@@ -84,6 +87,11 @@ const styles = StyleSheet.create({
   	textAlign: 'center',
     color: 'blue',
     backgroundColor: '#ffffff'
+  },
+  text: {
+    fontFamily: defaultFont,
+    fontSize: moderateScale(10),
+
   }
 });
 
