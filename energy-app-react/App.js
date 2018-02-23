@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
-import { Platform, StyleSheet, BackHandler, 
+import { Platform, StyleSheet, BackHandler,
   View, StatusBar, AsyncStorage} from 'react-native';
 import { TabNavigator, TabBarTop, TabBarBottom, SafeAreaView,
   NavigationActions, addNavigationHelpers } from 'react-navigation';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { createReduxBoundAddListener, 
+import { createReduxBoundAddListener,
   createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 //import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
@@ -17,7 +17,7 @@ import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
 import { handler, dataReducer, layoutReducer, apiReducer } from './src/helpers/ReduxHandler'
-import { getCurrentGenerationGraphFormat, 
+import { getCurrentGenerationGraphFormat,
   getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
 import IntroSlider from './src/intro/IntroSlider';
@@ -110,13 +110,13 @@ const RootTabs = TabNavigator({
         },
       }
   },
-   { 
+   {
     tabBarComponent: props => {
       const backgroundColor = props.position.interpolate({
         inputRange: [0, 1, 2, 3],
-        outputRange: [tabStyle.tabColors.tab0, 
-                      tabStyle.tabColors.tab1, 
-                      tabStyle.tabColors.tab2, 
+        outputRange: [tabStyle.tabColors.tab0,
+                      tabStyle.tabColors.tab1,
+                      tabStyle.tabColors.tab2,
                       tabStyle.tabColors.tab3]
       })
       return (
@@ -130,8 +130,8 @@ const RootTabs = TabNavigator({
         { style: navStyle.header,
           labelStyle: navStyle.label,
           indicatorStyle: navStyle.indicator,
-          activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF', 
-          inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90', 
+          activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF',
+          inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90',
           pressColor: '#DDD' // Android ripple color onPress
         },
      navigationOptions: ({ navigation }) => ( {
@@ -194,7 +194,7 @@ class App extends Component {
     isFirstLaunch: true,
     hasCheckedAsyncStorage: false,
   };
-  
+
   /*
   Great info about components mounting:
   https://daveceddia.com/where-fetch-data-componentwillmount-vs-componentdidmount/
@@ -205,7 +205,7 @@ class App extends Component {
     // checkIfFirstLaunch()
     //   .then(res => this.setState({ isFirstLaunch: res, hasCheckedAsyncStorage: true }))
     //   .catch(err => alert("An error occurred with async: ", err));
-    
+
     try {
       // AsyncStorage.getItem('RANDOM')
       //   .then(res => {
@@ -266,13 +266,13 @@ class App extends Component {
 
     await Promise.all([...imageAssets, ...fontAssets]);
   }
-      
+
   // Closes intro screen when done button is pressed
   closeIntro = (onDonePress) => {
     if (onDonePress == true) {
       this.setState({ isFirstLaunch: false });
     };
-  }  
+  }
 
 
   render() {
@@ -312,14 +312,14 @@ class App extends Component {
     // console.log("Before first launch return, checked Async: ", this.state.hasCheckedAsyncStorage)
         // makes Intro screen appear
     // if (this.state.isFirstLaunch && this.state.hasCheckedAsyncStorage) {
-      if (this.state.isFirstLaunch) {
+    /*  if (this.state.isFirstLaunch) {
       return (
         <IntroSlider
           onDone={this.closeIntro}
         />
       );
     }
-
+    */
     return (
       <RootTabs navigation={navigation} />
     );
