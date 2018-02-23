@@ -39,15 +39,14 @@ const initialRegion = {
 
 //Get redux
 @connect(
-     state => ({
-         historicalData: state.data.historicalData,
-         currentData: state.data.currentData,
-         loading: state.data.loading,
-     }),
-     dispatch => ({
-         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
-     }),
- )
+    state => ({
+        historicalBuildingData: state.buildings.historicalBuildingData,
+        currentBuildingData: state.buildings.currentBuildingData,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_BUILDING_GRAPH_DATA'}),
+    }),
+)
 
 class EnergyMapView extends Component {
   constructor(props) {
@@ -265,10 +264,20 @@ class EnergyMapView extends Component {
     if (utilityName == 'electric') {
       return ('electricity');
     }
-    else if (utilityName == 'water') {
-      return ('water');
-    }
     return (utilityName);
+  };
+
+  getCurrentBuildingUsage(building, utilityName) {
+    if (utilityName == 'total') {
+      return this.props.currentBuildingData["total"];
+    } else if (utilityName == 'electricity') {
+      return this.props.currentBuildingData["data"][3]["y"];
+    } else if (utilityName == 'heat') {
+      return this.props.currentBuildingData["data"][2]["y"];
+    } else if (utilityName == 'water') {
+      return this.props.currentBuildingData["data"][3]["y"];
+    };
+    return 0
   };
 
 
@@ -305,7 +314,8 @@ class EnergyMapView extends Component {
   */
   determineBuildingColor(buildingName, utilitySelected) {
     try {
-      var use = getCurrentBuildingUtilityConsumption(buildingName, this.mapUtilityNameToAPI(utilitySelected)).toFixed(1)
+      // var use = getCurrentBuildingUtilityConsumption(buildingName, this.mapUtilityNameToAPI(utilitySelected)).toFixed(1)
+      var use = this.getCurrentBuildingUsage(buildingName, utilitySelected);
       //var h = (1.0 - use) * 240
       //console.log("Usage selected utility", use)
       var building = this.state.buildings_info

@@ -32,6 +32,7 @@ import BuildingComparison from './BuildingComparison';
         refresh: () => dispatch({type: 'GET_BUILDING_GRAPH_DATA'}),
     }),
 )
+
 export default class IndividualBuilding extends Component {
     constructor(props) {
         super(props);
