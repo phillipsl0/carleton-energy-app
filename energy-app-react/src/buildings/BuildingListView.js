@@ -13,6 +13,7 @@ import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.j
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
 import DefaultTheme from './../styling/DefaultTheme.js';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const theme = GetStyle();
 
@@ -29,9 +30,9 @@ class BuildingListView extends Component {
             <Image
             style={styles.image} source={{uri: item.item.avatar}}/>
             <View style={{flex: 1, flexDirection: 'column'}}>
-                <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
-                <Text style={styles.text}>Water: {item.item.water}</Text>
-                <Text style={styles.text}>Heat: {item.item.heat}</Text>
+                <Text style={styles.text}><FontAwesome name="lightbulb-o" size={moderateScale(16)} color="#0B5091" />: {item.item.electricity}</Text>
+                <Text style={styles.text}><FontAwesome name="shower" size={moderateScale(16)} color="#0B5091" />: {item.item.water}</Text>
+                <Text style={styles.text}><FontAwesome name="fire" size={moderateScale(16)} color="#0B5091" />: {item.item.heat}</Text>
             </View>
             <Button
                 rightIcon={{name: "angle-right", type: 'font-awesome', size: moderateScale(20)}}
@@ -53,7 +54,6 @@ class BuildingListView extends Component {
             data = {buildings}
             renderItem={this.renderItem}
             keyExtractor = {(item) => item.name}
-
         />
       </ScrollView>
     );
@@ -148,10 +148,10 @@ BuildingStack.router.getStateForAction = navigateOnce(BuildingStack.router.getSt
 
 const styles = StyleSheet.create({
   card: {
-    marginTop: 3, 
+    marginTop: 3,
     marginBottom: 6,
-    marginLeft: 6, 
-    marginRight: 6, 
+    marginLeft: 6,
+    marginRight: 6,
     paddingLeft: 5,
     paddingRight: 5,
     borderRadius: 5,
