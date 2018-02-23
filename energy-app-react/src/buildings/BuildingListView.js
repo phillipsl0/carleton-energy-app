@@ -21,9 +21,10 @@ class BuildingListView extends Component {
   }
 
   renderItem = (item) => {
-    return <View style={[theme.card, theme.shadowed, styles.card]}>
+    return <View style={[theme.card, styles.card, {marginTop: '3%'}]}>
         <Text style={styles.header}>{item.item.name}</Text>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',}}>
+        <View style={{ borderBottomWidth: 1, borderBottomColor: '#e1e8ee', marginTop: '1%' }}/>
+        <View style={[{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}, styles.innerView]}>
             <Image
             style={{alignItems:'center', width:75, borderColor:'white', borderWidth:1, marginBottom:3, marginLeft:3}} source={{uri: item.item.avatar}}/>
             <View style={{flex: 1, flexDirection: 'column', paddingTop:'2%'}}>
@@ -48,13 +49,12 @@ class BuildingListView extends Component {
 
     return (
       <ScrollView>
-        <View style={{paddingTop:8}} />
         <FlatList
             data = {buildings}
             renderItem={this.renderItem}
             keyExtractor = {(item) => item.name}
+
         />
-        <View style={{paddingTop:3}} />
       </ScrollView>
     );
   }
@@ -154,6 +154,13 @@ const styles = StyleSheet.create({
     marginRight: 6, 
     paddingLeft: 5,
     paddingRight: 5,
+    borderRadius: 5,
+    borderColor:'#e1e8ee',
+    borderWidth: 1,
+    ...Platform.select({
+          ios: {
+            shadowColor: 'rgba(0,0,0, .9)',
+          },})
     // borderWidth: 1, 
     // borderColor:'#cbd2d9', 
     // borderRadius:3, 
@@ -187,6 +194,8 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingRight: 15,
     paddingLeft: 20,
+    borderColor:'#e1e8ee',
+    borderWidth: 1,
     // color: 'silver'
     // paddingBottom: 55,
   },
@@ -231,6 +240,16 @@ const styles = StyleSheet.create({
   },
   compareButton: {
     marginRight: 10
+  },
+  innerView: {
+//    borderTopColor: '#e1e8ee',
+//    borderTopWidth: 1,
+//    borderBottomColor: '#e1e8ee' ,
+//    borderBottomWidth: 1,
+    backgroundColor: '#F5FCFF',
+    paddingTop: '2%',
+    paddingBottom: '2%',
+    marginTop: '1%',
   }
 })
 
