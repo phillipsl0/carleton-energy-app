@@ -1,13 +1,13 @@
 {
   "expo": {
     "name": "Carleton College Energy Comps",
-    "icon": "./src/assets/images/icon.png",
+    "icon": "./src/assets/icon.png",
     "version": "0.1.0",
     "slug": "cc-energy-app",
     "sdkVersion": "24.0.0",
     "privacy": "unlisted",
     "splash": {
-      "image": "./src/assets/images/splash.png",
+      "image": "./src/assets/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#0B5091"
     },
