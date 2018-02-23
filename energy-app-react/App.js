@@ -168,8 +168,8 @@ const navReducer = (state = initialState, action) => {
 const appReducer = combineReducers({
     nav: navReducer,
     data: dataReducer,
+    api: apiReducer,
     ui: layoutReducer,
-    turbine: apiReducer,
     buildings: buildingDataReducer
 
 });
@@ -186,7 +186,7 @@ const mapStateToProps = (state) => ({
     nav: state.nav,
     data: state.data,
     ui: state.layout,
-    turbine: state.turbine,
+    api: state.api,
     buildings: state.buildings
 });
 
@@ -278,7 +278,8 @@ class App extends Component {
 
 
   render() {
-    const { dispatch, nav, data, ui, turbine } = this.props;
+    const { dispatch, nav, data, ui, api } = this.props;
+
     const navigation = addNavigationHelpers({
         dispatch,
         data,
@@ -297,7 +298,7 @@ class App extends Component {
       }
     }
 
-    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || turbine.loading) {
+    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || api.loading) {
       return(
         <AppLoading
             startAsync={this._cacheResourcesAsync}
@@ -335,6 +336,7 @@ store.dispatch({type: 'GET_GRAPH_DATA'});
 store.dispatch({type: 'GET_BUILDING_GRAPH_DATA'});
 store.dispatch({type: 'GET_LAYOUT'});
 store.dispatch({type: 'GET_TURBINE'});
+store.dispatch({type: 'GET_SOLAR'});
 
 
 export default class Root extends Component {

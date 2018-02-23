@@ -89,12 +89,44 @@ export const handler = store => next => action => {
                     error
                 }))
                 break;
+        case 'GET_SOLAR':
+            store.dispatch({type: 'GET_SOLAR_DATA_LOADING'});
+            var timeEnd = new Date();
+            var timeStart = new Date();
+            timeStart.setHours(timeEnd.getHours()-1);
+
+            // Solar data are purely historical (up to 2018) at the moment 
+            if (timeStart.getFullYear() == 2018){
+                timeStart.setFullYear(2017);
+                timeEnd.setFullYear(2017);
+            }
+
+            var start = dateToTimestamp(timeStart);
+            var end = dateToTimestamp(timeEnd);
+
+            var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/51/'+start+'/'+end;
+
+            fetch(url)
+                .then((response) => response.json())
+                .then((jsonData) => {
+                    jsonData = cleanupData(jsonData);
+                    return jsonData;
+                })
+                .then(solarData => next({
+                    type: 'GET_SOLAR_DATA_RECEIVED',
+                    solarData
+                }))
+                .catch(error => next({
+                    type: 'GET_SOLAR_DATA_ERROR',
+                    error
+                }))
+                break;
         default:
             break;
     };
 }
 
-export const apiReducer = (state = { turbineData: [], loading: true}, action) => {
+export const apiReducer = (state = { turbineData: [], solarData: [], loading: true}, action) => {
     switch (action.type) {
             case 'GET_TURBINE_LOADING':
                 return {
@@ -107,6 +139,19 @@ export const apiReducer = (state = { turbineData: [], loading: true}, action) =>
                     turbineData: action.turbineData,
                 };
             case 'GET_TURBINE_DATA_ERROR':
+                return state;
+
+            case 'GET_SOLAR_LOADING':
+                return {
+                    ...state,
+                    loading: true,
+                };
+            case 'GET_SOLAR_DATA_RECEIVED':
+                return {
+                    loading: false,
+                    solarData: action.solarData,
+                };
+            case 'GET_SOLAR_DATA_ERROR':
                 return state;
 
             default:

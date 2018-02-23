@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableHighlight, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableHighlight, Image, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Card, Button } from 'react-native-elements'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -63,16 +63,16 @@ export default class OverviewListCard extends Component {
                       resizeMode="contain"
                       style={{ flex: 0.5, height: moderateScale(150), width: moderateScale(102), marginLeft: '-20%'}} />
                     <View style={[{alignItems: 'center', marginLeft: '-45%', marginTop: '15%', flex: 0.5 }]}>
-                        <Text style={[ styles.font, { color: 'black' } ]}>
+                        <Text style={[ styles.font, theme.fontRegular, { color: 'black' } ]}>
                           Wind energy currently
                         </Text>
-                        <Text style={[ styles.font, { color: 'black' } ]}>
+                        <Text style={[ styles.font, theme.fontRegular, { color: 'black' } ]}>
                           makes up
                         </Text>
                         <Text style={[ styles.font, theme.fontBold, { fontSize: 16, color: '#0B5091' }]}>
                           {this.props.windRatio["percentage"]}%
                         </Text>
-                        <Text style={[ styles.font, { color: 'black' } ]}>
+                        <Text style={[ styles.font, theme.fontRegular, { color: 'black' } ]}>
                           of overall energy use.
                         </Text>
                     </View>
@@ -121,9 +121,9 @@ export default class OverviewListCard extends Component {
 
         return(
             <Card
-             containerStyle={[theme.card, theme.flex, { marginRight: margins, marginLeft: margins}]}
+             containerStyle={[styles.card, theme.flex, { marginRight: margins, marginLeft: margins}]}
              title={item.title}
-             titleStyle={styles.title}
+             titleStyle={[styles.title, theme.fontRegular]}
              dividerStyle={styles.divider}>
 
              <TouchableHighlight
@@ -190,7 +190,20 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 14,
-    marginBottom: 10
+    fontSize: moderateScale(18),
+    marginBottom: 10,
+    fontWeight: 'normal'
   },
+
+  card: {
+    backgroundColor: 'white',
+    borderColor:'#e1e8ee',
+    borderWidth: 1,
+    borderRadius: 5,
+
+    ...Platform.select({
+          ios: {
+            shadowColor: 'rgba(0,0,0, .2)',
+          },})
+  }
 })

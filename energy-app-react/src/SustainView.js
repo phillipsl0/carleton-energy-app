@@ -222,6 +222,9 @@ const SustainStack = StackNavigator({
             }),
             headerTintColor: 'white',
             headerStyle: styles.navHeader,
+            headerTitleStyle: styles.headerTitle,
+            headerBackTitleStyle: styles.headerTitle,
+            headerBackTitle: 'Back',
         }),
     }
 });
@@ -294,6 +297,9 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         marginLeft: 3,
     },
+    headerTitle: {
+        fontFamily: themeStyles.font,
+    }
 });
 
 export default SustainStack;

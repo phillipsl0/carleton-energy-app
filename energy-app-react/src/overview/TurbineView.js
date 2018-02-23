@@ -21,7 +21,8 @@ const theme = GetStyle(CurrTheme);
         windSpeed: state.data.windSpeed,
         windRatio: state.data.windRatio,
         loading: state.loading,
-        turbine: state.turbine,
+        turbine: state.api.turbine,
+        solar: state.api.solar,
         ui: state.ui,
     }),
 )
@@ -41,7 +42,7 @@ export default class Windmill extends Component {
     }
 
     render() {
-        const { currentData, totals, windSpeed, windRatio, turbine, ui } = this.props;
+        const { currentData, totals, windSpeed, windRatio, turbine, ui, solar } = this.props;
         const { width, height } = ui.layout;
 
         turbineGeneration = turbine.turbineData;

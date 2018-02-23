@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions,
+import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions, ScrollView,
   View, Text, Image, TouchableOpacity, Platform } from 'react-native'
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native-elements';
@@ -13,7 +13,7 @@ import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.j
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
 
-const themeStyles = GetStyle();
+const theme = GetStyle();
 
 class BuildingListView extends Component {
   renderHeader = (headerItem) => {
@@ -21,7 +21,7 @@ class BuildingListView extends Component {
   }
 
   renderItem = (item) => {
-    return <View style={[themeStyles.card, themeStyles.shadowed, styles.card]}>
+    return <View style={[theme.card, theme.shadowed, styles.card]}>
         <Text style={styles.header}>{item.item.name}</Text>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',}}>
             <Image
@@ -47,14 +47,15 @@ class BuildingListView extends Component {
     const {navigate} = this.props.navigation;
 
     return (
-      <View>
+      <ScrollView>
         <View style={{paddingTop:8}} />
         <FlatList
             data = {buildings}
             renderItem={this.renderItem}
             keyExtractor = {(item) => item.name}
         />
-      </View>
+        <View style={{paddingTop:3}} />
+      </ScrollView>
     );
   }
 }
@@ -70,8 +71,17 @@ const navigateOnce = (getStateForAction) => (action, state) => {
     ) ? null : getStateForAction(action, state);
 };
 
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    },
+    headerTitle: {
+            fontFamily: theme.font,
+    }
+})
+
 const BuildingStack = StackNavigator({
-  Buildings: {
+  BuildingsListView: {
       screen: BuildingListView,
       navigationOptions: ({ navigation }) => ({
         title: 'Buildings',
@@ -80,6 +90,9 @@ const BuildingStack = StackNavigator({
         }),
         headerTintColor: 'white',
         headerStyle: navStyles.header,
+        headerTitleStyle: navStyles.headerTitle,
+        headerBackTitleStyle: navStyles.headerTitle,
+        headerBackTitle: 'Back',
       }),
   },
   BuildingCardView: {
@@ -112,37 +125,31 @@ const BuildingStack = StackNavigator({
   Comparison: {
     screen: BuildingComparison,
     navigationOptions: ({ navigation }) => ({
-      ...Platform.select({
-          android: { header: null }
-      }),
       headerTintColor: 'white',
       headerStyle: navStyles.header,
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
     }),
   },
   ComparisonPage: {
     screen: ComparisonPage,
     navigationOptions: ({ navigation }) => ({
-        title: 'Comparison',
-        ...Platform.select({
-            android: { header: null }
-      }),
       headerTintColor: 'white',
       headerStyle: navStyles.header,
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
     }),
   },
 });
 
 BuildingStack.router.getStateForAction = navigateOnce(BuildingStack.router.getStateForAction);
 
-const navStyles = StyleSheet.create({
-    header: {
-        backgroundColor: '#0B5091',
-    },
-})
-
 const styles = StyleSheet.create({
   card: {
-    marginTop: 0, 
+    marginTop: 3, 
+    marginBottom: 6,
     marginLeft: 6, 
     marginRight: 6, 
     paddingLeft: 5,
@@ -219,7 +226,7 @@ const styles = StyleSheet.create({
       color:'darkslategrey',
       paddingLeft: 3,
       backgroundColor: 'white',
-      fontWeight: 'bold',
+//      fontWeight: 'bold',
       alignSelf: 'flex-start',
   },
   compareButton: {

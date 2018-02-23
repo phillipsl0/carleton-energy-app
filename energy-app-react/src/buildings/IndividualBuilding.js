@@ -241,9 +241,9 @@ export default class IndividualBuilding extends Component {
                 <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
                     <View style={[theme.centered, styles.height]}>
                         <Image
+                            resizeMode="cover"
                             source={{ uri: this.props.navigation.state.params.item.avatar }} 
-                            style={[styles.head, {width:380}, styles.height]}
-                            resizeMode="cover"/>
+                            style={[styles.head, {width:width+5}, styles.height]} />
                         <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
                         {header}
                     </View>
