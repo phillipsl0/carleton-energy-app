@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import { View, Text, Platform, StyleSheet, Dimensions, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, NavigationActions } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Polygon, Callout, Marker } from 'react-native-maps';
 
+import { connect } from 'react-redux';
 import MapCallout from './MapCallout';
-import OverviewCards from './../overview/OverviewCards';
-import buildings from './../Buildings'
-import { getCurrentBuildingUtilityConsumption, getUtilitiesList } from './../helpers/ApiWrappers.js';
-import TopUtilities from './UtilityButtons';
+import IndividualBuilding from './../buildings/IndividualBuilding';
+import BuildingStack from './../buildings/BuildingListView';
+import buildings from './../buildings/Buildings'
+import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
+import TopUtilities from './EnergyMapUtilityButtons';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
-
-const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
-var {screen_height, screen_width} = Dimensions.get('window');
+import ComparisonPage from './../buildings/ComparisonPage';
+import BuildingComparison from './../buildings/BuildingComparison';
+import { getUnits } from './../helpers/General';
 
 /*
 Using tutorials:
@@ -23,7 +25,9 @@ Cool native app: https://themeteorchef.com/tutorials/how-to-build-a-react-native
 Get lat/long: http://www.mapcoordinates.net/en
 */
 
-// ** if want to use user's location, set up geolocation in componentWillMount(): https://school.shoutem.com/lectures/geolocation-app-react-native/
+
+const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
+var {screenHeight, screenWidth} = Dimensions.get('window');
 
 const initialRegion = {
   latitude: 44.4606925434,
@@ -31,6 +35,19 @@ const initialRegion = {
   latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
   longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
 }
+
+
+//Get redux
+@connect(
+     state => ({
+         historicalData: state.data.historicalData,
+         currentData: state.data.currentData,
+         loading: state.data.loading,
+     }),
+     dispatch => ({
+         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
+     }),
+ )
 
 class EnergyMapView extends Component {
   constructor(props) {
@@ -44,7 +61,7 @@ class EnergyMapView extends Component {
       polygons: [],
       buildings_info: {
         "Burton": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -54,7 +71,7 @@ class EnergyMapView extends Component {
           },
         },
         "Cassat": {
-          "electricity": {
+          "electric": {
             "max": 40469,
             "min": 3137,
           },
@@ -64,7 +81,7 @@ class EnergyMapView extends Component {
           },
         },
         "Davis": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -74,7 +91,7 @@ class EnergyMapView extends Component {
           },
         },
         "Evans": {
-          "electricity": {
+          "electric": {
             "max": 47703,
             "min": 3228,
           },
@@ -84,7 +101,7 @@ class EnergyMapView extends Component {
           },
         },
         "Goodhue": {
-          "electricity": {
+          "electric": {
             "max": 38955,
             "min": 2427,
           },
@@ -94,7 +111,7 @@ class EnergyMapView extends Component {
           },
         },
         "Memo": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -104,7 +121,7 @@ class EnergyMapView extends Component {
           },
         },
         "Musser": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -114,7 +131,7 @@ class EnergyMapView extends Component {
           },
         },
         "Myers": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -124,7 +141,7 @@ class EnergyMapView extends Component {
           },
         },
         "Nourse": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -134,7 +151,7 @@ class EnergyMapView extends Component {
           },
         },
         "Sayles": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -144,7 +161,7 @@ class EnergyMapView extends Component {
           },
         },
         "Scoville": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -154,7 +171,7 @@ class EnergyMapView extends Component {
           },
         },
         "Severance": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -164,7 +181,7 @@ class EnergyMapView extends Component {
           },
         },
         "Watson": {
-          "electricity": {
+          "electric": {
             "max": 21664,
             "min": 1334,
           },
@@ -182,39 +199,32 @@ class EnergyMapView extends Component {
         latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
         longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
       },
-      northEast: {
-        latitude: 44.462039722138684,
-        longitude: -93.1505049392581
-      },
-      southWest: {
-        latitude: 44.4592961807,
-        longitude: -93.15502781429046
-      },
       ready: true,
-      utilityShown: 'electricity',
-      loading: true
+      utilityNameShown: 'electric',
+      utilityIndexShown: 3, // for IndividualBuilding's UtilitiesMiniCard
+      mapLoading: true
     };
     this.onRegionChange = this.onRegionChange.bind(this);
   };
 
+
   // Assemble all of Carleton's buildings BEFORE rendering
   componentWillMount() {
-    //this.getNormalizationData();
-    this.getBuildingData();
+    this.getBuildingData('electric'); // Initialize with electric
     this.moveToCarleton();
-    // this.refs.map.setMapBoundaries(this.state.northEast, this.state.southWest);
     //console.log('EnergyMapView component is mounting...');
     this.closeActivityIndicator();
+    //console.log("Component did mount")
   };
 
   openActivityIndicator() {
-    this.setState({ loading: true });
+    this.setState({ mapLoading: true });
   };
 
   // Closes activity indicator with 2 second delay after call
   closeActivityIndicator() {
     setTimeout(() => this.setState({
-      loading: false }), 2000);
+      mapLoading: false }), 2000);
   };
 
   setRegion(region) {
@@ -228,27 +238,56 @@ class EnergyMapView extends Component {
   };
 
   // Indicates when map is ready
-  onMapReady = (e) => {
-    if(!this.state.ready) {
-      this.setState({ready: true});
-    }
+  onMapReady = () => {
+    this.setState({ ready: true });
+    this.moveToCarleton();
+    //console.log("Map ready: moving to Carleton")
   };
+
+  // Maps utility name to its respective utility mini card index
+  mapUtilityNameToIndex(utilityName) {
+    if (utilityName == 'total') {
+      return (1);
+    }
+    else if (utilityName == 'heat') {
+      return (2);
+    }
+    else if (utilityName == 'electric') {
+      return (3);
+    }
+    else if (utilityName == 'water') {
+      return (4);
+    }
+    return (1);
+  };
+
+  mapUtilityNameToAPI(utilityName) {
+    if (utilityName == 'electric') {
+      return ('electricity');
+    }
+    else if (utilityName == 'water') {
+      return ('water');
+    }
+    return (utilityName);
+  };
+
 
   // Updates colors of energy map with new utility selection
   updateUtility = (utilitySelected) => {
     // Begin to update map
     this.openActivityIndicator();
-    this.setState({ utilityShown: utilitySelected});
+    this.moveToCarleton();  // Veronica, I moved this, it looks better on Android this way. - Martin
+    utilitySelected = utilitySelected.toLowerCase() // lower case
+    utilityIndex = this.mapUtilityNameToIndex(utilitySelected) // Get index for buildings
+    this.setState({ utilityNameShown: utilitySelected, utilityIndexShown: utilityIndex });
     
     // Update map
-    this.getBuildingData();
-    this.moveToCarleton();
+    this.getBuildingData(utilitySelected);
+    // this.moveToCarleton();
     this.closeActivityIndicator();
-    //{this.props.navigation.setParams({ updated: "Updating time stamp..." })}
   };
 
   onRegionChange = (region) => {
-    //this.setState({ region: region })
     //console.log('onRegionChange', region);
     //this.checkCalloutRender(region);
   };
@@ -264,22 +303,27 @@ class EnergyMapView extends Component {
   .5 : yellow
   1 : red
   */
-  determineBuildingColor(buildingName) {
-    //console.log("Rendering building colors with: ", this.state.utilityShown)
-    var use = getCurrentBuildingUtilityConsumption(buildingName, this.state.utilityShown).toFixed(1)
-    //var h = (1.0 - use) * 240
-    var building = this.state.buildings_info
-    building = building[buildingName][this.state.utilityShown]
-    var val = Math.abs(1 - ((use - building.min) / (building.max - building.min))) // taken from https://stats.stackexchange.com/questions/70801/how-to-normalize-data-to-0-1-range
-    //console.log("Normalizing " + buildingName, val)
-    var h = val * 85 // taken from: https://stackoverflow.com/questions/6660879/python-map-float-range-0-0-1-0-to-color-range-red-green
-    //return "hsl(" + h + ", 100%, 50%)";
+  determineBuildingColor(buildingName, utilitySelected) {
+    try {
+      var use = getCurrentBuildingUtilityConsumption(buildingName, this.mapUtilityNameToAPI(utilitySelected)).toFixed(1)
+      //var h = (1.0 - use) * 240
+      //console.log("Usage selected utility", use)
+      var building = this.state.buildings_info
+      building = building[buildingName][utilitySelected]
+      var val = Math.abs(1 - ((use - building.min) / (building.max - building.min))) // taken from https://stats.stackexchange.com/questions/70801/how-to-normalize-data-to-0-1-range
+      //console.log("Normalizing " + buildingName, val)
+      var h = val * 85 // taken from: https://stackoverflow.com/questions/6660879/python-map-float-range-0-0-1-0-to-color-range-red-green
+      return this.setColor(val);
 
-    return this.setColor(val);
+    } catch (err) {
+      // Returns grey if unable to get building data from API
+      console.log("Error in setting colors: ", err);
+      return ("lightgrey");
+    }
   };
 
-  // taken from: https://ux.stackexchange.com/questions/34875/how-to-translate-a-rating-range-into-red-yellow-green-colours
-  // Generates color from normalization of 0 to 10 scale
+  // Taken from: https://ux.stackexchange.com/questions/34875/how-to-translate-a-rating-range-into-red-yellow-green-colours
+  // Generates color of value normalizated on 0 to 10 scale
   setColor(value) {
     var color;
     var parts = (value > 5) ? (1-((value-5)/5)) : value/5;
@@ -296,45 +340,56 @@ class EnergyMapView extends Component {
     return "rgb(" + color.join(',') + ")";
 }
 
-  // Get current building data
-  async getBuildingData() {
+  // Calls API to get current building data - initializes with electric
+  async getBuildingData(utilitySelected) {
     try {
       let polygons = buildings.map((building) => {
+        // Call API for building colors
+        var color = this.determineBuildingColor(building.name, utilitySelected)
+        // if no data avaiable, set buildings to light blue
+        if (color == 'lightgrey') {
+          outline = 'blue'
+        } else {
+          outline = color
+        }
+
         return {
+          item: building,
           coordinates: building.coordinates,
           name: building.name,
-          color: this.determineBuildingColor(building.name),
+          // colorBuilding: this.determineBuildingColor(building.name, utilitySelected),
+          colorBuilding: color,
+          colorOutline: outline,
           marker_coordinate: building.marker_coordinate,
-          usage: getCurrentBuildingUtilityConsumption(building.name, this.state.utilityShown).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
+          usage: getCurrentBuildingUtilityConsumption(building.name, utilitySelected).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
         }
       });
       this.setState({polygons: polygons});
       return polygons;
     } catch(error) {
-        var introStr = "This is embarrassing... \n"
+        var introStr = "Error getting building data: \n"
         alert(introStr.concat(error))
     }
   };
 
-  getNormalizationData() {
-    try {
-      let normalization = buildings.reduce(function(map, building) {
-        map[building.name] = building.normalization;
-        return map;
-      }, {});
-      //console.log("Normalization: ", normalization)
-      this.setState({buildings_info: normalization})
-      var keys = Object.keys(this.state.buildings_info)
-    } catch(error) {
-        var introStr = "This is embarrassing...: "
-        alert(introStr.concat(error))
-    }
-  };
+  // getNormalizationData() {
+  //   try {
+  //     let normalization = buildings.reduce(function(map, building) {
+  //       map[building.name] = building.normalization;
+  //       return map;
+  //     }, {});
+  //     //console.log("Normalization: ", normalization)
+  //     this.setState({buildings_info: normalization})
+  //     var keys = Object.keys(this.state.buildings_info)
+  //   } catch(error) {
+  //       var introStr = "This is embarrassing...: "
+  //       alert(introStr.concat(error))
+  //   }
+  // };
 
 
   // Show callout when building polygon is pressed
   toggleCallout(polygon) {
-    // console.log('onPress', polygon.name);
     this.setState({lastBuildingPressed: polygon.name})
 
     if (polygon.open) {
@@ -386,10 +441,10 @@ class EnergyMapView extends Component {
 
   render() {
     navigation = this.props.navigation;
-    utilityShown = this.state.utilityShown
-    loading = this.state.loading
-    //console.log("Utility displayed before return:", utilityShown)
-    //console.log("Loading?", loading)
+    utilityNameShown = this.state.utilityNameShown;
+    mapLoading = this.state.mapLoading;
+    const { refresh, loading, historicalData, currentData } = this.props; // redux
+    isMapReady = false; // fix for Android latLang error
 
     return (
       <View style={styles.container}>
@@ -397,21 +452,19 @@ class EnergyMapView extends Component {
           //maxZoomLevel={5} // max in terms of how far IN you can zoon
           ref="map"
           provider = { PROVIDER_GOOGLE } // show buildings on OS
-          key={utilityShown} // key change needed to rerender map
+          key={utilityNameShown} // key change needed to rerender map
           showsTraffic={false}
+          showsCompass={false}
           initialRegion={initialRegion}
           onMapReady={this.onMapReady}
+          onLayout={this.onMapReady}
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={this.onRegionChangeComplete}
-          toggleCallout={this.toggleCallout}
-          displayUtility={utilityShown}
+          displayUtility={utilityNameShown}
           style={styles.map}
-                  
-
-          // set map boundaries, NE by SW
-          //setMapBoundaries={ this.setBoundaries }     
           >
-            {this.state.polygons.map((polygon, index) => (
+            {isMapReady = true}
+            {isMapReady && this.state.polygons.map((polygon, index) => (
               /* Renders polygons from list */
               <View key={polygon.name}>
                 <Polygon
@@ -419,33 +472,52 @@ class EnergyMapView extends Component {
                   coordinates={polygon.coordinates}
                   
                   // sets color + fill + width
-                  strokeWidth={5}
-                  strokeColor={polygon.color}
-                  fillColor={polygon.color}
-                 
+                  strokeWidth={2}
+                  strokeColor={polygon.colorOutline}
+                  fillColor={polygon.colorBuilding}
                   onPress={() => this.toggleCallout(polygon)}
-                />
-                  <Marker
-                   ref={ref => polygon.marker = ref}
-                   coordinate={polygon.marker_coordinate}
-                   opacity={4} // hides markers at 0
-                   key={polygon.name}
-                  >
-                    <Image
-                      source={require('./../assets/mapMarker.png')}
-                      style={{ height:1, width:1 }}
-                    />
-                    <Callout
-                      tooltip // enables customizable tooltip style
-                      style={styles.callout}
-                      onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon})}>
-                      <MapCallout
-                        name={polygon.name}
-                        image={'image'} // to be replaced with building image
-                        number={polygon.usage}
-                        utility={utilityShown}/>
-                    </Callout>
-                  </Marker>
+                  />
+                  { (Platform.OS === 'ios') ?
+                    <Marker
+                     ref={ref => polygon.marker = ref}
+                     coordinate={polygon.marker_coordinate}
+                     opacity={0} // hides markers at 0
+                     key={polygon.name}
+                    >
+                      <Image
+                        source={require('./../assets/mapMarker.png')}
+                        style={{ height:1, width:1 }}
+                      />
+                      <Callout
+                        tooltip // enables customizable tooltip style
+                        style={styles.callout}
+                        onPress={() => navigation.navigate('EnergyBuildingView', {item:polygon.item, selected: this.state.utilityIndexShown })}>
+                        <MapCallout
+                          name={polygon.name}
+                          image={'image'} // to be replaced with building image
+                          number={polygon.usage}
+                          utility={utilityNameShown}/>
+                      </Callout>
+                    </Marker>
+                  :
+                    <Marker
+                     ref={ref => polygon.marker = ref}
+                     coordinate={polygon.marker_coordinate}
+                     opacity={0} // hides markers at 0
+                     key={polygon.name}
+
+                     title={polygon.name}
+                     description={polygon.usage + ' ' + getUnits(utilityNameShown)}
+                     onCalloutPress={() => navigation.navigate(
+                       'EnergyBuildingView', 
+                       {item:polygon.item, selected: this.state.utilityIndexShown })}
+                    >
+                      <Image
+                        source={require('./../assets/mapMarker.png')}
+                        style={{ height:1, width:1 }}
+                      />
+                    </Marker>
+                  }
               </View>
             ))}
         </MapView>
@@ -465,12 +537,12 @@ class EnergyMapView extends Component {
         <TopUtilities
           // top utilities
           onUtilitySelect={this.updateUtility}
-          selected={this.state.utilityShown} />
-        {this.state.loading && <View style={styles.loading} accessibe={false}>
+          selected={this.state.utilityNameShown} />
+        {this.state.mapLoading && <View style={styles.loading} accessibe={false}>
           <ActivityIndicator
             size='large'
             color='#0000ff'
-            animating={this.state.loading} />
+            animating={this.state.mapLoading} />
         </View>
         }
       </View>
@@ -478,21 +550,17 @@ class EnergyMapView extends Component {
   }
 }
 
-/*
-      {this.state.loading && 
-        <View style=styles.loading}>
-          <ActivityIndicator size='large' />
-        </View>
-      }
-        <Text style={{ position: 'absolute', bottom: 10 }}>
-          Latitude: {this.state.region.latitude}{'\n'}
-          Longitude: {this.state.region.longitude}{'\n'}
-          LatitudeDelta: {this.state.region.latitudeDelta}{'\n'}
-          LongitudeDelta: {this.state.region.longitudeDelta}{'\n'}
-          Last Building Pressed: {this.state.lastBuildingPressed}
-        </Text>
-*/
 
+// Fix double navigation bug in stack
+const navigateOnce = (getStateForAction) => (action, state) => {
+    const {type, routeName} = action;
+
+    return (
+        state &&
+        type === NavigationActions.NAVIGATE &&
+        routeName === state.routes[state.routes.length - 1].routeName
+    ) ? null : getStateForAction(action, state);
+};
 
 // Stack of EnergyMap
 const EnergyMapViewStack = StackNavigator({
@@ -506,32 +574,83 @@ const EnergyMapViewStack = StackNavigator({
         easing: Easing.step0,
       }
     }),
-    // navigationOptions: ({ navigation, updated }) => ({
-    //   headerTitle: <EnergyMapHeader/>,
-    //   headerStyle: {backgroundColor: '#0B5091'},
-    //   ...Platform.select({
-    //       android: { header: null }
-    //   }),
-    // })
     navigationOptions: ({ navigation }) => ({
       title: "Energy Map",
       headerTintColor: 'white',
       headerStyle: {backgroundColor: '#0B5091'},
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
       ...Platform.select({
           android: { header: null }
       }),
     })
   },
   EnergyBuildingView: {
-    screen: OverviewCards,
+    screen: IndividualBuilding,
     path: 'buildings/:name',
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.item.name}`,
       headerTintColor: 'white',
-      headerStyle: {backgroundColor: '#0B5091'},
+      headerStyle: navStyles.header,
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
+      headerRight: (
+         <TouchableOpacity
+          style={styles.compareButton}
+          // Navigate to comparison screen
+          onPress={() => navigation.navigate("Comparison", {item:navigation.state.params.item.name})}>
+          <Icon
+            // see: https://react-native-training.github.io/react-native-elements/API/icons/
+            name='compare-arrows'
+            color='white'
+            type='material-icons'
+            size={30}
+          />
+        </TouchableOpacity>
+      ),
+    }), 
+  },
+  Comparison: {
+    screen: BuildingComparison,
+    navigationOptions: ({ navigation }) => ({
+      ...Platform.select({
+          android: { header: null }
+      }),
+      headerTintColor: 'white',
+      headerStyle: navStyles.header,
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
+    }),
+  },
+  ComparisonPage: {
+    screen: ComparisonPage,
+    navigationOptions: ({ navigation }) => ({
+        title: 'Comparison',
+        ...Platform.select({
+            android: { header: null }
+        }),
+        headerTintColor: 'white',
+        headerStyle: navStyles.header,
+        headerTitleStyle: navStyles.headerTitle,
+        headerBackTitleStyle: navStyles.headerTitle,
+        headerBackTitle: 'Back',
     }),
   },
 });
+
+EnergyMapViewStack.router.getStateForAction = navigateOnce(EnergyMapViewStack.router.getStateForAction);
+
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    },
+    headerTitle: {
+        fontFamily: theme.font,
+    }
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -541,14 +660,20 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    ...Platform.select({
+      ios: { ...StyleSheet.absoluteFillObject },
+      android: {
+        flex: 1,
+        //...StyleSheet.absoluteFillObject,
+        height: screenHeight,
+        width: screenWidth,
+      },
+    }),
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    width: screen_width,
-    height: screen_height
   },
   rightSwipeHack: {
     position: 'absolute',
@@ -592,6 +717,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#F5FCFF88'
+  },
+  compareButton: {
+    marginRight: 10
   }
 });
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Platform, ScrollView, Text, FlatList } from 'react-native';
+import { StyleSheet, View, ImageBackground, Platform, Text } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 
@@ -7,70 +7,84 @@ import { connect } from 'react-redux';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import { fake } from './OverviewExampleData'
-import { moderateScale, verticalScale } from './../helpers/Scaling';
+import { moderateScale, verticalScale, roundNumber, getSpecificRandom } from './../helpers/General';
 import CurrFont from './../styling/CurrentFont';
 
 const defaultFont = CurrFont+'-regular';
 const defaultFontBold = CurrFont+'-bold';
+const theme = GetStyle(CurrTheme);
 
 @connect(
     state => ({
-        layout: state.ui.layout,
         currentData: state.data.currentData,
-    }),
-    dispatch => ({
-        refresh: () => dispatch({type: 'GET_LAYOUT'}),
+        totals: state.data.currentTotals,
+        windSpeed: state.data.windSpeed,
+        windRatio: state.data.windRatio,
+        loading: state.loading,
+        turbine: state.api.turbine,
+        solar: state.api.solar,
+        ui: state.ui,
     }),
 )
 
 export default class Windmill extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            currImage: 0,
-            pause: 0,
-        };
-
     }
 
-    numberWithCommas = (x) => {
-          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
+    fetchData = (low) => {
+        var rightTitles = new Array(4);
+        rightTitles[0] = this.props.windRatio["percentage"] + "%";
+        rightTitles[1] = this.props.windSpeed + " mps";
+        rightTitles[2] = roundNumber(getSpecificRandom(500, low, 1, 1)) + " kW";
+        rightTitles[3] = roundNumber(getSpecificRandom(low+132, low+1000, 1, 1)) + " kW";
+        return rightTitles;
+    }
 
     render() {
-        const themeStyles = GetStyle(CurrTheme);
-        const { layout, currentData } = this.props;
-        var turbineTotal = Math.round(currentData.turbine[0]["y"]+currentData.turbine[1]["y"]);
+        const { currentData, totals, windSpeed, windRatio, turbine, ui, solar } = this.props;
+        const { width, height } = ui.layout;
+
+        turbineGeneration = turbine.turbineData;
+        if (turbine.turbineData == 0) {
+            turbineGeneration = getSpecificRandom(2, 1500, 1, 1);
+        }
+
+        var rightTitles = this.fetchData(turbineGeneration);
+
+        var padding = '5%';
+        if (height < 600) {
+            padding = '4%';
+        }
 
         return (
-            <View style={[themeStyles.flex, styles.background]}>
-            <View style={[styles.background, styles.head, {alignItems: 'center'}]}>
-                <Image source={require('./../assets/windmill.png')}
-                    style={[themeStyles.header, styles.image]}/>
-                <View style={styles.textContainer}>
-                <Text style={[styles.units, themeStyles.fontRegular]}>
+            <View style={[styles.main, { position: 'absolute', bottom: 0}]}>
+                <ImageBackground source={require('./../assets/windmillFull.png')}
+                    resizeMode="cover"
+                    style={[{ width: width + 5, height: width*.8}, styles.image, styles.head]}>
+                <Text style={[styles.units, theme.fontRegular]}>
                     Currently generating
                 </Text>
-                <Text style={[styles.number, themeStyles.fontBold]}>
-                    {this.numberWithCommas(turbineTotal)}
+                <Text style={[styles.number, theme.fontBold]}>
+                    {roundNumber(turbineGeneration)}
                 </Text>
-                <Text style={[styles.units, themeStyles.fontRegular]}>
-                    kWh
+                <Text style={[styles.units, theme.fontRegular]}>
+                    kW
                 </Text>
-                </View>
-                </View>
-                <List style={styles.list}>
+                </ImageBackground>
+                <List style={[styles.list]}>
                   {
                     fake.map((item, i) => (
                       <ListItem
-                        style={styles.listItem}
+                        containerStyle={[ styles.listItem, { paddingTop: padding, paddingBottom: padding }]}
                         key={i}
                         title={item.title}
-                        rightTitle={item.x}
-                        rightTitleStyle={{ color: '#647C92', marginRight: 5 }}
-                        chevronColor={'transparent'}
+                        rightTitle={rightTitles[item.index]}
+                        rightTitleStyle={{ color: '#647C92' }}
+                        rightTitleContainerStyle={{ flex: 0.75 }}
+                        hideChevron={true}
                         fontFamily={defaultFontBold}
-                        leftIcon={{name: item.icon, type: 'material-community', color: '#647C92'}}
+                        leftIcon={{name: item.icon, type: item.type, color: '#647C92'}}
                       />
                     ))
                   }
@@ -100,36 +114,31 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     image: {
-        height: verticalScale(310),
-        left: -2,
-        opacity: 0.9,
-        ...Platform.select({
-            android: {
-                top: '-5%',
-                width: 415,
-                height: verticalScale(350),
-            }
-        }),
+        alignItems: 'center',
+        justifyContent: 'center',
+        left: '-1%',
+        top: '-3%'
     },
+
     main: {
         backgroundColor: '#E1E8EE',
     },
     head: {
-        height: verticalScale(310),
         ...Platform.select({
             android: {
-                height: verticalScale(310),
+                height: verticalScale(290),
+                top: '-5%'
             }
         })
     },
     list: {
 //        borderTopColor: "#FFFFFF",
 //        borderTopWidth: 1,
-        marginTop: 0,
+        marginTop: '-3%',
         backgroundColor: '#E1E8EE',
         ...Platform.select({
             ios: {
-                paddingTop: '2%',
+                paddingTop: '0%',
             }
         })
     },

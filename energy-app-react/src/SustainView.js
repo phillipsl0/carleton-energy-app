@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, Linking, Platform,
-    StyleSheet, View, ScrollView, Text, Image, WebView, TouchableOpacity } from 'react-native'
-import { StackNavigator, SafeAreaView } from 'react-navigation';
-import { List, Card, ListItem, Button } from 'react-native-elements';
+import { Alert, Image, Linking, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { StackNavigator, NavigationActions } from 'react-navigation';
+import { Card, List, ListItem } from 'react-native-elements';
 
-import { getSustainabilityEvents, getSustainabilityEventsBak,
-    getSustainabilityNews, getSustainabilityNewsBak } from './helpers/ApiWrappers.js';
-import { scale, moderateScale, verticalScale} from './helpers/Scaling';
+import {
+    getSustainabilityEvents,
+    getSustainabilityEventsBak,
+    getSustainabilityNews,
+    getSustainabilityNewsBak
+} from './helpers/ApiWrappers.js';
+import { moderateScale } from './helpers/Scaling';
 import { GetStyle } from './styling/Themes'
+
 const themeStyles = GetStyle();
 
 class SustainListView extends Component {
@@ -15,8 +19,9 @@ class SustainListView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           newsData: '',
-           eventsData: ''
+            newsData: '',
+            eventsData: '',
+            neverAlert: false
         }
     }
 
@@ -28,18 +33,39 @@ class SustainListView extends Component {
 
     async componentDidMount() {
         const events = await getSustainabilityEvents();
-        const eventsJson = await events.json()
-        await this.setStateAsync({eventsData: eventsJson})
+        const eventsJson = await events.json();
+        await this.setStateAsync({eventsData: eventsJson});
 
         const news = await getSustainabilityNews();
-        const newsJson = await news.json()
+        const newsJson = await news.json();
         await this.setStateAsync({newsData: newsJson})
     }
 
+    alertBrowser = (link) => {
+
+        if (this.state.neverAlert) {
+            Linking.openURL(link);
+        } else {
+            let linkTitle;
+            if (link.length > moderateScale(60)) {
+                linkTitle = link.substring(0, moderateScale(60) - 5) + '...';
+            } else {
+                linkTitle = link;
+            }
+            Alert.alert(
+                linkTitle,
+                'Open link in web browser?',
+                [{text: 'Always Open', onPress: () =>
+                        (Linking.openURL(link), this.setState({neverAlert: true}))},
+                {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+                {text: 'Open', onPress: () => (Linking.openURL(link))}]
+            );
+        }
+    };
 
     render() {
-        events = getSustainabilityEventsBak();
-        news = getSustainabilityNewsBak();
+        let events = getSustainabilityEventsBak();
+        let news = getSustainabilityNewsBak();
 
         if (this.state.eventsData) {
             events["events"] = this.state.eventsData;
@@ -48,18 +74,18 @@ class SustainListView extends Component {
             news["news"] = this.state.newsData;
         }
 
-        links = ['https://apps.carleton.edu/sustainability/',
-                'https://apps.carleton.edu/sustainability/campus/',
-                'https://apps.carleton.edu/sustainability/action/',
-                'https://apps.carleton.edu/sustainability/about/',
-                'https://apps.carleton.edu/sustainability/events/',
-                'https://apps.carleton.edu/sustainability/news/']
+        let links = ['https://apps.carleton.edu/sustainability/',
+            'https://apps.carleton.edu/sustainability/campus/',
+            'https://apps.carleton.edu/sustainability/action/',
+            'https://apps.carleton.edu/sustainability/about/',
+            'https://apps.carleton.edu/sustainability/events/',
+            'https://apps.carleton.edu/sustainability/news/'];
 
 
         return (
             <ScrollView style={{backgroundColor: '#fafafa'}}>
                 <View style={{paddingTop:5}} />
-                <Card containerStyle={[themeStyles.card, styles.card]}>
+                <Card containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
 
                     <View style={styles.header} >
                         <Image
@@ -67,28 +93,32 @@ class SustainListView extends Component {
                             style={styles.image}
                             source={require('./assets/cfl.png')} />
                         <View>
-                            <Text style={[styles.title, themeStyles.title]}>Get Involved</Text>
+                            <Text style={styles.title}>Get Involved</Text>
                         </View>
                     </View>
 
                     <List containerStyle={styles.list}>
                         <ListItem
-                            containerStyle={[themeStyles.listItem, styles.listItem]}
+                            containerStyle={styles.listItem}
                             title={"Our Campus"}
+                            titleStyle={styles.listTitle}
                             titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(links[1])} />
-                        <ListItem containerStyle={[themeStyles.listItem, styles.listItem]}
+                            onPress={() => this.alertBrowser(links[1])} />
+                        <ListItem containerStyle={styles.listItem}
                             title={"Take Action"}
+                            titleStyle={styles.listTitle}
                             titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(links[2])} />
-                        <ListItem containerStyle={[themeStyles.listItem, styles.listItem]}
+                            onPress={() => this.alertBrowser(links[2])} />
+                        <ListItem containerStyle={styles.listItem}
                             title={"People & Policies"}
+                            titleStyle={styles.listTitle}
                             titleNumberOfLines={3}
-                            onPress={() => Linking.openURL(links[3])} />
+                            onPress={() => this.alertBrowser(links[3])} />
+                        <View style={styles.listItem} />
                     </List>
                 </Card>
 
-                <Card containerStyle={[themeStyles.card, styles.card]}>
+                <Card containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
 
                     <View style={styles.header} >
                         <Image
@@ -96,39 +126,41 @@ class SustainListView extends Component {
                             style={styles.image}
                             source={require('./assets/calendar.png')} />
                         <View>
-                            <Text style={[styles.title, themeStyles.title]}>Upcoming Events</Text>
+                            <Text style={styles.title}>Upcoming Events</Text>
                         </View>
                         <View style={styles.image} />
                     </View>
 
                     <List containerStyle={styles.list}>
-                        { events["events"]["items"].map((item, key) => 
-                            item["content"] 
-                            ? <ListItem
-                                key={item["guid"]}
-                                containerStyle={[themeStyles.listItem, styles.listItem]}
-                                title={item["title"]}
-                                titleNumberOfLines={3}
-                                onPress={() => Linking.openURL(item["link"])}
-                                subtitleStyle={themeStyles.subtitle}
-                                subtitle={item["content"]} />
-                            : <ListItem
-                                key={item["guid"]}
-                                containerStyle={[themeStyles.listItem, styles.listItem]}
-                                title={item["title"]}
-                                titleNumberOfLines={3}
-                                onPress={() => Linking.openURL(item["link"])} />
-                            )
-                        }
+                        { events["events"]["items"].map((item, key) =>
+                            item["content"]
+                                ? <ListItem
+                                    key={item["guid"]}
+                                    containerStyle={styles.listItem}
+                                    title={item["title"]}
+                                    titleStyle={styles.listTitle}
+                                    titleNumberOfLines={3}
+                                    onPress={() => this.alertBrowser(item["link"])}
+                                    subtitleStyle={styles.subtitle}
+                                    subtitle={item["content"]} />
+                                : <ListItem
+                                    key={item["guid"]}
+                                    containerStyle={styles.listItem}
+                                    title={item["title"]}
+                                    titleStyle={styles.listTitle}
+                                    titleNumberOfLines={3}
+                                    onPress={() => this.alertBrowser(item["link"])} />
+                        )}
+                        <View style={styles.listItem} />
                     </List>
                     <View>
-                        <Text 
-                            style={[styles.title, themeStyles.title, styles.button]}
-                            onPress={() => Linking.openURL(links[4])}>MORE EVENTS</Text>
+                        <Text
+                            style={[styles.title, styles.button]}
+                            onPress={() => this.alertBrowser(links[4])}>MORE EVENTS</Text>
                     </View>
                 </Card>
 
-                <Card containerStyle={[themeStyles.card, styles.card]}>
+                <Card containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
 
                     <View style={styles.header} >
                         <Image
@@ -136,44 +168,49 @@ class SustainListView extends Component {
                             style={styles.image}
                             source={require('./assets/news.png')} />
                         <View>
-                            <Text style={[styles.title, themeStyles.title]}>Recent News</Text>
+                            <Text style={styles.title}>Recent News</Text>
                         </View>
                     </View>
 
                     <List containerStyle={styles.list}>
-                        { news["news"]["items"].map((item, key) => 
+                        { news["news"]["items"].map((item, key) =>
                             <ListItem
                                 key={item["guid"]}
-                                containerStyle={[themeStyles.listItem, styles.listItem]}
+                                containerStyle={styles.listItem}
                                 title={item["title"]}
-                                titleStyle={themeStyles.title}
+                                titleStyle={styles.listTitle}
                                 titleNumberOfLines={3}
-                                onPress={() => Linking.openURL(item["link"])}
+                                onPress={() => this.alertBrowser(item["link"])}
                                 subtitle={item["content"].replace(/<[^>]+>/g, '')}
-                                subtitleStyle={themeStyles.subtitle}
-                                subtitleNumberOfLines={3} />
+                                subtitleStyle={styles.subtitle}
+                                subtitleNumberOfLines={3} />,
                         )}
+                        <View style={styles.listItem} />
                     </List>
                     <View>
-                        <Text 
-                            style={[styles.title, themeStyles.title, styles.button]}
-                            onPress={() => Linking.openURL(links[5])}>MORE NEWS</Text>
+                        <Text
+                            style={[styles.title, styles.button]}
+                            onPress={() => this.alertBrowser(links[5])}>MORE NEWS</Text>
                     </View>
                 </Card>
                 <View style={{paddingTop:5}} />
             </ScrollView>
-            );
+        );
 
     }
 }
 
+/* Function to prevent StackNavigator from navigating multiple times when navigate button is pressed in succession
+ * (note that function also must be called below) */
+const navigateOnce = (getStateForAction) => (action, state) => {
+    const {type, routeName} = action;
 
-
-const navStyles = StyleSheet.create({
-    header: {
-        backgroundColor: '#0B5091',
-    },
-})
+    return (
+        state &&
+        type === NavigationActions.NAVIGATE &&
+        routeName === state.routes[state.routes.length - 1].routeName
+    ) ? null : getStateForAction(action, state);
+};
 
 const SustainStack = StackNavigator({
     Sustain: {
@@ -184,12 +221,21 @@ const SustainStack = StackNavigator({
                 android: { header: null }
             }),
             headerTintColor: 'white',
-            headerStyle: navStyles.header,
+            headerStyle: styles.navHeader,
+            headerTitleStyle: styles.headerTitle,
+            headerBackTitleStyle: styles.headerTitle,
+            headerBackTitle: 'Back',
         }),
     }
 });
 
+// Calls the function that prevents multiple navigations
+SustainStack.router.getStateForAction = navigateOnce(SustainStack.router.getStateForAction);
+
 const styles = StyleSheet.create({
+    navHeader: {
+        backgroundColor: '#0B5091',
+    },
     card: {
         paddingTop: 0,
         marginBottom: 5,
@@ -205,10 +251,13 @@ const styles = StyleSheet.create({
     button: {
         marginBottom: 3,
         paddingRight: 25,
-        fontSize: 17,
+        fontSize: moderateScale(16),
         fontWeight: 'bold',
         textAlign: 'right',
-        color: '#529353'
+        ...Platform.select({
+            android: { color: '#529353' },
+            ios: { color: '#0b5091' },
+        }),
     },
     image: {
         width: moderateScale(40),
@@ -217,25 +266,40 @@ const styles = StyleSheet.create({
     list: {
         marginBottom: 12,
         marginTop: -15,
-        marginLeft: 15,
-        marginRight: 20,
-        borderTopColor: '#cbd2d9',
-        borderBottomColor: '#cbd2d940',
-        borderTopWidth: StyleSheet.hairlineWidth, 
-        borderBottomWidth: StyleSheet.hairlineWidth
+        marginLeft: 7,
+        marginRight: 7,
+        borderWidth: 0,
+        borderTopWidth: 0,
     },
     listItem: {
-        marginLeft: -15,
-        marginRight: -10,
-        borderColor: '#cbd2d940',
-        borderTopWidth: StyleSheet.hairlineWidth,
-        borderBottomWidth: StyleSheet.hairlineWidth
+        ...Platform.select({
+            android: { marginRight: -5, },
+        }),
+        borderColor: '#cbd2d9',
+        borderBottomColor: '#cbd2d9',
+        borderBottomWidth: 0,
+        borderTopWidth: 2*StyleSheet.hairlineWidth,
     },
     title: {
         paddingLeft: 12,
-        fontSize: 18,
+        paddingTop: 3,
+        fontSize: moderateScale(18),
         fontWeight: 'normal',
+        color: 'darkslategrey',
     },
-})
+    listTitle: {
+        color: 'darkslategrey',
+        marginLeft: 3,
+    },
+    subtitle: {
+        color: 'slategray',
+        fontWeight: 'normal',
+        fontStyle: 'italic',
+        marginLeft: 3,
+    },
+    headerTitle: {
+        fontFamily: themeStyles.font,
+    }
+});
 
 export default SustainStack;

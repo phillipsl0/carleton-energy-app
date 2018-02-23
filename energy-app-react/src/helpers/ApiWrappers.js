@@ -19,6 +19,7 @@ import {
     turbine2WindMeter
 } from './ProductionMeters.js'
 
+import { getSpecificRandom, combineData } from './General';
 
 const apiRSS2jsonKey = 'eymrq2p6ts5dcyltdxtmwsxp63xwzrkmirfvaezw';
 
@@ -43,6 +44,40 @@ var scaleFactorGeothermal = 9;
 var scaleFactorWater = 400;
 var scaleFactorElectricity = 150;
 var scaleFactorOther = 60;
+
+export function dateToTimestamp(date) {
+    year = date.getFullYear();
+    month = date.getMonth()+1;
+    day = date.getDate();
+    hours = date.getHours();
+
+    if (month < 10) {
+        month = '0'+month;
+    }
+
+    if (day < 10) {
+        day = '0'+day;
+    }
+
+    if (hours < 10) {
+        hours = '0'+hours;
+    }
+
+    timestamp = year+'-'+month+'-'+day+'%20'+hours+':00:00';
+
+    return timestamp;
+}
+
+export const cleanupData = (data) => {
+    //TODO: change to not be hardcoded
+    var total = 0;
+
+    for (var i=0; i < data.length; i++) {
+        total += data[i]["pointvalue"];
+    }
+
+    return total;
+}
 
 export function getBuildingsList() {
     // return list of every building name with data (e.g. "Burton", "Sayles", etc.)
@@ -100,19 +135,11 @@ export function getSustainabilityEventsBak() {
     return events;
 }
 
-function getSpecificRandom(min, max, scaleFactor, otherFactor) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-
-    temp = Math.floor(Math.random() * (max - min)) + min
-    return temp * scaleFactor * otherFactor;
-}
-  function convertRSStoJSON(rssFeed) {
+function convertRSStoJSON(rssFeed) {
     baseURL = 'https://api.rss2json.com/v1/api.json';
+    formatURL = `${baseURL}?rss_url=${rssFeed}&api_key=${apiRSS2jsonKey}&count=${3}`;
 
-    constructedURL = baseURL + '?rss_url=' + rssFeed + '&api_key=' + apiRSS2jsonKey + '&count=2';
-
-    return fetch(constructedURL);
+    return fetch(formatURL);
 }
 
 // -------------------- Electricity Generation -------------------------
@@ -164,6 +191,44 @@ export function getWindGenerationOverTime(timeStart, timeEnd, timeScale) {
     return table;
 }
 
+export function getWindGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, timeView) {
+    var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
+    var table = [];
+    for (var i = 0; i < totals.length; i++) {
+        table[i] = {};
+        currDate = new Date(totals[i]["date"]);
+        switch (timeView) {
+            case 1:
+                table[i]["x"] = getDayOfWeek(currDate.getDay());
+                break;
+
+            case 7:
+                if (i==0) {
+                    table[i]["x"] = "-3";
+                } else if (i==1) {
+                    table[i]["x"] = "-2";
+                } else if (i==2) {
+                    table[i]["x"] = "-1";
+                } else if (i==3) {
+                    table[i]["x"] = "Current";
+                }
+                break;
+
+            case 30:
+                table[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                break;
+
+            case 365:
+                table[i]["x"] = currDate.getFullYear().toString();
+                break;
+        }
+
+        table[i]["y"] = totals[i]["wind"];
+    }
+
+    return table;
+}
+
 export function getSolarGenerationOverTime(timeStart, timeEnd, timeScale) {
     var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
     var table = [];
@@ -171,6 +236,44 @@ export function getSolarGenerationOverTime(timeStart, timeEnd, timeScale) {
         table[i] = {};
         table[i]["date"] = totals[i]["date"];
         table[i]["solar"] = totals[i]["solar"];
+    }
+
+    return table;
+}
+
+export function getSolarGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, timeView) {
+    var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
+    var table = [];
+    for (var i = 0; i < totals.length; i++) {
+        table[i] = {};
+
+        currDate = new Date(totals[i]["date"]);
+        switch (timeView) {
+            case 1:
+                table[i]["x"] = getDayOfWeek(currDate.getDay());
+                break;
+
+            case 7:
+                if (i==0) {
+                    table[i]["x"] = "-3";
+                } else if (i==1) {
+                    table[i]["x"] = "-2";
+                } else if (i==2) {
+                    table[i]["x"] = "-1";
+                } else if (i==3) {
+                    table[i]["x"] = "Current";
+                }
+                break;
+
+            case 30:
+                table[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                break;
+
+            case 365:
+                table[i]["x"] = currDate.getFullYear().toString();
+                break;
+        }
+        table[i]["y"] = totals[i]["solar"];
     }
 
     return table;
@@ -184,6 +287,46 @@ export function getGeothermalGenerationOverTime(timeStart, timeEnd, timeScale) {
         table[i] = {};
         table[i]["date"] = totals[i]["date"];
         table[i]["geothermal"] = totals[i]["geothermal"];
+    }
+
+    return table;
+}
+
+export function getGeothermalGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, timeView) {
+    var totals = getEnergyGenerationOverTime(timeStart, timeEnd, timeScale);
+    var table = [];
+
+    for (var i = 0; i < totals.length; i++) {
+        table[i] = {};
+        currDate = new Date(totals[i]["date"]);
+
+        switch (timeView) {
+            case 1:
+                table[i]["x"] = getDayOfWeek(currDate.getDay());
+                break;
+
+            case 7:
+                if (i==0) {
+                    table[i]["x"] = "-3";
+                } else if (i==1) {
+                    table[i]["x"] = "-2";
+                } else if (i==2) {
+                    table[i]["x"] = "-1";
+                } else if (i==3) {
+                    table[i]["x"] = "Current";
+                }
+                break;
+
+            case 30:
+                table[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                break;
+
+            case 365:
+                table[i]["x"] = currDate.getFullYear().toString();
+                break;
+        }
+
+        table[i]["y"] = totals[i]["geothermal"];
     }
 
     return table;
@@ -223,6 +366,10 @@ export function getTotalWindGeneration(timeStart, timeEnd) {
     return getEnergyGeneration(timeStart, timeEnd)["wind"];
 }
 
+export function getTotalWindConsumption(timeStart, timeEnd) {
+    return getEnergyGeneration(timeStart, timeEnd)["wind"]*.25;
+}
+
 export function getTotalSolarGeneration(timeStart, timeEnd) {
     return getEnergyGeneration(timeStart, timeEnd)["solar"];
 }
@@ -241,6 +388,18 @@ export function getCurrentWindGeneration() {
     var timeEnd = new Date();
 
     return getTotalWindGeneration(timeStart, timeEnd);
+}
+
+export function getCurrentWindConsumption() {
+    var timeStart = new Date();
+    timeStart.setMinutes(timeStart.getMinutes() - 15);
+    var timeEnd = new Date();
+
+    return getTotalWindConsumption(timeStart, timeEnd);
+}
+
+export function getCurrentWindSpeed() {
+    return getSpecificRandom(0.2, 9, 1, 1);
 }
 
 export function getCurrentSolarGeneration() {
@@ -272,6 +431,7 @@ export function getCurrentWindGenerationGraphFormat() {
     var windTable = new Array(2);
     windTable[0] = {};
     windTable[1] = {};
+    var wind = {};
 
     windTable[0]["x"] = "One (kWh)";
     windTable[0]["y"] = getCurrentWindGeneration();
@@ -279,7 +439,10 @@ export function getCurrentWindGenerationGraphFormat() {
     windTable[1]["x"] = "Two (kWh)";
     windTable[1]["y"] = getCurrentWindGeneration();
 
-    return windTable;
+    wind["data"] = windTable;
+    wind["total"] = windTable[0]['y'] + windTable[1]['y'];
+
+    return wind;
 }
 
 export function getTotalWindGenerationGraphFormat(timeStart, timeEnd, timeScale, scaleFactor) {
@@ -314,18 +477,21 @@ export function getCurrentGenerationGraphFormat() {
     var totalWind = getCurrentWindGeneration();
     var totalGeothermal = getCurrentGeothermalGeneration();
     var data = new Array(3);
+    var generation = {};
 
     data[0] = {'x': 'Solar (kWh)', 'y': totalSolar};
     data[1] = {'x': 'Geothermal (kWh)', 'y': totalGeothermal};
     data[2] = {'x': 'Wind (kWh)', 'y': totalWind};
 
-    return data;
+    generation["data"] = data;
+    generation["total"] = data[0]['y'] + data[1]['y'] + data[2]['y'];
+    return generation;
 }
 
 export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, scaleFactor) {
-    var solarTable = getSolarGenerationOverTime(timeStart, timeEnd, timeScale);
-    var windTable = getWindGenerationOverTime(timeStart, timeEnd, timeScale);
-    var geoTable = getGeothermalGenerationOverTime(timeStart, timeEnd, timeScale);
+    var solarTable = getSolarGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, scaleFactor);
+    var windTable = getWindGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, scaleFactor);
+    var geoTable = getGeothermalGenerationOverTimeGraphFormat(timeStart, timeEnd, timeScale, scaleFactor);
 
     var combinedTable = new Array(solarTable.length);
     var finalTable = {};
@@ -334,45 +500,51 @@ export function getTotalGenerationGraphFormat(timeStart, timeEnd, timeScale, sca
 
     for (var i=solarTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
-        currDate = new Date(solarTable[i]["date"]);
-        switch (scaleFactor){
-            case 1:
-                combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
-                break;
-            case 7:
-                if (i==0) {
-                    combinedTable[i]["x"] = "-3";
-                } else if (i==1) {
-                    combinedTable[i]["x"] = "-2";
-                } else if (i==2) {
-                    combinedTable[i]["x"] = "-1";
-                } else if (i==3) {
-                    combinedTable[i]["x"] = "Current";
-                }
-                break;
-            case 30:
-                combinedTable[i]["x"] = getMonth(currDate.getMonth());
-                break;
-            case 365:
-                combinedTable[i]["x"] = currDate.getFullYear().toString();
-                break;
-            default:
-                combinedTable[i]["x"] = solarTable[i]["date"];
-                break;
-        }
+        combinedTable[i]["x"] = solarTable[i]["x"];
+//        currDate = new Date(solarTable[i]["x"]);
 
-        combinedTable[i]["y"] = (solarTable[i]["solar"] + windTable[i]["wind"]
-                                    + geoTable[i]["geothermal"]) * scaleFactor /1000;
+//        switch (scaleFactor){
+//            case 1:
+//                combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
+//                break;
+//            case 7:
+//                if (i==0) {
+//                    combinedTable[i]["x"] = "-3";
+//                } else if (i==1) {
+//                    combinedTable[i]["x"] = "-2";
+//                } else if (i==2) {
+//                    combinedTable[i]["x"] = "-1";
+//                } else if (i==3) {
+//                    combinedTable[i]["x"] = "Current";
+//                }
+//                break;
+//            case 30:
+//                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+//                break;
+//            case 365:
+//                combinedTable[i]["x"] = currDate.getFullYear().toString();
+//                break;
+//            default:
+//                combinedTable[i]["x"] = solarTable[i]["date"];
+//                break;
+//        }
+
+        combinedTable[i]["y"] = (solarTable[i]["y"] + windTable[i]["y"]
+                                    + geoTable[i]["y"]) * scaleFactor /1000;
 
         if (i==solarTable.length-1) {
             currData = combinedTable[i]["y"];
-        } else if (combinedTable[i]["y"] > currData) {
+        } else if (combinedTable[i]["y"] <= currData) {
             rank-=1;
         }
     }
 
+    finalTable["data"] = {};
+    finalTable["data"]["wind"] = windTable;
+    finalTable["data"]["solar"] = solarTable;
+    finalTable["data"]["geo"] = geoTable;
     finalTable["rank"] = rank;
-    finalTable["data"] = combinedTable;
+    finalTable["total"] = combinedTable;
 
     return finalTable;
 }
@@ -403,11 +575,47 @@ export function getBuildingUtilityConsumptionOverTime(building, utility, timeSta
     for (var i = numberEntries-1; i >= 0; i--) {
         table[i] = {};
         table[i]["date"] = currentTime.toString();
-        table[i][utility] = Math.random() * scaleFactor * timeframe;
+        // timeframe is not defined anywhere, see replacement below
+        //table[i][utility] = Math.random() * scaleFactor * timeframe;
+        table[i][utility] = Math.random() * scaleFactor * numberEntries;
+
 
         currentTime.setMinutes(currentTime.getMinutes() - timeScale);
     }
+    return table;
+}
 
+export function getBuildingUtilityConsumptionOverTimeGraphFormat(building, utility, timeStart, timeEnd, timeScale) {
+
+    // different utilities have different "typical" amounts
+    var scaleFactor = scaleFactorOther;
+
+    if (utility == "water") {
+        scaleFactor = scaleFactorWater;
+    } else if (utility == "electricity") {
+        scaleFactor = scaleFactorElectricity;
+    }
+
+    var buildings = getBuildingsList();
+
+    if (buildings.indexOf(building) % 2 == 0) {
+        scaleFactor *= 2;
+    }
+
+    var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
+    var currentTime = new Date(timeEnd);
+
+    var table = new Array(numberEntries);
+    for (var i = numberEntries-1; i >= 0; i--) {
+        table[i] = {};
+        table[i]["x"] = currentTime.toString();
+        // timeframe is not defined anywhere, see replacement below
+        //table[i][utility] = Math.random() * scaleFactor * timeframe;
+        table[i]["y"] = Math.random() * scaleFactor * numberEntries;
+
+
+        currentTime.setMinutes(currentTime.getMinutes() - timeScale);
+    }
     return table;
 }
 
@@ -461,6 +669,77 @@ export function getCurrentBuildingUtilityConsumption(building, utility) {
     return getTotalBuildingUtilityConsumption(building, utility, timeStart, timeEnd);
 }
 
+/*
+Returns historical data in form for building card graphs to use: {totals, data > [utility] }
+*/
+export function getTotalBuildingConsumptionGraphFormat(timeStart, timeEnd, timeScale, scaleFactor, building) {    
+    var waterTable = getBuildingUtilityConsumptionOverTimeGraphFormat(building, "water", timeStart, timeEnd, timeScale);
+    var electricityTable = getBuildingUtilityConsumptionOverTimeGraphFormat(building, "electricity", timeStart, timeEnd, timeScale);
+    var gasTable = getBuildingUtilityConsumptionOverTimeGraphFormat(building, "gas", timeStart, timeEnd, timeScale);
+    var heatTable = getBuildingUtilityConsumptionOverTimeGraphFormat(building, "heat", timeStart, timeEnd, timeScale);
+
+    var combinedTable = new Array(waterTable.length);
+    var finalTable = {};
+    var currData = 0;
+    var year = 2018;
+    var month = 12;
+
+    for (var i=waterTable.length-1; i >= 0; i--) {
+        combinedTable[i] = {};
+
+        switch (scaleFactor){
+            case 1:
+                combinedTable[i]["x"] = waterTable[i]["x"];
+                break;
+
+            case 7:
+                if (i==0) {
+                    combinedTable[i]["x"] = "-3";
+                } else if (i==1) {
+                    combinedTable[i]["x"] = "-2";
+                } else if (i==2) {
+                    combinedTable[i]["x"] = "-1";
+                } else if (i==3) {
+                    combinedTable[i]["x"] = "Current";
+                } else {
+                    combinedTable[i]["x"] = "help";
+                }
+                break;
+
+            case 30:
+                // quick fix
+                combinedTable[i]["x"] = month + "/" + '18';
+                month --;
+//                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                break;
+
+            case 365:
+                // quick fix
+                combinedTable[i]["x"] = year.toString();
+                year --;
+//                combinedTable[i]["x"] = currDate.getFullYear().toString();
+                break;
+
+            default:
+                combinedTable[i]["x"] = waterTable[i]["date"];
+                break;
+        }
+
+        combinedTable[i]["y"] = (waterTable[i]["y"] + electricityTable[i]["y"]
+                                    + gasTable[i]["y"] + heatTable[i]["y"]) * scaleFactor /1000;
+    }
+
+    finalTable["data"] = {}
+    finalTable["data"]["water"] = waterTable;
+    finalTable["data"]["electricity"] = electricityTable;
+    finalTable["data"]["gas"] = gasTable;
+    finalTable["data"]["heat"] = heatTable;
+    finalTable["total"] = combinedTable;
+
+    // console.log("Total building consumption", finalTable)
+
+    return finalTable;
+}
 
 export function getCurrentBuildingUtilityConsumptionGraphFormat(building1, building2, utility) {
     var utility1 = getCurrentBuildingUtilityConsumption(building1, utility);
@@ -470,13 +749,45 @@ export function getCurrentBuildingUtilityConsumptionGraphFormat(building1, build
     data[1] = {'x': building2, 'y': utility2};
     return data;
 }
-// added function to get usage I need
+
+/*
+Returns current data in form for building card graphs to use
+*/
+export function NEWgetCurrentBuildingUtilityConsumptionGraphFormat(building) {
+    var totalWater = 0;
+    var totalElectricity = 0;
+    var totalHeat = 0;
+    var totalGas = 0;
+    var data = new Array(4);
+    var consumption = {};
+
+    var totalWater = getCurrentBuildingUtilityConsumption(building, "water");
+    var totalElectricity = getCurrentBuildingUtilityConsumption(building, "electricity");
+    var totalHeat = getCurrentBuildingUtilityConsumption(building, "heat");
+    var totalGas = getCurrentBuildingUtilityConsumption(building, "gas");
+
+    data[0] = {'x': 'Gas (thm)', 'y': totalGas};
+    data[1] = {'x': 'Electricity (kWh)', 'y': totalElectricity};
+    data[2] = {'x': 'Heat (kBTU)', 'y': totalHeat};
+    data[3] = {'x': 'Water (gal)', 'y': totalWater};
+
+    total = combineData(data);
+    consumption["total"] = total;
+    consumption["data"] = data;
+
+    return consumption;
+}
+
+/*
+Returns data in form for overview card graphs to use
+*/
 export function getCurrentConsumptionGraphFormat() {
     var totalWater = 0;
     var totalElectricity = 0;
     var totalHeat = 0;
     var totalGas = 0;
     var data = new Array(4);
+    var consumption = {};
     var buildings = getBuildingsList();
 
     buildings.forEach(function(building) {
@@ -491,7 +802,11 @@ export function getCurrentConsumptionGraphFormat() {
     data[2] = {'x': 'Heat (kBTU)', 'y': totalHeat};
     data[3] = {'x': 'Water (gal)', 'y': totalWater};
 
-    return data;
+    total = combineData(data);
+    consumption["total"] = total;
+    consumption["data"] = data;
+
+    return consumption;
 }
 
 export function reformatDate(date){
@@ -556,79 +871,176 @@ export function getCampusUtilityConsumptionOverTime(utility, timeStart, timeEnd,
     return table;
 }
 
-// Added wrapper to get data the way I need it
+/*
+Returns data in form for overview card graphs to use
+*/
+export function getCampusUtilityConsumptionOverTimeGraphFormat(utility, timeStart, timeEnd, timeScale, scaleFactor) {
+    var numberEntries = Math.round(Math.abs(timeEnd - timeStart) / (60000 * timeScale));
+    var currDate = new Date(timeEnd);
+    var reformattedDate = reformatDate(currDate);
+
+    var table = new Array(numberEntries);
+    var year = 2018;
+    var month = 12;
+
+    for (var i = numberEntries-1; i >= 0; i--) {
+        reformattedDate = reformatDate(currDate);
+
+        table[i] = {};
+
+        switch (scaleFactor){
+            case 1:
+                table[i]["x"]  = getDayOfWeek(currDate.getDay());
+                break;
+
+            case 7:
+                if (i==0) {
+                    table[i]["x"] = "-3";
+                } else if (i==1) {
+                    table[i]["x"] = "-2";
+                } else if (i==2) {
+                    table[i]["x"] = "-1";
+                } else if (i==3) {
+                    table[i]["x"] = "Current";
+                } else {
+                    table[i]["x"] = "help";
+                }
+                break;
+
+            case 30:
+                // quick fix
+                table[i]["x"] = month + "/" + '18';
+                month --;
+//                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                break;
+
+            case 365:
+                // quick fix
+                table[i]["x"] = year.toString();
+                year --;
+//                combinedTable[i]["x"] = currDate.getFullYear().toString();
+                break;
+
+            default:
+                table[i]["x"] = waterTable[i]["date"];
+                break;
+        }
+
+        var utilityTable = wTable;
+
+        switch (utility) {
+            case 'electricity':
+                utilityTable = eTable;
+                break;
+            case 'water':
+                utilityTable = wTable;
+                break;
+            case 'gas':
+                utilityTable = sTable;
+                break;
+            case 'heat':
+                utilityTable = sTable;
+                break;
+        }
+
+        var dataPt = JanData[utilityTable["Burton"]][reformattedDate];
+
+
+        if (typeof dataPt == 'undefined') {
+            console.log('UNDEFINED DATA POINT (ApiWrappers.js):' + reformattedDate);
+
+            dataPt = "0";
+        }
+
+        table[i]["y"] = Number(dataPt);
+
+        currDate.setMinutes(currDate.getMinutes() - timeScale);
+    }
+
+    return table;
+}
+
+/*
+Returns data in form for overview card graphs to use
+*/
 export function getTotalConsumptionGraphFormat(timeStart, timeEnd, timeScale, scaleFactor) {
-    var waterTable = getCampusUtilityConsumptionOverTime("water", timeStart, timeEnd, timeScale);
-    var electricityTable = getCampusUtilityConsumptionOverTime("electricity", timeStart, timeEnd, timeScale);
-    var gasTable = getCampusUtilityConsumptionOverTime("gas", timeStart, timeEnd, timeScale);
-    var heatTable = getCampusUtilityConsumptionOverTime("heat", timeStart, timeEnd, timeScale);
+    var waterTable = getCampusUtilityConsumptionOverTimeGraphFormat("water", timeStart, timeEnd, timeScale, scaleFactor);
+    var electricityTable = getCampusUtilityConsumptionOverTimeGraphFormat("electricity", timeStart, timeEnd, timeScale, scaleFactor);
+    var gasTable = getCampusUtilityConsumptionOverTimeGraphFormat("gas", timeStart, timeEnd, timeScale, scaleFactor);
+    var heatTable = getCampusUtilityConsumptionOverTimeGraphFormat("heat", timeStart, timeEnd, timeScale, scaleFactor);
 
     var combinedTable = new Array(waterTable.length);
     var finalTable = {};
     var currData = 0;
     var rank = waterTable.length;
+    var year = 2018;
+    var month = 12;
 
     for (var i=waterTable.length-1; i >= 0; i--) {
         combinedTable[i] = {};
-        currDate = new Date(waterTable[i]["date"]);
 
         switch (scaleFactor){
             case 1:
-                combinedTable[i]["x"] = getDayOfWeek(currDate.getDay());
+                combinedTable[i]["x"] = waterTable[i]["x"];
                 break;
+
             case 7:
                 if (i==0) {
-                    combinedTable[i]["x"] = "-3 Weeks";
+                    combinedTable[i]["x"] = "-3";
                 } else if (i==1) {
-                    combinedTable[i]["x"] = "-2 Weeks";
+                    combinedTable[i]["x"] = "-2";
                 } else if (i==2) {
-                    combinedTable[i]["x"] = "-1 Week";
+                    combinedTable[i]["x"] = "-1";
                 } else if (i==3) {
-                    combinedTable[i]["x"] = "This Week";
+                    combinedTable[i]["x"] = "Current";
                 } else {
                     combinedTable[i]["x"] = "help";
                 }
                 break;
+
             case 30:
-                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
+                // quick fix
+                combinedTable[i]["x"] = month + "/" + '18';
+                month --;
+//                combinedTable[i]["x"] = (currDate.getMonth() + 1) + "/" + currDate.getYear().toString().substring(1);
                 break;
+
             case 365:
-                combinedTable[i]["x"] = currDate.getFullYear().toString();
+                // quick fix
+                combinedTable[i]["x"] = year.toString();
+                year --;
+//                combinedTable[i]["x"] = currDate.getFullYear().toString();
                 break;
+
             default:
                 combinedTable[i]["x"] = waterTable[i]["date"];
                 break;
         }
 
-        combinedTable[i]["y"] = (waterTable[i]["water"] + electricityTable[i]["electricity"]
-                                    + gasTable[i]["gas"] + heatTable[i]["heat"]) * scaleFactor /1000;
+        combinedTable[i]["y"] = (waterTable[i]["y"] + electricityTable[i]["y"]
+                                    + gasTable[i]["y"] + heatTable[i]["y"]) * scaleFactor /1000;
 
         if (i==waterTable.length-1) {
             currData = combinedTable[i]["y"];
+
         } else if (combinedTable[i]["y"] < currData) {
             rank-=1;
         }
     }
 
-    finalTable["rank"] = rank;
-    finalTable["data"] = combinedTable;
+    finalTable["data"] = {}
+    finalTable["data"]["water"] = waterTable;
+    finalTable["data"]["electricity"] = electricityTable;
+    finalTable["data"]["gas"] = gasTable;
 
-    // console.log(finalTable);
+    finalTable["rank"] = rank;
+    finalTable["total"] = combinedTable;
 
     return finalTable;
 }
 
 export function getTotalCampusUtilityConsumption(utility, timeStart, timeEnd) {
     // return total campus consumption of utility over specified time frame
-
-    // different utilities have different "typical" amounts
-//    var scaleFactor = scaleFactorOther;
-//
-//    if (utility == "water") {
-//        scaleFactor = scaleFactorWater;
-//    } else if (utility == "electricity") {
-//        scaleFactor = scaleFactorElectricity;
-//    }
 
     // calculate number of 15-min chunks b/w 'timeStart' and 'timeEnd'
     var timeframe = Math.abs(timeEnd - timeStart) / (60000 * 15); // 60,000ms per min * 15min
@@ -659,7 +1071,11 @@ export function getCurrentCampusUtilityConsumption(utility) {
     return getTotalCampusUtilityConsumption(utility, building, timeStart, timeEnd);
 }
 
-export function getEveryBuildingUtilityConsumption(utility) {
+/*
+Returns array of current consumption of every building given a utility in order of
+highest to least percentage of total used
+*/
+export function getEveryBuildingUtilityConsumptionRanked(utility) {
     var buildings = getBuildingsList();
 
     var total = 0;
@@ -682,7 +1098,7 @@ export function getEveryBuildingUtilityConsumption(utility) {
                 table[i][utility] = getRandomHeat();
                 break;
         }
-//        table[i][utility] = Math.random() * scaleFactor;
+
         total += table[i][utility];
     }
 
@@ -695,6 +1111,62 @@ export function getEveryBuildingUtilityConsumption(utility) {
     return table;
 }
 
+/* 
+Returns dictionary of current consumption of every building given a utility
+*/
+export function getEveryBuildingUtilityConsumption(utility) {
+    var buildings = getBuildingsList();
+
+    var total = 0;
+    var table = {};
+
+    for (var i = 0; i < buildings.length; i++) {
+        var building = buildings[i];
+        table[building] = {};
+        switch (utility) {
+            case 'electricity':
+                table[building][utility] = getRandomElectric();
+                break;
+            case 'water':
+                table[building][utility] = getRandomWater();
+                break;
+            case 'gas':
+                table[building][utility] = getRandomGas();
+                break;
+            case 'heat':
+                table[building][utility] = getRandomHeat();
+                break;
+        }
+
+        total += table[building][utility];
+    }
+
+    for (var i = 0; i < buildings.length; i++) {
+        var building = buildings[i];
+        table[building]["percent"] = table[building][utility] / total;
+    }
+
+    return table;
+}
+
+/*
+Returns consumption of every building for all utilites
+*/
+export function getEveryBuildingEveryUtilityConsumption() {
+    var buildings = getBuildingsList();
+    var table = {};
+
+    for (var i = 0; i < buildings.length; i++) {
+        var building = buildings[i];
+        table[building] = {};
+
+        table[building]['electricity'] = getRandomElectric();
+        table[building]['water'] = getRandomWater();
+        table[building]['gas'] = getRandomGas();
+        table[building]['heat'] = getRandomHeat();
+    }
+    return table;
+}
 
 // Helper function to sory the building list (in descending order)
 function sortByKey(array, key) {
@@ -721,6 +1193,9 @@ function getRandomElectric() {
     return getSpecificRandom(100000, 500000, 1, 1);
 }
 
+/*
+Get data in dictionary format of building and turbine energy usage and generation totals
+*/
 export function getAllHistoricalGraphData() {
     var historicalData = {};
     var currDate = new Date();
@@ -760,17 +1235,75 @@ export function getAllHistoricalGraphData() {
     return historicalData;
 }
 
+/*
+Get data in dictionary format of historical building energy usage
+Format: { [Building] > [time Usage] > {data, total} > [utility]
+*/
+export function getAllHistoricalBuildingGraphData() {
+    var historicalBuildingData = {};
+    var currDate = new Date();
+    var buildings = getBuildingsList();
+    var utilities = ['electricity', 'water', 'gas', 'heat'];
+
+    for (var i = 0; i < buildings.length; i++) {
+        var building = buildings[i];
+        historicalBuildingData[building] = {};
+
+        dayUsageData = getDayBuildingGraph(currDate, building);
+        weekUsageData = getWeekBuildingGraph(currDate, building);
+        monthUsageData = getMonthBuildingGraph(currDate, building);
+        yearUsageData = getYearBuildingGraph(currDate, building);
+
+        historicalBuildingData[building]["dayUsage"] = dayUsageData;
+        historicalBuildingData[building]["weekUsage"] = weekUsageData;
+        historicalBuildingData[building]["monthUsage"] = monthUsageData;
+        historicalBuildingData[building]["yearUsage"] = yearUsageData;
+
+    }
+    return historicalBuildingData;
+}
+
+/*
+Get data in dictionary format of current building energy usage
+Format: { [Building] > {data, total} > [utility]
+*/
+export function getAllCurrentBuildingGraphData() {
+    var currData = {};
+    var data = {};
+    var totals = {};
+    var buildings = getBuildingsList();
+
+    buildings.forEach(function(building) {
+        var usage = NEWgetCurrentBuildingUtilityConsumptionGraphFormat(building);
+        currData[building] = usage;
+    });
+    return currData;
+}
+
 export function getAllCurrentGraphData() {
     var currData = {};
+    var data = {};
+    var totals = {};
 
     var usage = getCurrentConsumptionGraphFormat();
     var generation = getCurrentGenerationGraphFormat();
-    var turbine = getCurrentWindGenerationGraphFormat();
+    var turbineGeneration = getCurrentWindGenerationGraphFormat();
+    var turbineConsumption = getCurrentWindConsumption();
+    var wind = getCurrentWindSpeed();
 
-    currData["usage"] = usage;
-    currData["generation"] = generation;
-    currData["turbine"] = turbine;
+    data["usage"] = usage.data;
+    data["generation"] = generation.data;
+    data["turbine"] = turbineGeneration.data;
+    data["windSpeed"] = wind;
 
+    totals["usage"] = usage.total;
+    totals["generation"] = generation.total;
+    totals["turbine"] = {};
+    totals["turbine"]["generation"] = turbineGeneration.total;
+    totals["turbine"]["consumption"] = turbineConsumption;
+
+    currData["data"] = data;
+    currData["totals"] = totals;
     return currData;
 }
 
@@ -827,3 +1360,306 @@ function getYearGraph(currDate, type) {
         return getTotalWindGenerationGraphFormat(comparisonDate, currDate, 525600, 365);
     }
 }
+
+/*           TIME GRAPHS FOR BUILDING GRAPH DATA              */
+
+
+function getDayBuildingGraph(currDate, building) {
+    var comparisonDate = new Date();
+    comparisonDate.setDate(currDate.getDate()-7);
+    // console.log("Day building", getTotalBuildingConsumptionGraphFormat(comparisonDate, currDate, 1440, 1, building))
+    return getTotalBuildingConsumptionGraphFormat(comparisonDate, currDate, 1440, 1, building);
+}
+
+function getWeekBuildingGraph(currDate, building) {
+    var comparisonDate = new Date();
+    comparisonDate.setDate(currDate.getDate()-28);
+    return getTotalBuildingConsumptionGraphFormat(comparisonDate, currDate, 10080, 7, building);
+}
+
+function getMonthBuildingGraph(currDate, building){
+    var comparisonDate = new Date();
+    comparisonDate.setMonth(currDate.getMonth()-12);
+    return getTotalBuildingConsumptionGraphFormat(comparisonDate, currDate, 41760, 30, building);
+}
+
+function getYearBuildingGraph(currDate, building) {
+    var comparisonDate = new Date();
+    comparisonDate.setYear(currDate.getFullYear()-4);
+    return getTotalBuildingConsumptionGraphFormat(comparisonDate, currDate, 525600, 365, building);
+}
+
+export function getBuildingIDs() {
+    var buildings = {"Burton":39, "Sayles":10, "Severance":61, "Davis":44, "Musser":57, 
+                    "Myers":58, "Cassat":40, "Memo":50, "Nourse":59, "Evans":45, 
+                    "Goodhue":47, "Watson":64, "Scoville":60};
+    return buildings;
+}
+
+export function getConsumptionDataTableAllBuildings(date) {
+    // Return a table of all relevant data for ALL buildings
+    // Table will have a row for each building
+    var buildings = getBuildingIDs();
+
+    table = {};
+    for (var i=0; i<buildings.length; i++){
+        table[i] = getConsumptionDataTableForBuilding(buildings[i], date);
+    }
+
+    return table;
+}
+
+export function getConsumptionDataTableForBuilding(building, date) {
+    // Data we need FOR EACH UTILITY TYPE (3 utilities): 
+    // • 7 datapoints: value @ this time of day (hour) over the last 7 days
+    // • 12 datapoints: value @ this time (hour) on this day of the month (1st - 30th) over the last 12 months
+    // • 4 datapoints: value @ this time (hour) on this day of the week (mon/tue/wed)over the last 4 weeks
+    // • 5 datapoints: value @ this day of the year (DD/MM) over the past 5 years
+
+    var table = {};
+    // Here's a visual reference for the layout of the data "table" (object, really)
+    table[building] = {
+        electricity:{
+            days: [],
+            weeks: [],
+            months: [],
+            years: []
+        },
+        water:{
+            days: [],
+            weeks: [],
+            months: [],
+            years: []},
+        heat:{
+            days: [],
+            weeks: [],
+            months: [],
+            years: []}
+    };
+
+    var buildingID = getBuildingIDs()[building];
+
+    // Historical data dump only went up until the beginning of 2018
+    // If we pass in a date beyond then, we'll get no data back from the API
+    if (date.getFullYear() > 2017){
+        date = new Date("2017", "00", "01", "00", "00", "00", "00");
+    }
+
+    // get data for last 7 days (value on this hour yesterday, day before,...)
+    for (let daysAgo=0; daysAgo<7; daysAgo++){
+        var start = new Date(date);
+        var end = new Date(date);
+
+        start.setDate(date.getDate()-daysAgo);
+        end.setDate(date.getDate()-daysAgo);
+        end.setHours(start.getHours() + 1);
+
+        startStamp = dateToTimestamp(start);
+        endStamp = dateToTimestamp(end);
+        var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+    
+        console.log(url);
+        fetch(url).then((response) => response.json()).then((responseJson) => {
+
+            console.log(responseJson.length);
+
+            if (responseJson.length == 0) {
+                console.log("NO DATA: " + url);
+                // TO DO: fill in the table with NULL or 0 values rather than completely skipping them
+            }
+
+            for (let i =0; i < responseJson.length ; i++) {
+
+                obj = responseJson[i];
+                // name = obj.name.substring(15,24)
+                val = obj.pointvalue.toFixed(2)
+                units = obj.units;
+
+                switch (units) {
+                    case "kWh":
+                        table[building].electricity.days.push(val);
+                        console.log(table);
+                        break;
+                    case "kBTU":
+                        table[building].heat.days.push(val);
+                        console.log(table);
+                        break;
+                    case "gal":
+                        table[building].water.days.push(val);
+                        console.log(table);
+                        break;
+                }
+
+            }
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+    }
+
+
+    // get data for last 12 months (value on this hour of this day last month, month before,...)
+    for(let monthsAgo=0; monthsAgo<12; monthsAgo++){
+        var start = new Date(date);
+        var end = new Date(date);
+
+        start.setMonth(date.getMonth()-monthsAgo);
+        end.setMonth(date.getMonth()-monthsAgo);
+        end.setHours(start.getHours() + 1);
+
+        startStamp = dateToTimestamp(start);
+        endStamp = dateToTimestamp(end);
+        var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+    
+        console.log(url);
+        fetch(url).then((response) => response.json()).then((responseJson) => {
+
+            console.log(responseJson.length);
+
+            if (responseJson.length == 0) {
+                console.log("NO DATA: " + url);
+                // TO DO: fill in the table with NULL or 0 values rather than completely skipping them
+            }
+
+            for (let i =0; i < responseJson.length ; i++) {
+
+                obj = responseJson[i];
+                // name = obj.name.substring(15,24)
+                val = obj.pointvalue.toFixed(2)
+                units = obj.units;
+
+                switch (units) {
+                    case "kWh":
+                        table[building].electricity.months.push(val);
+                        console.log(table);
+                        break;
+                    case "kBTU":
+                        table[building].heat.months.push(val);
+                        console.log(table);
+                        break;
+                    case "gal":
+                        table[building].water.months.push(val);
+                        console.log(table);
+                        break;
+                }
+
+            }
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+    // get data for last 4 weeks (value on this hour of this day last week, week before,...)
+    for(let weeksAgo=0; weeksAgo<4; weeksAgo++){
+        var start = new Date(date);
+        var end = new Date(date);
+
+        start.setDate(date.getDate()-7*weeksAgo);
+        end.setDate(date.getDate()-7*weeksAgo);
+        end.setHours(start.getHours() + 1);
+
+        startStamp = dateToTimestamp(start);
+        endStamp = dateToTimestamp(end);
+        var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+    
+        console.log(url);
+        fetch(url).then((response) => response.json()).then((responseJson) => {
+
+            console.log(responseJson.length);
+
+            if (responseJson.length == 0) {
+                console.log("NO DATA: " + url);
+                // TO DO: fill in the table with NULL or 0 values rather than completely skipping them
+            }
+
+            for (let i =0; i < responseJson.length ; i++) {
+
+                obj = responseJson[i];
+                // name = obj.name.substring(15,24)
+                val = obj.pointvalue.toFixed(2)
+                units = obj.units;
+
+                switch (units) {
+                    case "kWh":
+                        table[building].electricity.weeks.push(val);
+                        console.log(table);
+                        break;
+                    case "kBTU":
+                        table[building].heat.weeks.push(val);
+                        console.log(table);
+                        break;
+                    case "gal":
+                        table[building].water.weeks.push(val);
+                        console.log(table);
+                        break;
+                }
+
+            }
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+
+    // get data for last 5 years (value on this hour of this day last year, year before,...)
+    for(let yearsAgo=0; yearsAgo<5; yearsAgo++){
+        var start = new Date(date);
+        var end = new Date(date);
+
+        start.setFullYear(date.getFullYear()-yearsAgo);
+        end.setFullYear(date.getFullYear()-yearsAgo);
+        end.setHours(start.getHours() + 1);
+
+        startStamp = dateToTimestamp(start);
+        endStamp = dateToTimestamp(end);
+        var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+    
+        console.log(url);
+        fetch(url).then((response) => response.json()).then((responseJson) => {
+
+            console.log(responseJson.length);
+
+            if (responseJson.length == 0) {
+                console.log("NO DATA: " + url);
+                // TO DO: fill in the table with NULL or 0 values rather than completely skipping them 
+            }
+
+            for (let i =0; i < responseJson.length ; i++) {
+
+                obj = responseJson[i];
+                // name = obj.name.substring(15,24)
+                val = obj.pointvalue.toFixed(2)
+                units = obj.units;
+
+                switch (units) {
+                    case "kWh":
+                        table[building].electricity.years.push(val);
+                        console.log(table);
+                        break;
+                    case "kBTU":
+                        table[building].heat.years.push(val);
+                        console.log(table);
+                        break;
+                    case "gal":
+                        table[building].water.years.push(val);
+                        console.log(table);
+                        break;
+                }
+
+            }
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+}
+
+

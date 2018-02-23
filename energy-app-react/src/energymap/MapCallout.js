@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, Text, View, } from 'react-native';
 import { Button } from 'react-native-elements';
+import { getUnits } from './../helpers/General';
 
 
 //Callout styling tutorial: https://rationalappdev.com/santas-map-app-with-react-native/
@@ -11,12 +12,8 @@ export default class MapCallout extends Component {
     const { name, image, number, utility } = this.props;
     
     // Decide what units to render
-    var units = ""
-    if (utility == 'electricity') {
-      units = "kWh"
-    } else if (utility == 'water') {
-      units = "gal"
-    }
+    var units = getUnits(utility);
+
 
     return (
       <View style={styles.container}>
