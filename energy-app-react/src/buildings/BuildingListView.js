@@ -12,22 +12,23 @@ import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.j
 
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
+import DefaultTheme from './../styling/DefaultTheme.js';
 
 const theme = GetStyle();
 
 class BuildingListView extends Component {
   renderHeader = (headerItem) => {
-    return <Text style={styles.header}>{headerItem.section.name}</Text>
+    return <Text style={[themeStyles.container, styles.header]}>{headerItem.section.name}</Text>
   }
 
   renderItem = (item) => {
-    return <View style={[theme.card, styles.card, {marginTop: '3%'}]}>
+    return <View style={[theme.card, styles.card, styles.card]}>
         <Text style={styles.header}>{item.item.name}</Text>
         <View style={{ borderBottomWidth: 1, borderBottomColor: '#e1e8ee', marginTop: '1%' }}/>
-        <View style={[{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}, styles.innerView]}>
+        <View style={[styles.outerView, styles.innerView]}>
             <Image
-            style={{alignItems:'center', width:75, borderColor:'white', borderWidth:1, marginBottom:3, marginLeft:3}} source={{uri: item.item.avatar}}/>
-            <View style={{flex: 1, flexDirection: 'column', paddingTop:'2%'}}>
+            style={styles.image} source={{uri: item.item.avatar}}/>
+            <View style={{flex: 1, flexDirection: 'column'}}>
                 <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
                 <Text style={styles.text}>Water: {item.item.water}</Text>
                 <Text style={styles.text}>Heat: {item.item.heat}</Text>
@@ -37,7 +38,6 @@ class BuildingListView extends Component {
                 fontSize={moderateScale(14)}
                 title='More Info'
                 style={{paddingBottom:20}}
-                containerViewStyle={styles.button}
                 backgroundColor='#0B5091'
                 onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item})}/>
         </View>
@@ -48,7 +48,7 @@ class BuildingListView extends Component {
     const {navigate} = this.props.navigation;
 
     return (
-      <ScrollView>
+      <ScrollView style={{paddingTop:'3%'}}>
         <FlatList
             data = {buildings}
             renderItem={this.renderItem}
@@ -120,7 +120,7 @@ const BuildingStack = StackNavigator({
       headerTitleStyle: navStyles.headerTitle,
       headerBackTitleStyle: navStyles.headerTitle,
       headerBackTitle: 'Back',
-    }), 
+    }),
   },
   Comparison: {
     screen: BuildingComparison,
@@ -161,27 +161,6 @@ const styles = StyleSheet.create({
           ios: {
             shadowColor: 'rgba(0,0,0, .9)',
           },})
-    // borderWidth: 1, 
-    // borderColor:'#cbd2d9', 
-    // borderRadius:3, 
-    // backgroundColor:'white'
-  },
-  // card: {
-  //   paddingTop: 20,
-  // },
-  head: {
-      backgroundColor: 'grey',
-    },
-  table: {
-    width: 250,
-    marginLeft: 5,
-
-  },
-  text: {
-    alignSelf: 'flex-start',
-    marginLeft: 5,
-    fontSize: moderateScale(16),
-    color: 'darkslategrey',
   },
   listItem: {
     height: 50,
@@ -199,36 +178,20 @@ const styles = StyleSheet.create({
     // color: 'silver'
     // paddingBottom: 55,
   },
-  subtitleText: {
-    paddingTop: 5,
-    paddingRight: 40,
-    paddingLeft: 20,
-    color: 'silver',
-    fontSize: 15
-  },
-  listImg: {
-    height: 30,
-    alignSelf: 'stretch',
-  },
-  listText: {
-    paddingLeft: 30,
-    marginLeft: 30,
-    fontSize: 24,
-  },
-  row: {
-    backgroundColor: 'orange',
-  },
-  button: {
-    marginTop: '3%',
-
-  },
-  view: {
-    alignItems: 'center',
-    backgroundColor: 'yellow'
-  },
   img: {
     alignSelf: 'stretch',
     height: 100,
+      marginTop: 0,
+      marginLeft: 6,
+      marginRight: 6,
+      paddingLeft: 5,
+      paddingRight: 5,
+  },
+  text: {
+      alignSelf: 'flex-start',
+      marginLeft: 5,
+      fontSize: moderateScale(16),
+      color: 'darkslategrey',
   },
   header: {
       fontSize: moderateScale(18),
@@ -237,6 +200,16 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
 //      fontWeight: 'bold',
       alignSelf: 'flex-start',
+  },
+  image: {
+      alignItems:'center',
+      width:75,
+  },
+  outerView: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      backgroundColor: 'white'
   },
   compareButton: {
     marginRight: 10
