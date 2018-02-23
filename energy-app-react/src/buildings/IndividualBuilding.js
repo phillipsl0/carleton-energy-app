@@ -213,7 +213,6 @@ export default class IndividualBuilding extends Component {
         var utilities = ["Gas", "Electric", "Heat", "Water"];
 
         graphData = this.getGraphScope(historicalBuildingData[this.state.buildingName])
-        // console.log("Graph data", graphData)
         header = this.getHeader(currentBuildingData[this.state.buildingName]);
 
         if (height < 600) {

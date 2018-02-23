@@ -200,8 +200,8 @@ class EnergyMapView extends Component {
         longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
       },
       ready: true,
-      utilityNameShown: 'electric',
-      utilityIndexShown: 3, // for IndividualBuilding's UtilitiesMiniCard
+      utilityNameShown: 'total',
+      utilityIndexShown: 1, // for IndividualBuilding's UtilitiesMiniCard
       mapLoading: true
     };
     this.onRegionChange = this.onRegionChange.bind(this);
