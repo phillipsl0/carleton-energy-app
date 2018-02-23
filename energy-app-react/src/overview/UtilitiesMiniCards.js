@@ -1,3 +1,8 @@
+/* UtilitiesMiniCards.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * Cards on Graph detail page that determine graph utility scope.
+ */
+
 import React, { Component } from 'react';
 import { View, StyleSheet, Text } from 'react-native'
 import { connect } from 'react-redux';

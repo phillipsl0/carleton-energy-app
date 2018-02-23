@@ -1,3 +1,8 @@
+/* General.js
+ * Written by Liv Phillips & Veronica Child for Energy App Comps, 2018
+ * Variety of general helper functions.
+ */
+
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 

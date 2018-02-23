@@ -1,3 +1,8 @@
+/* OverviewCards.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * Second level detail cards for Overview page, containing header & graph card.
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, Platform, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
@@ -76,38 +81,6 @@ export default class OverviewCards extends Component {
 
     }
 
-    getRanking = (data, cardType) => {
-        if (cardType == USAGE_CARD) {
-            switch (this.state.view) {
-                case "day":
-                    return data["dayUsage"].rank;
-
-                case "week":
-                    return data["weekUsage"].rank;
-
-                case "month":
-                    return data["monthUsage"].rank;
-
-                case "year":
-                    return data["yearUsage"].rank;
-            }
-        } else {
-            switch (this.state.view) {
-                case "day":
-                    return data["dayGeneration"].rank;
-
-                case "week":
-                    return data["weekGeneration"].rank;
-
-                case "month":
-                    return data["monthGeneration"].rank;
-
-                case "year":
-                    return data["yearGeneration"].rank;
-            }
-        }
-    }
-
     getUnits = (indexData) => {
         if (indexData["three"]){
             switch(indexData["indices"][2]){
@@ -128,6 +101,7 @@ export default class OverviewCards extends Component {
         }
     }
 
+    /* Indexes into the full data object to get the specific numbers necessary for the current view */
     getIndices = () => {
         var data = {};
         var indices = new Array(3);
@@ -220,6 +194,7 @@ export default class OverviewCards extends Component {
             return data;
     }
 
+    /* Returns the correct header based on the current view */
     getHeader = (historicalData, cardType, currentData) => {
         const theme = GetStyle(CurrTheme);
         const { ui } = this.props;
@@ -245,7 +220,7 @@ export default class OverviewCards extends Component {
             subheaderHighlight = this.state.view;
         }
 
-
+      /* Small phones defy all styling tricks, so they need special help */
       if (height < 600) {
         return (
           <View style={[styles.textContainer, theme.centered, {paddingBottom: '3%'}]}>

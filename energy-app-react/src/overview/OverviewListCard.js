@@ -1,3 +1,9 @@
+/* OverviewListCard.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * First level detail cards for Overview page, giving basic details about turbine energy, energy usage,
+ * and energy generation.
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableHighlight, Image, Platform } from 'react-native';
 import { connect } from 'react-redux';
