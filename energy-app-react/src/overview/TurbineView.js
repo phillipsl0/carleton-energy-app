@@ -21,8 +21,8 @@ const theme = GetStyle(CurrTheme);
         windSpeed: state.data.windSpeed,
         windRatio: state.data.windRatio,
         loading: state.loading,
-        turbine: state.api.turbine,
-        solar: state.api.solar,
+        turbine: state.api.turbineData,
+        solar: state.api.solarData,
         ui: state.ui,
     }),
 )
@@ -44,13 +44,7 @@ export default class Windmill extends Component {
     render() {
         const { currentData, totals, windSpeed, windRatio, turbine, ui, solar } = this.props;
         const { width, height } = ui.layout;
-
-        turbineGeneration = turbine.turbineData;
-        if (turbine.turbineData == 0) {
-            turbineGeneration = getSpecificRandom(2, 1500, 1, 1);
-        }
-
-        var rightTitles = this.fetchData(turbineGeneration);
+        var rightTitles = this.fetchData(turbine);
 
         var padding = '5%';
         if (height < 600) {
@@ -66,7 +60,7 @@ export default class Windmill extends Component {
                     Currently generating
                 </Text>
                 <Text style={[styles.number, theme.fontBold]}>
-                    {roundNumber(turbineGeneration)}
+                    {roundNumber(turbine)}
                 </Text>
                 <Text style={[styles.units, theme.fontRegular]}>
                     kW
