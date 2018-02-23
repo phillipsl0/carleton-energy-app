@@ -248,8 +248,8 @@ class App extends Component {
         {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
         {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
 
-    const imageAssets = cacheImages([require('./src/assets/windmillCard.png'),
-        require('./src/assets/windmillHeader.png'), require('./src/assets/windmillFull.png')]);
+    const imageAssets = cacheImages([require('./src/assets/images/windmillCard.png'),
+        require('./src/assets/images/windmillHeader.png'), require('./src/assets/images/windmillFull.png')]);
 
     await Promise.all([...imageAssets, ...fontAssets]);
   }

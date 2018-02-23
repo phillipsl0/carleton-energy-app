@@ -274,7 +274,7 @@ export default class OverviewCards extends Component {
             return(
                 <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
                 <View style={[{width:width+5}, styles.smallHeight, theme.centered]}>
-                <Image source={require('./../assets/windmillHeader.png')}
+                <Image source={require('./../assets/images/windmillHeader.png')}
                     style={[styles.head, {width:width+5}, styles.smallHeight,]}
                     resizeMode="cover"/>
                 <View style={[{width:width+5}, styles.head, styles.smallHeight, theme.carletonBlueBackground]}/>
@@ -293,7 +293,7 @@ export default class OverviewCards extends Component {
             return (
                     <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
                     <View style={[{width:width+5}, theme.centered, styles.height]}>
-                    <Image source={require('./../assets/windmillHeader.png')}
+                    <Image source={require('./../assets/images/windmillHeader.png')}
                         style={[styles.head, {width:width+5}, styles.height]}
                         resizeMode="cover"/>
                     <View style={[{width:width+5}, styles.head, styles.height, theme.carletonBlueBackground]}/>
