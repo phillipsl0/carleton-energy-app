@@ -1889,9 +1889,9 @@ export function grabData(buildingName, date){
 
 function sumHoursToDays(responseJson){
 
-    electricDict = {};
-    waterDict = {};
-    heatDict = {};
+    electricDictDay = {};
+    waterDictDay = {};
+    heatDictDay = {};
 
     var size = responseJson.length-1;
 
@@ -1910,24 +1910,24 @@ function sumHoursToDays(responseJson){
 
         switch (units) {
             case "kWh":
-                if (date in electricDict){
-                    electricDict[date] = electricDict[date] + val;
+                if (date in electricDictDay){
+                    electricDictDay[date] = electricDictDay[date] + val;
                 } else {
-                    electricDict[date] = val;
+                    electricDictDay[date] = val;
                 }
                 break;
             case "kBTU":
-                if (date in heatDict){
-                    heatDict[date] = heatDict[date] + val;
+                if (date in heatDictDay){
+                    heatDictDay[date] = heatDictDay[date] + val;
                 } else {
-                    heatDict[date] = val;
+                    heatDictDay[date] = val;
                 }
                 break;
             case "gal":
-                if (date in waterDict){
-                    waterDict[date] = waterDict[date] + val;
+                if (date in waterDictDay){
+                    waterDictDay[date] = waterDictDay[date] + val;
                 } else {
-                    waterDict[date] = val;
+                    waterDictDay[date] = val;
                 }
                 break;
         }
@@ -1935,7 +1935,7 @@ function sumHoursToDays(responseJson){
     }
 
 
-    return { electricDict, heatDict, waterDict };
+    return { electricDictDay, heatDictDay, waterDictDay };
 
 }
 
@@ -1945,17 +1945,17 @@ function sumDaysToWeeks(daySums){
     // values are sums of usage data over 7 days
     // keys are the timstamps for the END of the summed week
 
-    electricDict = daySums["electricDict"];
-    heatDict = daySums["heatDict"];
-    waterDict = daySums["waterDict"];
+    electricDictDay = daySums["electricDictDay"];
+    heatDictDay = daySums["heatDictDay"];
+    waterDictDay = daySums["waterDictDay"];
 
     electricDictWeek = {};
     heatDictWeek = {};
     waterDictWeek = {};
 
-    electricArr = sortByKey(Object.keys(electricDict));
-    heatArr = sortByKey(Object.keys(heatDict));
-    waterArr = sortByKey(Object.keys(waterDict));
+    electricArr = sortByKey(Object.keys(electricDictDay));
+    heatArr = sortByKey(Object.keys(heatDictDay));
+    waterArr = sortByKey(Object.keys(waterDictDay));
 
     for (let week = 0; week < 4; week++) {
         var weekLabel = -1;
@@ -1970,7 +1970,8 @@ function sumDaysToWeeks(daySums){
             }
 
             var electricKey = electricArr[idx];
-            var val = electricDict[electricKey];
+            var val = electricDictDay[electricKey];
+
 
             if (weekLabel in electricDictWeek){
                 electricDictWeek[weekLabel] = electricDictWeek[weekLabel] + val;
@@ -1981,7 +1982,56 @@ function sumDaysToWeeks(daySums){
         }
     }
 
-    return electricDictWeek;
+    for (let week = 0; week < 4; week++) {
+        var weekLabel = -1;
+        for (let day = 0; day < 7; day++){
+            var idx = week*7+day;
+            if (idx >= heatArr.length){
+                break;
+            }
+
+            if (day == 0){
+                weekLabel = heatArr[idx];
+            }
+
+            var heatKey = heatArr[idx];
+            var val = heatDictDay[heatKey];
+
+            if (weekLabel in heatDictWeek){
+                heatDictWeek[weekLabel] = heatDictWeek[weekLabel] + val;
+            } else {
+                heatDictWeek[weekLabel] = val;
+            }
+
+        }
+    }
+
+    for (let week = 0; week < 4; week++) {
+        var weekLabel = -1;
+        for (let day = 0; day < 7; day++){
+            var idx = week*7+day;
+            if (idx >= waterArr.length){
+                break;
+            }
+
+            if (day == 0){
+                weekLabel = waterArr[idx];
+            }
+
+            var waterKey = waterArr[idx];
+            var val = waterDictDay[waterKey];
+
+            if (weekLabel in waterDictWeek){
+                waterDictWeek[weekLabel] = waterDictWeek[weekLabel] + val;
+            } else {
+                waterDictWeek[weekLabel] = val;
+            }
+
+        }
+    }
+
+
+    return {electricDictWeek, heatDictWeek, waterDictWeek};
 }
 
 function sumDaysToMonths(daySums){
