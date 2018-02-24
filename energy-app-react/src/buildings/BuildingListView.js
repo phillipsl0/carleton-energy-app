@@ -19,7 +19,7 @@ class BuildingListView extends Component {
     renderItem = (item) => {
         return (
             <TouchableOpacity
-                activeOpacity={0.6}
+                activeOpacity={0.75}
                 onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item})}>
                 <View style={[theme.card, styles.card, theme.shadowed]}>
                     <Text style={styles.header}>{item.item.name}</Text>
