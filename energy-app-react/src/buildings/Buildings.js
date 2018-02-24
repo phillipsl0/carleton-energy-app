@@ -35,9 +35,7 @@ const buildings = [
         open: false,
         color: "lightgreen",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W",
-        water: "500G",
-        heat: "1200U"
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
         name: 'Sayles',
@@ -70,7 +68,7 @@ const buildings = [
         open: false,
         color: "yellow",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
        name: 'Severance',
@@ -102,7 +100,7 @@ const buildings = [
         open: false,
         color: "red",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
        name: 'Davis',
@@ -146,7 +144,7 @@ const buildings = [
       open: false,
       color: "yellow",
       normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-      electricity: "44W", water: "500G", heat: "1200U",
+      electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
 
     },
     {
@@ -169,7 +167,7 @@ const buildings = [
       open: false,
       color: "yellow",
       normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-      electricity: "44W", water: "500G", heat: "1200U",
+      electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
 		name: 'Myers',
@@ -192,7 +190,7 @@ const buildings = [
 		open: false,
 		color: "yellow",
 		normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
        name: 'Cassat',
@@ -247,7 +245,7 @@ const buildings = [
         open: false,
         color: "lightgreen",
         normalization: {electricity: {max: 40469, min: 3137}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
         name: 'Memo',
@@ -290,7 +288,7 @@ const buildings = [
         open: false,
         color: "lightgreen",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
         name: 'Nourse',
@@ -319,7 +317,7 @@ const buildings = [
         open: false,
         color: "red",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
         name: 'Evans',
@@ -355,7 +353,7 @@ const buildings = [
         open: false,
         color: "lightgreen",
         normalization: {electricity: {max: 47703, min: 3228}, water: {max: 316880, min: 4232}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
         name: 'Goodhue',
@@ -390,7 +388,7 @@ const buildings = [
         open: false,
         color: "red",
         normalization: {electricity: {max: 38955, min: 2427}, water: {max: 285100, min: 3200}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
         name: 'Watson',
@@ -415,7 +413,7 @@ const buildings = [
         open: false,
         color: "yellow",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
     {
         name: 'Scoville',
@@ -440,7 +438,7 @@ const buildings = [
         open: false,
         color: "lightgreen",
         normalization: {electricity: {max: 21664, min: 1334}, water: {max: 47243177, min: 18784}},
-        electricity: "44W", water: "500G", heat: "1200U",
+        electricity: "44\nkWh", water: "500\ngal", heat: "1200\nkBTU",
     },
 ]
 
