@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions, ScrollView,
-  View, Text, Image, TouchableOpacity, Platform } from 'react-native'
+  View, Text, Image, TouchableOpacity, TouchableHighlight, Platform } from 'react-native'
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native-elements';
 
@@ -23,38 +23,55 @@ class BuildingListView extends Component {
   }
 
   renderItem = (item) => {
-    return <View style={[theme.card, styles.card, styles.card]}>
+    return (
+      <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item})}>
+      <View style={[theme.card, styles.card, theme.shadowed]}>
         <Text style={styles.header}>{item.item.name}</Text>
         <View style={{ borderBottomWidth: 1, borderBottomColor: '#e1e8ee', marginTop: '1%' }}/>
         <View style={[styles.outerView, styles.innerView]}>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
             <Image
+            resizeMode="cover"
             style={styles.image} source={{uri: item.item.avatar}}/>
-            <View style={{flex: 1, flexDirection: 'column'}}>
-                <Text style={styles.text}><FontAwesome name="lightbulb-o" size={moderateScale(16)} color="#0B5091" />: {item.item.electricity}</Text>
-                <Text style={styles.text}><FontAwesome name="shower" size={moderateScale(16)} color="#0B5091" />: {item.item.water}</Text>
-                <Text style={styles.text}><FontAwesome name="fire" size={moderateScale(16)} color="#0B5091" />: {item.item.heat}</Text>
-            </View>
-            <Button
-                rightIcon={{name: "angle-right", type: 'font-awesome', size: moderateScale(20)}}
-                fontSize={moderateScale(14)}
-                title='More Info'
-                style={{paddingBottom:20}}
-                backgroundColor='#0B5091'
-                onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item})}/>
+
+                <View style={{flex: 1, flexDirection: 'column'}}>
+                <Text style={styles.icon}><FontAwesome name="lightbulb-o" size={moderateScale(24)} color="#0B5091" /></Text>
+                <Text style={styles.text}>{item.item.electricity}</Text></View>
+
+                <View style={{flex: 1, flexDirection: 'column'}}>
+                <Text style={styles.icon}> <FontAwesome name="shower" size={moderateScale(24)} color="#0B5091" /></Text>
+                <Text style={styles.text}>{item.item.water}</Text></View>
+
+                <View style={{flex: 1, flexDirection: 'column'}}>
+                <Text style={styles.icon}><FontAwesome name="fire" size={moderateScale(24)} color="#0B5091" /></Text>
+                <Text style={styles.text}>{item.item.heat}</Text></View>
+
+                <View style={{flex: 1, flexDirection: 'column'}}>
+                <Text style={styles.icon}><FontAwesome name="angle-right" size={moderateScale(24)} color="#0B5091" /></Text>
+                </View>
+
+
         </View>
-      </View>
+        </View>
+        </View>
+        </TouchableOpacity>
+    );
   }
 
   render() {
     const {navigate} = this.props.navigation;
 
     return (
-      <ScrollView style={{paddingTop:'3%'}}>
+      <ScrollView style={{backgroundColor: '#fafafa'}}>
+        <View style={{paddingTop:8}} />
         <FlatList
             data = {buildings}
             renderItem={this.renderItem}
             keyExtractor = {(item) => item.name}
         />
+        <View style={{paddingTop:5}} />
       </ScrollView>
     );
   }
@@ -79,6 +96,30 @@ const navStyles = StyleSheet.create({
             fontFamily: theme.font,
     }
 })
+
+// themeStyles.container
+// styles.header
+// styles.card
+// styles.header
+// styles.outerView
+// styles.innerView
+// styles.image
+// styles.text
+// styles.text
+// styles.text
+// navStyles.header
+// navStyles.headerTitle
+// navStyles.headerTitle
+// navStyles.header
+// styles.compareButton
+// navStyles.headerTitle
+// navStyles.headerTitle
+// navStyles.header
+// navStyles.headerTitle
+// navStyles.headerTitle
+// navStyles.header
+// navStyles.headerTitle
+// navStyles.headerTitle
 
 const BuildingStack = StackNavigator({
   BuildingsListView: {
@@ -148,10 +189,8 @@ BuildingStack.router.getStateForAction = navigateOnce(BuildingStack.router.getSt
 
 const styles = StyleSheet.create({
   card: {
-    marginTop: 3,
-    marginBottom: 6,
-    marginLeft: 6,
-    marginRight: 6,
+    marginTop: 5, 
+    marginBottom: 5,
     paddingLeft: 5,
     paddingRight: 5,
     borderRadius: 5,
@@ -162,48 +201,29 @@ const styles = StyleSheet.create({
             shadowColor: 'rgba(0,0,0, .9)',
           },})
   },
-  listItem: {
-    height: 50,
-    borderBottomColor: '#c8c7cc',
-    borderBottomWidth: 0.5,
-    width: Dimensions.get('window').width - 0, //300,
-    marginLeft: '25%',
-    marginRight: '25%',
-    alignSelf: 'center',
-    paddingTop: 15,
-    paddingRight: 15,
-    paddingLeft: 20,
-    borderColor:'#e1e8ee',
-    borderWidth: 1,
-    // color: 'silver'
-    // paddingBottom: 55,
-  },
-  img: {
-    alignSelf: 'stretch',
-    height: 100,
-      marginTop: 0,
-      marginLeft: 6,
-      marginRight: 6,
-      paddingLeft: 5,
-      paddingRight: 5,
-  },
   text: {
-      alignSelf: 'flex-start',
       marginLeft: 5,
+      textAlign: 'center',
       fontSize: moderateScale(16),
       color: 'darkslategrey',
+  },
+  icon: {
+      marginLeft: 5,
+      textAlign: 'center',
+      fontSize: moderateScale(16),
   },
   header: {
       fontSize: moderateScale(18),
       color:'darkslategrey',
       paddingLeft: 3,
+      marginTop: moderateScale(-8),
       backgroundColor: 'white',
-//      fontWeight: 'bold',
       alignSelf: 'flex-start',
   },
   image: {
       alignItems:'center',
       width:75,
+      height:75,
   },
   outerView: {
       flex: 1,
@@ -215,14 +235,10 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   innerView: {
-//    borderTopColor: '#e1e8ee',
-//    borderTopWidth: 1,
-//    borderBottomColor: '#e1e8ee' ,
-//    borderBottomWidth: 1,
-    backgroundColor: '#F5FCFF',
+    // backgroundColor: '#F5FCFF',
     paddingTop: '2%',
-    paddingBottom: '2%',
-    marginTop: '1%',
+    // paddingBottom: '1%',
+    // marginTop: '1%',
   }
 })
 
