@@ -30,7 +30,7 @@ const themeStyles = GetStyle();
 const HAS_LAUNCHED = 'HAS_LAUNCHED';
 
 if (Platform.OS === 'android') {
-  SafeAreaView.setStatusBarHeight(0);
+    SafeAreaView.setStatusBarHeight(0);
 }
 
 function cacheImages(images) {
@@ -51,7 +51,6 @@ const navStyle = StyleSheet.create({
     label: {
         fontFamily: themeStyles.boldFont,
     },
-
     indicator: {
         backgroundColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF',
     }
@@ -76,87 +75,87 @@ tabStyle.tabStatusColors = {
 // Bottom tab navigation
 const RootTabs = TabNavigator({
     Overview: {
-      screen: OverviewStack,
-      navigationOptions: {
-        tabBarLabel: 'Overview',
-        tabBarIcon: ({ tintColor, focused }) => (
-          <FontAwesome name="tachometer" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
-        ),
-      },
+        screen: OverviewStack,
+        navigationOptions: {
+            tabBarLabel: 'Overview',
+            tabBarIcon: ({ tintColor, focused }) => (
+                <FontAwesome name="tachometer" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+            ),
+        },
     },
     Buildings: {
-      screen: BuildingStack,
-      navigationOptions: {
-        tabBarLabel: 'Buildings',
-        tabBarIcon: ({ tintColor, focused }) => (
-          <FontAwesome name="building" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
-        ),
-      },
+        screen: BuildingStack,
+        navigationOptions: {
+            tabBarLabel: 'Buildings',
+            tabBarIcon: ({ tintColor, focused }) => (
+                <FontAwesome name="building" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+            ),
+        },
     },
     Sustain: {
-      screen: SustainStack,
-      navigationOptions: {
-        tabBarLabel: 'Learn',
-        tabBarIcon: ({ tintColor, focused }) => (
-          <FontAwesome name="graduation-cap" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
-        ),
-      },
+        screen: SustainStack,
+        navigationOptions: {
+            tabBarLabel: 'Learn',
+            tabBarIcon: ({ tintColor, focused }) => (
+                <FontAwesome name="graduation-cap" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+            ),
+        },
     },
     EnergyMap: {
         screen: EnergyMapViewStack,
         navigationOptions: {
-          tabBarLabel: 'Map',
-          tabBarIcon: ({ tintColor, focused }) => (
-            <FontAwesome name="map" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
-          ),
+            tabBarLabel: 'Map',
+            tabBarIcon: ({ tintColor, focused }) => (
+                <FontAwesome name="map" size={20} color={focused ? "#0B5091" : "#d3d3d3"} />
+            ),
         },
-      }
-  },
-   {
+    }
+},
+{
     tabBarComponent: props => {
-      const backgroundColor = props.position.interpolate({
-        inputRange: [0, 1, 2, 3],
-        outputRange: [tabStyle.tabColors.tab0,
-                      tabStyle.tabColors.tab1,
-                      tabStyle.tabColors.tab2,
-                      tabStyle.tabColors.tab3]
-      });
-      return (
-        Platform.OS === 'ios'
-        ? <TabBarBottom {...props} style={{ backgroundColor: '#e1e8ee' }} />
-        : <TabBarTop {...props} style={{ backgroundColor: backgroundColor }} />
-      );
+        const backgroundColor = props.position.interpolate({
+            inputRange: [0, 1, 2, 3],
+            outputRange: [tabStyle.tabColors.tab0,
+                tabStyle.tabColors.tab1,
+                tabStyle.tabColors.tab2,
+                tabStyle.tabColors.tab3]
+        });
+        return (
+            Platform.OS === 'ios'
+                ? <TabBarBottom {...props} style={{ backgroundColor: '#e1e8ee' }} />
+                : <TabBarTop {...props} style={{ backgroundColor: backgroundColor }} />
+        );
     },
     tabBarOptions:
         { style: navStyle.header,
-          labelStyle: navStyle.label,
-          indicatorStyle: navStyle.indicator,
-          activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF',
-          inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90',
-          pressColor: '#DDD' // Android ripple color onPress
+            labelStyle: navStyle.label,
+            indicatorStyle: navStyle.indicator,
+            activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF',
+            inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90',
+            pressColor: '#DDD' // Android ripple color onPress
         },
     appStyle: {
         orientation: 'portrait',
     },
-     navigationOptions: ({ navigation }) => ( {
-         tabBarOnPress: (tab, jumpToIndex) => {
-          tab.jumpToIndex(tab.scene.index);
+    navigationOptions: ({ navigation }) => ( {
+        tabBarOnPress: (tab, jumpToIndex) => {
+            tab.jumpToIndex(tab.scene.index);
 
-           // resets stack in tabs if their icon is tapped while focused
-           if (tab.scene.focused) {
-             if (tab.scene.route.index !== 0) {
-               navigation.dispatch(NavigationActions.reset({
-                 index: 0,
-                 actions: [
-                   NavigationActions.navigate({ routeName: tab.scene.route.routes[0].routeName })
-                 ]
-               }));
-             }
-           } else {
-              tab.jumpToIndex(tab.scene.index);
-           }
-         }
-       })
+            // resets stack in tabs if their icon is tapped while focused
+            if (tab.scene.focused) {
+                if (tab.scene.route.index !== 0) {
+                    navigation.dispatch(NavigationActions.reset({
+                        index: 0,
+                        actions: [
+                            NavigationActions.navigate({ routeName: tab.scene.route.routes[0].routeName })
+                        ]
+                    }));
+                }
+            } else {
+                tab.jumpToIndex(tab.scene.index);
+            }
+        }
+    })
 });
 
 //for redux
