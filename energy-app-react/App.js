@@ -1,3 +1,7 @@
+/* App.js
+ * Written by Liv Phillips, Veronica Child, and Martin Green for Energy App Comps, 2018
+ * Top level detail of App, controls the tab view navigation.
+ */
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
 import { Platform, StyleSheet, BackHandler,
@@ -8,7 +12,6 @@ import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { createReduxBoundAddListener,
   createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
-//import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
 import BuildingStack from './src/buildings/BuildingListView';
@@ -205,25 +208,8 @@ class App extends Component {
   */
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-    // checkIfFirstLaunch()
-    //   .then(res => this.setState({ isFirstLaunch: res, hasCheckedAsyncStorage: true }))
-    //   .catch(err => alert("An error occurred with async: ", err));
 
     try {
-      // AsyncStorage.getItem('RANDOM')
-      //   .then(res => {
-      //     if (res !== null) {
-      //       console.log("Not null random");
-      //       this.isFirstLaunch = false;
-      //     } else {
-      //       console.log("Null random");
-      //       this.isFirstLaunch = true;
-      //       console.log("Result: ", res)
-      //       AsyncStorage.setItem('RANDOM', 'true');
-      //       console.log("INSIDE of async, first launch:", this.state.isFirstLaunch);
-      //     }
-      //   })
-      //   .catch(err => alert("App mounting error: ", err));
       const first = AsyncStorage.getItem(HAS_LAUNCHED);
       // Check if value present, if so not first launched
       if (first !== null) {
@@ -264,8 +250,8 @@ class App extends Component {
         {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
         {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
 
-    const imageAssets = cacheImages([require('./src/assets/windmillCard.png'),
-        require('./src/assets/windmillHeader.png'), require('./src/assets/windmillFull.png')]);
+    const imageAssets = cacheImages([require('./src/assets/images/windmillCard.png'),
+        require('./src/assets/images/windmillHeader.png'), require('./src/assets/images/windmillFull.png')]);
 
     await Promise.all([...imageAssets, ...fontAssets]);
   }
@@ -316,7 +302,9 @@ class App extends Component {
     // console.log("Before first launch return, checked Async: ", this.state.hasCheckedAsyncStorage)
         // makes Intro screen appear
     // if (this.state.isFirstLaunch && this.state.hasCheckedAsyncStorage) {
+    
     /*  if (this.state.isFirstLaunch) {
+      if (this.state.isFirstLaunch) {
       return (
         <IntroSlider
           onDone={this.closeIntro}

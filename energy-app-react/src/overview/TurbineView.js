@@ -1,3 +1,9 @@
+/* TurbineView.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * Second level detail for Turbine, provides data on how much the turbine is currently generating, the percent of overall
+ * energy that is, how much energy the turbine is consuming, and the weekly high for turbine energy production.
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, View, ImageBackground, Platform, Text } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
@@ -6,7 +12,7 @@ import { connect } from 'react-redux';
 
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
-import { fake } from './OverviewExampleData'
+import { turbineLabels } from './OverviewExampleData'
 import { moderateScale, verticalScale, roundNumber, getSpecificRandom } from './../helpers/General';
 import CurrFont from './../styling/CurrentFont';
 
@@ -21,8 +27,8 @@ const theme = GetStyle(CurrTheme);
         windSpeed: state.data.windSpeed,
         windRatio: state.data.windRatio,
         loading: state.loading,
-        turbine: state.api.turbine,
-        solar: state.api.solar,
+        turbine: state.api.turbineData,
+        solar: state.api.solarData,
         ui: state.ui,
     }),
 )
@@ -32,11 +38,12 @@ export default class Windmill extends Component {
         super(props);
     }
 
+    /* Returns the titles for the turbine view, based on current information */
     fetchData = (low) => {
         var rightTitles = new Array(4);
         rightTitles[0] = this.props.windRatio["percentage"] + "%";
         rightTitles[1] = this.props.windSpeed + " mps";
-        rightTitles[2] = roundNumber(getSpecificRandom(500, low, 1, 1)) + " kW";
+        rightTitles[2] = roundNumber(getSpecificRandom(2, low, 1, 1)) + " kW";
         rightTitles[3] = roundNumber(getSpecificRandom(low+132, low+1000, 1, 1)) + " kW";
         return rightTitles;
     }
@@ -44,13 +51,7 @@ export default class Windmill extends Component {
     render() {
         const { currentData, totals, windSpeed, windRatio, turbine, ui, solar } = this.props;
         const { width, height } = ui.layout;
-
-        turbineGeneration = turbine.turbineData;
-        if (turbine.turbineData == 0) {
-            turbineGeneration = getSpecificRandom(2, 1500, 1, 1);
-        }
-
-        var rightTitles = this.fetchData(turbineGeneration);
+        var rightTitles = this.fetchData(turbine);
 
         var padding = '5%';
         if (height < 600) {
@@ -59,14 +60,15 @@ export default class Windmill extends Component {
 
         return (
             <View style={[styles.main, { position: 'absolute', bottom: 0}]}>
-                <ImageBackground source={require('./../assets/windmillFull.png')}
+                <ImageBackground source={require('./../assets/images/windmillFull.png')}
+                    defaultSource={require('./../assets/images/windmillFull.png')}
                     resizeMode="cover"
                     style={[{ width: width + 5, height: width*.8}, styles.image, styles.head]}>
                 <Text style={[styles.units, theme.fontRegular]}>
                     Currently generating
                 </Text>
                 <Text style={[styles.number, theme.fontBold]}>
-                    {roundNumber(turbineGeneration)}
+                    {roundNumber(turbine)}
                 </Text>
                 <Text style={[styles.units, theme.fontRegular]}>
                     kW
@@ -74,7 +76,7 @@ export default class Windmill extends Component {
                 </ImageBackground>
                 <List style={[styles.list]}>
                   {
-                    fake.map((item, i) => (
+                    turbineLabels.map((item, i) => (
                       <ListItem
                         containerStyle={[ styles.listItem, { paddingTop: padding, paddingBottom: padding }]}
                         key={i}
@@ -132,8 +134,6 @@ const styles = StyleSheet.create({
         })
     },
     list: {
-//        borderTopColor: "#FFFFFF",
-//        borderTopWidth: 1,
         marginTop: '-3%',
         backgroundColor: '#E1E8EE',
         ...Platform.select({

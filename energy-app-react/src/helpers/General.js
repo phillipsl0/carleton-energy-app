@@ -1,3 +1,8 @@
+/* General.js
+ * Written by Liv Phillips & Veronica Child for Energy App Comps, 2018
+ * Variety of general helper functions.
+ */
+
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
@@ -21,7 +26,7 @@ export const getUnits = (utility) => {
       units = "kWh"
     } else if (utility == 'water') {
       units = "gal"
-    } else if (utility == 'gas') {
+    } else if (utility == 'heat') {
       units = "kBTU"
     } else if (utility == 'total') { 
       units = "BTUs"
