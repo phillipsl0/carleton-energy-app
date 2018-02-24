@@ -133,11 +133,14 @@ const RootTabs = TabNavigator({
           inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90',
           pressColor: '#DDD' // Android ripple color onPress
         },
+    appStyle: {
+        orientation: 'portrait',
+    },
      navigationOptions: ({ navigation }) => ( {
          tabBarOnPress: (tab, jumpToIndex) => {
           tab.jumpToIndex(tab.scene.index);
 
-//           resets stack in tabs if their icon is tapped while focused
+           // resets stack in tabs if their icon is tapped while focused
            if (tab.scene.focused) {
              if (tab.scene.route.index !== 0) {
                navigation.dispatch(NavigationActions.reset({
