@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+
 import { FlatList, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { NavigationActions, StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
 
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
@@ -14,8 +16,17 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const theme = GetStyle();
 
-class BuildingListView extends Component {
+@connect(
+   state => ({
+       historicalBuildingData: state.buildings.historicalBuildingData,
+       currentBuildingData: state.buildings.currentBuildingData,
+   }),
+   dispatch => ({
+       refresh: () => dispatch({type: 'GET_BUILDING_GRAPH_DATA'}),
+   }),
+)
 
+class BuildingListView extends Component {
     renderItem = (item) => {
         return (
             <TouchableOpacity
@@ -51,11 +62,22 @@ class BuildingListView extends Component {
     };
 
     render() {
+        var item = this.props.currentBuildingData;
+        var buildingImageArray = buildings;
+        var dataArray = [];
+        var iterator = 0;
+        for (var building in item) {
+            if (item.hasOwnProperty(building)) {
+                sanitizedBuilding = {name: building, electricity: item[building]["data"]["1"]["y"], water: item[building]["data"]["3"]["y"], heat: item[building]["data"]["2"]["y"], avatar: buildingImageArray[iterator]["avatar"]}
+                dataArray.push(sanitizedBuilding);
+                iterator += 1;
+            }
+        }
         return (
             <ScrollView style={{backgroundColor: '#fafafa'}}>
                 <View style={{paddingTop:8}} />
                 <FlatList
-                    data={buildings}
+                    data={dataArray}
                     renderItem={this.renderItem}
                     keyExtractor = {(item) => item.name}
                 />
@@ -63,6 +85,8 @@ class BuildingListView extends Component {
             </ScrollView>
         );
     }
+
+  
 }
 
 // Fix double navigation bug in stack
