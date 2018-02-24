@@ -1943,7 +1943,7 @@ function sumDaysToWeeks(daySums){
     // takes a dictionary of day sums (3 nested dictionaries: 1 for each utility).
     // returns 3 dictionaries (1 for each utility) nested within a larger object.
     // values are sums of usage data over 7 days
-    // keys are the timstamps for the END of the summed week
+    // keys are the timstamps for the START of the summed week
 
     electricDictDay = daySums["electricDictDay"];
     heatDictDay = daySums["heatDictDay"];
@@ -1958,14 +1958,14 @@ function sumDaysToWeeks(daySums){
     waterArr = sortByKey(Object.keys(waterDictDay));
 
     for (let week = 0; week < 4; week++) {
-        var weekLabel = -1;
+        var weekLabel = electricArr[6];
         for (let day = 0; day < 7; day++){
             var idx = week*7+day;
             if (idx >= electricArr.length){
                 break;
             }
 
-            if (day == 0){
+            if (day == 6){
                 weekLabel = electricArr[idx];
             }
 
@@ -1983,14 +1983,14 @@ function sumDaysToWeeks(daySums){
     }
 
     for (let week = 0; week < 4; week++) {
-        var weekLabel = -1;
+        var weekLabel = heatArr[6];
         for (let day = 0; day < 7; day++){
             var idx = week*7+day;
             if (idx >= heatArr.length){
                 break;
             }
 
-            if (day == 0){
+            if (day == 6){
                 weekLabel = heatArr[idx];
             }
 
@@ -2007,14 +2007,14 @@ function sumDaysToWeeks(daySums){
     }
 
     for (let week = 0; week < 4; week++) {
-        var weekLabel = -1;
+        var weekLabel = waterArr[6];
         for (let day = 0; day < 7; day++){
             var idx = week*7+day;
             if (idx >= waterArr.length){
                 break;
             }
 
-            if (day == 0){
+            if (day == 6){
                 weekLabel = waterArr[idx];
             }
 
