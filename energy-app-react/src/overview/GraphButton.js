@@ -1,3 +1,8 @@
+/* GraphButton.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * Returns a button for Graph card.
+ */
+
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import CurrFont from './../styling/CurrentFont';

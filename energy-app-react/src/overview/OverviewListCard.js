@@ -1,3 +1,9 @@
+/* OverviewListCard.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * First level detail cards for Overview page, giving basic details about turbine energy, energy usage,
+ * and energy generation.
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableHighlight, Image, Platform } from 'react-native';
 import { connect } from 'react-redux';
@@ -59,7 +65,7 @@ export default class OverviewListCard extends Component {
                 return(
                   <View style={[{height: moderateScale(160), width: moderateScale(280)}]}>
                   <View style={[theme.container, { alignItems: 'center' }, theme.flexboxRow]}>
-                    <Image source={require('./../assets/windmillCard.png')}
+                    <Image source={require('./../assets/images/windmillCard.png')}
                       resizeMode="contain"
                       style={{ flex: 0.5, height: moderateScale(150), width: moderateScale(102), marginLeft: '-20%'}} />
                     <View style={[{alignItems: 'center', marginLeft: '-45%', marginTop: '15%', flex: 0.5 }]}>

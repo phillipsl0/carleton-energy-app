@@ -1,3 +1,8 @@
+/* Grayscale.js
+ * Based on code for Victory Themes, modified by Liv Phillips for Energy App Comps, 2018
+ * Styles graphs.
+ */
+
 import { assign } from "lodash";
 
 import CurrFont from './../styling/CurrentFont';
