@@ -48,11 +48,9 @@ class BuildingListView extends Component {
                 </View>
             </TouchableOpacity>
         );
-    }
+    };
 
     render() {
-        const {navigate} = this.props.navigation;
-
         return (
             <ScrollView style={{backgroundColor: '#fafafa'}}>
                 <View style={{paddingTop:8}} />
@@ -85,12 +83,12 @@ const navStyles = StyleSheet.create({
     headerTitle: {
         fontFamily: theme.font,
     }
-})
+});
 
 const BuildingStack = StackNavigator({
     BuildingsListView: {
         screen: BuildingListView,
-        navigationOptions: ({ navigation }) => ({
+        navigationOptions: () => ({
             title: 'Buildings',
             ...Platform.select({
                 android: { header: null }
@@ -131,7 +129,7 @@ const BuildingStack = StackNavigator({
     },
     Comparison: {
         screen: BuildingComparison,
-        navigationOptions: ({ navigation }) => ({
+        navigationOptions: () => ({
             headerTintColor: 'white',
             headerStyle: navStyles.header,
             headerTitleStyle: navStyles.headerTitle,
@@ -141,7 +139,7 @@ const BuildingStack = StackNavigator({
     },
     ComparisonPage: {
         screen: ComparisonPage,
-        navigationOptions: ({ navigation }) => ({
+        navigationOptions: () => ({
             headerTintColor: 'white',
             headerStyle: navStyles.header,
             headerTitleStyle: navStyles.headerTitle,
@@ -214,6 +212,6 @@ const styles = StyleSheet.create({
         // paddingBottom: '1%',
         // marginTop: '1%',
     }
-})
+});
 
 export default BuildingStack;
