@@ -1858,7 +1858,7 @@ export function grabData(buildingName, date){
         end.setFullYear(2017);
     }
 
-    var numDaysAgo = 36;
+    var numDaysAgo = 47;
     start.setDate(start.getDate()-numDaysAgo);
 
     startStamp = dateToTimestamp(start);
@@ -1873,13 +1873,13 @@ export function grabData(buildingName, date){
     fetch(url).then((response) => response.json()).then((responseJson) => {
         var daySums = sumHoursToDays(responseJson);
         var weekSums = sumDaysToWeeks(daySums);
-        // var monthSums = sumDaysToMonths(daySums);
-        // var yearSums = sumMonthsToYears(monthSums);
+        var monthSums = sumDaysToMonths(daySums);
+        var yearSums = sumMonthsToYears(monthSums);
 
         console.log(daySums);
         console.log(weekSums);
-        // console.log(monthSums);
-        // console.log(yearSums);
+        console.log(monthSums);
+        console.log(yearSums);
     })
     .catch((error) => {
         console.error(error);
@@ -1936,7 +1936,6 @@ function sumHoursToDays(responseJson){
 
 
     return { electricDictDay, heatDictDay, waterDictDay };
-
 }
 
 function sumDaysToWeeks(daySums){
@@ -1958,7 +1957,7 @@ function sumDaysToWeeks(daySums){
     waterArr = sortByKey(Object.keys(waterDictDay));
 
     for (let week = 0; week < 4; week++) {
-        var weekLabel = electricArr[6];
+        var weekLabel = electricArr[electricArr.length-1];
         for (let day = 0; day < 7; day++){
             var idx = week*7+day;
             if (idx >= electricArr.length){
@@ -1983,7 +1982,7 @@ function sumDaysToWeeks(daySums){
     }
 
     for (let week = 0; week < 4; week++) {
-        var weekLabel = heatArr[6];
+        var weekLabel = heatArr[heatArr.length-1];
         for (let day = 0; day < 7; day++){
             var idx = week*7+day;
             if (idx >= heatArr.length){
@@ -2007,7 +2006,7 @@ function sumDaysToWeeks(daySums){
     }
 
     for (let week = 0; week < 4; week++) {
-        var weekLabel = waterArr[6];
+        var weekLabel = waterArr[waterArr.length-1];
         for (let day = 0; day < 7; day++){
             var idx = week*7+day;
             if (idx >= waterArr.length){
@@ -2035,13 +2034,191 @@ function sumDaysToWeeks(daySums){
 }
 
 function sumDaysToMonths(daySums){
-    return 0;
+    // QUICK-FIX: a "month" is the past 30 days
+    // TO DO: change it to ACTUALLY sum the last month (not just 30 days)
+
+    electricDictDay = daySums["electricDictDay"];
+    heatDictDay = daySums["heatDictDay"];
+    waterDictDay = daySums["waterDictDay"];
+
+    electricDictMonth = {};
+    heatDictMonth = {};
+    waterDictMonth = {};
+
+    electricArr = sortByKey(Object.keys(electricDictDay));
+    heatArr = sortByKey(Object.keys(heatDictDay));
+    waterArr = sortByKey(Object.keys(waterDictDay));
+
+    for (let month = 0; month < 4; month++) {
+        var monthLabel = electricArr[electricArr.length-1];
+        for (let day = 0; day < 30; day++){
+            var idx = month*30+day;
+            if (idx >= electricArr.length){
+                break;
+            }
+
+            if (day == 29){
+                monthLabel = electricArr[idx];
+            }
+
+            var electricKey = electricArr[idx];
+            var val = electricDictDay[electricKey];
+
+
+            if (monthLabel in electricDictMonth){
+                electricDictMonth[monthLabel] = electricDictMonth[monthLabel] + val;
+            } else {
+                electricDictMonth[monthLabel] = val;
+            }
+
+        }
+    }
+
+    for (let month = 0; month < 4; month++) {
+        var monthLabel = heatArr[heatArr.length-1];
+        for (let day = 0; day < 30; day++){
+            var idx = month*30+day;
+            if (idx >= heatArr.length){
+                break;
+            }
+
+            if (day == 29){
+                monthLabel = heatArr[idx];
+            }
+
+            var heatKey = heatArr[idx];
+            var val = heatDictDay[heatKey];
+
+            if (monthLabel in heatDictMonth){
+                heatDictMonth[monthLabel] = heatDictMonth[monthLabel] + val;
+            } else {
+                heatDictMonth[monthLabel] = val;
+            }
+
+        }
+    }
+
+    for (let month = 0; month < 4; month++) {
+        var monthLabel = waterArr[waterArr.length-1];
+        for (let day = 0; day < 30; day++){
+            var idx = month*30+day;
+            if (idx >= waterArr.length){
+                break;
+            }
+
+            if (day == 29){
+                monthLabel = waterArr[idx];
+            }
+
+            var waterKey = waterArr[idx];
+            var val = waterDictDay[waterKey];
+
+            if (monthLabel in waterDictMonth){
+                waterDictMonth[monthLabel] = waterDictMonth[monthLabel] + val;
+            } else {
+                waterDictMonth[monthLabel] = val;
+            }
+
+        }
+    }
+
+
+    return {electricDictMonth, heatDictMonth, waterDictMonth};
 }
 
 function sumMonthsToYears(monthSums){
-    return 0;
-}
+    // Parses data from however many months you give it. 
+    // In reality will probably only 12 at a time since the API queries
+    //      max out at a year's worth of data.
 
+    electricDictMonth = monthSums["electricDictMonth"];
+    heatDictMonth = monthSums["heatDictMonth"];
+    waterDictMonth = monthSums["waterDictMonth"];
+
+    electricDictYear = {};
+    heatDictYear = {};
+    waterDictYear = {};
+
+    electricArr = sortByKey(Object.keys(electricDictMonth));
+    heatArr = sortByKey(Object.keys(heatDictMonth));
+    waterArr = sortByKey(Object.keys(waterDictMonth));
+
+    for (let year = 0; year < 5; year++) {
+        var yearLabel = electricArr[electricArr.length-1];
+        for (let month = 0; month < 12; month++){
+            var idx = year*12+month;
+            if (idx >= electricArr.length){
+                break;
+            }
+
+            if (month == 11){
+                yearLabel = electricArr[idx];
+            }
+
+            var electricKey = electricArr[idx];
+            var val = electricDictMonth[electricKey];
+
+
+            if (yearLabel in electricDictYear){
+                electricDictYear[yearLabel] = electricDictYear[yearLabel] + val;
+            } else {
+                electricDictYear[yearLabel] = val;
+            }
+
+        }
+    }
+
+    for (let year = 0; year < 5; year++) {
+        var yearLabel = heatArr[heatArr.length-1];
+        for (let month = 0; month < 12; month++){
+            var idx = year*12+month;
+            if (idx >= heatArr.length){
+                break;
+            }
+
+            if (month == 11){
+                yearLabel = heatArr[idx];
+            }
+
+            var heatKey = heatArr[idx];
+            var val = heatDictMonth[heatKey];
+
+            if (yearLabel in heatDictYear){
+                heatDictYear[yearLabel] = heatDictYear[yearLabel] + val;
+            } else {
+                heatDictYear[yearLabel] = val;
+            }
+
+        }
+    }
+
+    for (let year = 0; year < 5; year++) {
+        var yearLabel = waterArr[waterArr.length-1];
+        for (let month = 0; month < 12; month++){
+            var idx = year*12+month;
+            if (idx >= waterArr.length){
+                break;
+            }
+
+            if (month == 11){
+                yearLabel = waterArr[idx];
+            }
+
+            var waterKey = waterArr[idx];
+            var val = waterDictMonth[waterKey];
+
+            if (yearLabel in waterDictYear){
+                waterDictYear[yearLabel] = waterDictYear[yearLabel] + val;
+            } else {
+                waterDictYear[yearLabel] = val;
+            }
+
+        }
+    }
+
+
+    return {electricDictYear, heatDictYear, waterDictYear};
+}
 
 
 
