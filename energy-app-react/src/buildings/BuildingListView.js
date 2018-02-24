@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions, ScrollView,
-  View, Text, Image, TouchableOpacity, Platform } from 'react-native'
+  View, Text, Image, TouchableOpacity, Platform, TouchableHighlight } from 'react-native'
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
 
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
@@ -17,6 +18,16 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const theme = GetStyle();
 
+@connect(
+   state => ({
+       historicalBuildingData: state.buildings.historicalBuildingData,
+       currentBuildingData: state.buildings.currentBuildingData,
+   }),
+   dispatch => ({
+       refresh: () => dispatch({type: 'GET_BUILDING_GRAPH_DATA'}),
+   }),
+)
+
 class BuildingListView extends Component {
   renderHeader = (headerItem) => {
     return <Text style={[themeStyles.container, styles.header]}>{headerItem.section.name}</Text>
@@ -30,15 +41,15 @@ class BuildingListView extends Component {
             <Image
             style={styles.image} source={{uri: item.item.avatar}}/>
             <View style={{flex: 1, flexDirection: 'column'}}>
-                <Text style={styles.text}><FontAwesome name="lightbulb-o" size={moderateScale(16)} color="#0B5091" />: {item.item.electricity}</Text>
-                <Text style={styles.text}><FontAwesome name="shower" size={moderateScale(16)} color="#0B5091" />: {item.item.water}</Text>
-                <Text style={styles.text}><FontAwesome name="fire" size={moderateScale(16)} color="#0B5091" />: {item.item.heat}</Text>
+                <Text style={styles.text}> <FontAwesome name="lightbulb-o" size={moderateScale(16)} color="#0B5091" /> : {item.item.electricity} kWh</Text>
+                <Text style={styles.text}><FontAwesome name="shower" size={moderateScale(16)} color="#0B5091" />: {item.item.water} gal</Text>
+                <Text style={styles.text}> <FontAwesome name="fire" size={moderateScale(16)} color="#0B5091" />: {item.item.heat} kBTU</Text>
             </View>
             <Button
                 rightIcon={{name: "angle-right", type: 'font-awesome', size: moderateScale(20)}}
                 fontSize={moderateScale(14)}
                 title='More Info'
-                style={{paddingBottom:20}}
+                style={{marginTop:'5%'}}
                 backgroundColor='#0B5091'
                 onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item})}/>
         </View>
@@ -46,12 +57,21 @@ class BuildingListView extends Component {
   }
 
   render() {
-    const {navigate} = this.props.navigation;
-
+    var item = this.props.currentBuildingData;
+    var buildingImageArray = buildings;
+    var dataArray = [];
+    var iterator = 0;
+    for (var building in item) {
+        if (item.hasOwnProperty(building)) {
+            sanitizedBuilding = {name: building, electricity: item[building]["data"]["1"]["y"], water: item[building]["data"]["3"]["y"], heat: item[building]["data"]["2"]["y"], avatar: buildingImageArray[iterator]["avatar"]}
+            dataArray.push(sanitizedBuilding);
+            iterator += 1;
+        }
+    }
     return (
       <ScrollView style={{paddingTop:'3%'}}>
         <FlatList
-            data = {buildings}
+            data = {dataArray}
             renderItem={this.renderItem}
             keyExtractor = {(item) => item.name}
         />
