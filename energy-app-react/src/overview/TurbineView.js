@@ -61,6 +61,7 @@ export default class Windmill extends Component {
         return (
             <View style={[styles.main, { position: 'absolute', bottom: 0}]}>
                 <ImageBackground source={require('./../assets/images/windmillFull.png')}
+                    defaultSource={require('./../assets/images/windmillFull.png')}
                     resizeMode="cover"
                     style={[{ width: width + 5, height: width*.8}, styles.image, styles.head]}>
                 <Text style={[styles.units, theme.fontRegular]}>
