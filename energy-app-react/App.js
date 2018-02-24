@@ -24,7 +24,7 @@ import { checkIfFirstLaunch } from './src/intro/checkIfFirstLaunch';
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
-const HAS_LAUNCHED = 'HAS_LAUNCHED'
+const HAS_LAUNCHED = 'HAS_LAUNCHED';
 
 if (Platform.OS === 'android') {
   SafeAreaView.setStatusBarHeight(0);
@@ -52,22 +52,22 @@ const navStyle = StyleSheet.create({
     indicator: {
         backgroundColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF',
     }
-})
+});
 
 const tabStyle = [];
 tabStyle.tabColors = {
-        tab0: '#6699cc',  // blue
-        tab1: '#20cef5',  // light blue
-        tab2: '#67b868',  // green
-        tab3: '#a695c7'   // purple
-    }
+    tab0: '#6699cc',  // blue
+    tab1: '#20cef5',  // light blue
+    tab2: '#67b868',  // green
+    tab3: '#a695c7'   // purple
+};
 
 tabStyle.tabStatusColors = {
-        tab0: '#527aa3',
-        tab1: '#1aa5c4',
-        tab2: '#529353',
-        tab3: '#85779f'
-    }
+    tab0: '#527aa3',
+    tab1: '#1aa5c4',
+    tab2: '#529353',
+    tab3: '#85779f'
+};
 
 
 // Bottom tab navigation
@@ -117,14 +117,13 @@ const RootTabs = TabNavigator({
                       tabStyle.tabColors.tab1,
                       tabStyle.tabColors.tab2,
                       tabStyle.tabColors.tab3]
-      })
+      });
       return (
         Platform.OS === 'ios'
         ? <TabBarBottom {...props} style={{ backgroundColor: '#e1e8ee' }} />
         : <TabBarTop {...props} style={{ backgroundColor: backgroundColor }} />
       );
     },
-    // animationEnabled: false,
     tabBarOptions:
         { style: navStyle.header,
           labelStyle: navStyle.label,
@@ -165,7 +164,7 @@ const navReducer = (state = initialState, action) => {
     const nextState = RootTabs.router.getStateForAction(action, state);
 
     return nextState || state;
-}
+};
 
 const appReducer = combineReducers({
     nav: navReducer,
