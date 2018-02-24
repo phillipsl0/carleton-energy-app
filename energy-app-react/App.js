@@ -3,24 +3,19 @@
  * Top level detail of App, controls the tab view navigation.
  */
 import React, { Component } from 'react';
-import { Font, AppLoading, Asset } from 'expo';
-import { Platform, StyleSheet, BackHandler,
-  View, StatusBar, AsyncStorage} from 'react-native';
-import { TabNavigator, TabBarTop, TabBarBottom, SafeAreaView,
-  NavigationActions, addNavigationHelpers } from 'react-navigation';
-import { Provider, connect } from 'react-redux';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { createReduxBoundAddListener,
-  createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
-import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
+import { AppLoading, Asset, Font } from 'expo';
+import { AsyncStorage, BackHandler, Platform, StatusBar, StyleSheet } from 'react-native';
+import { addNavigationHelpers, NavigationActions, SafeAreaView, TabBarBottom, TabBarTop, TabNavigator } from 'react-navigation';
+import { connect, Provider } from 'react-redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { createReactNavigationReduxMiddleware, createReduxBoundAddListener } from 'react-navigation-redux-helpers';
+import { Entypo, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import BuildingStack from './src/buildings/BuildingListView';
 import EnergyMapViewStack from './src/energymap/EnergyMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
-import CurrTheme from './src/styling/CurrentTheme'
-import { handler, dataReducer, layoutReducer, apiReducer, buildingDataReducer } from './src/helpers/ReduxHandler'
-import { getCurrentGenerationGraphFormat, getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
+import { apiReducer, buildingDataReducer, dataReducer, handler, layoutReducer } from './src/helpers/ReduxHandler'
 import SustainStack from './src/SustainView';
 import IntroSlider from './src/intro/IntroSlider';
 import { checkIfFirstLaunch } from './src/intro/checkIfFirstLaunch';
