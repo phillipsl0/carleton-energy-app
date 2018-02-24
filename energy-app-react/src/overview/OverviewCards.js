@@ -85,7 +85,7 @@ export default class OverviewCards extends Component {
         if (indexData["three"]){
             switch(indexData["indices"][2]){
                 case "gas":
-                    return "BTU";
+                    return "BTUs";
                     break;
 
                 case "water":
@@ -216,7 +216,12 @@ export default class OverviewCards extends Component {
         } else {
             index = historicalData[firstIndex][secondIndex].length-1;
             headerText = roundNumber(historicalData[firstIndex][secondIndex][index]["y"]);
-            subheaderText = this.getUnits(indexData) + " in the past ";
+
+            if (this.cardType == USAGE_CARD) {
+                subheaderText = "BTUs in the past ";
+            } else {
+                subheaderText = "kWh in the past ";
+            }
             subheaderHighlight = this.state.view;
         }
 
@@ -275,6 +280,7 @@ export default class OverviewCards extends Component {
                 <View style={[theme.lightBlueBackground, {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}]}>
                 <View style={[{width:width+5}, styles.smallHeight, theme.centered]}>
                 <Image source={require('./../assets/images/windmillHeader.png')}
+                    defaultSource={require('./../assets/images/windmillHeader.png')}
                     style={[styles.head, {width:width+5}, styles.smallHeight,]}
                     resizeMode="cover"/>
                 <View style={[{width:width+5}, styles.head, styles.smallHeight, theme.carletonBlueBackground]}/>
