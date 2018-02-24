@@ -1,26 +1,20 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions, ScrollView,
-  View, Text, Image, TouchableOpacity, TouchableHighlight, Platform } from 'react-native'
-import { StackNavigator, NavigationActions } from 'react-navigation';
-import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native-elements';
+import { FlatList, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { NavigationActions, StackNavigator } from 'react-navigation';
+import { Icon } from 'react-native-elements';
 
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
 import ComparisonPage from './ComparisonPage';
 import BuildingComparison from './BuildingComparison';
-import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
 
-import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
+import { moderateScale } from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
-import DefaultTheme from './../styling/DefaultTheme.js';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const theme = GetStyle();
 
 class BuildingListView extends Component {
-  renderHeader = (headerItem) => {
-    return <Text style={[themeStyles.container, styles.header]}>{headerItem.section.name}</Text>
-  }
 
   renderItem = (item) => {
     return (
