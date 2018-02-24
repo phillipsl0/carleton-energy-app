@@ -1,13 +1,17 @@
+/* GraphDetailCard.js
+ * Written by Liv Phillips, Veronica Child, and Andrew Woosnam for Energy App Comps, 2018
+ * Redux handles state for the app, including navigation. When the app starts up, redux is called during the
+ * loading screen, & the screen does not disappear until all fetched data has been resolved.
+ */
+
 import { Platform, Dimensions } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
-import { getAllHistoricalGraphData, getAllCurrentGraphData, dateToTimestamp, cleanupData, getAllHistoricalBuildingGraphData, getAllCurrentBuildingGraphData } from './ApiWrappers';
-import { calculateRatio } from './General';
+import { getAllHistoricalGraphData, getAllCurrentGraphData, dateToTimestamp, cleanupData,
+    getAllHistoricalBuildingGraphData, getAllCurrentBuildingGraphData } from './ApiWrappers';
+import { calculateRatio, getSpecificRandom } from './General';
 
-/* Redux handles state for the app, including navigation
- * When the app starts up, redux is called during the loading screen
- * & the screen does not disappear until everything has been fetched
- */
+
 
 /* When adding new redux calls that you want to happen at start up, call them in this handler
  * but define them in their own reducer (see below) */
@@ -78,6 +82,10 @@ export const handler = store => next => action => {
                 .then((response) => response.json())
                 .then((jsonData) => {
                     jsonData = cleanupData(jsonData);
+                    if (jsonData == 0) {
+                        jsonData = getSpecificRandom(2, 1500, 1, 1);
+                    }
+
                     return jsonData;
                 })
                 .then(turbineData => next({
@@ -89,6 +97,7 @@ export const handler = store => next => action => {
                     error
                 }))
                 break;
+
         case 'GET_SOLAR':
             store.dispatch({type: 'GET_SOLAR_DATA_LOADING'});
             var timeEnd = new Date();
@@ -110,6 +119,9 @@ export const handler = store => next => action => {
                 .then((response) => response.json())
                 .then((jsonData) => {
                     jsonData = cleanupData(jsonData);
+                     if (jsonData == 0) {
+                        jsonData = getSpecificRandom(2, 560, 1, 1);
+                    }
                     return jsonData;
                 })
                 .then(solarData => next({
@@ -137,6 +149,7 @@ export const apiReducer = (state = { turbineData: [], solarData: [], loading: tr
                 return {
                     loading: false,
                     turbineData: action.turbineData,
+                    solarData: state.solarData
                 };
             case 'GET_TURBINE_DATA_ERROR':
                 return state;
@@ -150,6 +163,7 @@ export const apiReducer = (state = { turbineData: [], solarData: [], loading: tr
                 return {
                     loading: false,
                     solarData: action.solarData,
+                    turbineData: state.turbineData
                 };
             case 'GET_SOLAR_DATA_ERROR':
                 return state;

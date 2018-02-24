@@ -1,3 +1,9 @@
+/* GraphDetailCard.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * Card on Overview detail pages that displays graph & buttons to modify graph scope
+ * by time (day, week, month, year), and utility (total, heat, electricity, water).
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Platform } from 'react-native';
 import { connect } from 'react-redux';
@@ -22,7 +28,7 @@ export default class GraphDetail extends Component {
             super(props);
     }
 
-    // Callback function to update parent header
+    /* Callback function to update parent header */
     sendToParent = (buttonIndex) => {
         var views = ["day", "week", "month", "year"];
         var comparators = [7, 4, 12, 5];
@@ -35,7 +41,7 @@ export default class GraphDetail extends Component {
     }
 
     getLabel = (label) => {
-        // Labels for the scatter plot axes depend on the x axis
+        /* Labels for the scatter plot axes depend on the x axis */
         if (label === "x") {
             switch (this.props.timeSelected){
                 case 1:

@@ -1,3 +1,8 @@
+/* OverviewListView.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * Manages first level detail for Overview page, as well as the Overview stack.
+ */
+
 import React, { Component } from 'react';
 import { FlatList, StyleSheet, Platform } from 'react-native';
 import { StackNavigator, NavigationActions } from 'react-navigation';
@@ -8,7 +13,7 @@ import OverviewCards from './OverviewCards';
 import OverviewListCard from './OverviewListCard';
 import Turbine from './TurbineView';
 
-import ExampleData from './OverviewExampleData';
+import { overviewLabels } from './OverviewExampleData';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 
@@ -34,7 +39,7 @@ class OverviewListView extends Component {
 
            <FlatList
             style={[theme.flex, styles.up]}
-             data={ExampleData}
+             data={overviewLabels}
              keyExtractor={item => item.title}
              onRefresh={refresh}
              refreshing={loading}

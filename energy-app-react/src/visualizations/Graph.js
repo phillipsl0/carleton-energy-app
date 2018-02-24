@@ -1,3 +1,8 @@
+/* Graph.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * Wrapper for Victory Graphs, so that the same styling & structure can easily be used in multiple places,
+ * without all of the code repetition.
+ */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Platform } from 'react-native'

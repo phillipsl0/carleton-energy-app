@@ -1,3 +1,8 @@
+/* Comparators.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * View that takes in energy being produced or used, and compares it to other energy costs.
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -30,7 +35,7 @@ var icons = ["car", "car", "delete-empty", "delete-empty", "gas-station", "fire"
     }),
 )
 export default class Comparator extends Component {
-    // combine the data into one total, and get random comparators
+    /* Combine the data into one total, and get random comparators */
     convertData = (data) => {
         var newData = {};
         var comparators = new Array(3);
@@ -59,7 +64,7 @@ export default class Comparator extends Component {
         return newData;
     }
 
-    // grab the correct number of comparators
+    /* Generate random comparator */
     getComparison = (data, cardType) => {
         var theme = GetStyle(CurrTheme);
         var font = 12;
@@ -89,7 +94,7 @@ export default class Comparator extends Component {
 
             <Text style={[ theme.fontBold ]}> Total: </Text>
             <Text style={ [styles.oneFont, { fontSize: font, flex: 1 }, theme.fontRegular]}>
-                {roundNumber(converted["total"])} MWh in the last hour
+                {roundNumber(converted["total"])} BTUs in the last hour
             </Text>
             </View>
             <View style={[theme.centered, {paddingTop: '2%', flex: 1,}]}>

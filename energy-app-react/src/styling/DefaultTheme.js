@@ -1,3 +1,8 @@
+/* DefaultTheme.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * Contains styles that are used multiple places in the app, so that updates to one style change all views using said
+ * style.
+ */
 import { StyleSheet, Platform } from 'react-native'
 
 import CurrFont from './../styling/CurrentFont';
@@ -116,7 +121,7 @@ const DefaultTheme = StyleSheet.create({
         ...Platform.select({
             ios: {
                 shadowOpacity: 0.75,
-                shadowRadius: 5,
+                shadowRadius: 3,
                 shadowColor: mediumBlue,
                 shadowOffset: { height: 0, width: 0 },
             },
