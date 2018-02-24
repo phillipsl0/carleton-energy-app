@@ -3,6 +3,7 @@ import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions, ScrollView,
   View, Text, Image, TouchableOpacity, Platform } from 'react-native'
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
 
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
@@ -15,9 +16,31 @@ import { GetStyle } from './../styling/Themes'
 
 const theme = GetStyle();
 
+@connect(
+    state => ({
+        historicalBuildingData: state.buildings.historicalBuildingData,
+        currentBuildingData: state.buildings.currentBuildingData,
+    }),
+    dispatch => ({
+        refresh: () => dispatch({type: 'GET_BUILDING_GRAPH_DATA'}),
+    }),
+)
+
 class BuildingListView extends Component {
   renderHeader = (headerItem) => {
     return <Text style={styles.header}>{headerItem.section.name}</Text>
+  }
+
+/*
+OLD TEXT STYLES:
+                <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
+                <Text style={styles.text}>Water: {item.item.water}</Text>
+                <Text style={styles.text}>Heat: {item.item.heat}</Text>
+*/
+
+  // Helper function to add commas to large numbers
+  numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   renderItem = (item) => {
@@ -28,9 +51,9 @@ class BuildingListView extends Component {
             <Image
             style={{alignItems:'center', width:75, borderColor:'white', borderWidth:1, marginBottom:3, marginLeft:3}} source={{uri: item.item.avatar}}/>
             <View style={{flex: 1, flexDirection: 'column', paddingTop:'2%'}}>
-                <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
-                <Text style={styles.text}>Water: {item.item.water}</Text>
-                <Text style={styles.text}>Heat: {item.item.heat}</Text>
+                <Text style={styles.text}>Electricity: {this.numberWithCommas(this.props.currentBuildingData[item.item.name]["data"][1]["y"].toFixed(0))}</Text>
+                <Text style={styles.text}>Water: {this.numberWithCommas(this.props.currentBuildingData[item.item.name]["data"][3]["y"].toFixed(0))}</Text>
+                <Text style={styles.text}>Heat: {this.numberWithCommas(this.props.currentBuildingData[item.item.name]["data"][2]["y"].toFixed(0))}</Text>
             </View>
             <Button
                 rightIcon={{name: "angle-right", type: 'font-awesome', size: moderateScale(20)}}
