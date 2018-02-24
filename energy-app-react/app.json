@@ -23,6 +23,9 @@
     "android": {
       "package": "edu.carleton.energy_app",
       "versionCode": 1
-    }
+    },
+    "assetBundlePatterns": [
+      "assets/images/*"
+    ]
   }
 }

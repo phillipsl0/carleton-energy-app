@@ -1,3 +1,7 @@
+/* Themes.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * Change between global themes without having to change every file.
+ */
 // import colorfulTheme from "./ColorfulTheme";
 import defaultTheme from "./DefaultTheme";
 // import font from "./DefaultTheme";

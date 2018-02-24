@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions,
+import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions, ScrollView,
   View, Text, Image, TouchableOpacity, Platform } from 'react-native'
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native-elements';
@@ -13,7 +13,7 @@ import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.j
 import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
 
-const themeStyles = GetStyle();
+const theme = GetStyle();
 
 class BuildingListView extends Component {
   renderHeader = (headerItem) => {
@@ -21,9 +21,10 @@ class BuildingListView extends Component {
   }
 
   renderItem = (item) => {
-    return <View style={[themeStyles.card, themeStyles.shadowed, styles.card]}>
+    return <View style={[theme.card, styles.card, {marginTop: '3%'}]}>
         <Text style={styles.header}>{item.item.name}</Text>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',}}>
+        <View style={{ borderBottomWidth: 1, borderBottomColor: '#e1e8ee', marginTop: '1%' }}/>
+        <View style={[{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}, styles.innerView]}>
             <Image
             style={{alignItems:'center', width:75, borderColor:'white', borderWidth:1, marginBottom:3, marginLeft:3}} source={{uri: item.item.avatar}}/>
             <View style={{flex: 1, flexDirection: 'column', paddingTop:'2%'}}>
@@ -47,14 +48,14 @@ class BuildingListView extends Component {
     const {navigate} = this.props.navigation;
 
     return (
-      <View>
-        <View style={{paddingTop:8}} />
+      <ScrollView>
         <FlatList
             data = {buildings}
             renderItem={this.renderItem}
             keyExtractor = {(item) => item.name}
+
         />
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -70,8 +71,17 @@ const navigateOnce = (getStateForAction) => (action, state) => {
     ) ? null : getStateForAction(action, state);
 };
 
+const navStyles = StyleSheet.create({
+    header: {
+        backgroundColor: '#0B5091',
+    },
+    headerTitle: {
+            fontFamily: theme.font,
+    }
+})
+
 const BuildingStack = StackNavigator({
-  Buildings: {
+  BuildingsListView: {
       screen: BuildingListView,
       navigationOptions: ({ navigation }) => ({
         title: 'Buildings',
@@ -80,6 +90,9 @@ const BuildingStack = StackNavigator({
         }),
         headerTintColor: 'white',
         headerStyle: navStyles.header,
+        headerTitleStyle: navStyles.headerTitle,
+        headerBackTitleStyle: navStyles.headerTitle,
+        headerBackTitle: 'Back',
       }),
   },
   BuildingCardView: {
@@ -112,41 +125,42 @@ const BuildingStack = StackNavigator({
   Comparison: {
     screen: BuildingComparison,
     navigationOptions: ({ navigation }) => ({
-      ...Platform.select({
-          android: { header: null }
-      }),
       headerTintColor: 'white',
       headerStyle: navStyles.header,
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
     }),
   },
   ComparisonPage: {
     screen: ComparisonPage,
     navigationOptions: ({ navigation }) => ({
-        title: 'Comparison',
-        ...Platform.select({
-            android: { header: null }
-      }),
       headerTintColor: 'white',
       headerStyle: navStyles.header,
+      headerTitleStyle: navStyles.headerTitle,
+      headerBackTitleStyle: navStyles.headerTitle,
+      headerBackTitle: 'Back',
     }),
   },
 });
 
 BuildingStack.router.getStateForAction = navigateOnce(BuildingStack.router.getStateForAction);
 
-const navStyles = StyleSheet.create({
-    header: {
-        backgroundColor: '#0B5091',
-    },
-})
-
 const styles = StyleSheet.create({
   card: {
-    marginTop: 0, 
+    marginTop: 3, 
+    marginBottom: 6,
     marginLeft: 6, 
     marginRight: 6, 
     paddingLeft: 5,
     paddingRight: 5,
+    borderRadius: 5,
+    borderColor:'#e1e8ee',
+    borderWidth: 1,
+    ...Platform.select({
+          ios: {
+            shadowColor: 'rgba(0,0,0, .9)',
+          },})
     // borderWidth: 1, 
     // borderColor:'#cbd2d9', 
     // borderRadius:3, 
@@ -180,6 +194,8 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingRight: 15,
     paddingLeft: 20,
+    borderColor:'#e1e8ee',
+    borderWidth: 1,
     // color: 'silver'
     // paddingBottom: 55,
   },
@@ -219,11 +235,21 @@ const styles = StyleSheet.create({
       color:'darkslategrey',
       paddingLeft: 3,
       backgroundColor: 'white',
-      fontWeight: 'bold',
+//      fontWeight: 'bold',
       alignSelf: 'flex-start',
   },
   compareButton: {
     marginRight: 10
+  },
+  innerView: {
+//    borderTopColor: '#e1e8ee',
+//    borderTopWidth: 1,
+//    borderBottomColor: '#e1e8ee' ,
+//    borderBottomWidth: 1,
+    backgroundColor: '#F5FCFF',
+    paddingTop: '2%',
+    paddingBottom: '2%',
+    marginTop: '1%',
   }
 })
 

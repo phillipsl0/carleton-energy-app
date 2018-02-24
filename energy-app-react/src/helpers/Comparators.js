@@ -1,3 +1,8 @@
+/* Comparators.js
+ * Written by Liv Phillips for Energy App Comps, 2018
+ * View that takes in energy being produced or used, and compares it to other energy costs.
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -30,7 +35,7 @@ var icons = ["car", "car", "delete-empty", "delete-empty", "gas-station", "fire"
     }),
 )
 export default class Comparator extends Component {
-    // combine the data into one total, and get random comparators
+    /* Combine the data into one total, and get random comparators */
     convertData = (data) => {
         var newData = {};
         var comparators = new Array(3);
@@ -59,7 +64,7 @@ export default class Comparator extends Component {
         return newData;
     }
 
-    // grab the correct number of comparators
+    /* Generate random comparator */
     getComparison = (data, cardType) => {
         var theme = GetStyle(CurrTheme);
         var font = 12;
@@ -69,7 +74,7 @@ export default class Comparator extends Component {
         const { width, height } = ui.layout;
 
         if (width < 350) {
-            font = 11;
+            font = 10;
         }
 
         var converted = this.convertData(data);
@@ -85,18 +90,20 @@ export default class Comparator extends Component {
 
             <View style={ styles.divider }></View>
 
-            <View style={[theme.centered, {paddingTop: '2%', flex: 1}]}>
+            <View style={[theme.centered, {paddingTop: '2%', flex: 1, }]}>
 
             <Text style={[ theme.fontBold ]}> Total: </Text>
-            <Text style={ [styles.oneFont, { fontSize: font, flex: 1 }]}>
-                {roundNumber(converted["total"])} MWh in the last hour
+            <Text style={ [styles.oneFont, { fontSize: font, flex: 1 }, theme.fontRegular]}>
+                {roundNumber(converted["total"])} BTUs in the last hour
             </Text>
+            </View>
+            <View style={[theme.centered, {paddingTop: '2%', flex: 1,}]}>
             <Text style={[ theme.fontBold ]}> Compare to... </Text>
 
             <View style={[ theme.flexboxRow ]}>
 
               <MaterialCommunityIcons color="#0B5091" size={moderateScale(icon)} name={icons[converted["comparators"][0]]}/>
-              <Text style={[ styles.oneFont, { fontSize: moderateScale(font) }] }>
+              <Text style={[ styles.oneFont, theme.fontRegular, { fontSize: moderateScale(font) }] }>
               {roundNumber(kWhComparison[converted["comparators"][0]]* converted["total"])} {comparisons[converted["comparators"][0]]}
               </Text>
 
@@ -120,7 +127,7 @@ export default class Comparator extends Component {
 
 const styles = StyleSheet.create({
     divider: {
-        borderTopColor: '#d3d3d3',
+        borderTopColor: '#e1e8ee',
         borderTopWidth: 1,
         marginLeft: '5%',
         marginRight: '5%'

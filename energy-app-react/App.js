@@ -1,3 +1,7 @@
+/* App.js
+ * Written by Liv Phillips, Veronica Child, and Martin Green for Energy App Comps, 2018
+ * Top level detail of App, controls the tab view navigation.
+ */
 import React, { Component } from 'react';
 import { Font, AppLoading, Asset } from 'expo';
 import { Platform, StyleSheet, BackHandler, 
@@ -8,7 +12,6 @@ import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { createReduxBoundAddListener, 
   createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
-//import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
 import BuildingStack from './src/buildings/BuildingListView';
@@ -16,7 +19,7 @@ import EnergyMapViewStack from './src/energymap/EnergyMapView'
 import OverviewStack from './src/overview/OverviewListView';
 import { GetStyle } from './src/styling/Themes'
 import CurrTheme from './src/styling/CurrentTheme'
-import { handler, dataReducer, layoutReducer, apiReducer } from './src/helpers/ReduxHandler'
+import { handler, dataReducer, layoutReducer, apiReducer, buildingDataReducer } from './src/helpers/ReduxHandler'
 import { getCurrentGenerationGraphFormat, 
   getCurrentConsumptionGraphFormat } from './src/helpers/ApiWrappers';
 import SustainStack from './src/SustainView';
@@ -125,7 +128,6 @@ const RootTabs = TabNavigator({
         : <TabBarTop {...props} style={{ backgroundColor: backgroundColor }} />
       );
     },
-    // animationEnabled: false,
     tabBarOptions:
         { style: navStyle.header,
           labelStyle: navStyle.label,
@@ -168,8 +170,9 @@ const navReducer = (state = initialState, action) => {
 const appReducer = combineReducers({
     nav: navReducer,
     data: dataReducer,
+    api: apiReducer,
     ui: layoutReducer,
-    turbine: apiReducer
+    buildings: buildingDataReducer
 
 });
 
@@ -185,7 +188,8 @@ const mapStateToProps = (state) => ({
     nav: state.nav,
     data: state.data,
     ui: state.layout,
-    turbine: state.turbine
+    api: state.api,
+    buildings: state.buildings
 });
 
 class App extends Component {
@@ -202,25 +206,8 @@ class App extends Component {
   */
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-    // checkIfFirstLaunch()
-    //   .then(res => this.setState({ isFirstLaunch: res, hasCheckedAsyncStorage: true }))
-    //   .catch(err => alert("An error occurred with async: ", err));
     
     try {
-      // AsyncStorage.getItem('RANDOM')
-      //   .then(res => {
-      //     if (res !== null) {
-      //       console.log("Not null random");
-      //       this.isFirstLaunch = false;
-      //     } else {
-      //       console.log("Null random");
-      //       this.isFirstLaunch = true;
-      //       console.log("Result: ", res)
-      //       AsyncStorage.setItem('RANDOM', 'true');
-      //       console.log("INSIDE of async, first launch:", this.state.isFirstLaunch);
-      //     }
-      //   })
-      //   .catch(err => alert("App mounting error: ", err));
       const first = AsyncStorage.getItem(HAS_LAUNCHED);
       // Check if value present, if so not first launched
       if (first !== null) {
@@ -261,8 +248,8 @@ class App extends Component {
         {'lato-regular': require('./src/assets/fonts/Lato/Lato-Regular.ttf'),},
         {'lato-bold': require('./src/assets/fonts/Lato/Lato-Bold.ttf'),}]);
 
-    const imageAssets = cacheImages([require('./src/assets/windmillCard.png'),
-        require('./src/assets/windmillHeader.png'), require('./src/assets/windmillFull.png')]);
+    const imageAssets = cacheImages([require('./src/assets/images/windmillCard.png'),
+        require('./src/assets/images/windmillHeader.png'), require('./src/assets/images/windmillFull.png')]);
 
     await Promise.all([...imageAssets, ...fontAssets]);
   }
@@ -276,7 +263,8 @@ class App extends Component {
 
 
   render() {
-    const { dispatch, nav, data, ui, turbine } = this.props;
+    const { dispatch, nav, data, ui, api } = this.props;
+
     const navigation = addNavigationHelpers({
         dispatch,
         data,
@@ -295,7 +283,7 @@ class App extends Component {
       }
     }
 
-    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || turbine.loading) {
+    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || api.loading) {
       return(
         <AppLoading
             startAsync={this._cacheResourcesAsync}
@@ -304,14 +292,6 @@ class App extends Component {
       );
     }
 
-    // if (!this.state.hasCheckedAsyncStorage) {
-    //   return( null )
-    // }
-    // Check if app has been launched for the first time
-    // console.log("Before first launch return, isFirstLaunch: ", this.state.isFirstLaunch);
-    // console.log("Before first launch return, checked Async: ", this.state.hasCheckedAsyncStorage)
-        // makes Intro screen appear
-    // if (this.state.isFirstLaunch && this.state.hasCheckedAsyncStorage) {
       if (this.state.isFirstLaunch) {
       return (
         <IntroSlider
@@ -330,8 +310,10 @@ const AppWithNavigationState = connect(mapStateToProps)(App);
 
 const store = createStore(appReducer, {}, applyMiddleware(handler));
 store.dispatch({type: 'GET_GRAPH_DATA'});
+store.dispatch({type: 'GET_BUILDING_GRAPH_DATA'});
 store.dispatch({type: 'GET_LAYOUT'});
 store.dispatch({type: 'GET_TURBINE'});
+store.dispatch({type: 'GET_SOLAR'});
 
 
 export default class Root extends Component {
