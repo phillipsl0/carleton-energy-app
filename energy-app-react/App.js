@@ -297,15 +297,14 @@ class App extends Component {
         // makes Intro screen appear
     // if (this.state.isFirstLaunch && this.state.hasCheckedAsyncStorage) {
     
-    /*  if (this.state.isFirstLaunch) {
-      if (this.state.isFirstLaunch) {
+    if (this.state.isFirstLaunch) {
       return (
         <IntroSlider
           onDone={this.closeIntro}
         />
       );
     }
-    */
+    
     return (
       <RootTabs navigation={navigation} />
     );

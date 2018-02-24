@@ -55,7 +55,7 @@ class BuildingListView extends Component {
             <ScrollView style={{backgroundColor: '#fafafa'}}>
                 <View style={{paddingTop:8}} />
                 <FlatList
-                    data = {buildings}
+                    data={buildings}
                     renderItem={this.renderItem}
                     keyExtractor = {(item) => item.name}
                 />
@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         width:75,
         height:75,
+        marginLeft: 3,
     },
     outerView: {
         flex: 1,
