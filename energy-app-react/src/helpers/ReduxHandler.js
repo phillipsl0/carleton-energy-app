@@ -72,7 +72,7 @@ export const handler = store => next => action => {
             var start = dateToTimestamp(timeStart);
             var end = dateToTimestamp(timeEnd);
 
-            var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/55/'+start+'/'+end;
+            var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/20/'+start+'/'+end;
 
             fetch(url)
                 .then((response) => response.json())
@@ -96,7 +96,7 @@ export const handler = store => next => action => {
             timeStart.setHours(timeEnd.getHours()-1);
 
             // Solar data are purely historical (up to 2018) at the moment 
-            if (timeStart.getFullYear() == 2018){
+            if (timeStart.getFullYear() > 2017){
                 timeStart.setFullYear(2017);
                 timeEnd.setFullYear(2017);
             }
@@ -104,7 +104,7 @@ export const handler = store => next => action => {
             var start = dateToTimestamp(timeStart);
             var end = dateToTimestamp(timeEnd);
 
-            var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/51/'+start+'/'+end;
+            var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/21/'+start+'/'+end;
 
             fetch(url)
                 .then((response) => response.json())

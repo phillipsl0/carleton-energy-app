@@ -1,6 +1,7 @@
 import buildingsDetail from './BuildingsDetail';
 import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
+import buildingIDs from './../assets/data/buildingIDs';
 
 import { JanData, eTable, wTable, sTable } from './../assets/data/JanData.js';
 
@@ -68,12 +69,27 @@ export function dateToTimestamp(date) {
     return timestamp;
 }
 
+export function timestampToDate(timestamp){
+    var day = timestamp.substring(8,10);
+    var month = timestamp.substring(5,7);
+    var year = timestamp.substring(0,4);
+    var hours = timestamp.substring(11,13);
+
+    d = new Date(year, month, day, hours, "00", "00", "00");
+    return d;
+}
+
 export const cleanupData = (data) => {
     //TODO: change to not be hardcoded
     var total = 0;
+    var turb1Name = "Main Campus -  Turbine 1: Public Grid Production";
+    var turb2Name = "Main Campus -  Turbine 2 (Kracum): Carleton Grid Production";
+    var solarName = "James Hall - James Hall Solar PV";
 
     for (var i=0; i < data.length; i++) {
-        total += data[i]["pointvalue"];
+        if (data[i]["pointname"] == turb1Name || data[i]["pointname"] == turb2Name || data[i]["pointname"] == solarName){
+            total += data[i]["pointvalue"]; 
+        } 
     }
 
     return total;
@@ -495,8 +511,7 @@ export function getBuildingUtilityConsumptionOverTime(building, utility, timeSta
     for (var i = numberEntries-1; i >= 0; i--) {
         table[i] = {};
         table[i]["date"] = currentTime.toString();
-        // timeframe is not defined anywhere, see replacement below
-        //table[i][utility] = Math.random() * scaleFactor * timeframe;
+
         table[i][utility] = Math.random() * scaleFactor * numberEntries;
 
 
@@ -529,8 +544,7 @@ export function getBuildingUtilityConsumptionOverTimeGraphFormat(building, utili
     for (var i = numberEntries-1; i >= 0; i--) {
         table[i] = {};
         table[i]["x"] = currentTime.toString();
-        // timeframe is not defined anywhere, see replacement below
-        //table[i][utility] = Math.random() * scaleFactor * timeframe;
+
         table[i]["y"] = Math.random() * scaleFactor * numberEntries;
 
 
@@ -1309,17 +1323,19 @@ function getYearBuildingGraph(currDate, building) {
     return getTotalBuildingConsumptionGraphFormat(comparisonDate, currDate, 525600, 365, building);
 }
 
-export function getBuildingIDs() {
-    var buildings = {"Burton":39, "Sayles":10, "Severance":61, "Davis":44, "Musser":57, 
-                    "Myers":58, "Cassat":40, "Memo":50, "Nourse":59, "Evans":45, 
-                    "Goodhue":47, "Watson":64, "Scoville":60};
-    return buildings;
-}
+// export function getBuildingIDs() {
+//     var buildings = {"Burton":39, "Sayles":10, "Severance":61, "Davis":44, "Musser":57, 
+//                     "Myers":58, "Cassat":40, "Memo":50, "Nourse":59, "Evans":45, 
+//                     "Goodhue":47, "Watson":64, "Scoville":60};
+//     return buildings;
+// }
 
 export function getConsumptionDataTableAllBuildings(date) {
     // Return a table of all relevant data for ALL buildings
     // Table will have a row for each building
-    var buildings = getBuildingIDs();
+
+    // var buildings = getBuildingIDs();
+    var buildings = buildingIDs;
 
     table = {};
     for (var i=0; i<buildings.length; i++){
@@ -1357,7 +1373,8 @@ export function getConsumptionDataTableForBuilding(building, date) {
             years: []}
     };
 
-    var buildingID = getBuildingIDs()[building];
+    // var buildingID = getBuildingIDs()[building];
+    var buildingID = buildingIDs[building];
 
     // Historical data dump only went up until the beginning of 2018
     // If we pass in a date beyond then, we'll get no data back from the API
@@ -1581,5 +1598,267 @@ export function getConsumptionDataTableForBuilding(building, date) {
     }
 
 }
+
+
+
+
+export function grabData(buildingName, date){
+
+    // TO DO: special cases for these buildings
+    // if (buildingName == "Cassat" || buildingName == "Memo" || buildingName == "Goodhue") {
+    //     switch (buildingName) {
+    //         case "Cassat":
+    //         case "Memo":
+    //         case "Goodhue":
+    //     }
+    // }
+    thisYear = date.getFullYear();
+    thisMonth = date.getMonth()+1;
+    thisDay = date.getDate();
+
+    var start = new Date(date);
+    // var end = new Date(date);
+
+    if (thisYear > 2017) {
+        start.setFullYear(2017);
+        // end.setFullYear(2017);
+        thisYear = 2017;
+    }
+
+    start.setHours(0);
+    var end = new Date(start);
+    end.setDate(end.getDate()+1);
+
+    // end.setDate(date.getDate()+1);
+    // end.setHours(0); 
+
+    var numDaysAgo = 8;
+    start.setDate(start.getDate()-numDaysAgo);
+
+
+    startStamp = dateToTimestamp(start);
+    endStamp = dateToTimestamp(end);
+
+    // var buildingID = getBuildingIDs()[buildingName];
+    var buildingID = buildingIDs[buildingName];
+
+    var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+    console.log(url);
+
+
+    fetch(url).then((response) => response.json()).then((responseJson) => {
+
+        if (responseJson.length == 0) {
+            console.log("NO DATA: " + url);
+    //         // TO DO: fill in the table with NULL or 0 values rather than completely skipping them 
+        }
+
+        console.log(url);
+
+        var daySum = 0;
+        var weekSum = 0;
+        var monthSum = 0;
+        var yearSum = 0;
+
+        var hourCount = 0;
+        var dayCount = 0;
+        var weekCount = 0;
+        var monthCount = 0;
+        var yearCount = 0;
+
+        var dayUsage =   { "data": { "electricity":[], "water":[], "heat":[],},   "total":[],};
+        var monthUsage = { "data": { "electricity":[], "water":[], "heat":[],},   "total":[],};
+        var weekUsage =  { "data": { "electricity":[], "water":[], "heat":[],},   "total":[],};
+        var yearUsage =  { "data": { "electricity":[], "water":[], "heat":[],},   "total":[],};
+
+        var utility = "z";
+
+        var prevDay = -1;
+
+        // for (let i = 10 ; i > 0; i--) {
+        for (let i = responseJson.length ; i > 0; i--) {
+
+            obj = responseJson[i-1];
+            // console.log(obj);
+            // name = obj.name.substring(15,24)
+            val = obj.pointvalue;
+            units = obj.units;
+
+            var dayStr = obj.pointtimestamp.substring(8,10);
+
+            switch (units) {
+                case "kWh":
+                    utility = "electricity";
+                    break;
+                case "kBTU":
+                    utility = "heat";
+                    break;
+                case "gal":
+                    utility = "water";
+                    break;
+            }
+
+            hourCount++;
+            
+            // console.log("daySum: " + daySum);
+
+            console.log(val,daySum,obj.pointtimestamp,hourCount, dayStr, prevDay);
+            // if (hourCount == 24){
+            if (dayStr != prevDay){
+                prevDay = dayStr;
+
+                console.log("NEW DAY");
+                weekSum+=daySum;
+
+                if (dayUsage["data"][utility].length < 7){
+                    addition = {"x":obj.pointtimestamp,"y":daySum};
+                    dayUsage["data"][utility].push(addition);
+                }
+                dayCount++;
+                daySum = 0;
+                hourCount = 0;
+
+            }
+            if (dayCount == 7) {
+                console.log("NEW WEEK");
+
+                
+                if (weekUsage["data"][utility].length < 4){
+                    addition = {"x":obj.pointtimestamp,"y":daySum};
+                    weekUsage["data"][utility].push(addition);
+                }
+                weekCount++;
+                weekSum = 0;
+                dayCount = 0;
+            }
+
+            daySum += val;
+
+            // timestamp = obj.pointtimestamp;
+            // day = timestamp.substring(8,10);
+            // month = timestamp.substring(5,7);
+            // year = timestamp.substring(0,4);
+            // objDate = timestampToDate(timestamp);
+
+
+
+            // yearsAgo = thisYear - year;
+            // monthsAgo = thisMonth - month;
+            // daysAgo = thisDay - day;
+
+            // console.log(daysAgo);
+            // console.log(monthsAgo);
+            // console.log(yearsAgo);
+
+            // if (daysAgo < 7 && monthsAgo == 0 && yearsAgo == 0) {
+            //     daySum += val;
+
+            //     addition = {"x":daysAgo,"y":val};
+            //     dayUsage["data"][utility].push(addition);
+            // }
+
+
+
+            // if (year == end.getFullYear()) {
+            //     yearSum += val;
+            //     if (month == end.getMonth()+1) {
+            //         monthSum += val;
+            //         if (day ==)
+            //     }
+            // }
+
+
+            // console.log(val + units);
+
+            
+
+        }
+
+        console.log("dayUsage:");
+        console.log(dayUsage);
+        console.log("weekUsage:");
+        console.log(weekUsage);
+        console.log("DONE");
+
+
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+}
+
+
+// function grabData(buildingID, utility, date, epoch){
+//     // Returns an array of datapoints
+//     // sample call: grabData("Burton","electricity","day")
+//     // sample call: grabData("Myers","water","year")
+
+//     var numPts = 4;
+
+//     if (buildingName == "Cassat" || buildingName == "Memo" || buildingName == "Goodhue") {
+//         switch (buildingName) {
+//             case "Cassat":
+//             case "Memo":
+//             case "Goodhue":
+//         }
+//     }
+
+//     var start = new Date(date);
+//     var end = new Date(date);
+//     start.setDate(date.getDate()-7);
+
+//     if (date.getFullYear() > 2017) {
+//         start.setFullYear(2017);
+//         end.setFullYear(2017);
+//     }
+
+//     if (epoch == "day") {
+//         numPts = 7;
+//     } else if (epoch == "year") {
+//         // fetch hardcoded data
+//     }
+
+//     startStamp = dateToTimestamp(start);
+//     endStamp = dateToTimestamp(end);
+
+//     // var buildingID = getBuildingIDs()[buildingName];
+//     var buildingID = buildingIDs[buildingName];
+
+//     var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+
+//     console.log(url);
+
+//     fetch(url).then((response) => response.json()).then((responseJson) => {
+
+//         dayUsage = {};
+
+
+//         if (responseJson.length == 0) {
+//             console.log("NO DATA: " + url);
+//             // TO DO: fill in the table with NULL or 0 values rather than completely skipping them 
+//             return dayUsage;
+//         }
+
+//         for (let i =0; i < responseJson.length ; i++) {
+
+//             obj = responseJson[i];
+//             console.log(obj);
+//             // name = obj.name.substring(15,24)
+//             val = obj.pointvalue.toFixed(2)
+//             units = obj.units;
+
+//         }
+
+//     })
+//     .catch((error) => {
+//         console.error(error);
+//     });
+
+
+
+
+// }
+
+
 
 
