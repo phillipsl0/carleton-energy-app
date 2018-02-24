@@ -95,12 +95,6 @@ export const handler = store => next => action => {
             var timeStart = new Date();
             timeStart.setHours(timeEnd.getHours()-1);
 
-            // Solar data are purely historical (up to 2018) at the moment 
-            if (timeStart.getFullYear() > 2017){
-                timeStart.setFullYear(2017);
-                timeEnd.setFullYear(2017);
-            }
-
             var start = dateToTimestamp(timeStart);
             var end = dateToTimestamp(timeEnd);
 
