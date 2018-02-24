@@ -9,7 +9,7 @@ import MapCallout from './MapCallout';
 import IndividualBuilding from './../buildings/IndividualBuilding';
 import BuildingStack from './../buildings/BuildingListView';
 import buildings from './../buildings/Buildings'
-import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
+// import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
 import TopUtilities from './EnergyMapUtilityButtons';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
 import ComparisonPage from './../buildings/ComparisonPage';
@@ -17,7 +17,7 @@ import BuildingComparison from './../buildings/BuildingComparison';
 import { getUnits } from './../helpers/General';
 
 /*
-Using tutorials:
+Helpful links:
 https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/#
 Polygon onPress: https://snack.expo.io/H1L9ClUGW
 Animated region with scroll cards: https://codedaily.io/tutorials/9/Build-a-Map-with-Custom-Animated-Markers-and-Region-Focus-when-Content-is-Scrolled-in-React-Native
@@ -68,6 +68,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Cassat": {
           "electric": {
@@ -78,6 +86,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Davis": {
           "electric": {
@@ -88,6 +104,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Evans": {
           "electric": {
@@ -98,6 +122,14 @@ class EnergyMapView extends Component {
             "max": 316880,
             "min": 4232,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Goodhue": {
           "electric": {
@@ -105,9 +137,17 @@ class EnergyMapView extends Component {
             "min": 2427,
           },
           "water": {
-            "max": 285100,
+            "max": 400100,
             "min": 3200,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Memo": {
           "electric": {
@@ -118,6 +158,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Musser": {
           "electric": {
@@ -128,6 +176,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Myers": {
           "electric": {
@@ -138,6 +194,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Nourse": {
           "electric": {
@@ -148,6 +212,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Sayles": {
           "electric": {
@@ -158,6 +230,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Scoville": {
           "electric": {
@@ -168,6 +248,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Severance": {
           "electric": {
@@ -178,6 +266,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         },
         "Watson": {
           "electric": {
@@ -188,6 +284,14 @@ class EnergyMapView extends Component {
             "max": 47243177,
             "min": 18784,
           },
+          "total": {
+            "max": 5000,
+            "min": 1000,
+          },
+          "heat": {
+            "max": 15000,
+            "min": 5000,
+          }
         }
       },
       // Initial region is Carleton's coordinates
@@ -209,11 +313,9 @@ class EnergyMapView extends Component {
 
   // Assemble all of Carleton's buildings BEFORE rendering
   componentWillMount() {
-    this.getBuildingData('electric'); // Initialize with electric
+    this.getBuildingData(this.state.utilityNameShown); // Initialize with electric
     this.moveToCarleton();
-    //console.log('EnergyMapView component is mounting...');
     this.closeActivityIndicator();
-    //console.log("Component did mount")
   };
 
   openActivityIndicator() {
@@ -269,13 +371,13 @@ class EnergyMapView extends Component {
 
   getCurrentBuildingUsage(building, utilityName) {
     if (utilityName == 'total') {
-      return this.props.currentBuildingData["total"];
+      return this.props.currentBuildingData[building]["total"];
     } else if (utilityName == 'electricity') {
-      return this.props.currentBuildingData["data"][3]["y"];
+      return this.props.currentBuildingData[building]["data"][1]["y"];
     } else if (utilityName == 'heat') {
-      return this.props.currentBuildingData["data"][2]["y"];
+      return this.props.currentBuildingData[building]["data"][2]["y"];
     } else if (utilityName == 'water') {
-      return this.props.currentBuildingData["data"][3]["y"];
+      return this.props.currentBuildingData[building]["data"][3]["y"];
     };
     return 0
   };
@@ -314,15 +416,14 @@ class EnergyMapView extends Component {
   */
   determineBuildingColor(buildingName, utilitySelected) {
     try {
-      // var use = getCurrentBuildingUtilityConsumption(buildingName, this.mapUtilityNameToAPI(utilitySelected)).toFixed(1)
-      var use = this.getCurrentBuildingUsage(buildingName, utilitySelected);
+      var use = this.getCurrentBuildingUsage(buildingName, this.mapUtilityNameToAPI(utilitySelected));
       //var h = (1.0 - use) * 240
-      //console.log("Usage selected utility", use)
       var building = this.state.buildings_info
       building = building[buildingName][utilitySelected]
       var val = Math.abs(1 - ((use - building.min) / (building.max - building.min))) // taken from https://stats.stackexchange.com/questions/70801/how-to-normalize-data-to-0-1-range
-      //console.log("Normalizing " + buildingName, val)
       var h = val * 85 // taken from: https://stackoverflow.com/questions/6660879/python-map-float-range-0-0-1-0-to-color-range-red-green
+      // console.log("Building name:", buildingName)
+      // console.log("Val:", this.setColor(val))
       return this.setColor(val);
 
     } catch (err) {
@@ -332,11 +433,17 @@ class EnergyMapView extends Component {
     }
   };
 
+  // Helper function to add commas to large numbers
+  numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   // Taken from: https://ux.stackexchange.com/questions/34875/how-to-translate-a-rating-range-into-red-yellow-green-colours
   // Generates color of value normalizated on 0 to 10 scale
   setColor(value) {
     var color;
     var parts = (value > 5) ? (1-((value-5)/5)) : value/5;
+    // console.log("Normalized value:", parts)
     parts = Math.round(parts * 255);
     if (value > 5) {
         color = [255, parts, 0];
@@ -371,7 +478,7 @@ class EnergyMapView extends Component {
           colorBuilding: color,
           colorOutline: outline,
           marker_coordinate: building.marker_coordinate,
-          usage: getCurrentBuildingUtilityConsumption(building.name, utilitySelected).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
+          usage: this.getCurrentBuildingUsage(building.name, this.mapUtilityNameToAPI(utilitySelected)).toFixed(1) // used in determineBuildingColor - best way to avoid redundancy?
         }
       });
       this.setState({polygons: polygons});
@@ -413,19 +520,6 @@ class EnergyMapView extends Component {
 
   round(value, decimals) {
     return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-  };
-
-  // Close open callout upon user zoom
-  checkCalloutRender(region) {
-    //console.log("New region: ", this.round(region.latitudeDelta, 5))
-    //console.log("State region: ", this.round(this.state.region.latitudeDelta, 5))
-    if (this.round(region.latitudeDelta, 5) != this.round(this.state.region.latitudeDelta, 5)) {
-      this.state.polygons.map((polygon) => {
-        if (polygon.open) {
-          this.toggleCallout(polygon)
-        }
-      })
-    }
   };
 
   moveMaptoLocation(latlng) {
@@ -505,7 +599,7 @@ class EnergyMapView extends Component {
                         <MapCallout
                           name={polygon.name}
                           image={'image'} // to be replaced with building image
-                          number={polygon.usage}
+                          number={this.numberWithCommas(polygon.usage)}
                           utility={utilityNameShown}/>
                       </Callout>
                     </Marker>
@@ -517,7 +611,7 @@ class EnergyMapView extends Component {
                      key={polygon.name}
 
                      title={polygon.name}
-                     description={polygon.usage + ' ' + getUnits(utilityNameShown)}
+                     description={this.numberWithCommas(polygon.usage) + ' ' + getUnits(utilityNameShown)}
                      onCalloutPress={() => navigation.navigate(
                        'EnergyBuildingView', 
                        {item:polygon.item, selected: this.state.utilityIndexShown })}

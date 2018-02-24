@@ -131,8 +131,9 @@ export default class IndividualBuilding extends Component {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    // Maps utility name to its respective API placement
+    // Maps utility name to its respective API placement of building's data
     getHeaderText(currentData, utilityIndex) {
+
         if (utilityIndex == 1) {
           // total
           return (currentData["total"]);
@@ -211,7 +212,6 @@ export default class IndividualBuilding extends Component {
         const theme = GetStyle(CurrTheme);
         const { width, height } = Dimensions.get('window');
         const { refresh, historicalBuildingData, currentBuildingData } = this.props; // redux
-        var utilities = ["Gas", "Electric", "Heat", "Water"];
 
         graphData = this.getGraphScope(historicalBuildingData[this.state.buildingName])
         header = this.getHeader(currentBuildingData[this.state.buildingName]);
