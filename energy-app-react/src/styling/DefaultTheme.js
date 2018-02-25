@@ -121,7 +121,7 @@ const DefaultTheme = StyleSheet.create({
         ...Platform.select({
             ios: {
                 shadowOpacity: 0.75,
-                shadowRadius: 5,
+                shadowRadius: 3,
                 shadowColor: mediumBlue,
                 shadowOffset: { height: 0, width: 0 },
             },

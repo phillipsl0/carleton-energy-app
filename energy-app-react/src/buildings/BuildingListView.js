@@ -1,43 +1,53 @@
 import React, { Component } from 'react';
-import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions, ScrollView,
-  View, Text, Image, TouchableOpacity, Platform } from 'react-native'
-import { StackNavigator, NavigationActions } from 'react-navigation';
-import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native-elements';
+
+import { FlatList, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions} from 'react-native'
+import { NavigationActions, StackNavigator } from 'react-navigation';
+import { Icon, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
 
 import buildings from './Buildings';
 import IndividualBuilding from './IndividualBuilding';
 import ComparisonPage from './ComparisonPage';
 import BuildingComparison from './BuildingComparison';
-import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
 
-import { scale, moderateScale, verticalScale} from './../helpers/Scaling';
+import { moderateScale } from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
-
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {roundNumber} from './../helpers/General';
 const theme = GetStyle();
+
+@connect(
+   state => ({
+       historicalBuildingData: state.buildings.historicalBuildingData,
+       currentBuildingData: state.buildings.currentBuildingData,
+   }),
+   dispatch => ({
+       refresh: () => dispatch({type: 'GET_BUILDING_GRAPH_DATA'}),
+   }),
+)
 
 class BuildingListView extends Component {
   renderHeader = (headerItem) => {
-    return <Text style={styles.header}>{headerItem.section.name}</Text>
+    return <Text style={[themeStyles.container, styles.header]}>{headerItem.section.name}</Text>
   }
 
   renderItem = (item) => {
-    return <View style={[theme.card, styles.card, {marginTop: '3%'}]}>
+    return <View style={[theme.card, styles.card, styles.card]}>
         <Text style={styles.header}>{item.item.name}</Text>
         <View style={{ borderBottomWidth: 1, borderBottomColor: '#e1e8ee', marginTop: '1%' }}/>
-        <View style={[{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}, styles.innerView]}>
+        <View style={[styles.outerView, styles.innerView]}>
             <Image
-            style={{alignItems:'center', width:75, borderColor:'white', borderWidth:1, marginBottom:3, marginLeft:3}} source={{uri: item.item.avatar}}/>
-            <View style={{flex: 1, flexDirection: 'column', paddingTop:'2%'}}>
-                <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
-                <Text style={styles.text}>Water: {item.item.water}</Text>
-                <Text style={styles.text}>Heat: {item.item.heat}</Text>
+            style={styles.image} source={{uri: item.item.avatar}}/>
+            <View style={{flex: 1, flexDirection: 'column'}}>
+                <Text style={styles.text}> <FontAwesome name="lightbulb-o" size={moderateScale(16)} color="#0B5091" />  {roundNumber(item.item.electricity)} kWh</Text>
+                <Text style={styles.text}><FontAwesome name="shower" size={moderateScale(16)} color="#0B5091" /> {roundNumber(item.item.water)} gal</Text>
+                <Text style={styles.text}> <FontAwesome name="fire" size={moderateScale(16)} color="#0B5091" /> {roundNumber(item.item.heat)} kBTU</Text>
             </View>
             <Button
                 rightIcon={{name: "angle-right", type: 'font-awesome', size: moderateScale(20)}}
                 fontSize={moderateScale(14)}
                 title='More Info'
-                style={{paddingBottom:20}}
-                containerViewStyle={styles.button}
+                style={{marginTop:'10%'}}
                 backgroundColor='#0B5091'
                 onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item})}/>
         </View>
@@ -45,15 +55,23 @@ class BuildingListView extends Component {
   }
 
   render() {
-    const {navigate} = this.props.navigation;
-
+    var item = this.props.currentBuildingData;
+    var buildingImageArray = buildings;
+    var dataArray = [];
+    var iterator = 0;
+    for (var building in item) {
+        if (item.hasOwnProperty(building)) {
+            sanitizedBuilding = {name: building, electricity: item[building]["data"]["1"]["y"], water: item[building]["data"]["3"]["y"], heat: item[building]["data"]["2"]["y"], avatar: buildingImageArray[iterator]["avatar"]}
+            dataArray.push(sanitizedBuilding);
+            iterator += 1;
+        }
+    }
     return (
-      <ScrollView>
+      <ScrollView style={{paddingTop:'3%'}}>
         <FlatList
-            data = {buildings}
+            data = {dataArray}
             renderItem={this.renderItem}
             keyExtractor = {(item) => item.name}
-
         />
       </ScrollView>
     );
@@ -120,7 +138,7 @@ const BuildingStack = StackNavigator({
       headerTitleStyle: navStyles.headerTitle,
       headerBackTitleStyle: navStyles.headerTitle,
       headerBackTitle: 'Back',
-    }), 
+    }),
   },
   Comparison: {
     screen: BuildingComparison,
@@ -148,10 +166,10 @@ BuildingStack.router.getStateForAction = navigateOnce(BuildingStack.router.getSt
 
 const styles = StyleSheet.create({
   card: {
-    marginTop: 3, 
+    marginTop: 3,
     marginBottom: 6,
-    marginLeft: 6, 
-    marginRight: 6, 
+    marginLeft: 6,
+    marginRight: 6,
     paddingLeft: 5,
     paddingRight: 5,
     borderRadius: 5,
@@ -161,27 +179,6 @@ const styles = StyleSheet.create({
           ios: {
             shadowColor: 'rgba(0,0,0, .9)',
           },})
-    // borderWidth: 1, 
-    // borderColor:'#cbd2d9', 
-    // borderRadius:3, 
-    // backgroundColor:'white'
-  },
-  // card: {
-  //   paddingTop: 20,
-  // },
-  head: {
-      backgroundColor: 'grey',
-    },
-  table: {
-    width: 250,
-    marginLeft: 5,
-
-  },
-  text: {
-    alignSelf: 'flex-start',
-    marginLeft: 5,
-    fontSize: moderateScale(16),
-    color: 'darkslategrey',
   },
   listItem: {
     height: 50,
@@ -199,36 +196,21 @@ const styles = StyleSheet.create({
     // color: 'silver'
     // paddingBottom: 55,
   },
-  subtitleText: {
-    paddingTop: 5,
-    paddingRight: 40,
-    paddingLeft: 20,
-    color: 'silver',
-    fontSize: 15
-  },
-  listImg: {
-    height: 30,
-    alignSelf: 'stretch',
-  },
-  listText: {
-    paddingLeft: 30,
-    marginLeft: 30,
-    fontSize: 24,
-  },
-  row: {
-    backgroundColor: 'orange',
-  },
-  button: {
-    marginTop: '3%',
-
-  },
-  view: {
-    alignItems: 'center',
-    backgroundColor: 'yellow'
-  },
   img: {
     alignSelf: 'stretch',
     height: 100,
+      marginTop: 0,
+      marginLeft: 6,
+      marginRight: 6,
+      paddingLeft: 5,
+      paddingRight: 5,
+  },
+  text: {
+      alignSelf: 'flex-start',
+      marginLeft: 5,
+      fontSize: moderateScale(16),
+      color: 'darkslategrey',
+      paddingTop: '3%',
   },
   header: {
       fontSize: moderateScale(18),
@@ -237,6 +219,18 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
 //      fontWeight: 'bold',
       alignSelf: 'flex-start',
+  },
+  image: {
+      alignItems:'center',
+      width:75,
+      marginLeft: '1%',
+      marginRight: '1%'
+  },
+  outerView: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      backgroundColor: 'white'
   },
   compareButton: {
     marginRight: 10
