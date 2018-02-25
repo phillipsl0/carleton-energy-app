@@ -753,6 +753,7 @@ const navStyles = StyleSheet.create({
     },
     headerTitle: {
         fontFamily: theme.font,
+        fontStyle: 'normal'
     }
 })
 
