@@ -1662,60 +1662,47 @@ export function getFormattedData(buildingName, date){
 
         var result = { 
             "dayUsage":{ 
-                "data" : {
-                    "electricity": [],
-                    "heat": [],
-                    "water": [],
-                },
+                "data" : {"electricity": [], "heat": [], "water": [],},
                 "total":[]
             }, 
             "weekUsage":{ 
-                "data" : {
-                    "electricity": [],
-                    "heat": [],
-                    "water": [],
-                },
+                "data" : {"electricity": [], "heat": [], "water": [],},
                 "total":[]
             }, 
             "monthUsage":{ 
-                "data" : {
-                    "electricity": [],
-                    "heat": [],
-                    "water": [],
-                },
+                "data" : {"electricity": [], "heat": [], "water": [],},
                 "total":[]
             }, 
             "yearUsage":{ 
-                "data" : {
-                    "electricity": [],
-                    "heat": [],
-                    "water": [],
-                },
+                "data" : {"electricity": [], "heat": [], "water": [],},
                 "total":[]
             } 
         };
         
         // get an array of the most recent 7 items from daySums[electricDictDay]
         var daySumsElectric = sortByKey(Object.entries(daySums["electricDictDay"]));
+        var daySumsHeat = sortByKey(Object.entries(daySums["heatDictDay"]));
+        var daySumsWater = sortByKey(Object.entries(daySums["waterDictDay"]));
         for (let i = 0; i < 7; i++) {
-            var item = daySumsElectric[i];
-            // console.log(item);
-            // console.log("0: ",item[0]);
-            // console.log("1: ",item[1]);
+            var itemElectric = daySumsElectric[i];
+            var objElectric = {"x":"0","y":0};
+            objElectric["x"] = itemElectric[0];
+            objElectric["y"] = itemElectric[1];
+            result["dayUsage"]["data"]["electricity"].push(objElectric);
 
-            var obj = {"x":"x","y":"y"};
-            obj["x"] = item[0];
-            obj["y"] = item[1];
-            // obj[item[0]] = item[1];
-            // console.log(obj);
+            var itemHeat = daySumsHeat[i];
+            var objHeat = {"x":"0","y":0};
+            objHeat["x"] = itemHeat[0];
+            objHeat["y"] = itemHeat[1];
+            result["dayUsage"]["data"]["heat"].push(objHeat);
+
+            var itemWater = daySumsWater[i];
+            var objWater = {"x":"0","y":0};
+            objWater["x"] = itemWater[0];
+            objWater["y"] = itemWater[1];
+            result["dayUsage"]["data"]["water"].push(objWater);
 
 
-            // var key = Object.keys(daySumsElectric[i]);
-            // var val = {daySumsElectric[i]};
-            // var val = daySums["electricDictDay"][daySumsElectric[i]];
-            // result["dayUsage"]["electricity"].push({key, val});
-            // result["dayUsage"]["data"]["electricity"] = val;
-            result["dayUsage"]["data"]["electricity"].push(obj);
         }
 
         
