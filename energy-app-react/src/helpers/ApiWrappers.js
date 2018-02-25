@@ -1858,7 +1858,7 @@ export function grabData(buildingName, date){
         end.setFullYear(2017);
     }
 
-    var numDaysAgo = 47;
+    var numDaysAgo = 280;
     start.setDate(start.getDate()-numDaysAgo);
 
     startStamp = dateToTimestamp(start);
@@ -2049,30 +2049,45 @@ function sumDaysToMonths(daySums){
     heatArr = sortByKey(Object.keys(heatDictDay));
     waterArr = sortByKey(Object.keys(waterDictDay));
 
-    for (let month = 0; month < 4; month++) {
-        var monthLabel = electricArr[electricArr.length-1];
-        for (let day = 0; day < 30; day++){
-            var idx = month*30+day;
-            if (idx >= electricArr.length){
-                break;
-            }
-
-            if (day == 29){
-                monthLabel = electricArr[idx];
-            }
-
-            var electricKey = electricArr[idx];
-            var val = electricDictDay[electricKey];
 
 
-            if (monthLabel in electricDictMonth){
-                electricDictMonth[monthLabel] = electricDictMonth[monthLabel] + val;
-            } else {
-                electricDictMonth[monthLabel] = val;
-            }
+    var monthsRecorded = 0;
+    var idx = 0;
+    var monthNum = electricArr[idx].substring(0,7); 
+    var prevMonthNum = monthNum;  
+    var val = 0;
 
+
+    while (monthsRecorded < 4) { // only need to keep 4 months of daily sums
+
+        if (idx >= electricArr.length){
+            console.log('OOPS')
+            // if we have fewer than 4 months of day data, break infinite loop:
+            break;
+        } else {
+            monthNum = electricArr[idx].substring(0,7);
+            console.log('HERE!', monthNum);
+            val = electricDictDay[electricArr[idx]];
         }
+        
+        // sum vals from days WITHIN this month
+        if (monthNum == prevMonthNum){
+            console.log('monthNum == prevMonthNum', monthNum);
+
+            if (monthNum in electricDictMonth){
+                electricDictMonth[monthNum] = electricDictMonth[monthNum] + val;
+            } else {
+                electricDictMonth[monthNum] = val;
+            }
+
+        } else {
+            console.log('monthNum != prevMonthNum', monthNum, prevMonthNum);
+            prevMonthNum = monthNum;   
+            monthsRecorded++;
+        }
+        idx++; // next day
     }
+
 
     for (let month = 0; month < 4; month++) {
         var monthLabel = heatArr[heatArr.length-1];
