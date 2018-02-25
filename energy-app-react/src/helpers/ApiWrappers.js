@@ -1627,7 +1627,7 @@ export function getConsumptionDataTableForBuilding(building, date) {
 
 
 
-export function grabData(buildingName, date){
+export function getFormattedData(buildingName, date){
     var end = new Date(date);
     end.setHours(0); // midnight earlier today
     var start = new Date(end);
@@ -1659,6 +1659,69 @@ export function grabData(buildingName, date){
         console.log(weekSums);
         console.log(monthSums);
         console.log(yearSums);
+
+        var result = { 
+            "dayUsage":{ 
+                "data" : {
+                    "electricity": [],
+                    "heat": [],
+                    "water": [],
+                },
+                "total":[]
+            }, 
+            "weekUsage":{ 
+                "data" : {
+                    "electricity": [],
+                    "heat": [],
+                    "water": [],
+                },
+                "total":[]
+            }, 
+            "monthUsage":{ 
+                "data" : {
+                    "electricity": [],
+                    "heat": [],
+                    "water": [],
+                },
+                "total":[]
+            }, 
+            "yearUsage":{ 
+                "data" : {
+                    "electricity": [],
+                    "heat": [],
+                    "water": [],
+                },
+                "total":[]
+            } 
+        };
+        
+        // get an array of the most recent 7 items from daySums[electricDictDay]
+        var daySumsElectric = sortByKey(Object.entries(daySums["electricDictDay"]));
+        for (let i = 0; i < 7; i++) {
+            var item = daySumsElectric[i];
+            // console.log(item);
+            // console.log("0: ",item[0]);
+            // console.log("1: ",item[1]);
+
+            var obj = {"x":"x","y":"y"};
+            obj["x"] = item[0];
+            obj["y"] = item[1];
+            // obj[item[0]] = item[1];
+            // console.log(obj);
+
+
+            // var key = Object.keys(daySumsElectric[i]);
+            // var val = {daySumsElectric[i]};
+            // var val = daySums["electricDictDay"][daySumsElectric[i]];
+            // result["dayUsage"]["electricity"].push({key, val});
+            // result["dayUsage"]["data"]["electricity"] = val;
+            result["dayUsage"]["data"]["electricity"].push(obj);
+        }
+
+        
+
+        console.log(result);
+
     })
     .catch((error) => {
         console.error(error);
