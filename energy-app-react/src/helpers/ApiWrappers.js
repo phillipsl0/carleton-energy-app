@@ -2057,8 +2057,7 @@ function sumDaysToMonths(daySums){
     var prevMonthNum = monthNum;  
     var val = 0;
 
-
-    while (monthsRecorded < 4) { // only need to keep 4 months of daily sums
+    while (true) {
 
         if (idx >= electricArr.length){
             console.log('OOPS')
