@@ -1701,6 +1701,12 @@ export function getFormattedData(buildingName, date, daysAgo){
             objWater["x"] = itemWater[0];
             objWater["y"] = itemWater[1];
             result["dayUsage"]["data"]["water"].push(objWater);
+
+            // TO DO: we're assuming itemElectric[0] == itemHeat[0] == itemWater[0] !!!
+            var totalLabel = itemElectric[0]; 
+            var totalVal = objElectric["y"] + objWater["y"] + objHeat["y"];
+            var objTotal = {"x":totalLabel,"y":totalVal};
+            result["dayUsage"]["total"].push(objTotal);
         }
 
         // get an array of the most recent 4 items from weekSums
@@ -1725,6 +1731,12 @@ export function getFormattedData(buildingName, date, daysAgo){
             objWater["x"] = itemWater[0];
             objWater["y"] = itemWater[1];
             result["weekUsage"]["data"]["water"].push(objWater);
+
+            // TO DO: we're assuming itemElectric[0] == itemHeat[0] == itemWater[0] !!!
+            var totalLabel = itemElectric[0]; 
+            var totalVal = objElectric["y"] + objWater["y"] + objHeat["y"];
+            var objTotal = {"x":totalLabel,"y":totalVal};
+            result["weekUsage"]["total"].push(objTotal);
         }
 
         // get an array of the most recent 4 items from monthSums
@@ -1749,34 +1761,16 @@ export function getFormattedData(buildingName, date, daysAgo){
             objWater["x"] = itemWater[0];
             objWater["y"] = itemWater[1];
             result["monthUsage"]["data"]["water"].push(objWater);
+
+            // TO DO: we're assuming itemElectric[0] == itemHeat[0] == itemWater[0] !!!
+            var totalLabel = itemElectric[0]; 
+            var totalVal = objElectric["y"] + objWater["y"] + objHeat["y"];
+            var objTotal = {"x":totalLabel,"y":totalVal};
+            result["monthUsage"]["total"].push(objTotal);
+
         }
 
-        // // get an array of the most recent 1 item from yearSums
-        // // data capacity is only ONE year at a time
-        // var yearSumsElectric = sortByKey(Object.entries(yearSums["electricDictYear"]));
-        // var yearSumsHeat = sortByKey(Object.entries(yearSums["heatDictYear"]));
-        // var yearSumsWater = sortByKey(Object.entries(yearSums["waterDictYear"]));
-        // for (let i = 0; i < 1; i++) {
-        //     var itemElectric = yearSumsElectric[i];
-        //     var objElectric = {"x":"0","y":0};
-        //     objElectric["x"] = itemElectric[0];
-        //     objElectric["y"] = itemElectric[1];
-        //     result["yearUsage"]["data"]["electricity"].push(objElectric);
-
-        //     var itemHeat = yearSumsHeat[i];
-        //     var objHeat = {"x":"0","y":0};
-        //     objHeat["x"] = itemHeat[0];
-        //     objHeat["y"] = itemHeat[1];
-        //     result["yearUsage"]["data"]["heat"].push(objHeat);
-
-        //     var itemWater = yearSumsWater[i];
-        //     var objWater = {"x":"0","y":0};
-        //     objWater["x"] = itemWater[0];
-        //     objWater["y"] = itemWater[1];
-        //     result["yearUsage"]["data"]["water"].push(objWater);
-        // }
-
-        // add extra year data (HARD-CODED for now)
+        // add year data (HARD-CODED for now)
         // TO-DO: don't rely on hard-coded data; make an API query for each year
         var burtonYearlySums = {
             "data":{
