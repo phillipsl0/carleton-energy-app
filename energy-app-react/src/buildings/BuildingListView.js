@@ -13,7 +13,7 @@ import BuildingComparison from './BuildingComparison';
 import { moderateScale } from './../helpers/Scaling';
 import { GetStyle } from './../styling/Themes'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+import {roundNumber} from './../helpers/General';
 const theme = GetStyle();
 
 @connect(
@@ -39,15 +39,15 @@ class BuildingListView extends Component {
             <Image
             style={styles.image} source={{uri: item.item.avatar}}/>
             <View style={{flex: 1, flexDirection: 'column'}}>
-                <Text style={styles.text}> <FontAwesome name="lightbulb-o" size={moderateScale(16)} color="#0B5091" /> : {item.item.electricity} kWh</Text>
-                <Text style={styles.text}><FontAwesome name="shower" size={moderateScale(16)} color="#0B5091" />: {item.item.water} gal</Text>
-                <Text style={styles.text}> <FontAwesome name="fire" size={moderateScale(16)} color="#0B5091" />: {item.item.heat} kBTU</Text>
+                <Text style={styles.text}> <FontAwesome name="lightbulb-o" size={moderateScale(16)} color="#0B5091" />  {roundNumber(item.item.electricity)} kWh</Text>
+                <Text style={styles.text}><FontAwesome name="shower" size={moderateScale(16)} color="#0B5091" /> {roundNumber(item.item.water)} gal</Text>
+                <Text style={styles.text}> <FontAwesome name="fire" size={moderateScale(16)} color="#0B5091" /> {roundNumber(item.item.heat)} kBTU</Text>
             </View>
             <Button
                 rightIcon={{name: "angle-right", type: 'font-awesome', size: moderateScale(20)}}
                 fontSize={moderateScale(14)}
                 title='More Info'
-                style={{marginTop:'5%'}}
+                style={{marginTop:'10%'}}
                 backgroundColor='#0B5091'
                 onPress={() => this.props.navigation.navigate('BuildingCardView', {item:item.item})}/>
         </View>
@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
       marginLeft: 5,
       fontSize: moderateScale(16),
       color: 'darkslategrey',
+      paddingTop: '3%',
   },
   header: {
       fontSize: moderateScale(18),
@@ -222,6 +223,8 @@ const styles = StyleSheet.create({
   image: {
       alignItems:'center',
       width:75,
+      marginLeft: '1%',
+      marginRight: '1%'
   },
   outerView: {
       flex: 1,
