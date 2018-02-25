@@ -1627,227 +1627,6 @@ export function getConsumptionDataTableForBuilding(building, date) {
 
 
 
-
-    
-
-export function grabDataDEPRECATED(buildingName, date){
-
-    // TO DO: special cases for these buildings
-    // if (buildingName == "Cassat" || buildingName == "Memo" || buildingName == "Goodhue") {
-    //     switch (buildingName) {
-    //         case "Cassat":
-    //         case "Memo":
-    //         case "Goodhue":
-    //     }
-    // }
-    thisYear = date.getFullYear();
-    thisMonth = date.getMonth()+1;
-    thisDay = date.getDate();
-
-    var end = new Date(date);
-    end.setHours(0); // midnight earlier today
-    var start = new Date(end);
-
-    if (thisYear > 2017) {
-        start.setFullYear(2017);
-        end.setFullYear(2017);
-        // thisYear = 2017;
-    }
-
-    // start.setHours(0);
-    // var end = new Date(start);
-    // end.setDate(end.getDate()+1);
-
-    // end.setDate(date.getDate()+1);
-    // end.setHours(0); 
-
-    var numDaysAgo = 10;
-    start.setDate(start.getDate()-numDaysAgo);
-
-
-    startStamp = dateToTimestamp(start);
-    endStamp = dateToTimestamp(end);
-
-    // var buildingID = getBuildingIDs()[buildingName];
-    var buildingID = buildingIDs[buildingName];
-
-    var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
-    console.log(url);
-
-
-    fetch(url).then((response) => response.json()).then((responseJson) => {
-        var size = responseJson.length-1;
-
-
-        if (size <= 0) {
-            console.log("NO DATA: " + url);
-    //         // TO DO: fill in the table with NULL or 0 values rather than completely skipping them 
-        }
-
-        console.log(url);
-
-        var daySum = 0;
-        var weekSum = 0;
-        var monthSum = 0;
-        var yearSum = 0;
-
-        var hourCount = 0;
-        var dayCount = 0;
-        var weekCount = 0;
-        var monthCount = 0;
-        var yearCount = 0;
-
-        var dayUsage =   { "data": { "electricity":[], "water":[], "heat":[],},   "total":[],};
-        var monthUsage = { "data": { "electricity":[], "water":[], "heat":[],},   "total":[],};
-        var weekUsage =  { "data": { "electricity":[], "water":[], "heat":[],},   "total":[],};
-        var yearUsage =  { "data": { "electricity":[], "water":[], "heat":[],},   "total":[],};
-
-
-        // initialize 
-        var utility = "z";
-        // var prevDay = responseJson[size].pointtimestamp.substring(0,10);
-        // var prevDay = responseJson[size].pointtimestamp.substring(8,10);
-        var prevDay = responseJson[size].pointtimestamp;
-
-
-        switch (responseJson[size].units){
-            case "kWh":
-                prevUtility = "electricity";
-                break;
-            case "kBTU":
-                prevUtility = "heat";
-                break;
-            case "gal":
-                prevUtility = "water";
-                break;
-        }
-
-        // for (let i = 0 ; i < responseJson.length; i++) {
-        for (let i = size ; i > -1; i--) {
-
-            obj = responseJson[i];
-            // name = obj.name.substring(15,24)
-            val = obj.pointvalue;
-            units = obj.units;
-
-            // var dayStr = obj.pointtimestamp.substring(0,10);
-            // var dayStr = obj.pointtimestamp.substring(8,10);
-            var dayStr = obj.pointtimestamp;
-
-
-            switch (units) {
-                case "kWh":
-                    utility = "electricity";
-                    break;
-                case "kBTU":
-                    utility = "heat";
-                    break;
-                case "gal":
-                    utility = "water";
-                    break;
-            }
-
-            var utilityBorder = false;
-            // if (utility != prevUtility && prevUtility != null){
-            if (utility != prevUtility){
-                utilityBorder = true;
-                prevUtility = utility;
-                console.log("--UTILITY CHANGE--", dayStr);
-                prevDay = dayStr;
-                daySum = 0;
-                daySum+=val;
-            } 
-
-            hourCount++;
-
-            console.log(val,daySum,obj.pointtimestamp,hourCount, dayStr, prevDay);
-
- // TO DO: fix bleed-over BETWEEN utilities (e.g. border of heat and electricity -- elec is picking up heat data in the sum)
-            // if (dayStr != prevDay && utilityBorder == false){
-            if (dayStr.substring(0,10) != prevDay.substring(0,10)){
-                // console.log(prevDay, dayStr);
-
-                console.log("NEW DAY! Last day's sum: " + daySum);
-                weekSum+=daySum;
-
-                if (dayUsage["data"][utility].length < 7){
-                    // addition = {"x":obj.pointtimestamp,"y":daySum};
-                    addition = {"x":prevDay,"y":daySum};
-                    dayUsage["data"][utility].push(addition);
-                    console.log("x,y:", prevDay, daySum);
-                }
-                prevDay = dayStr;
-                dayCount++;
-                daySum = 0;
-                hourCount = 0;
-
-            }
-            // if (dayCount == 7) {
-            //     console.log("NEW WEEK");
-
-                
-            //     if (weekUsage["data"][utility].length < 4){
-            //         addition = {"x":obj.pointtimestamp,"y":daySum};
-            //         weekUsage["data"][utility].push(addition);
-            //     }
-            //     weekCount++;
-            //     weekSum = 0;
-            //     dayCount = 0;
-            // }
-
-            daySum += val;
-
-
-            // timestamp = obj.pointtimestamp;
-            // day = timestamp.substring(8,10);
-            // month = timestamp.substring(5,7);
-            // year = timestamp.substring(0,4);
-            // objDate = timestampToDate(timestamp);
-    
-
-        }
-
-        console.log("dayUsage:");
-        console.log(dayUsage);
-        console.log("weekUsage:");
-        console.log(weekUsage);
-        console.log("DONE");
-
-
-    })
-    .catch((error) => {
-        console.error(error);
-    });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export function grabData(buildingName, date){
     var end = new Date(date);
     end.setHours(0); // midnight earlier today
@@ -1931,9 +1710,7 @@ function sumHoursToDays(responseJson){
                 }
                 break;
         }
-
     }
-
 
     return { electricDictDay, heatDictDay, waterDictDay };
 }
@@ -2029,7 +1806,6 @@ function sumDaysToWeeks(daySums){
         }
     }
 
-
     return {electricDictWeek, heatDictWeek, waterDictWeek};
 }
 
@@ -2112,10 +1888,8 @@ function sumDaysToMonths(daySums){
         // sum vals from days WITHIN this month
         if (monthNum in waterDictMonth){
             waterDictMonth[monthNum] = waterDictMonth[monthNum] + val;
-            console.log(waterDictMonth[monthNum], '+', val, '=', waterDictMonth[monthNum] + val);
         } else {
             waterDictMonth[monthNum] = val;
-            console.log('\n start: ', val);
         }
 
         idx++; // next day
@@ -2201,10 +1975,8 @@ function sumMonthsToYears(monthSums){
         // sum vals from months WITHIN this year
         if (yearNum in waterDictYear){
             waterDictYear[yearNum] = waterDictYear[yearNum] + val;
-            console.log(waterDictYear[yearNum], '+', val, '=', waterDictYear[yearNum] + val);
         } else {
             waterDictYear[yearNum] = val;
-            console.log('\n start: ', val);
         }
 
         idx++; // next month
