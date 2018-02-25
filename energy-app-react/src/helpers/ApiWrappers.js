@@ -2049,93 +2049,77 @@ function sumDaysToMonths(daySums){
     heatArr = sortByKey(Object.keys(heatDictDay));
     waterArr = sortByKey(Object.keys(waterDictDay));
 
-
-
-    var monthsRecorded = 0;
     var idx = 0;
     var monthNum = electricArr[idx].substring(0,7); 
-    var prevMonthNum = monthNum;  
     var val = 0;
 
     while (true) {
 
         if (idx >= electricArr.length){
-            console.log('OOPS')
             // if we have fewer than 4 months of day data, break infinite loop:
             break;
         } else {
             monthNum = electricArr[idx].substring(0,7);
-            console.log('HERE!', monthNum);
             val = electricDictDay[electricArr[idx]];
         }
         
         // sum vals from days WITHIN this month
-        if (monthNum == prevMonthNum){
-            console.log('monthNum == prevMonthNum', monthNum);
-
-            if (monthNum in electricDictMonth){
-                electricDictMonth[monthNum] = electricDictMonth[monthNum] + val;
-            } else {
-                electricDictMonth[monthNum] = val;
-            }
-
+        if (monthNum in electricDictMonth){
+            electricDictMonth[monthNum] = electricDictMonth[monthNum] + val;
         } else {
-            console.log('monthNum != prevMonthNum', monthNum, prevMonthNum);
-            prevMonthNum = monthNum;   
-            monthsRecorded++;
+            electricDictMonth[monthNum] = val;
         }
+
         idx++; // next day
     }
 
+    idx = 0;
+    monthNum = heatArr[idx].substring(0,7); 
 
-    for (let month = 0; month < 4; month++) {
-        var monthLabel = heatArr[heatArr.length-1];
-        for (let day = 0; day < 30; day++){
-            var idx = month*30+day;
-            if (idx >= heatArr.length){
-                break;
-            }
+    while (true) {
 
-            if (day == 29){
-                monthLabel = heatArr[idx];
-            }
-
-            var heatKey = heatArr[idx];
-            var val = heatDictDay[heatKey];
-
-            if (monthLabel in heatDictMonth){
-                heatDictMonth[monthLabel] = heatDictMonth[monthLabel] + val;
-            } else {
-                heatDictMonth[monthLabel] = val;
-            }
-
+        if (idx >= heatArr.length){
+            // if we have fewer than 4 months of day data, break infinite loop:
+            break;
+        } else {
+            monthNum = heatArr[idx].substring(0,7);
+            val = heatDictDay[heatArr[idx]];
         }
+        
+        // sum vals from days WITHIN this month
+        if (monthNum in heatDictMonth){
+            heatDictMonth[monthNum] = heatDictMonth[monthNum] + val;
+        } else {
+            heatDictMonth[monthNum] = val;
+        }
+
+        idx++; // next day
     }
 
-    for (let month = 0; month < 4; month++) {
-        var monthLabel = waterArr[waterArr.length-1];
-        for (let day = 0; day < 30; day++){
-            var idx = month*30+day;
-            if (idx >= waterArr.length){
-                break;
-            }
+    idx = 0;
+    monthNum = waterArr[idx].substring(0,7); 
 
-            if (day == 29){
-                monthLabel = waterArr[idx];
-            }
+    while (true) {
 
-            var waterKey = waterArr[idx];
-            var val = waterDictDay[waterKey];
-
-            if (monthLabel in waterDictMonth){
-                waterDictMonth[monthLabel] = waterDictMonth[monthLabel] + val;
-            } else {
-                waterDictMonth[monthLabel] = val;
-            }
-
+        if (idx >= waterArr.length){
+            // if we have fewer than 4 months of day data, break infinite loop:
+            break;
+        } else {
+            monthNum = waterArr[idx].substring(0,7);
+            val = waterDictDay[waterArr[idx]];
         }
-    }
+        
+        // sum vals from days WITHIN this month
+        if (monthNum in waterDictMonth){
+            waterDictMonth[monthNum] = waterDictMonth[monthNum] + val;
+            console.log(waterDictMonth[monthNum], '+', val, '=', waterDictMonth[monthNum] + val);
+        } else {
+            waterDictMonth[monthNum] = val;
+            console.log('\n start: ', val);
+        }
 
+        idx++; // next day
+    }
 
     return {electricDictMonth, heatDictMonth, waterDictMonth};
 }
