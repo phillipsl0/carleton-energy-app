@@ -1751,35 +1751,70 @@ export function getFormattedData(buildingName, date, daysAgo){
             result["monthUsage"]["data"]["water"].push(objWater);
         }
 
-        // get an array of the most recent 1 item from yearSums
-        // data capacity is only ONE year at a time
-        var yearSumsElectric = sortByKey(Object.entries(yearSums["electricDictYear"]));
-        var yearSumsHeat = sortByKey(Object.entries(yearSums["heatDictYear"]));
-        var yearSumsWater = sortByKey(Object.entries(yearSums["waterDictYear"]));
-        for (let i = 0; i < 1; i++) {
-            var itemElectric = yearSumsElectric[i];
-            var objElectric = {"x":"0","y":0};
-            objElectric["x"] = itemElectric[0];
-            objElectric["y"] = itemElectric[1];
-            result["yearUsage"]["data"]["electricity"].push(objElectric);
+        // // get an array of the most recent 1 item from yearSums
+        // // data capacity is only ONE year at a time
+        // var yearSumsElectric = sortByKey(Object.entries(yearSums["electricDictYear"]));
+        // var yearSumsHeat = sortByKey(Object.entries(yearSums["heatDictYear"]));
+        // var yearSumsWater = sortByKey(Object.entries(yearSums["waterDictYear"]));
+        // for (let i = 0; i < 1; i++) {
+        //     var itemElectric = yearSumsElectric[i];
+        //     var objElectric = {"x":"0","y":0};
+        //     objElectric["x"] = itemElectric[0];
+        //     objElectric["y"] = itemElectric[1];
+        //     result["yearUsage"]["data"]["electricity"].push(objElectric);
 
-            var itemHeat = yearSumsHeat[i];
-            var objHeat = {"x":"0","y":0};
-            objHeat["x"] = itemHeat[0];
-            objHeat["y"] = itemHeat[1];
-            result["yearUsage"]["data"]["heat"].push(objHeat);
+        //     var itemHeat = yearSumsHeat[i];
+        //     var objHeat = {"x":"0","y":0};
+        //     objHeat["x"] = itemHeat[0];
+        //     objHeat["y"] = itemHeat[1];
+        //     result["yearUsage"]["data"]["heat"].push(objHeat);
 
-            var itemWater = yearSumsWater[i];
-            var objWater = {"x":"0","y":0};
-            objWater["x"] = itemWater[0];
-            objWater["y"] = itemWater[1];
-            result["yearUsage"]["data"]["water"].push(objWater);
-        }
+        //     var itemWater = yearSumsWater[i];
+        //     var objWater = {"x":"0","y":0};
+        //     objWater["x"] = itemWater[0];
+        //     objWater["y"] = itemWater[1];
+        //     result["yearUsage"]["data"]["water"].push(objWater);
+        // }
 
         // add extra year data (HARD-CODED for now)
         // TO-DO: don't rely on hard-coded data; make an API query for each year
-        
-        
+        var burtonYearlySums = {
+            "data":{
+                "electricity":[
+                    {"x":2018, "y":28670},
+                    {"x":2017, "y":170955},
+                    {"x":2016, "y":164863},
+                    {"x":2015, "y":169940},
+                    {"x":2014, "y":168883},
+                    {"x":2013, "y":150891},
+                ],
+                "heat":[
+                    {"x":2018, "y":982493},
+                    {"x":2017, "y":2489862},
+                    {"x":2016, "y":2481243},
+                    {"x":2015, "y":2431114},
+                    {"x":2014, "y":2650242},
+                    {"x":2013, "y":432652},
+                ],
+                "water":[
+                    {"x":2018, "y":440388},
+                    {"x":2017, "y":49336252},
+                    {"x":2016, "y":1936451},
+                    {"x":2015, "y":1827384},
+                    {"x":2014, "y":1460462},
+                    {"x":2013, "y":1026886},
+                ],
+            },
+            "total":[
+                {"x":2018, "y":1451551},
+                {"x":2017, "y":51997069},
+                {"x":2016, "y":4582557},
+                {"x":2015, "y":4428439},
+                {"x":2014, "y":4279588},
+                {"x":2013, "y":1610431},
+            ]
+        };
+        result["yearUsage"] = burtonYearlySums;
 
         console.log(result);
 
