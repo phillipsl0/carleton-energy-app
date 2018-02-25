@@ -43,14 +43,10 @@ class ComparisonPage extends Component {
         const buildingBheat = Math.round(getCurrentBuildingUtilityConsumption(this.props.navigation.state.params.building2,'Heat'));
 
         var electricGraphdata = doMath(buildingAelectric, buildingBelectric);
-        var waterGraphdata = doMath(buildingAelectric, buildingBelectric);
-        var heatGraphdata = doMath(buildingAelectric, buildingBelectric);
+        var waterGraphdata = doMath(buildingAwater, buildingBwater);
+        var heatGraphdata = doMath(buildingAheat, buildingBheat);
         return (
-            <View style={{
-                flex: 1,
-                flexDirection: 'column',
-                paddingTop: 20,
-            }}>
+            <View style={{flex: 1, flexDirection: 'column', paddingTop: 20,}}>
                 <View style={{flex: 1, flexDirection: 'row',}}>
                     <Card containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}>
                         <View style={{width: 120, height: 100, alignSelf: 'center'}}>
@@ -119,7 +115,6 @@ class ComparisonPage extends Component {
                 </View>
 
 
-
                 <View style={{width: 130, height: 225,}}>
                     <Text style={styles.h2text}> {this.props.navigation.state.params.building2} </Text>
                     <View style={{width: 110, height: 110, alignSelf: 'center', paddingBottom: 30, paddingTop: 10}}>
@@ -142,7 +137,6 @@ class ComparisonPage extends Component {
                     </View>
                 </View>
             </View>
-
         );
     }
 }
