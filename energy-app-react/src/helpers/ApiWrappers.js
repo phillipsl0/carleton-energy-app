@@ -2125,9 +2125,6 @@ function sumDaysToMonths(daySums){
 }
 
 function sumMonthsToYears(monthSums){
-    // Parses data from however many months you give it. 
-    // In reality will probably only 12 at a time since the API queries
-    //      max out at a year's worth of data.
 
     electricDictMonth = monthSums["electricDictMonth"];
     heatDictMonth = monthSums["heatDictMonth"];
@@ -2141,84 +2138,80 @@ function sumMonthsToYears(monthSums){
     heatArr = sortByKey(Object.keys(heatDictMonth));
     waterArr = sortByKey(Object.keys(waterDictMonth));
 
-    for (let year = 0; year < 5; year++) {
-        var yearLabel = electricArr[electricArr.length-1];
-        for (let month = 0; month < 12; month++){
-            var idx = year*12+month;
-            if (idx >= electricArr.length){
-                break;
-            }
+    var idx = 0;
+    var yearNum = electricArr[idx].substring(0,4); 
+    var val = 0;
 
-            if (month == 11){
-                yearLabel = electricArr[idx];
-            }
+    while (true) {
 
-            var electricKey = electricArr[idx];
-            var val = electricDictMonth[electricKey];
-
-
-            if (yearLabel in electricDictYear){
-                electricDictYear[yearLabel] = electricDictYear[yearLabel] + val;
-            } else {
-                electricDictYear[yearLabel] = val;
-            }
-
+        if (idx >= electricArr.length){
+            // if we have fewer than 4 years of month data, break infinite loop:
+            break;
+        } else {
+            yearNum = electricArr[idx].substring(0,4);
+            val = electricDictMonth[electricArr[idx]];
         }
+        
+        // sum vals from months WITHIN this year
+        if (yearNum in electricDictYear){
+            electricDictYear[yearNum] = electricDictYear[yearNum] + val;
+        } else {
+            electricDictYear[yearNum] = val;
+        }
+
+        idx++; // next month
     }
 
-    for (let year = 0; year < 5; year++) {
-        var yearLabel = heatArr[heatArr.length-1];
-        for (let month = 0; month < 12; month++){
-            var idx = year*12+month;
-            if (idx >= heatArr.length){
-                break;
-            }
+    idx = 0;
+    yearNum = heatArr[idx].substring(0,4); 
 
-            if (month == 11){
-                yearLabel = heatArr[idx];
-            }
+    while (true) {
 
-            var heatKey = heatArr[idx];
-            var val = heatDictMonth[heatKey];
-
-            if (yearLabel in heatDictYear){
-                heatDictYear[yearLabel] = heatDictYear[yearLabel] + val;
-            } else {
-                heatDictYear[yearLabel] = val;
-            }
-
+        if (idx >= heatArr.length){
+            // if we have fewer than 4 years of month data, break infinite loop:
+            break;
+        } else {
+            yearNum = heatArr[idx].substring(0,4);
+            val = heatDictMonth[heatArr[idx]];
         }
+        
+        // sum vals from months WITHIN this year
+        if (yearNum in heatDictYear){
+            heatDictYear[yearNum] = heatDictYear[yearNum] + val;
+        } else {
+            heatDictYear[yearNum] = val;
+        }
+
+        idx++; // next month
     }
 
-    for (let year = 0; year < 5; year++) {
-        var yearLabel = waterArr[waterArr.length-1];
-        for (let month = 0; month < 12; month++){
-            var idx = year*12+month;
-            if (idx >= waterArr.length){
-                break;
-            }
+    idx = 0;
+    yearNum = waterArr[idx].substring(0,4); 
 
-            if (month == 11){
-                yearLabel = waterArr[idx];
-            }
+    while (true) {
 
-            var waterKey = waterArr[idx];
-            var val = waterDictMonth[waterKey];
-
-            if (yearLabel in waterDictYear){
-                waterDictYear[yearLabel] = waterDictYear[yearLabel] + val;
-            } else {
-                waterDictYear[yearLabel] = val;
-            }
-
+        if (idx >= waterArr.length){
+            // if we have fewer than 4 years of month data, break infinite loop:
+            break;
+        } else {
+            yearNum = waterArr[idx].substring(0,4);
+            val = waterDictMonth[waterArr[idx]];
         }
-    }
+        
+        // sum vals from months WITHIN this year
+        if (yearNum in waterDictYear){
+            waterDictYear[yearNum] = waterDictYear[yearNum] + val;
+            console.log(waterDictYear[yearNum], '+', val, '=', waterDictYear[yearNum] + val);
+        } else {
+            waterDictYear[yearNum] = val;
+            console.log('\n start: ', val);
+        }
 
+        idx++; // next month
+    }
 
     return {electricDictYear, heatDictYear, waterDictYear};
 }
-
-
 
 
 
