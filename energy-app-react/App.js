@@ -170,7 +170,7 @@ const appReducer = combineReducers({
     data: dataReducer,
     api: apiReducer,
     ui: layoutReducer,
-    buildings: buildingDataReducer
+    buildings: buildingDataReducer /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 });
 
@@ -278,7 +278,7 @@ class App extends Component {
 
 
   render() {
-    const { dispatch, nav, data, ui, api } = this.props;
+    const { dispatch, nav, data, ui, api, buildings } = this.props;
 //    console.log(turbine.loading);
 
     const navigation = addNavigationHelpers({
@@ -298,9 +298,10 @@ class App extends Component {
          case 3: StatusBar.setBackgroundColor(tabStyle.tabStatusColors.tab3, true); break;
       }
     }
-    console.log(api);
+    // console.log("API~",api);
+    // console.log("buildings~",buildings.loading);
 
-    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || api.loading) {
+    if (!this.state.isReady || !this.state.hasCheckedAsyncStorage || api.loading || buildings.loading) {
       return(
         <AppLoading
             startAsync={this._cacheResourcesAsync}

@@ -1,7 +1,7 @@
 import { Platform, Dimensions } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
-import { getAllHistoricalGraphData, getAllCurrentGraphData, dateToTimestamp, cleanupData, getAllHistoricalBuildingGraphData, getAllCurrentBuildingGraphData } from './ApiWrappers';
+import { getAllHistoricalGraphData, getAllCurrentGraphData, dateToTimestamp, cleanupData, getAllHistoricalBuildingGraphData, getAllCurrentBuildingGraphData, formatResponse } from './ApiWrappers';
 import { calculateRatio } from './General';
 
 /* Redux handles state for the app, including navigation
@@ -11,25 +11,82 @@ import { calculateRatio } from './General';
 
 /* When adding new redux calls that you want to happen at start up, call them in this handler
  * but define them in their own reducer (see below) */
+
+// async getBuildingData(){
+//     let result = await getFormattedData("Burton", currDate, daysAgo);
+//     return result;
+// }
+
 export const handler = store => next => action => {
     next(action);
 
     switch (action.type) {
         case 'GET_BUILDING_GRAPH_DATA':
             store.dispatch({type: 'GET_BUILDING_GRAPH_DATA_LOADING'});
-            try {
-                var historicalBuildingData = getAllHistoricalBuildingGraphData();
+            // try {
+
+
+                var date = new Date();
+                var daysAgo = 128; // just over 4 months
+                // // var historicalBuildingData = getBuildingData();
+                // var historicalBuildingData = getFormattedData("Burton", currDate, daysAgo);
+                // console.log("HERE~~~ ", historicalBuildingData);
+
+                var historicalBuildingData = {};
+                // var buildings = getBuildingsList();
+
+                var end = new Date(date);
+                end.setHours(0); // midnight earlier today
+                var start = new Date(end);
+
+                if (date.getFullYear() > 2017) {
+                    start.setFullYear(2017);
+                    end.setFullYear(2017);
+                }
+
+                start.setDate(start.getDate()-daysAgo);
+
+                startStamp = dateToTimestamp(start);
+                endStamp = dateToTimestamp(end);
+
+                // var buildingID = buildingIDs[buildingName];
+                var buildingID = 23;
+
+                var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+                console.log(url);
+
                 var currentBuildingData = getAllCurrentBuildingGraphData();
-                store.dispatch({
-                    type: 'GET_BUILDING_GRAPH_DATA_RECEIVED',
-                    historicalBuildingData,
-                    currentBuildingData
-                });
-            } catch (error) {
-                next({
+
+                fetch(url)
+                    .then((response) => response.json())
+                    .then((responseJson) => { 
+                        responseJson = formatResponse(responseJson);
+                        return responseJson;
+                })
+                .then(historicalBuildingData => next({
+
+                        type: 'GET_BUILDING_GRAPH_DATA_RECEIVED',
+                        historicalBuildingData,
+                        currentBuildingData
+                    
+                }))
+                .catch(error => next({
                     type: 'GET_BUILDING_GRAPH_DATA_ERROR',
-                });
-            }
+                    error
+                }))
+
+
+
+            //     store.dispatch({
+            //         type: 'GET_BUILDING_GRAPH_DATA_RECEIVED',
+            //         historicalBuildingData,
+            //         currentBuildingData
+            //     });
+            // } catch (error) {
+            //     next({
+            //         type: 'GET_BUILDING_GRAPH_DATA_ERROR',
+            //     });
+            // }
 
             break;
         case 'GET_GRAPH_DATA':
@@ -141,7 +198,7 @@ export const apiReducer = (state = { turbineData: [], solarData: [], loading: tr
                     loading: true,
                 };
             case 'GET_SOLAR_DATA_RECEIVED':
-                console.log(action.solarData);
+                // console.log(action.solarData);
                 return {
                     loading: false,
                     solarData: action.solarData,

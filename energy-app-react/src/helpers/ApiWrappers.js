@@ -1169,6 +1169,42 @@ export function getAllHistoricalGraphData() {
     return historicalData;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 Get data in dictionary format of historical building energy usage
 Format: { [Building] > [time Usage] > {data, total} > [utility]
@@ -1178,22 +1214,27 @@ export function getAllHistoricalBuildingGraphData() {
     var currDate = new Date();
     var buildings = getBuildingsList();
     var utilities = ['electricity', 'water', 'gas', 'heat'];
+    var daysAgo = 128; // just over 4 months    
+
+    var realData = getFormattedData("Burton", currDate, daysAgo);
 
     for (var i = 0; i < buildings.length; i++) {
         var building = buildings[i];
-        historicalBuildingData[building] = {};
+        historicalBuildingData[building] = realData;
+        // historicalBuildingData[building] = {};
 
-        dayUsageData = getDayBuildingGraph(currDate, building);
-        weekUsageData = getWeekBuildingGraph(currDate, building);
-        monthUsageData = getMonthBuildingGraph(currDate, building);
-        yearUsageData = getYearBuildingGraph(currDate, building);
+        // dayUsageData = getDayBuildingGraph(currDate, building);
+        // weekUsageData = getWeekBuildingGraph(currDate, building);
+        // monthUsageData = getMonthBuildingGraph(currDate, building);
+        // yearUsageData = getYearBuildingGraph(currDate, building);
 
-        historicalBuildingData[building]["dayUsage"] = dayUsageData;
-        historicalBuildingData[building]["weekUsage"] = weekUsageData;
-        historicalBuildingData[building]["monthUsage"] = monthUsageData;
-        historicalBuildingData[building]["yearUsage"] = yearUsageData;
+        // historicalBuildingData[building]["dayUsage"] = dayUsageData;
+        // historicalBuildingData[building]["weekUsage"] = weekUsageData;
+        // historicalBuildingData[building]["monthUsage"] = monthUsageData;
+        // historicalBuildingData[building]["yearUsage"] = yearUsageData;
 
     }
+    console.log("historicalBuildingData ", historicalBuildingData);
     return historicalBuildingData;
 }
 
@@ -1395,10 +1436,10 @@ export function getConsumptionDataTableForBuilding(building, date) {
         endStamp = dateToTimestamp(end);
         var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
     
-        console.log(url);
+        // console.log(url);
         fetch(url).then((response) => response.json()).then((responseJson) => {
 
-            console.log(responseJson.length);
+            // console.log(responseJson.length);
 
             if (responseJson.length == 0) {
                 console.log("NO DATA: " + url);
@@ -1627,38 +1668,48 @@ export function getConsumptionDataTableForBuilding(building, date) {
 
 
 
-export function getFormattedData(buildingName, date, daysAgo){
-    var end = new Date(date);
-    end.setHours(0); // midnight earlier today
-    var start = new Date(end);
-
-    if (date.getFullYear() > 2017) {
-        start.setFullYear(2017);
-        end.setFullYear(2017);
-    }
-
-    var numDaysAgo = daysAgo;
-    start.setDate(start.getDate()-numDaysAgo);
-
-    startStamp = dateToTimestamp(start);
-    endStamp = dateToTimestamp(end);
-
-    var buildingID = buildingIDs[buildingName];
-
-    var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
-    console.log(url);
 
 
-    fetch(url).then((response) => response.json()).then((responseJson) => {
+
+// export function getFormattedData(buildingName, date, daysAgo){
+    // var historicalBuildingData = {};
+    // var buildings = getBuildingsList();
+
+    // var end = new Date(date);
+    // end.setHours(0); // midnight earlier today
+    // var start = new Date(end);
+
+    // if (date.getFullYear() > 2017) {
+    //     start.setFullYear(2017);
+    //     end.setFullYear(2017);
+    // }
+
+    // var numDaysAgo = daysAgo;
+    // start.setDate(start.getDate()-numDaysAgo);
+
+    // startStamp = dateToTimestamp(start);
+    // endStamp = dateToTimestamp(end);
+
+    // var buildingID = buildingIDs[buildingName];
+
+    // var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+startStamp+'/'+endStamp;
+    // console.log(url);
+
+
+    // fetch(url).then((response) => response.json()).then(formatResponse(responseJson)).catch((error) => {
+    //     console.error(error);
+    // });
+
+
+
+export function formatResponse(responseJson){
+        var historicalBuildingData = {};
+        var buildings = getBuildingsList();
+        // console.log(responseJson);
         var daySums = sumHoursToDays(responseJson);
         var weekSums = sumDaysToWeeks(daySums);
         var monthSums = sumDaysToMonths(daySums);
         var yearSums = sumMonthsToYears(monthSums);
-
-        console.log(daySums);
-        console.log(weekSums);
-        console.log(monthSums);
-        console.log(yearSums);
 
         var result = { 
             "dayUsage":{ 
@@ -1810,14 +1861,19 @@ export function getFormattedData(buildingName, date, daysAgo){
         };
         result["yearUsage"] = burtonYearlySums;
 
-        console.log(result);
+        // console.log(result);
 
-    })
-    .catch((error) => {
-        console.error(error);
-    });
+        for (var i = 0; i < buildings.length; i++) {
+            var building = buildings[i];
+            historicalBuildingData[building] = result;
+        }
 
-}
+        // console.log("~~ historicalBuildingData: ", historicalBuildingData);
+        console.log(historicalBuildingData["Burton"]);
+        return historicalBuildingData;
+
+    }
+    
 
 function sumHoursToDays(responseJson){
 
