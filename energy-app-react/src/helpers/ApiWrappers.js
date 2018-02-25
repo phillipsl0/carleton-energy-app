@@ -1627,7 +1627,7 @@ export function getConsumptionDataTableForBuilding(building, date) {
 
 
 
-export function getFormattedData(buildingName, date){
+export function getFormattedData(buildingName, date, daysAgo){
     var end = new Date(date);
     end.setHours(0); // midnight earlier today
     var start = new Date(end);
@@ -1637,7 +1637,7 @@ export function getFormattedData(buildingName, date){
         end.setFullYear(2017);
     }
 
-    var numDaysAgo = 280;
+    var numDaysAgo = daysAgo;
     start.setDate(start.getDate()-numDaysAgo);
 
     startStamp = dateToTimestamp(start);
@@ -1679,7 +1679,7 @@ export function getFormattedData(buildingName, date){
             } 
         };
         
-        // get an array of the most recent 7 items from daySums[electricDictDay]
+        // get an array of the most recent 7 items from daySums
         var daySumsElectric = sortByKey(Object.entries(daySums["electricDictDay"]));
         var daySumsHeat = sortByKey(Object.entries(daySums["heatDictDay"]));
         var daySumsWater = sortByKey(Object.entries(daySums["waterDictDay"]));
@@ -1701,8 +1701,30 @@ export function getFormattedData(buildingName, date){
             objWater["x"] = itemWater[0];
             objWater["y"] = itemWater[1];
             result["dayUsage"]["data"]["water"].push(objWater);
+        }
 
+        // get an array of the most recent 4 items from weekSums
+        var weekSumsElectric = sortByKey(Object.entries(weekSums["electricDictWeek"]));
+        var weekSumsHeat = sortByKey(Object.entries(weekSums["heatDictWeek"]));
+        var weekSumsWater = sortByKey(Object.entries(weekSums["waterDictWeek"]));
+        for (let i = 0; i < 4; i++) {
+            var itemElectric = weekSumsElectric[i];
+            var objElectric = {"x":"0","y":0};
+            objElectric["x"] = itemElectric[0];
+            objElectric["y"] = itemElectric[1];
+            result["weekUsage"]["data"]["electricity"].push(objElectric);
 
+            var itemHeat = weekSumsHeat[i];
+            var objHeat = {"x":"0","y":0};
+            objHeat["x"] = itemHeat[0];
+            objHeat["y"] = itemHeat[1];
+            result["weekUsage"]["data"]["heat"].push(objHeat);
+
+            var itemWater = weekSumsWater[i];
+            var objWater = {"x":"0","y":0};
+            objWater["x"] = itemWater[0];
+            objWater["y"] = itemWater[1];
+            result["weekUsage"]["data"]["water"].push(objWater);
         }
 
         
@@ -1783,8 +1805,8 @@ function sumDaysToWeeks(daySums){
     heatArr = sortByKey(Object.keys(heatDictDay));
     waterArr = sortByKey(Object.keys(waterDictDay));
 
+    var weekLabel = electricArr[electricArr.length-1];
     for (let week = 0; week < 4; week++) {
-        var weekLabel = electricArr[electricArr.length-1];
         for (let day = 0; day < 7; day++){
             var idx = week*7+day;
             if (idx >= electricArr.length){
@@ -1798,7 +1820,6 @@ function sumDaysToWeeks(daySums){
             var electricKey = electricArr[idx];
             var val = electricDictDay[electricKey];
 
-
             if (weekLabel in electricDictWeek){
                 electricDictWeek[weekLabel] = electricDictWeek[weekLabel] + val;
             } else {
@@ -1808,8 +1829,8 @@ function sumDaysToWeeks(daySums){
         }
     }
 
+    var weekLabel = heatArr[heatArr.length-1];
     for (let week = 0; week < 4; week++) {
-        var weekLabel = heatArr[heatArr.length-1];
         for (let day = 0; day < 7; day++){
             var idx = week*7+day;
             if (idx >= heatArr.length){
@@ -1832,8 +1853,8 @@ function sumDaysToWeeks(daySums){
         }
     }
 
+    var weekLabel = waterArr[waterArr.length-1];
     for (let week = 0; week < 4; week++) {
-        var weekLabel = waterArr[waterArr.length-1];
         for (let day = 0; day < 7; day++){
             var idx = week*7+day;
             if (idx >= waterArr.length){
