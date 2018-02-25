@@ -71,7 +71,10 @@ class ComparisonPage extends Component {
                 </View>
 
                 <View>
-                    <Card title="Electricity" containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
+                    <Card 
+                        title="Electricity"
+                        titleStyle={styles.title}
+                        containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
                             <View><Text style={styles.text}>{buildingAelectric} kWh</Text></View>
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 30,}}>
@@ -82,7 +85,7 @@ class ComparisonPage extends Component {
                         </View>
                     </Card>
 
-                    <Card title="Water" containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
+                    <Card title="Water" titleStyle={styles.title} containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
                             <View><Text style={styles.text}>{buildingAwater} gal</Text></View>
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 30,}}>
@@ -93,7 +96,7 @@ class ComparisonPage extends Component {
                         </View>
                     </Card>
 
-                    <Card title="Heat" containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
+                    <Card title="Heat" titleStyle={styles.title} containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
                             <View><Text style={styles.text}>{buildingAheat} kBTUs</Text></View>
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 30,}}>
@@ -155,6 +158,9 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingBottom: 10,
         // fontWeight: 'bold',
+    },
+    title: {
+        marginBottom: 2,
     },
     listImg: {
         height: 147,
