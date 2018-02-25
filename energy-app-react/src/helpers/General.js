@@ -26,7 +26,7 @@ export const getUnits = (utility) => {
       units = "kWh"
     } else if (utility == 'water') {
       units = "gal"
-    } else if (utility == 'gas') {
+    } else if (utility == 'heat') {
       units = "kBTU"
     } else if (utility == 'total') { 
       units = "BTUs"

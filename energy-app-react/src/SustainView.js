@@ -215,7 +215,7 @@ const navigateOnce = (getStateForAction) => (action, state) => {
 const SustainStack = StackNavigator({
     Sustain: {
         screen: SustainListView,
-        navigationOptions: ({ navigation }) => ({
+        navigationOptions: () => ({
             title: 'Learn More',
             ...Platform.select({
                 android: { header: null }
