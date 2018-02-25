@@ -13,8 +13,6 @@ import Graph from './../visualizations/Graph';
 import { default as CustomThemes } from './../visualizations/GraphThemes';
 
 function doMath(building1value, building2value) {
-    console.log((building1value/(building1value + building2value)))
-
     var utilityPercentA = (building1value/(building1value + building2value))*100 + '%';
     var utilityPercentB = (building2value/(building1value + building2value))*100 + '%';
     value = new Array(2);
@@ -48,37 +46,32 @@ class ComparisonPage extends Component {
         var waterGraphdata = doMath(buildingAwater, buildingBwater);
         var heatGraphdata = doMath(buildingAheat, buildingBheat);
 
-        console.log(electricGraphdata)
-        console.log(buildingAelectric, buildingBelectric)
         return (
-            <ScrollView style={{flex: 1, flexDirection: 'column', paddingTop: 20,}}>
-                <View style={{flex: 0, flexDirection: 'row',}}>
+            <ScrollView style={{backgroundColor: '#fafafa'}}>
+                <View style={{paddingTop:10}} />
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingLeft: 7, paddingRight: 7}}>
                     <View>
-                    <Card containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}>
-                        <View //style={{width: 120, height: 100, alignSelf: 'center'}}
-                        >
-                            <Image style={styles.listImg} //resizeMode="cover"
-                                   source={{ uri: getAvatar(this.props.navigation.state.params.building1)}} />
-                        </View>
-                    </Card>
-                        <Text style={styles.h1text}> {this.props.navigation.state.params.building1} </Text>
+                        <Card containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
+                            <View>
+                                <Image style={styles.listImg} //resizeMode="cover"
+                                       source={{ uri: getAvatar(this.props.navigation.state.params.building1)}} />
+                                <Text style={styles.h1text}>{this.props.navigation.state.params.building1}</Text>
+                            </View>
+                        </Card>
                     </View>
                     <View>
-                    <Card containerStyle={[styles.card, themeStyles.card, themeStyles.flex]}>
-                        <View //style={{width: 120, height: 100, alignSelf: 'center'}}
-                        >
-                            <Image style={styles.listImg} //resizeMode="cover"
-                                   source={{ uri: getAvatar(this.props.navigation.state.params.building2)}} />
-                        </View>
-                    </Card>
-                        <Text style={styles.h2text}> {this.props.navigation.state.params.building2} </Text>
+                        <Card containerStyle={[themeStyles.card, themeStyles.flex, styles.card]}>
+                            <View>
+                                <Image style={styles.listImg} //resizeMode="cover"
+                                       source={{ uri: getAvatar(this.props.navigation.state.params.building2)}} />
+                                <Text style={styles.h2text}>{this.props.navigation.state.params.building2}</Text>
+                            </View>
+                        </Card>
                     </View>
                 </View>
 
-
-                <View //style={{flex: 2, flexDirection: 'column',}}
-                >
-                    <Card title="Electricity">
+                <View>
+                    <Card title="Electricity" containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
                             <View><Text style={styles.text}>{buildingAelectric} kWh</Text></View>
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 30,}}>
@@ -89,7 +82,7 @@ class ComparisonPage extends Component {
                         </View>
                     </Card>
 
-                    <Card title="Water">
+                    <Card title="Water" containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
                             <View><Text style={styles.text}>{buildingAwater} gal</Text></View>
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 30,}}>
@@ -100,7 +93,7 @@ class ComparisonPage extends Component {
                         </View>
                     </Card>
 
-                    <Card title="Heat">
+                    <Card title="Heat" containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
                             <View><Text style={styles.text}>{buildingAheat} kBTUs</Text></View>
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 30,}}>
@@ -112,6 +105,7 @@ class ComparisonPage extends Component {
                     </Card>
 
                 </View>
+                <View style={{paddingTop:10}} />
             </ScrollView>
         );
     }
@@ -127,23 +121,9 @@ const navStyles = StyleSheet.create({
 const styles = StyleSheet.create({
     card: {
         paddingTop: 5,
-    },
-    cards: {
-        alignSelf: 'center',
-        width: 100,
-        height: 120,
-    },
-    bigyellow: {
-        color: 'green',
-        fontWeight: 'bold',
-        fontSize: 30
-    },
-    blue: {
-        color: 'blue',
-        fontWeight: 'bold',
-    },
-    head: {
-        backgroundColor: 'grey',
+        paddingBottom: 5,
+        paddingLeft: 5,
+        paddingRight: 5,
     },
     button: {
         paddingTop: 20,
@@ -151,24 +131,19 @@ const styles = StyleSheet.create({
         paddingRight: 30,
         paddingBottom: 200,
     },
-    table: {
-        width: 250,
-        marginLeft: 5,
-
-    },
     h1text: {
         alignSelf: 'center',
-        marginLeft: 5,
+        // marginLeft: 5,
         fontSize: 24,
-        paddingBottom: 10,
+        // paddingBottom: 10,
         fontWeight: 'bold',
         color: '#447BB0',
     },
     h2text: {
         alignSelf: 'center',
-        marginLeft: 5,
+        // marginLeft: 5,
         fontSize: 24,
-        paddingBottom: 10,
+        // paddingBottom: 10,
         fontWeight: 'bold',
         color: '#0B5091',
     },
@@ -181,23 +156,10 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         // fontWeight: 'bold',
     },
-
     listImg: {
         height: 147,
         width: 149,
         alignSelf: 'center',
-    },
-    listText: {
-        paddingLeft: 30,
-        marginLeft: 30,
-        fontSize: 24,
-    },
-    row: {
-        backgroundColor: 'orange',
-    },
-    view: {
-        alignItems: 'center',
-        backgroundColor: 'yellow'
     },
     img: {
         alignSelf: 'center',
@@ -205,44 +167,6 @@ const styles = StyleSheet.create({
         width: 30,
     },
 });
-
-// <View style={{
-//        flex: 0,
-//        flexDirection: 'column',
-//        paddingTop: 25,
-//      }}>
-//        <View style={{width: 100, height: 110, alignSelf: 'center'}}>
-//        <Graph
-
-//            type= 'pie'
-//            theme={CustomThemes.carleton}
-//            graphData={getCurrentBuildingUtilityConsumptionGraphFormat(this.props.navigation.state.params.building1, this.props.navigation.state.params.building2, 'Electric')}
-//            height={95}
-//            width={100}
-//            innerRadius={10}
-//            legend={false} />
-//        </View>
-//        <View style={{width: 100, height: 110, alignSelf: 'center'}}>
-//       <Graph
-//          type= 'pie'
-//          theme={CustomThemes.carleton}
-//          graphData={getCurrentBuildingUtilityConsumptionGraphFormat(this.props.navigation.state.params.building1, this.props.navigation.state.params.building2, 'Water')}
-//          height={95}
-//          width={100}
-//          innerRadius={10}
-//          legend={false} />
-//        </View>
-//        <View style={{width: 100, height: 110, alignSelf: 'center', paddingBottom: 10}}>
-//      <Graph
-//        type= 'pie'
-//        theme={CustomThemes.carleton}
-//        graphData={getCurrentBuildingUtilityConsumptionGraphFormat(this.props.navigation.state.params.building1, this.props.navigation.state.params.building2, 'Gas')}
-//        height={95}
-//        width={100}
-//        innerRadius={10}
-//        legend={false} />
-//      </View>
-//        </View>
 
 
 export default ComparisonPage;
