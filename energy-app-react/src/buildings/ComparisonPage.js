@@ -13,12 +13,14 @@ import Graph from './../visualizations/Graph';
 import { default as CustomThemes } from './../visualizations/GraphThemes';
 
 function doMath(building1value, building2value) {
-    var utilityPercentA = toString(building1value/(building1value + building2value)) + '%';
-    var utilityPercentB = toString(building1value/(building1value + building2value)) + '%';
+    console.log((building1value/(building1value + building2value)))
+
+    var utilityPercentA = (building1value/(building1value + building2value))*100 + '%';
+    var utilityPercentB = (building2value/(building1value + building2value))*100 + '%';
     value = new Array(2);
     value[0] = utilityPercentA;
     value[1] = utilityPercentB;
-    return value
+    return value;
 }
 
 class ComparisonPage extends Component {
@@ -45,6 +47,9 @@ class ComparisonPage extends Component {
         var electricGraphdata = doMath(buildingAelectric, buildingBelectric);
         var waterGraphdata = doMath(buildingAwater, buildingBwater);
         var heatGraphdata = doMath(buildingAheat, buildingBheat);
+
+        console.log(electricGraphdata)
+        console.log(buildingAelectric, buildingBelectric)
         return (
             <ScrollView style={{flex: 1, flexDirection: 'column', paddingTop: 20,}}>
                 <View style={{flex: 0, flexDirection: 'row',}}>
@@ -69,137 +74,44 @@ class ComparisonPage extends Component {
                         <Text style={styles.h2text}> {this.props.navigation.state.params.building2} </Text>
                     </View>
                 </View>
-                <View style={{flex: 2, flexDirection: 'row', justifyContent: 'space-around',}}
-                >
-                </View>
-
-
 
 
                 <View //style={{flex: 2, flexDirection: 'column',}}
                 >
                     <Card title="Electricity">
-                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around',}}>
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
                             <View><Text style={styles.text}>{buildingAelectric} kWh</Text></View>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 20, width: 100,}}>
-                                <View style={{width:'40%', backgroundColor: '#447BB0',}} />
-                                <View style={{width:'60%', backgroundColor: '#0B5091',}} />
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 30,}}>
+                                <View style={{width: electricGraphdata[0], backgroundColor: '#447BB0',}} />
+                                <View style={{width: electricGraphdata[1], backgroundColor: '#0B5091',}} />
                             </View>
                             <View><Text style={styles.text}> {buildingBelectric} kWh</Text></View>
                         </View>
                     </Card>
-                    <Card>
-                        <View>
-                            <Text style={styles.text}> Water: </Text>
-                            <Text style={styles.text}> {buildingAwater} gal</Text>
-                        </View>
-                        <View style={{flex: 1, flexDirection: 'row', height: 50, width: 200,}}>
-                            <View style={{height: 50, width:20, backgroundColor: 'blue'}} >
-                                <Text></Text>
+
+                    <Card title="Water">
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
+                            <View><Text style={styles.text}>{buildingAwater} gal</Text></View>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 30,}}>
+                                <View style={{width: waterGraphdata[0], backgroundColor: '#447BB0',}} />
+                                <View style={{width: waterGraphdata[1], backgroundColor: '#0B5091',}} />
                             </View>
-                            <View style={{height: 50, width:50, backgroundColor: '#0B5091',}} >
-                                <Text></Text>
-                            </View>
-                        </View>
-                        <View>
-                            <Text style={styles.text}> Water: </Text>
-                            <Text style={styles.text}> {buildingBwater} gal</Text>
-                        </View>
-                    </Card>
-                    <Card>
-                        <View>
-                            <Text style={styles.text}> Gas: </Text>
-                            <Text style={styles.text}> {buildingAheat} kBTU</Text>
-                        </View>
-                        <View>
-                            <View style={{height: 50, width:20, backgroundColor: 'blue'}} >
-                                <Text> </Text>
-                            </View>
-                            <View style={{height: 50, width:50, backgroundColor: 'yellow'}} >
-                                <Text> </Text>
-                            </View>
-                        </View>
-                        <View>
-                            <Text style={styles.text}> Gas: </Text>
-                            <Text style={styles.text}> {buildingBheat} kBTU</Text>
+                            <View><Text style={styles.text}> {buildingBwater} gal</Text></View>
                         </View>
                     </Card>
 
+                    <Card title="Heat">
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
+                            <View><Text style={styles.text}>{buildingAheat} kBTUs</Text></View>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 30,}}>
+                                <View style={{width: heatGraphdata[0], backgroundColor: '#447BB0',}} />
+                                <View style={{width: heatGraphdata[1], backgroundColor: '#0B5091',}} />
+                            </View>
+                            <View><Text style={styles.text}> {buildingBheat} kBTUs</Text></View>
+                        </View>
+                    </Card>
 
-
-
-                    {/*<View style={{width: 130, height: 225}}>
-                        <Text style={styles.h1text}> {this.props.navigation.state.params.building1} </Text>
-                        <View style={{width: 110, height: 110, alignSelf: 'center', paddingBottom: 30, paddingTop: 10}}>
-                            <Card containerStyle={[styles.cards, themeStyles.card, themeStyles.flex]}>
-                                <Text style={styles.text}> Electric: </Text>
-                                <Text style={styles.text}> {buildingAelectric} kWh</Text>
-                            </Card>
-                        </View>
-                        <View style={{width: 110, height: 110, alignSelf: 'center', paddingBottom: 30, paddingTop: 10}}>
-                            <Card containerStyle={[styles.cards, themeStyles.card, themeStyles.flex]}>
-                                <Text style={styles.text}> Water: </Text>
-                                <Text style={styles.text}> {buildingAwater} gal</Text>
-                            </Card>
-                        </View>
-                        <View style={{width: 110, height: 110, alignSelf: 'center', paddingBottom: 30, paddingTop: 10}}>
-                            <Card containerStyle={[styles.cards, themeStyles.card, themeStyles.flex]}>
-                                <Text style={styles.text}> Gas: </Text>
-                                <Text style={styles.text}> {buildingAheat} kBTU</Text>
-                            </Card>
-                        </View>
-                    </View>
-
-                    <View style={{flex: 1, flexDirection: 'row', height: 50, width: 200,}}>
-                        <View style={{height: 50, width:20, backgroundColor: 'blue'}} >
-                            <Text> </Text>
-                        </View>
-                        <View style={{height: 50, width:50, backgroundColor: 'yellow'}} >
-                            <Text> </Text>
-                        </View>
-                    </View>
-
-                    <View style={{flex: 1, flexDirection: 'row',}}>
-                        <View style={{height: 50, width:waterGraphdata[0], backgroundColor: 'blue'}} >
-                            <Text> </Text>
-                        </View>
-                        <View style={{height: 50, width:waterGraphdata[0], backgroundColor: 'yellow'}} >
-                            <Text> </Text>
-                        </View>
-                    </View>
-
-                    <View style={{flex: 1, flexDirection: 'row',}}>
-                        <View style={{height: 50, width:heatGraphdata[0], backgroundColor: 'blue'}} >
-                            <Text> </Text>
-                        </View>
-                        <View style={{height: 50, width:heatGraphdata[0], backgroundColor: 'yellow'}} >
-                            <Text> </Text>
-                        </View>
-                    </View>*/}
                 </View>
-
-
-                {/*<View style={{width: 130, height: 225,}}>
-                    <Text style={styles.h2text}> {this.props.navigation.state.params.building2} </Text>
-                    <View style={{width: 110, height: 110, alignSelf: 'center', paddingBottom: 30, paddingTop: 10}}>
-                        <Card containerStyle={[styles.cards, themeStyles.card, themeStyles.flex]}>
-                            <Text style={styles.text}> Electric: </Text>
-                            <Text style={styles.text}> {buildingBelectric} kWh</Text>
-                        </Card>
-                    </View>
-                    <View style={{width: 110, height: 110, alignSelf: 'center', paddingBottom: 30, paddingTop: 10}}>
-                        <Card containerStyle={[styles.cards, themeStyles.card, themeStyles.flex]}>
-                            <Text style={styles.text}> Water: </Text>
-                            <Text style={styles.text}> {buildingBwater} gal</Text>
-                        </Card>
-                    </View>
-                    <View style={{width: 110, height: 110, alignSelf: 'center', paddingBottom: 30, paddingTop: 10}}>
-                        <Card containerStyle={[styles.cards, themeStyles.card, themeStyles.flex]}>
-                            <Text style={styles.text}> Gas: </Text>
-                            <Text style={styles.text}> {buildingBheat} kBTU</Text>
-                        </Card>
-                    </View>
-                </View>*/}
             </ScrollView>
         );
     }
