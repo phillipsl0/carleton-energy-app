@@ -22,7 +22,7 @@ const theme = GetStyle(CurrTheme);
         windRatio: state.data.windRatio,
         loading: state.loading,
         turbine: state.api.turbine,
-        solar: state.api.solar
+        solar: state.api.solar,
         ui: state.ui,
     }),
 )
