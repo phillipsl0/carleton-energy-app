@@ -74,6 +74,7 @@ const navStyles = StyleSheet.create({
     },
     headerTitle: {
         fontFamily: theme.font,
+        fontWeight: 'normal'
     }
 })
 
