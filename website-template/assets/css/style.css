@@ -16,7 +16,7 @@ body {
     padding: 0;
     margin-left: 0;
     margin-right: 0;
-    font-family: 'robotolight';
+    font-family: 'Lato';
     font-weight: 300;
     width:100%;
 }
@@ -88,7 +88,7 @@ p {
 
 }
 a{
-    font-family: 'robotoregular';
+    font-family: 'Lato';
 }
 .clear {
     clear: both;
@@ -162,21 +162,21 @@ h2 {
     font-size:1.875rem;
     line-height: 3rem;
     text-transform: uppercase;
-    font-family: 'playfair_displayblack';
+    font-family: 'Lato';
 
 }
 h3 {
     font-size:1.375rem;
     line-height: 2.5rem;  
     text-transform: uppercase;
-    font-family: 'playfair_displaybold';
+    font-family: 'Lato';
 }
 h4 {
     font-size: 0.875rem;
     line-height: 2rem;
     margin-bottom: 1rem;
     text-transform: uppercase;
-    font-family: 'robotoblack';
+    font-family: 'Lato';
 }
 h5 {
     font-size: 1.125rem;
@@ -272,7 +272,7 @@ ul{
     margin-bottom: 4rem;
 }
 .overlay {
-    background-color: rgba(76, 61, 114, 0.5);
+    background-color: rgba(0, 39, 118, 0.25);
     width: 100%;
     height: 670px;
 }
@@ -372,7 +372,7 @@ Button
     background-color: transparent;
     transition: .5s;
     border: 1px solid #00e0d0;
-    font-family: 'hammersmith_oneregular';
+    font-family: 'Lato';
 
 }
 .btn:hover {
@@ -558,7 +558,7 @@ input::-ms-input-placeholder {
     text-transform: uppercase;
     font-size: 0.875rem;
     color: #fff;
-    font-family: 'robotoblack';
+    font-family: 'Lato';
 }
 .navbar-brand {
     padding: 0px 15px;
@@ -585,12 +585,13 @@ input::-ms-input-placeholder {
     color:#413d4b;
 }
 .head_title p{
-    font-family: 'playfair_displayregular';
+    font-family: 'Lato';
+    font-weight: bold;
 }
 
 /*home section*/
 .home{
-    background: url(../images/homebg.jpg) no-repeat 100% 100%;
+    background: url(../images/windmillHeader.png) no-repeat 100% 100%;
     background-size: cover;
 }
 
