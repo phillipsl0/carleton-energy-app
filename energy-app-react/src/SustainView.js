@@ -67,9 +67,9 @@ class SustainListView extends Component {
         let events = getSustainabilityEventsBak();
         let news = getSustainabilityNewsBak();
 
-        if (this.state.eventsData) {
-            events["events"] = this.state.eventsData;
-        }
+        // if (this.state.eventsData) {
+        //     events["events"] = this.state.eventsData;
+        // }
         if (this.state.newsData) {
             news["news"] = this.state.newsData;
         }
