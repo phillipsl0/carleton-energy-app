@@ -11,7 +11,7 @@ html,
 body {
     background-color: #fff;
     font-size: 0.875rem;
-    color: #797979;
+    color: #647C92;
     width: 100%;
     padding: 0;
     margin-left: 0;
@@ -277,12 +277,12 @@ ul{
     height: 670px;
 }
 .home-overlay {
-    background-color: rgba(237, 237, 237, 0.80);
+    background-color: rgba(11, 80, 145, 0.5);
     width: 100%;
     height:auto;
 }
 .video_overlay {
-    background-color: rgba(76, 61, 114, 0.8);
+    background-color: rgba(11, 80, 145, 0.5);
     width: 100%;
     height: auto;
 }
@@ -304,7 +304,7 @@ Separator
     height: 1px;
     width: 127px;
     margin: 20px auto;
-    background: #00e0d0;
+    background: #fff;
 }
 .whiseparator {
     height: 10px;
@@ -316,20 +316,20 @@ Separator
     height: 2px;
     width: 50px;
     margin:20px auto;
-    background: #c6c4c9;
+    background: #fff;
 
 }
 .separator3 {
     height: 2px;
     width: 30px;
     margin:20px auto;
-    background: #5e9a28;
+    background: #fff;
 }
 .separator4 {
     height: 2px;
     width: 30px;
     margin:20px 0px;
-    background: #f38181;
+    background: #fff;
 }
 /*section:nth-of-type(odd) {
     background-color: #F9F9F9;
@@ -363,7 +363,7 @@ Button
     padding: .8em;
     height: 45px;
     text-align: center;
-    color: #00e0d0;
+    color: #fff;
     letter-spacing: 1px;
     margin: 0;
     font-size: 20px;
@@ -371,15 +371,15 @@ Button
     margin-top: 20px;
     background-color: transparent;
     transition: .5s;
-    border: 1px solid #00e0d0;
+    border: 1px solid #fff;
     font-family: 'Lato';
 
 }
 .btn:hover {
-    background-color:#00e0d0;
-    color: #fff;
+    background-color:#C6DDF4;
+    color: #0B5091;
     text-decoration: none;
-    border: 1px solid #00e0d0;
+    border: 1px solid #0B5091;
 }
 
 .btn-primary {
@@ -540,14 +540,14 @@ input::-ms-input-placeholder {
     margin: 15px auto;
 }
 .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus{
-    color:#00e0d0;
+    color:#fff;
 }
 .main_menu_bg .navbar {}
 
 .main_menu_bg .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
-    color: #00e0d0;
+    color: #fff;
     padding-bottom: 22px;
-    border-bottom: 1px solid #00e0d0;
+    border-bottom: 1px solid #fff;
     background: transparent;
 
 }
@@ -628,7 +628,7 @@ input::-ms-input-placeholder {
 }
 
 .owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
-    background: #00e0d0;
+    background: #98BDE1;
 }
 .owl-theme .owl-dots .owl-dot span {
     -webkit-border-radius: 0px;
@@ -697,7 +697,7 @@ input::-ms-input-placeholder {
     margin-bottom: 25px;
 }
 .service .single_service .single_service_icon i{
-    color:#95e1d3;
+    color:#0B5091;
     font-size:2rem;
 }
 .service .single_service .single_service_content{
@@ -839,7 +839,7 @@ input::-ms-input-placeholder {
     color: #fff;
     transition: all 0.6s;
     opacity: 0;
-    background-color: rgba(76, 61, 114, 0.55)
+    background-color: rgba(11, 80, 145, 0.5);
 }
 .portfolio .grid_item_overlay p{
     color:#fff;
