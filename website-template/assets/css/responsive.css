@@ -7,15 +7,14 @@ Author URI: http://www.bootstrapthemes.co
 
 /* Portrait tablets and medium desktops */
 @media (max-width: 1199px) {
+    .home{
+        background: url(../images/windmillHeader@5x.png) no-repeat 100% 100%;
+        background-size: cover;
+    }
+
     body {
         font-size: 1rem;
     }
-
-
-
-
-
-
 
 }
 
@@ -23,6 +22,11 @@ Author URI: http://www.bootstrapthemes.co
 @media (max-width: 991px) {
     html {
         font-size: 90%;
+    }
+
+    .home{
+        background: url(../images/longHeader@3x.png) no-repeat 100% 100%;
+        background-size: cover;
     }
 
     h3 {
@@ -56,10 +60,15 @@ Author URI: http://www.bootstrapthemes.co
     html {
         font-size: 80%;
     }
+    .home{
+        background: url(../images/longHeader@3x.png) no-repeat 100% 100%;
+        background-size: cover;
+    }
     .navbar-default .navbar-collapse, .navbar-default .navbar-form {
         border-color: transparent;
-        background-color: rgba(67, 52, 108, 0.5);
+        background-color: rgba(11, 80, 145, 0.5);
         text-align: center;
+        padding-right: 5%;
     }
     .main_menu_bg .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
         border-bottom: 0px solid;
@@ -109,6 +118,10 @@ Author URI: http://www.bootstrapthemes.co
     html {
         font-size: 65%;
     }
+    .home{
+        background: url(../images/longHeader@2x.png) no-repeat 100% 100%;
+        background-size: cover;
+    }
     #quote-carousel .carousel-control.left {
         display: none;
     }
@@ -132,8 +145,10 @@ Author URI: http://www.bootstrapthemes.co
 
 
 @media (max-width: 320px) {
-
-
+    .home{
+        background: url(../images/longHeader.png) no-repeat 100% 100%;
+        background-size: cover;
+    }
     html {
         font-size: 60.5%;
     }

@@ -546,7 +546,7 @@ input::-ms-input-placeholder {
 
 .main_menu_bg .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
     color: #fff;
-    padding-bottom: 22px;
+    padding-bottom: 5px;
     border-bottom: 1px solid #fff;
     background: transparent;
 
@@ -564,6 +564,7 @@ input::-ms-input-placeholder {
     padding: 0px 15px;
 }
 .navbar-brand>img {
+    padding-left: 5%
     max-width: 80%;
 }
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>.open>a:focus{
@@ -591,7 +592,7 @@ input::-ms-input-placeholder {
 
 /*home section*/
 .home{
-    background: url(../images/windmillHeader.png) no-repeat 100% 100%;
+    background: url(../images/windmillHeader@5x.png) no-repeat 100% 100%;
     background-size: cover;
 }
 
