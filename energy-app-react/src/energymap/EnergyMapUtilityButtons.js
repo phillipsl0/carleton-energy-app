@@ -1,3 +1,8 @@
+/* EnergyMapUtilityButtons.js
+ * Written by Veronica Child for Energy App Comps, 2018
+ * Buttons on top of energy map that allow user to select utility displayed.
+ */
+
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions, Heading, Overlay, TouchableHighlight } from 'react-native';
 import { Button } from 'react-native-elements'
@@ -7,11 +12,9 @@ import { moderateScale } from './../helpers/Scaling';
 import CurrFont from './../styling/CurrentFont';
 const defaultFont = CurrFont+'-regular';
 
-//const UTILITIES = getUtilitiesList();
 const UTILITIES = ['Total', 'Heat', 'Electric', 'Water'];
 
 // Class for individual buttons
-
 @connect(
     state => ({
         ui: state.ui,
