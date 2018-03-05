@@ -1,8 +1,12 @@
+/* EnergyMapTimestampjs
+ * Written by Veronica Child for Energy App Comps, 2018
+ * Generates time in 24 hour format for energy map update
+ */
+
 import React, { Component } from 'react';
-import { View, Text, Platform, StyleSheet, Dimensions, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, Platform, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
-// Timestamp for EnergyMap's Update
 
 @connect(
     state => ({

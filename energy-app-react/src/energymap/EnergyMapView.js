@@ -1,3 +1,9 @@
+/* EnergyMapView.js
+ * Written by Veronica Child for Energy App Comps, 2018
+ * Energy map written that shows how well buildings are doing in regards to the specified
+ * utility consumption. Redder hues indicate more usage, greener hues indicate less.
+ */
+
 import React, { Component } from 'react';
 import { View, Text, Platform, StyleSheet, Dimensions, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { StackNavigator, NavigationActions } from 'react-navigation';
@@ -9,21 +15,11 @@ import MapCallout from './MapCallout';
 import IndividualBuilding from './../buildings/IndividualBuilding';
 import BuildingStack from './../buildings/BuildingListView';
 import buildings from './../buildings/Buildings'
-// import { getCurrentBuildingUtilityConsumption } from './../helpers/ApiWrappers.js';
 import TopUtilities from './EnergyMapUtilityButtons';
 import EnergyMapTimestamp from './EnergyMapTimestamp';
 import ComparisonPage from './../buildings/ComparisonPage';
 import BuildingComparison from './../buildings/BuildingComparison';
 import { getUnits } from './../helpers/General';
-
-/*
-Helpful links:
-https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/#
-Polygon onPress: https://snack.expo.io/H1L9ClUGW
-Animated region with scroll cards: https://codedaily.io/tutorials/9/Build-a-Map-with-Custom-Animated-Markers-and-Region-Focus-when-Content-is-Scrolled-in-React-Native
-Cool native app: https://themeteorchef.com/tutorials/how-to-build-a-react-native-app-with-meteor
-Get lat/long: http://www.mapcoordinates.net/en
-*/
 
 
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
@@ -32,12 +28,11 @@ var {screenHeight, screenWidth} = Dimensions.get('window');
 const initialRegion = {
   latitude: 44.4606925434,
   longitude: -93.1533574685,
-  latitudeDelta: 0.005223853, //0.00475503 > 0.003861 previously
-  longitudeDelta: 0.0086313486, //0.004325397 > 0.003916 previously
+  latitudeDelta: 0.005223853, 
+  longitudeDelta: 0.0086313486, 
 }
 
 
-//Get redux
 @connect(
     state => ({
         historicalBuildingData: state.buildings.historicalBuildingData,
@@ -53,8 +48,6 @@ class EnergyMapView extends Component {
     super(props);
     
     // Turn fixed regions into state
-    // Get drawn polygon coordinates: http://www.birdtheme.org/useful/v3tool.html
-    // Get exact point lat/long: http://www.mapcoordinates.net/en
     this.state = {
       lastBuildingPressed: "No buildings have been pressed",
       polygons: [],
@@ -488,21 +481,6 @@ class EnergyMapView extends Component {
         alert(introStr.concat(error))
     }
   };
-
-  // getNormalizationData() {
-  //   try {
-  //     let normalization = buildings.reduce(function(map, building) {
-  //       map[building.name] = building.normalization;
-  //       return map;
-  //     }, {});
-  //     //console.log("Normalization: ", normalization)
-  //     this.setState({buildings_info: normalization})
-  //     var keys = Object.keys(this.state.buildings_info)
-  //   } catch(error) {
-  //       var introStr = "This is embarrassing...: "
-  //       alert(introStr.concat(error))
-  //   }
-  // };
 
 
   // Show callout when building polygon is pressed

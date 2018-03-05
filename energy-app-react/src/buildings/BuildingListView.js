@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-
-import { FlatList, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions} from 'react-native'
-import { NavigationActions, StackNavigator } from 'react-navigation';
-import { Icon, Button } from 'react-native-elements';
+import { FlatList, AppRegistry, SectionList, StyleSheet, Dimensions, ScrollView,
+  View, Text, Image, TouchableOpacity, Platform } from 'react-native'
+import { StackNavigator, NavigationActions } from 'react-navigation';
+import { List, Card, ListItem, Button, Avatar, Header, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import buildings from './Buildings';
@@ -17,13 +17,13 @@ import {roundNumber} from './../helpers/General';
 const theme = GetStyle();
 
 @connect(
-   state => ({
-       historicalBuildingData: state.buildings.historicalBuildingData,
-       currentBuildingData: state.buildings.currentBuildingData,
-   }),
-   dispatch => ({
-       refresh: () => dispatch({type: 'GET_BUILDING_GRAPH_DATA'}),
-   }),
+  state => ({
+     historicalBuildingData: state.buildings.historicalBuildingData,
+     currentBuildingData: state.buildings.currentBuildingData,
+  }),
+  dispatch => ({
+     refresh: () => dispatch({type: 'GET_BUILDING_GRAPH_DATA'}),
+  }),
 )
 
 class BuildingListView extends Component {
@@ -31,13 +31,24 @@ class BuildingListView extends Component {
     return <Text style={[themeStyles.container, styles.header]}>{headerItem.section.name}</Text>
   }
 
+/*
+OLD TEXT STYLES:
+                <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
+                <Text style={styles.text}>Water: {item.item.water}</Text>
+                <Text style={styles.text}>Heat: {item.item.heat}</Text>
+*/
+
+  // Helper function to add commas to large numbers
+  numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   renderItem = (item) => {
     return <View style={[theme.card, styles.card, styles.card]}>
         <Text style={styles.header}>{item.item.name}</Text>
         <View style={{ borderBottomWidth: 1, borderBottomColor: '#e1e8ee', marginTop: '1%' }}/>
         <View style={[styles.outerView, styles.innerView]}>
-            <Image
-            style={styles.image} source={{uri: item.item.avatar}}/>
+            <Image style={styles.image} source={{uri: item.item.avatar}}/>
             <View style={{flex: 1, flexDirection: 'column'}}>
                 <Text style={styles.text}> <FontAwesome name="lightbulb-o" size={moderateScale(16)} color="#0B5091" />  {roundNumber(item.item.electricity)} kWh</Text>
                 <Text style={styles.text}><FontAwesome name="shower" size={moderateScale(16)} color="#0B5091" /> {roundNumber(item.item.water)} gal</Text>

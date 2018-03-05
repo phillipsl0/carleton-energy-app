@@ -741,18 +741,6 @@ input::-ms-input-placeholder {
 }
 .team .single_team_content .team .single_team_text p{}
 
-.team .team_hiring_area{
-    margin-top:60px;
-}
-.team .team_hiring_area p{
-    margin-bottom:0;
-}
-.team .team_hiring_area a{
-    margin-top:20px;
-    text-transform: uppercase;
-}
-
-
 
 
 

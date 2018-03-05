@@ -4,7 +4,6 @@ import { Platform, AppRegistry, SectionList, StyleSheet, View, Text, Image, Scro
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
-// import { getAllCurrentBuildingGraphData } from './../helpers/ApiWrappers';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
 import GraphDetail from './../overview/GraphDetailCard';
@@ -13,15 +12,6 @@ import ComparisonPage from './ComparisonPage';
 import { moderateScale, verticalScale } from './../helpers/Scaling';
 import BuildingComparison from './BuildingComparison';
 
-// @connect(
-//     state => ({
-//         historicalData: state.data.historicalData,
-//         currentData: state.data.currentData,
-//     }),
-//     dispatch => ({
-//         refresh: () => dispatch({type: 'GET_GRAPH_DATA'}),
-//     }),
-// )
 
 @connect(
     state => ({
