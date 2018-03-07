@@ -146,6 +146,8 @@ h2,
 h3 {
     font-weight: 300;
     margin: 0;
+    color:#fff;
+    font-family: 'Lato';
 }
 h4,
 h5 {
@@ -154,9 +156,13 @@ h5 {
     line-height: 2rem;
 }
 h1 {
-    font-size: 4.375rem;
-    line-height: 5.5rem;
+    font-size: 2.375rem;
+    line-height: 3.5rem;
     color:#fff;
+    padding-right: 5%;
+    padding-left: 5%;
+    width: 575px;
+
 }
 h2 {
     font-size:1.875rem;
@@ -170,6 +176,7 @@ h3 {
     line-height: 2.5rem;  
     text-transform: uppercase;
     font-family: 'Lato';
+    color: #2A4863;
 }
 h4 {
     font-size: 0.875rem;
@@ -189,8 +196,8 @@ h6 {
     margin-bottom: .9rem;
 }
 p {
-    line-height: 1.375rem;
-    font-size: 0.875rem;
+    line-height: 1.575rem;
+    font-size: 1.1rem;
 }
 p:last-child {
     margin-bottom: 0px;
@@ -355,7 +362,18 @@ Button
     border-color: #5e9a28;
 }
 
+.col-img {
+    width: 100%;
+}
 
+.col-thanks {
+    position:relative;
+    min-height:1px;
+    padding-right:15px;
+    padding-left:15px;
+    width:33%;
+    float: left;
+}
 
 .btn {
     display: inline-block;
@@ -528,7 +546,6 @@ input::-ms-input-placeholder {
 
 }
 
-
 .main_menu_bg{
     margin-top: 0px;
     background-color: transparent;
@@ -546,10 +563,11 @@ input::-ms-input-placeholder {
 
 .main_menu_bg .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
     color: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-bottom: 5px;
     border-bottom: 1px solid #fff;
     background: transparent;
-
 }
 
 .main_menu_bg .navbar-nav>li>a {
@@ -573,6 +591,10 @@ input::-ms-input-placeholder {
 
 }
 
+.navbar-brand>h1 {
+    padding-left: 5%;
+}
+
 
 .culmn{
     width:100%;
@@ -580,11 +602,9 @@ input::-ms-input-placeholder {
 }
 /*heading title all area*/
 .head_title{
-    margin-bottom:90px;
+    margin-bottom:25px;
 }
-.head_title h3{
-    color:#413d4b;
-}
+
 .head_title p{
     font-family: 'Lato';
     font-weight: bold;
@@ -639,13 +659,13 @@ input::-ms-input-placeholder {
 }
 
 /*about section css*/
-.about{}
-.about .main_about_area{}
-.about .main_about_content{}
-.about .main_about_content .single_about{
+.background{}
+.background .main_about_area{}
+.background .main_about_content{}
+.background .main_about_content .single_about{
     position: relative;  
     transition: all 0.6s;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 
 .about .main_about_content .single_about .single_about_img img{
@@ -653,10 +673,14 @@ input::-ms-input-placeholder {
     height: 100%;
 }
 
+.background-head {
+    padding-bottom: 10px;
+}
+
 /*video section css*/
 
 .video{
-    background: url(../images/videobg.jpg) no-repeat top center;
+    background: url(../images/.jpg) no-repeat top center;
     background-size:cover;
 }
 .video .main_video{
@@ -708,7 +732,7 @@ input::-ms-input-placeholder {
 
 /* Team section css */
 .team{
-    background: url(../images/teambg.jpg) no-repeat center center;
+    background: url(../images/turbine_bg.jpg) no-repeat center center;
     overflow:hidden;
     background-size: cover;
     color:#fff;
@@ -730,6 +754,7 @@ input::-ms-input-placeholder {
 
 .team .single_team_content .single_team_img img{
     width:100%;
+    height
 
 }
 .team .single_team_content .single_team_text{
@@ -740,13 +765,19 @@ input::-ms-input-placeholder {
     display: inline-block;
 }
 .team .single_team_content .team .single_team_text p{}
+.team .main_team.sections.text-center .img-row {
+    margin-left: 100px;
+    margin-right: -160px;
+}
 
+.img-row:after, .img-row:before{
+    display:table;
+    content:" ";
+}
 
-
-
-
-
-
+.img-row:after {
+    clear:both;
+}
 
 
 /*.owl-carousel .owl-controls .owl-nav .owl-prev {
@@ -799,11 +830,12 @@ input::-ms-input-placeholder {
     display: inline-block;
     float:left;
     font-size:1.375rem;
+    color:#2A4863;
 }
 .main_portfolio .head_title a{
     display: inline-block;
     float:right;
-    color:#413d4b;
+    color:#647C92;
 }
 
 .main_portfolio_content{}
@@ -932,19 +964,48 @@ input::-ms-input-placeholder {
 
 /*contact section css*/
 .contact{
+    padding-top: 0px;
     background: #fff;
 }
 
 .contact .main_clinetslogo{
-
+    width: 90%;
 }
 .contact .main_clinetslogo a {
     overflow: hidden;
-    margin-top:20px;
+    margin-top:0px;
     display: inline-block;
 }
 .contact .main_clinetslogo a img{
 
+}
+.contact .btn {
+    background-color: transparent;
+    transition: .5s;
+    color: #0B5091;
+    border: 1px solid #0B5091;
+    font-family: 'Lato';
+
+}
+.contact .btn:hover {
+    background-color:#C6DDF4;
+    color: #0B5091;
+    text-decoration: none;
+    border: 1px solid #0B5091;
+}
+
+.contact.btn-primary {
+    background-color: transparent;
+    transition: .5s;
+    padding: 9px 30px;
+}
+
+.contact h3 {
+    padding-bottom: 20px;
+}
+
+.contact .form {
+    padding-left: 0px;
 }
 
 
@@ -974,7 +1035,7 @@ input::-ms-input-placeholder {
 /*footer widget*/
 
 .footer_widget{
-    background: url(../images/footerbg.jpg) no-repeat top center;
+    background: url(../images/cmc_bg.jpg) no-repeat top center;
     color:#fff;
     background-size: cover;
 }
@@ -1081,6 +1142,10 @@ input::-ms-input-placeholder {
 .main_footer .right_menu{
     padding: 40px 0px;
 }
+.help {
+    width: 30%;
+}
+
 .main_footer .right_menu li a{
     color:#fff;
 }
@@ -1097,6 +1162,9 @@ input::-ms-input-placeholder {
 .copyright_text p a{
     padding:0px 10px;
     color:#3bd3ba;
+}
+.copy {
+    width: 70%;
 }
 
 
