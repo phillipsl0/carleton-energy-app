@@ -1,17 +1,18 @@
+/* MapCallout.js
+ * Written by Veronica Child for Energy App Comps, 2018
+ * Callout on Energy Map that displays name of building and current utility consumption.
+ * Directs to Individual Building Card associated with building name when tapped
+ */
+
 import React, { Component } from 'react';
 import { Image, StyleSheet, Text, View, } from 'react-native';
 import { Button } from 'react-native-elements';
 import { getUnits } from './../helpers/General';
 
-
-//Callout styling tutorial: https://rationalappdev.com/santas-map-app-with-react-native/
-// Open source icons: https://material.io/icons/#ic_local_florist
-
 export default class MapCallout extends Component {
   render() {
     const { name, image, number, utility } = this.props;
     
-    // Decide what units to render
     var units = getUnits(utility);
 
 
@@ -77,7 +78,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   // Building number
-  //grey:     color: '#9E9E9E',
   number: {
     fontSize: 30,
     color: '#0B5091',
