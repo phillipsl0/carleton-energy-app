@@ -833,6 +833,10 @@ input::-ms-input-placeholder {
     clear:both;
 }
 
+.team .single_team_content:hover #bigyellow {
+    color:#ff0;
+}
+
 
 /*.owl-carousel .owl-controls .owl-nav .owl-prev {
     cursor: pointer;
