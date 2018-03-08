@@ -620,7 +620,6 @@ input::-ms-input-placeholder {
 .home{
     background: url(../images/windmillHeader@5x.png) no-repeat 100%;
     background-size: cover;
-    border-bottom: 2px solid #ddd;
 }
 
 .home .main_home{
@@ -667,7 +666,6 @@ input::-ms-input-placeholder {
 
 /*about section css*/
 .background{
-    border-bottom: 2px solid #ddd;
 }
 .background .main_about_area{}
 .background .main_about_content{}
@@ -705,7 +703,7 @@ input::-ms-input-placeholder {
 
 
 /*service section css*/
-.border_divider, .border_divider_hidden{
+.border_divider, .border_divider_hidden, .border_divider_sectioned {
     width:100%;
     height: 2px;
     background: #ddd;
@@ -721,10 +719,13 @@ input::-ms-input-placeholder {
     margin: 0px;
     display: inherit;
 }
+
+.border_divider_sectioned {
+    margin: 0px 0px;
+}
 .service{
     position: relative;
     background: #ffffff;
-    border-bottom: 2px solid #ddd;
 }
 .main_service_area{}
 .service .single_service {
@@ -753,7 +754,6 @@ input::-ms-input-placeholder {
     overflow:hidden;
     background-size: cover;
     color:#fff;
-    border-bottom: 2px solid #ddd;
 }
 .team .main_team{
 
@@ -838,7 +838,6 @@ input::-ms-input-placeholder {
 .portfolio{
     overflow: hidden;
     width:100%;
-    border-bottom: 2px solid #ddd;
 }
 .main_portfolio .head_title{
     max-width: 100%;
@@ -903,7 +902,6 @@ input::-ms-input-placeholder {
 .testimonial{
     background: url(../images/teambg.jpg) no-repeat center center;
     background-size: cover;
-    border-bottom: 2px solid #ddd;
 }
 .main_testimonial {
     color:#fff;
@@ -993,7 +991,6 @@ input::-ms-input-placeholder {
 .contact{
     padding-top: 20px;
     background: #fff;
-    border-bottom: 2px solid #ddd;
 }
 
 .contact .main_clinetslogo{
@@ -1193,6 +1190,11 @@ input::-ms-input-placeholder {
 }
 .copy {
     width: 70%;
+}
+
+.footer{
+    margin-left: 0px;
+    width: 100%;
 }
 
 
