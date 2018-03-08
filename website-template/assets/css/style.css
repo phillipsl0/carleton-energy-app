@@ -784,8 +784,12 @@ input::-ms-input-placeholder {
     padding-bottom: 20px;
 }
 
-.team .single_team_content .single_team_text.second-tallest {
+.team .single_team_content .single_team_text.third-tallest {
     padding-bottom: 44px;
+}
+
+.team .single_team_content .single_team_text.second-tallest {
+    padding-bottom: 22px;
 }
 
 .team .single_team_content .single_team_text h4{
