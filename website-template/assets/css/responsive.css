@@ -90,7 +90,7 @@ Author URI: http://www.bootstrapthemes.co
     }
 
     .team .single_team_content .single_team_text p {
-        font-size: 0.8rem;
+        font-size: 0.6rem;
     }
 
     .team .col-sm-10.col-sm-offset-1 {
@@ -153,6 +153,7 @@ Author URI: http://www.bootstrapthemes.co
     h4 {
         font-size: 1.4rem;
         line-height: 2rem;
+        padding-bottom: 10px;
     }
     h5 {
         font-size: 0.8rem;
@@ -237,6 +238,10 @@ Author URI: http://www.bootstrapthemes.co
     .team .single_team_content .single_team_text p {
         font-size: 1.5rem;
         line-height: 1.8rem;
+    }
+
+    .team .single_team_content .single_team_img img {
+        padding-bottom: 0px;
     }
 
     .team .main_team.sections.text-center .img-row {

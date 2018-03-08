@@ -171,14 +171,14 @@ h2 {
 
 }
 h3 {
-    font-size:1.375rem;
+    font-size:1.575rem;
     line-height: 2.5rem;  
     text-transform: uppercase;
     font-family: 'Lato';
     color: #2A4863;
 }
 h4 {
-    font-size: 0.875rem;
+    font-size: 1.275rem;
     line-height: 2rem;
     margin-bottom: 1rem;
     text-transform: uppercase;
@@ -772,17 +772,25 @@ input::-ms-input-placeholder {
 
 .team .single_team_content .single_team_img img{
     width:100%;
-    height
 
 }
 .team .single_team_content .single_team_text{
-    padding: 20px 0px;
+    padding-top: 20px;
+    padding-bottom: 42px;
+    padding-left:0px;
+    padding-right: 0px;
+}
+
+.team .single_team_content .single_team_text.tallest {
+    padding-bottom: 20px;
 }
 .team .single_team_content .single_team_text h4{
     margin-bottom: .0rem;
     display: inline-block;
 }
-.team .single_team_content .team .single_team_text p{}
+.team .single_team_content .single_team_text p{
+    font-size: 1rem;
+}
 .team .main_team.sections.text-center .img-row {
     margin-left: 100px;
     margin-right: -160px;
