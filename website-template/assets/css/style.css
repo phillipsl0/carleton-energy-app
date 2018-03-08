@@ -829,6 +829,10 @@ input::-ms-input-placeholder {
     clear:both;
 }
 
+#bigyellow {
+    color:#ff0;
+}
+
 
 /*.owl-carousel .owl-controls .owl-nav .owl-prev {
     cursor: pointer;
