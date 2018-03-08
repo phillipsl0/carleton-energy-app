@@ -16,7 +16,6 @@ body {
     padding: 0;
     margin-left: 0;
     margin-right: 0;
-    font-family: 'Lato';
     font-weight: 300;
     width:100%;
 }
@@ -160,7 +159,7 @@ h1 {
     line-height: 3.5rem;
     color:#fff;
     padding-right: 5%;
-    padding-left: 5%;
+    padding-left: 15px;
     width: 575px;
 
 }
@@ -550,6 +549,10 @@ input::-ms-input-placeholder {
     margin-top: 0px;
     background-color: transparent;
 }
+
+.main_menu_bg .container {
+    width: auto;
+}
 .main_menu_bg .navbar-default {
     background-color: transparent; 
     border-color: transparent; 
@@ -595,6 +598,9 @@ input::-ms-input-placeholder {
     padding-left: 5%;
 }
 
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #fff;
+}
 
 .culmn{
     width:100%;
@@ -612,12 +618,13 @@ input::-ms-input-placeholder {
 
 /*home section*/
 .home{
-    background: url(../images/windmillHeader@5x.png) no-repeat 100% 100%;
+    background: url(../images/windmillHeader@5x.png) no-repeat 100%;
     background-size: cover;
+    border-bottom: 2px solid #ddd;
 }
 
 .home .main_home{
-    padding-top: 250px;
+    padding-top: 200px;
 }
 
 .home .main_home h4{
@@ -659,7 +666,9 @@ input::-ms-input-placeholder {
 }
 
 /*about section css*/
-.background{}
+.background{
+    border-bottom: 2px solid #ddd;
+}
 .background .main_about_area{}
 .background .main_about_content{}
 .background .main_about_content .single_about{
@@ -696,7 +705,7 @@ input::-ms-input-placeholder {
 
 
 /*service section css*/
-.border_devider{
+.border_divider, .border_divider_hidden{
     width:100%;
     height: 2px;
     background: #ddd;
@@ -705,9 +714,17 @@ input::-ms-input-placeholder {
     display: inline-block;
 
 }
+
+.border_divider_hidden {
+    visibility: hidden;
+    width: 0%;
+    margin: 0px;
+    display: inherit;
+}
 .service{
     position: relative;
     background: #ffffff;
+    border-bottom: 2px solid #ddd;
 }
 .main_service_area{}
 .service .single_service {
@@ -736,6 +753,7 @@ input::-ms-input-placeholder {
     overflow:hidden;
     background-size: cover;
     color:#fff;
+    border-bottom: 2px solid #ddd;
 }
 .team .main_team{
 
@@ -820,11 +838,12 @@ input::-ms-input-placeholder {
 .portfolio{
     overflow: hidden;
     width:100%;
+    border-bottom: 2px solid #ddd;
 }
 .main_portfolio .head_title{
-    max-width: 80%;
-    padding-bottom: 90px;
-    margin:0 auto;
+    max-width: 100%;
+    padding-bottom: 40px;
+    padding-left: 10px;
 }
 .main_portfolio .head_title h4{
     display: inline-block;
@@ -842,7 +861,10 @@ input::-ms-input-placeholder {
 
 .grid{}
 
-.grid-item { width: 16.67%; }
+.grid-item { 
+    width: 16.67%;
+    padding: 10px;
+}
 .portfolio .grid-item{
     position: relative;
 }
@@ -872,11 +894,16 @@ input::-ms-input-placeholder {
     color:#FFF;
 }
 
+.first {
+    padding-left: 0px;
+}
+
 
 /* Carousel */
 .testimonial{
     background: url(../images/teambg.jpg) no-repeat center center;
     background-size: cover;
+    border-bottom: 2px solid #ddd;
 }
 .main_testimonial {
     color:#fff;
@@ -964,8 +991,9 @@ input::-ms-input-placeholder {
 
 /*contact section css*/
 .contact{
-    padding-top: 0px;
+    padding-top: 20px;
     background: #fff;
+    border-bottom: 2px solid #ddd;
 }
 
 .contact .main_clinetslogo{
