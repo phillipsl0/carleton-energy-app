@@ -766,9 +766,7 @@ input::-ms-input-placeholder {
     margin-top:30px;
     transition: all .6s;
 }
-.team .single_team_content:hover{
-    transform: rotateY(360deg);
-}
+
 
 .team .single_team_content .single_team_img img{
     width:100%;
