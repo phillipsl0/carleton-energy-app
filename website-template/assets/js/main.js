@@ -14,7 +14,7 @@ jQuery(document).ready(function ($) {
             target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
             if (target.length) {
                 $('html,body').animate({
-                    scrollTop: (target.offset().top - 40)
+                    scrollTop: (target.offset().top)
                 }, 1000);
                 if ($('.navbar-toggle').css('display') != 'none') {
                     $(this).parents('.container').find(".navbar-toggle").trigger("click");
@@ -107,7 +107,7 @@ jQuery(document).ready(function ($) {
 
     jQuery(window).scroll(function () {
         var top = jQuery(document).scrollTop();
-        var height = 300;
+        var height = 100;
         //alert(batas);
 
         if (top > height) {
