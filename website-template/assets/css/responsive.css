@@ -130,6 +130,10 @@ Author URI: http://www.bootstrapthemes.co
     html {
         font-size: 80%;
     }
+
+    img {
+        padding-bottom: 5%;
+    }
     h1 {
         font-size: 2.5rem;
         line-height: 3rem;
@@ -144,6 +148,7 @@ Author URI: http://www.bootstrapthemes.co
         font-size: 1.6rem;
         line-height: 2rem;
         margin-bottom: 15px;
+        text-align: center;
     }
     h4 {
         font-size: 1.4rem;
@@ -211,11 +216,17 @@ Author URI: http://www.bootstrapthemes.co
     }
 
     .overlay {
-        height: 600px;
+        height: 620px;
     }
 
     .team .col-sm-3.col-xs-12 {
         width: 70%;
+        margin-left: 15%;
+    }
+
+    .team .col-sm-10 {
+        padding: 0px;
+
     }
 
     .team .single_team_content .single_team_text h4 {
@@ -228,6 +239,30 @@ Author URI: http://www.bootstrapthemes.co
         line-height: 1.8rem;
     }
 
+    .team .main_team.sections.text-center .img-row {
+        margin: 0px;
+    }
+
+    .contact .row {
+        margin: 0px;
+    }
+
+    .col-thanks {
+        width: 100%;
+        padding: 0px;
+    }
+
+    .contact .main_clinetslogo, .col-sm-7, .col-sm-5 {
+        width: 100%;
+    }
+
+    .portfolio a {
+        margin-right: 15px;
+    }
+
+    .background img {
+        padding-left: 7%;
+    }
 
 }
 
@@ -238,6 +273,26 @@ Author URI: http://www.bootstrapthemes.co
     html {
         font-size: 65%;
     }
+    h1 {
+        line-height: 5rem;
+    }
+
+    h1, h2, h3, h4, h5, .home .main_home h2 {
+        font-size: 1.8rem; 
+    } 
+
+    h2, h3, h4, h5, .home .main_home h2 {
+        padding-top: 5%;
+    }
+
+    p {
+
+    }
+
+    .portfolio a {
+        padding-top: 5%;
+    }
+
     .home{
         background: url(../images/longHeader@2x.png) no-repeat 100% 100%;
         background-size: cover;
@@ -257,6 +312,13 @@ Author URI: http://www.bootstrapthemes.co
         height: 35px;
     } 
 
+    .service .single_service .single_service_icon i {
+        font-size: 5rem;
+    }
+
+    .overlay {
+        height: 650px;
+    }
 
 
 
