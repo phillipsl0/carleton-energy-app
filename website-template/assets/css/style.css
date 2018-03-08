@@ -829,7 +829,7 @@ input::-ms-input-placeholder {
     clear:both;
 }
 
-#bigyellow {
+.team .single_team_content:hover #bigyellow {
     color:#ff0;
 }
 
