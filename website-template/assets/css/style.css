@@ -198,6 +198,7 @@ p {
     line-height: 1.575rem;
     font-size: 1.1rem;
 }
+
 p:last-child {
     margin-bottom: 0px;
 }
@@ -774,7 +775,7 @@ input::-ms-input-placeholder {
 }
 .team .single_team_content .single_team_text{
     padding-top: 20px;
-    padding-bottom: 42px;
+    padding-bottom: 66px;
     padding-left:0px;
     padding-right: 0px;
 }
@@ -782,6 +783,11 @@ input::-ms-input-placeholder {
 .team .single_team_content .single_team_text.tallest {
     padding-bottom: 20px;
 }
+
+.team .single_team_content .single_team_text.second-tallest {
+    padding-bottom: 46px;
+}
+
 .team .single_team_content .single_team_text h4{
     margin-bottom: .0rem;
     display: inline-block;
@@ -792,6 +798,26 @@ input::-ms-input-placeholder {
 .team .main_team.sections.text-center .img-row {
     margin-left: 100px;
     margin-right: -160px;
+}
+
+.team .single_team_content .single_team_text .stack0 p{
+    line-height: 1.4rem;
+    font-size: 1rem;
+}
+
+.team .single_team_content .single_team_text .stack1 p {
+    line-height: 1.3rem;
+    font-size: 0.9rem;
+}
+
+.team .single_team_content .single_team_text .stack2 p {
+    line-height: 1.2rem;
+    font-size: 0.8rem;
+}
+
+.team .single_team_content .single_team_text .stack3 p {
+    line-height: 1.1rem;
+    font-size: 0.7rem;
 }
 
 .img-row:after, .img-row:before{
