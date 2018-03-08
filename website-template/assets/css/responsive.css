@@ -50,20 +50,14 @@ Author URI: http://www.bootstrapthemes.co
     .team .single_team_content .single_team_text .stack3 p {
         font-size: 0.3rem;
     }
+
+    .team .single_team_content .single_team_text.liv {
+        padding-bottom: 22px
+    }
 }
 
-/* Portrait tablets and small desktops */
-@media (max-width: 991px) {
-    html {
-        font-size: 90%;
-    }
-
-    .home{
-        background: url(../images/longHeader@3x.png) no-repeat 100% 100%;
-        background-size: cover;
-    }
-
-    h1 {
+@media (max-width: 1032px) {
+     h1 {
         font-size: 1.5rem;
         line-height: 3rem;
         color:#fff;
@@ -88,13 +82,6 @@ Author URI: http://www.bootstrapthemes.co
         color: #696f7c;
         line-height: 1.475rem;
     }
-   
-    #quote-carousel .carousel-control.left {
-        left: 120px;
-    }
-    #quote-carousel .carousel-control.right {
-        right: 120px;
-    }
 
     .main_menu_bg .container {
         width: auto;
@@ -107,6 +94,29 @@ Author URI: http://www.bootstrapthemes.co
     .home .main_home h2 {
         font-size: 1.4rem;
         line-height: 2rem; 
+    }
+
+    .portfolio a {
+        margin-right: 15px;
+    }
+
+}
+/* Portrait tablets and small desktops */
+@media (max-width: 991px) {
+    html {
+        font-size: 90%;
+    }
+
+    .home{
+        background: url(../images/longHeader@3x.png) no-repeat 100% 100%;
+        background-size: cover;
+    }
+   
+    #quote-carousel .carousel-control.left {
+        left: 120px;
+    }
+    #quote-carousel .carousel-control.right {
+        right: 120px;
     }
 
     .team .single_team_content .single_team_text h4 {
@@ -122,8 +132,17 @@ Author URI: http://www.bootstrapthemes.co
         margin-left: 0px;
         padding-left: 0px;
     }
+
+    .team .single_team_content .single_team_text.liv {
+        padding-bottom: 44px;
+    }
 }
 
+@media (max-width: 928px) {
+    .team .single_team_content .single_team_text.liv {
+        padding-bottom: 22px
+    }
+}
 @media (max-width: 875px) {
     .main_menu_bg .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
         color: #fff;
@@ -149,6 +168,11 @@ Author URI: http://www.bootstrapthemes.co
     }
 }
 
+@media (max-width: 783px) {
+    .team .single_team_content .single_team_text.liv, .team .single_team_content .single_team_text.andrew {
+        padding-bottom: 44px;
+    }
+}
 /* Landscape phones and portrait tablets */
 @media  (max-width: 768px) {
     html {
@@ -305,9 +329,7 @@ Author URI: http://www.bootstrapthemes.co
         width: 100%;
     }
 
-    .portfolio a {
-        margin-right: 15px;
-    }
+    
 
     .background img {
         padding-left: 7%;

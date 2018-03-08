@@ -781,14 +781,14 @@ input::-ms-input-placeholder {
 }
 
 .team .single_team_content .single_team_text.tallest {
-    padding-bottom: 20px;
+    padding-bottom: 18px;
 }
 
-.team .single_team_content .single_team_text.third-tallest {
+.team .single_team_content .single_team_text.third-tallest, .team .single_team_content .single_team_text.liv {
     padding-bottom: 44px;
 }
 
-.team .single_team_content .single_team_text.second-tallest {
+.team .single_team_content .single_team_text.second-tallest,  .team .single_team_content .single_team_text.andrew {
     padding-bottom: 22px;
 }
 
