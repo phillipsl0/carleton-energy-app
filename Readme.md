@@ -71,3 +71,9 @@ See also the list of [contributors](https://github.com/phillipsl0/carleton-energ
 * Make server accessible from off campus
 * Set up time out in case server is inaccessible
 * Fix styling issues in Android (graphs, other?)
+* Make sure that energy conversions are accurate
+* API calls:
+    * Get historical high and low for each building, for use in heat map normalization
+    * Ask Martha if she wants this normalization as a static number or as a percentage of the building's high
+    * Add up all data points for the graphs (aka daily sum, weekly sum, monthly sum, and yearly sum) on the server side
+    
