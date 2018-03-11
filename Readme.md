@@ -40,7 +40,8 @@ Android emulator, or 'I' to run it on the iOS simulator.
 ## Demo
 
 If you simply want to see a demo of the app, you can download the [Expo](https://docs.expo.io/versions/latest/introduction/installation.html)
-mobile client, and scan our [QR code](https://expo.io/@phillipsl/cc-energy-app).
+mobile client, and scan our [QR code](https://expo.io/@phillipsl/cc-energy-app). (Note: the version of our app on Expo is
+our most stable version, and pulls from our Master branch).
 
 ## Authors
 
