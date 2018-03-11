@@ -6,6 +6,9 @@ detailing Carleton's energy usage.
 ## Built With
 
 * [React Native](https://facebook.github.io/react-native/docs/getting-started.html) - App development framework
+* [React Navigation](https://reactnavigation.org/) - RN package, provides tab and stack navigation for the app
+* [Redux](https://redux.js.org/) - RN package, handles navigation state, and data state for the app
+* [Victory](https://formidable.com/open-source/victory/docs/native/) - RN package, creates data visualizations
 * [Node](https://nodejs.org/en/download/) - Necessary dependency for RN
 * [npm](https://nodejs.org/en/download/) - Package manager, included with Node
 * [Expo](https://docs.expo.io/versions/latest/introduction/installation.html) - sets up necessary RN dependencies, and
@@ -43,6 +46,8 @@ If you simply want to see a demo of the app, you can download the [Expo](https:/
 mobile client, and scan our [QR code](https://expo.io/@phillipsl/cc-energy-app). (Note: the version of our app on Expo is
 our most stable version, and pulls from our Master branch).
 
+## Future Deployment
+In order to deploy the app to the app store/play store, please check out the following [guide](https://docs.expo.io/versions/latest/guides/publishing.html)
 ## Authors
 
 * **Jesse Bolton** -  [jboltron3000](https://github.com/jboltron3000)
