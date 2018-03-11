@@ -1,17 +1,67 @@
-# Carleton Energy App
+# Carleton Energy App Comps
 
-## Project Overview
-A Carleton College CS department Comps with the goal of creating an engaging app
+A Carleton College Computer Science department Comps with the goal of creating an  app
 detailing Carleton's energy usage.
 
-## Branch Overview
-- `master` - stable branch, need to be carefully code-reviewed before merging
-- `develop` - need 1 person to code review before merging
-- `feature/` - branch for each feature, don't need to code review before merging to each feature branch
+## Built With
 
-## Style
-naming: no more than 3 words, lower case, separated by dashes (i.e. building-cards)
+* [React Native](https://facebook.github.io/react-native/docs/getting-started.html) - App development framework
+* [Node](https://nodejs.org/en/download/) - Necessary dependency for RN
+* [npm](https://nodejs.org/en/download/) - Package manager, included with Node
+* [Expo](https://docs.expo.io/versions/latest/introduction/installation.html) - sets up necessary RN dependencies, and
+provides tools for smoother development
 
-## Carleton Colors
-- Blue - `#0B5091` -> R=0, G=39, B=118
-- Maize - `#F3B61D` -> R=252, G=212, B=80
+## Getting Started
+### Prerequisites
+Before running this project, a few dependencies must be installed.
+
+(Note: if at any point you have issues, check out the getting started guides for [React Native](https://facebook.github.io/react-native/docs/getting-started.html) and
+[Expo](https://docs.expo.io/versions/latest/introduction/installation.html))
+
+1) Install [Node](https://nodejs.org/en/download/)
+2) Install [Expo](https://docs.expo.io/versions/latest/introduction/installation.html) (both the XDE and either a mobile
+client, or use a simulator/emulator)
+
+### Running the project
+1) Clone this repository, and cd to carleton-energy-app/energy-app-react
+2) Then, run the following command to install the necessary dependencies:
+```
+npm install
+```
+
+3) Run the app with:
+
+```
+npm start
+```
+
+From here, either scan the QR code on the Expo mobile client on your phone, or press 'A' to run the Expo app on the
+Android emulator, or 'I' to run it on the iOS simulator.
+## Demo
+
+If you simply want to see a demo of the app, you can download the [Expo](https://docs.expo.io/versions/latest/introduction/installation.html)
+mobile client, and scan our [QR code](https://expo.io/@phillipsl/cc-energy-app).
+
+## Authors
+
+* **Jesse Bolton** -  [jboltron3000](https://github.com/jboltron3000)
+* **Veronica Child** -  [childv](https://github.com/childv)
+* **Martin Green** - [Martination](https://github.com/Martination)
+* **Jack Kennelly** - [Kennelly57](https://github.com/Kennelly57)
+* **Liv Phillips** - [phillipsl0](https://github.com/phillipsl0)
+* **Andrew Woosnam** - [atwoosnam](https://github.com/atwoosnam)
+
+See also the list of [contributors](https://github.com/phillipsl0/carleton-energy-app/graphs/contributors) who participated in this project.
+
+## Acknowledgments
+
+* Jeff Ondich, our comps advisor
+* Martha Larson, our client
+* Dave Flynn, Mike Tie, and Matt Ryan
+* Jeff's Energy Analytics Comps Team for their help wrangling data
+
+## To Do
+* Hook up all live data
+* Make server accessible from off campus
+* Set up time out in case server is inaccessible
+* Fix styling issues in Android (graphs, other?)
