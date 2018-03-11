@@ -54,6 +54,11 @@ Author URI: http://www.bootstrapthemes.co
     .team .single_team_content .single_team_text.liv {
         padding-bottom: 22px
     }
+
+    .contact .main_clientslogo h4 {
+        font-size: 1rem;
+        
+    }
 }
 
 @media (max-width: 1032px) {
@@ -217,7 +222,7 @@ Author URI: http://www.bootstrapthemes.co
         background: url(../images/longHeader@3x.png) no-repeat 100% 100%;
         background-size: cover;
     }
-    .main_clinetslogo{
+    .main_clientslogo{
         margin-top:30px;
     }    
     .grid-item {
@@ -325,7 +330,7 @@ Author URI: http://www.bootstrapthemes.co
         padding: 0px;
     }
 
-    .contact .main_clinetslogo, .col-sm-7, .col-sm-5 {
+    .contact .main_clientslogo, .col-sm-7, .col-sm-5 {
         width: 100%;
     }
 

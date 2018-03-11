@@ -687,10 +687,6 @@ input::-ms-input-placeholder {
 
 /*video section css*/
 
-.video{
-    background: url(../images/.jpg) no-repeat top center;
-    background-size:cover;
-}
 .video .main_video{
     padding: 200px 0px;
     overflow: hidden;
@@ -1033,15 +1029,16 @@ input::-ms-input-placeholder {
     background: #fff;
 }
 
-.contact .main_clinetslogo{
-    width: 90%;
+.contact .main_clientslogo{
+    width: 100%;
 }
-.contact .main_clinetslogo a {
+.contact .main_clientslogo a {
     overflow: hidden;
     margin-top:0px;
     display: inline-block;
 }
-.contact .main_clinetslogo a img{
+
+.contact .main_clientslogo a img{
 
 }
 .contact .btn {
