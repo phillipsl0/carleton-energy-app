@@ -16,7 +16,6 @@ body {
     padding: 0;
     margin-left: 0;
     margin-right: 0;
-    font-family: 'Lato';
     font-weight: 300;
     width:100%;
 }
@@ -160,7 +159,7 @@ h1 {
     line-height: 3.5rem;
     color:#fff;
     padding-right: 5%;
-    padding-left: 5%;
+    padding-left: 15px;
     width: 575px;
 
 }
@@ -172,14 +171,14 @@ h2 {
 
 }
 h3 {
-    font-size:1.375rem;
+    font-size:1.575rem;
     line-height: 2.5rem;  
     text-transform: uppercase;
     font-family: 'Lato';
     color: #2A4863;
 }
 h4 {
-    font-size: 0.875rem;
+    font-size: 1.275rem;
     line-height: 2rem;
     margin-bottom: 1rem;
     text-transform: uppercase;
@@ -199,6 +198,7 @@ p {
     line-height: 1.575rem;
     font-size: 1.1rem;
 }
+
 p:last-child {
     margin-bottom: 0px;
 }
@@ -550,6 +550,10 @@ input::-ms-input-placeholder {
     margin-top: 0px;
     background-color: transparent;
 }
+
+.main_menu_bg .container {
+    width: auto;
+}
 .main_menu_bg .navbar-default {
     background-color: transparent; 
     border-color: transparent; 
@@ -595,6 +599,9 @@ input::-ms-input-placeholder {
     padding-left: 5%;
 }
 
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #fff;
+}
 
 .culmn{
     width:100%;
@@ -612,12 +619,12 @@ input::-ms-input-placeholder {
 
 /*home section*/
 .home{
-    background: url(../images/windmillHeader@5x.png) no-repeat 100% 100%;
+    background: url(../images/windmillHeader@5x.png) no-repeat 100%;
     background-size: cover;
 }
 
 .home .main_home{
-    padding-top: 250px;
+    padding-top: 200px;
 }
 
 .home .main_home h4{
@@ -659,7 +666,8 @@ input::-ms-input-placeholder {
 }
 
 /*about section css*/
-.background{}
+.background{
+}
 .background .main_about_area{}
 .background .main_about_content{}
 .background .main_about_content .single_about{
@@ -679,10 +687,6 @@ input::-ms-input-placeholder {
 
 /*video section css*/
 
-.video{
-    background: url(../images/.jpg) no-repeat top center;
-    background-size:cover;
-}
 .video .main_video{
     padding: 200px 0px;
     overflow: hidden;
@@ -696,7 +700,7 @@ input::-ms-input-placeholder {
 
 
 /*service section css*/
-.border_devider{
+.border_divider, .border_divider_hidden, .border_divider_sectioned {
     width:100%;
     height: 2px;
     background: #ddd;
@@ -704,6 +708,17 @@ input::-ms-input-placeholder {
     margin:20px 0px;
     display: inline-block;
 
+}
+
+.border_divider_hidden {
+    visibility: hidden;
+    width: 0%;
+    margin: 0px;
+    display: inherit;
+}
+
+.border_divider_sectioned {
+    margin: 0px 0px;
 }
 .service{
     position: relative;
@@ -748,26 +763,61 @@ input::-ms-input-placeholder {
     margin-top:30px;
     transition: all .6s;
 }
-.team .single_team_content:hover{
-    transform: rotateY(360deg);
-}
+
 
 .team .single_team_content .single_team_img img{
     width:100%;
-    height
 
 }
 .team .single_team_content .single_team_text{
-    padding: 20px 0px;
+    padding-top: 20px;
+    padding-bottom: 66px;
+    padding-left:0px;
+    padding-right: 0px;
 }
+
+.team .single_team_content .single_team_text.tallest {
+    padding-bottom: 18px;
+}
+
+.team .single_team_content .single_team_text.third-tallest, .team .single_team_content .single_team_text.liv {
+    padding-bottom: 44px;
+}
+
+.team .single_team_content .single_team_text.second-tallest,  .team .single_team_content .single_team_text.andrew {
+    padding-bottom: 22px;
+}
+
 .team .single_team_content .single_team_text h4{
     margin-bottom: .0rem;
     display: inline-block;
 }
-.team .single_team_content .team .single_team_text p{}
+.team .single_team_content .single_team_text p{
+    font-size: 1rem;
+}
 .team .main_team.sections.text-center .img-row {
     margin-left: 100px;
     margin-right: -160px;
+}
+
+.team .single_team_content .single_team_text .stack0 p{
+    line-height: 1.4rem;
+    font-size: 1rem;
+}
+
+.team .single_team_content .single_team_text .stack1 p {
+    line-height: 1.3rem;
+    font-size: 0.9rem;
+}
+
+.team .single_team_content .single_team_text .stack2 p {
+    line-height: 1.2rem;
+    font-size: 0.8rem;
+}
+
+.team .single_team_content .single_team_text .stack3 p {
+    line-height: 1.1rem;
+    font-size: 0.7rem;
 }
 
 .img-row:after, .img-row:before{
@@ -777,6 +827,10 @@ input::-ms-input-placeholder {
 
 .img-row:after {
     clear:both;
+}
+
+.team .single_team_content:hover #bigyellow {
+    color:#ff0;
 }
 
 
@@ -822,9 +876,9 @@ input::-ms-input-placeholder {
     width:100%;
 }
 .main_portfolio .head_title{
-    max-width: 80%;
-    padding-bottom: 90px;
-    margin:0 auto;
+    max-width: 100%;
+    padding-bottom: 40px;
+    padding-left: 10px;
 }
 .main_portfolio .head_title h4{
     display: inline-block;
@@ -842,7 +896,10 @@ input::-ms-input-placeholder {
 
 .grid{}
 
-.grid-item { width: 16.67%; }
+.grid-item { 
+    width: 16.67%;
+    padding: 10px;
+}
 .portfolio .grid-item{
     position: relative;
 }
@@ -870,6 +927,10 @@ input::-ms-input-placeholder {
     margin-bottom:10px;
     font-size:2rem;
     color:#FFF;
+}
+
+.first {
+    padding-left: 0px;
 }
 
 
@@ -964,19 +1025,20 @@ input::-ms-input-placeholder {
 
 /*contact section css*/
 .contact{
-    padding-top: 0px;
+    padding-top: 20px;
     background: #fff;
 }
 
-.contact .main_clinetslogo{
-    width: 90%;
+.contact .main_clientslogo{
+    width: 100%;
 }
-.contact .main_clinetslogo a {
+.contact .main_clientslogo a {
     overflow: hidden;
     margin-top:0px;
     display: inline-block;
 }
-.contact .main_clinetslogo a img{
+
+.contact .main_clientslogo a img{
 
 }
 .contact .btn {
@@ -1165,6 +1227,11 @@ input::-ms-input-placeholder {
 }
 .copy {
     width: 70%;
+}
+
+.footer{
+    margin-left: 0px;
+    width: 100%;
 }
 
 

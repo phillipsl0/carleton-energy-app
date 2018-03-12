@@ -1,0 +1,426 @@
+
+
+/*
+Author: Bootstrapthemes
+Author URI: http://www.bootstrapthemes.co
+*/
+
+/* Portrait tablets and medium desktops */
+@media (max-width: 1199px) {
+    .home{
+        background: url(../images/windmillHeader@5x.png) no-repeat 100% 100%;
+        background-size: cover;
+    }
+    h1 {
+        font-size: 2rem;
+        line-height: 3rem;
+        color:#fff;
+        width: max-content;
+    }
+    .main_menu_bg .container {
+        width: auto;
+    }
+    .home .main_home {
+        padding-top: 200px;
+    }
+    body {
+        font-size: 1rem;
+    }
+
+    .team .single_team_content .single_team_text h4 {
+        font-size: 0.9rem;
+    }
+
+    .team .single_team_content .single_team_text p {
+        font-size: 0.6rem;
+    }
+
+    .team .single_team_content .single_team_text .stack0 p{
+        font-size: 0.6rem;
+    }
+
+    .team .single_team_content .single_team_text .stack1 p {
+        font-size: 0.5rem;
+    }
+
+    .team .single_team_content .single_team_text .stack2 p {
+        font-size: 0.4rem;
+    }
+
+    .team .single_team_content .single_team_text .stack3 p {
+        font-size: 0.3rem;
+    }
+
+    .team .single_team_content .single_team_text.liv {
+        padding-bottom: 22px
+    }
+
+    .contact .main_clientslogo h4 {
+        font-size: 1rem;
+        
+    }
+}
+
+@media (max-width: 1032px) {
+     h1 {
+        font-size: 1.5rem;
+        line-height: 3rem;
+        color:#fff;
+        width: max-content;
+    }
+    h2 {
+        font-size: 1.2rem;
+        line-height: 2rem; 
+    }
+    h3 {
+        font-size: 1rem;
+        line-height: 2rem;
+        margin-bottom: 15px;
+    }
+    h4 {
+        font-size: 0.9rem;
+        line-height: 2rem;
+    }
+    h5 {
+        font-size: 0.8rem;
+        margin-bottom: .5rem;
+        color: #696f7c;
+        line-height: 1.475rem;
+    }
+
+    .main_menu_bg .container {
+        width: auto;
+    }
+
+    .home .main_home p {
+        max-width:90%;
+    }
+
+    .home .main_home h2 {
+        font-size: 1.4rem;
+        line-height: 2rem; 
+    }
+
+    .portfolio a {
+        margin-right: 15px;
+    }
+
+}
+/* Portrait tablets and small desktops */
+@media (max-width: 991px) {
+    html {
+        font-size: 90%;
+    }
+
+    .home{
+        background: url(../images/longHeader@3x.png) no-repeat 100% 100%;
+        background-size: cover;
+    }
+   
+    #quote-carousel .carousel-control.left {
+        left: 120px;
+    }
+    #quote-carousel .carousel-control.right {
+        right: 120px;
+    }
+
+    .team .single_team_content .single_team_text h4 {
+        font-size: 0.9rem;
+    }
+
+    .team .single_team_content .single_team_text p {
+        font-size: 0.6rem;
+    }
+
+    .team .col-sm-10.col-sm-offset-1 {
+        width: 100%;
+        margin-left: 0px;
+        padding-left: 0px;
+    }
+
+    .team .single_team_content .single_team_text.liv {
+        padding-bottom: 44px;
+    }
+}
+
+@media (max-width: 928px) {
+    .team .single_team_content .single_team_text.liv {
+        padding-bottom: 22px
+    }
+}
+@media (max-width: 875px) {
+    .main_menu_bg .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
+        color: #fff;
+        padding-top: 15px;
+        padding-bottom: 20px;
+        border-bottom: hidden;
+        background-color: rgba(11, 80, 145, 1.0);
+        text-align: center;
+    }
+
+    .main_menu_bg .navbar-nav>li>a {
+        padding-top: 15px;
+        padding-bottom: 20px;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        color: #fff;
+        font-family: 'Lato';
+        background-color: rgba(11, 80, 145, 0.9);
+        text-align: center;
+    }
+    .navbar-default .navbar-nav>li>a:hover,.navbar-default .navbar-nav>li>a:focus {
+        background-color: rgba(11, 80, 145, 0.8);
+    }
+}
+
+@media (max-width: 783px) {
+    .team .single_team_content .single_team_text.liv, .team .single_team_content .single_team_text.andrew {
+        padding-bottom: 44px;
+    }
+}
+/* Landscape phones and portrait tablets */
+@media  (max-width: 768px) {
+    html {
+        font-size: 80%;
+    }
+
+    img {
+        padding-bottom: 5%;
+    }
+    h1 {
+        font-size: 2.5rem;
+        line-height: 3rem;
+        color:#fff;
+        width: max-content;
+    }
+    h2, .home .main_home h2 {
+        font-size: 2.2rem;
+        line-height: 2.7rem; 
+    }
+    h3 {
+        font-size: 1.6rem;
+        line-height: 2rem;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    h4 {
+        font-size: 1.4rem;
+        line-height: 2rem;
+        padding-bottom: 10px;
+    }
+    h5 {
+        font-size: 0.8rem;
+        margin-bottom: .5rem;
+        color: #696f7c;
+        line-height: 1.475rem;
+    }
+    p {
+        font-size: 1.2rem;
+        line-height: 1.975rem;
+    }
+    .home{
+        background: url(../images/longHeader@3x.png) no-repeat 100% 100%;
+        background-size: cover;
+    }
+    .main_clientslogo{
+        margin-top:30px;
+    }    
+    .grid-item {
+        width: 49.93%;
+    }
+    .portfolio .grid_item_overlay {
+        padding-top: 37%;
+    }
+    .copyright_text{
+        text-align: center;
+    }
+    .footer_socail{ 
+        text-align: center;
+    }
+    .footer_subcribs_area .navbar-form {
+        padding: 10px;
+    }
+    #quote-carousel .carousel-control.left {
+        left: 80px;
+    }
+    #quote-carousel .carousel-control.right {
+        right: 80px;
+    } 
+    .single_widget ul li a i{
+        width:3%;
+        margin-right:2%;
+    }
+    .navbar-form {
+        border-top: 0px solid transparent;
+        border-bottom: 0px solid transparent;
+        -webkit-box-shadow: inset 0 0px 0 rgba(255,255,255,.1),0 0px 0 rgba(255,255,255,.1);
+        box-shadow: inset 0 0px 0 rgba(255,255,255,.1),0 0px 0 rgba(255,255,255,.1);
+    }
+
+    .col-thanks {
+        float:left
+    }
+
+    .home .main_home {
+        padding-top: 150px;
+    }
+
+    .home .main_home p {
+        max-width:100%;
+    }
+
+    .overlay {
+        height: 620px;
+    }
+
+    .team .col-sm-3.col-xs-12 {
+        width: 70%;
+        margin-left: 15%;
+    }
+
+    .team .col-sm-10 {
+        padding: 0px;
+
+    }
+
+    .team .single_team_content .single_team_text h4 {
+        line-height: 3.5rem;
+        font-size: 3rem;
+    }
+
+    .team .single_team_content .single_team_text p {
+        font-size: 1.5rem;
+        line-height: 1.8rem;
+    }
+
+    .team .single_team_content .single_team_text .stack0 p{
+        font-size: 1.5rem;
+        line-height: 1.8rem;
+    }
+
+    .team .single_team_content .single_team_text .stack1 p {
+        font-size: 1.4rem;
+        line-height: 1.7rem;
+    }
+
+    .team .single_team_content .single_team_text .stack2 p {
+        font-size: 1.3rem;
+        line-height: 1.6rem;
+    }
+
+    .team .single_team_content .single_team_text .stack3 p {
+        font-size: 1.2rem;
+        line-height: 1.5rem;
+    }
+
+    .team .single_team_content .single_team_img img {
+        padding-bottom: 0px;
+    }
+
+    .team .main_team.sections.text-center .img-row {
+        margin: 0px;
+    }
+
+    .contact .row {
+        margin: 0px;
+    }
+
+    .col-thanks {
+        width: 100%;
+        padding: 0px;
+    }
+
+    .contact .main_clientslogo, .col-sm-7, .col-sm-5 {
+        width: 100%;
+    }
+
+    
+
+    .background img {
+        padding-left: 7%;
+    }
+
+}
+
+
+
+/* Landscape phones and smaller */
+@media (max-width: 479px) {
+    html {
+        font-size: 65%;
+    }
+    h1 {
+        line-height: 5rem;
+    }
+
+    h1, h2, h3, h4, h5, .home .main_home h2 {
+        font-size: 1.8rem; 
+    } 
+
+    h2, h3, h4, h5, .home .main_home h2 {
+        padding-top: 5%;
+    }
+
+    p {
+
+    }
+
+    .portfolio a {
+        padding-top: 5%;
+    }
+
+    .home{
+        background: url(../images/longHeader@2x.png) no-repeat 100% 100%;
+        background-size: cover;
+    }
+    #quote-carousel .carousel-control.left {
+        display: none;
+    }
+    #quote-carousel .carousel-control.right {
+        display: none;
+    } 
+    #quote-carousel .carousel-indicators li {
+        width: 30px;
+        height: 30px;
+    }
+    #quote-carousel .carousel-indicators .active {
+        width: 35px;
+        height: 35px;
+    } 
+
+    .service .single_service .single_service_icon i {
+        font-size: 5rem;
+    }
+
+    .overlay {
+        height: 650px;
+    }
+
+
+
+}
+
+
+
+
+
+@media (max-width: 320px) {
+    .home{
+        background: url(../images/longHeader.png) no-repeat 100% 100%;
+        background-size: cover;
+    }
+    html {
+        font-size: 60.5%;
+    }
+
+
+
+
+
+
+
+
+
+
+}
+

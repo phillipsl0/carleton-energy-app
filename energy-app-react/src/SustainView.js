@@ -1,3 +1,8 @@
+/* SustainView.js
+ * Written by Martin Green for Energy App Comps, 2018
+ * Learn More tab which pulls data from Rss2JSON using ApiWrappers
+ */
+
 import React, { Component } from 'react';
 import { Alert, Image, Linking, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { StackNavigator, NavigationActions } from 'react-navigation';
@@ -67,9 +72,9 @@ class SustainListView extends Component {
         let events = getSustainabilityEventsBak();
         let news = getSustainabilityNewsBak();
 
-        // if (this.state.eventsData) {
-        //     events["events"] = this.state.eventsData;
-        // }
+        if (this.state.eventsData) {
+            events["events"] = this.state.eventsData;
+        }
         if (this.state.newsData) {
             news["news"] = this.state.newsData;
         }
@@ -200,7 +205,8 @@ class SustainListView extends Component {
     }
 }
 
-/* Function to prevent StackNavigator from navigating multiple times when navigate button is pressed in succession
+/* Function to prevent StackNavigator from navigating multiple times 
+ * when navigate button is pressed in succession
  * (note that function also must be called below) */
 const navigateOnce = (getStateForAction) => (action, state) => {
     const {type, routeName} = action;
@@ -246,7 +252,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     button: {
         marginBottom: 3,
@@ -299,7 +305,7 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontFamily: themeStyles.font,
-    }
+    },
 });
 
 export default SustainStack;
