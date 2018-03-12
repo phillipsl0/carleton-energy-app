@@ -70,7 +70,8 @@ See also the list of [contributors](https://github.com/phillipsl0/carleton-energ
 * Hook up all live data
 * Make server accessible from off campus
 * Set up time out in case server is inaccessible
-* Fix styling issues in Android (graphs, other?)
+* Fix styling issues in Android (graph labels, Turbine card image margins)
+* Fix graph labels on Individual Buildings page
 * Make sure that energy conversions are accurate
 * API calls:
     * Get historical high and low for each building, for use in heat map normalization
