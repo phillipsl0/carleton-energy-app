@@ -1,0 +1,64 @@
+ISSUES TO WRESTLE WITH:
+
+• Can’t get more than 1 year’s-worth of data at a time from the Carleton database (at least not with the API call we’ve been using). Currently the “yearly” data are hard-coded sums; we’ll want to replace these with a routine that actually makes the API query and sums the REAL data that come back.
+
+• We’ll need to retrieve buildingIDs (for the url API query) from the database itself rather than assuming Burton is (and will always be) buildingID 23, for example.
+
+• Building names in database aren’t the exact same as the are in the app — we’ll want a more robust (non-hardcoded) way of translating (see example names below)
+
+• The “real data” version (on the “feature/api” branch) currently only uses BURTON data (buildingID = 23). It’ll be simple enough to replace the hard-coded “23” with the proper buildingIDs for each building, BUT not every building’s utility usage can be summarized by just ONE building ID:
+
+	const buildingIDs = {
+		"Olin Hall":3,
+		"Hulings Hall":6,
+		// "Evans Hall":7,
+		"Evans":7,
+		"Gould Library":16,
+		"LDC":17,
+		"Recreation Center":18,
+		// "Sayles-Hill Campus Center":19,
+		"Sayles":19,
+		"Main Campus":20,
+		"James Hall":21,
+		"Boliou Hall":22,
+		// "Burton Hall":23,
+		"Burton":23,
+		// "Cassat Hall":24,
+		"Cassat":24, // NO WATER (just electricity and heat) 
+		"Cassat Hall\/James Hall":25, // NO ELECTRICITY (just heat/water) 
+		"Memo":25, // NO ELECTRICITY (just heat and water)
+		"CMC":26,
+		"Cowling Gym":27,
+		// "Davis Hall":28,
+		"Davis":28,
+		"Faculty Club":29,
+		"Goodhue":30, // ELECTRICITY ONLY (no heat or water)
+		"Goodhue Hall":31, // NO ELECTRICITY (just heat and water)
+		"Goodsell":32,
+		"James":33,
+		"Laird Hall":34,
+		"Leighton Hall":35,
+		"Music Hall":36,
+		"Musser":37,
+		// "Musser Hall":37,
+		// "Myers Hall":38,
+		"Myers":38,
+		// "Nourse Hall":39,
+		"Nourse":39,
+		// "Scoville Hall":40,
+		"Scoville":40,
+		// "Severance Hall":41,
+		"Severance":41,
+		"Skinner Chapel":42,
+		"Student Townhouses":43,
+		// "Watson Hall":44,
+		"Watson":44,
+		"Weitz Center for Creativity":45,
+		"West Gym":46,
+		"Willis Hall":47,
+	}
+
+
+• The way we’re currently pulling “real” data from the database is dumb — there’s a lot of unnecessarily-repeated code in “sumDaysToWeeks” and “sumDaysToMonths” (sorry; it was a quick fix).
+
+

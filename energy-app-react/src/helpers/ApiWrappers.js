@@ -1821,7 +1821,8 @@ export function formatResponse(responseJson){
 
         }
 
-        // add year data (HARD-CODED for now)
+        // add year data 
+        // HARD-CODED (real data!) for now because the API won't return more than 1 year of data at a time
         // TO-DO: don't rely on hard-coded data; make an API query for each year
         var burtonYearlySums = {
             "data":{
@@ -1861,14 +1862,11 @@ export function formatResponse(responseJson){
         };
         result["yearUsage"] = burtonYearlySums;
 
-        // console.log(result);
-
         for (var i = 0; i < buildings.length; i++) {
             var building = buildings[i];
             historicalBuildingData[building] = result;
         }
 
-        // console.log("~~ historicalBuildingData: ", historicalBuildingData);
         console.log(historicalBuildingData["Burton"]);
         return historicalBuildingData;
 
@@ -2018,8 +2016,6 @@ function sumDaysToWeeks(daySums){
 }
 
 function sumDaysToMonths(daySums){
-    // QUICK-FIX: a "month" is the past 30 days
-    // TO DO: change it to ACTUALLY sum the last month (not just 30 days)
 
     electricDictDay = daySums["electricDictDay"];
     heatDictDay = daySums["heatDictDay"];
@@ -2036,6 +2032,8 @@ function sumDaysToMonths(daySums){
     var idx = 0;
     var monthNum = electricArr[idx].substring(0,7); 
     var val = 0;
+
+    // ELECTRICITY
 
     while (true) {
 
@@ -2056,6 +2054,8 @@ function sumDaysToMonths(daySums){
 
         idx++; // next day
     }
+
+    // HEAT
 
     idx = 0;
     monthNum = heatArr[idx].substring(0,7); 
@@ -2079,6 +2079,8 @@ function sumDaysToMonths(daySums){
 
         idx++; // next day
     }
+
+    // WATER
 
     idx = 0;
     monthNum = waterArr[idx].substring(0,7); 
@@ -2106,6 +2108,7 @@ function sumDaysToMonths(daySums){
     return {electricDictMonth, heatDictMonth, waterDictMonth};
 }
 
+
 function sumMonthsToYears(monthSums){
 
     electricDictMonth = monthSums["electricDictMonth"];
@@ -2123,6 +2126,8 @@ function sumMonthsToYears(monthSums){
     var idx = 0;
     var yearNum = electricArr[idx].substring(0,4); 
     var val = 0;
+
+    // ELECTRICITY
 
     while (true) {
 
@@ -2143,6 +2148,8 @@ function sumMonthsToYears(monthSums){
 
         idx++; // next month
     }
+
+    // HEAT
 
     idx = 0;
     yearNum = heatArr[idx].substring(0,4); 
@@ -2166,6 +2173,8 @@ function sumMonthsToYears(monthSums){
 
         idx++; // next month
     }
+
+    // WATER
 
     idx = 0;
     yearNum = waterArr[idx].substring(0,4); 
