@@ -21,17 +21,6 @@ events = {
         "enclosure":[],
         "categories":[]},
 
-        // {"title":"February 24 - Climate Action Week 2018",
-        // "pubDate":"",
-        // "link":"http:\/\/apps.carleton.edu\/sustainability\/events\/?event_id=1659795&amp;date=2018-02-24",
-        // "guid":"16f981cf997661bb7367f674bd52c0e6",
-        // "author":"",
-        // "thumbnail":"",
-        // "description":"",
-        // "content":"",
-        // "enclosure":[],
-        // "categories":[]},
-
         {"title":"February 26 - International Film Forum: 500 YEARS",
         "pubDate":"",
         "link":"http:\/\/apps.carleton.edu\/sustainability\/events\/?event_id=1648162&amp;date=2018-02-26",

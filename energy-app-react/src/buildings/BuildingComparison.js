@@ -1,3 +1,8 @@
+/* BuildingComparison.js
+ * Written by Jesse Bolton and Martin Green for Energy App Comps, 2018
+ * Picker page to select two buildings to pass to ComparisonPage.js
+ */
+
 import React, { Component } from 'react';
 import { Picker, StyleSheet, View, Dimensions } from 'react-native'
 import { Button, Card } from 'react-native-elements';
@@ -12,7 +17,7 @@ class BuildingComparison extends Component {
         backgroundColor: '#F3B61D',
     };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {

@@ -31,13 +31,6 @@ class BuildingListView extends Component {
     return <Text style={[themeStyles.container, styles.header]}>{headerItem.section.name}</Text>
   }
 
-/*
-OLD TEXT STYLES:
-                <Text style={styles.text}>Electricity: {item.item.electricity}</Text>
-                <Text style={styles.text}>Water: {item.item.water}</Text>
-                <Text style={styles.text}>Heat: {item.item.heat}</Text>
-*/
-
   // Helper function to add commas to large numbers
   numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -72,7 +65,13 @@ OLD TEXT STYLES:
     var iterator = 0;
     for (var building in item) {
         if (item.hasOwnProperty(building)) {
-            sanitizedBuilding = {name: building, electricity: item[building]["data"]["1"]["y"], water: item[building]["data"]["3"]["y"], heat: item[building]["data"]["2"]["y"], avatar: buildingImageArray[iterator]["avatar"]}
+            sanitizedBuilding = {
+                name: building, 
+                electricity: item[building]["data"]["1"]["y"], 
+                water: item[building]["data"]["3"]["y"], 
+                heat: item[building]["data"]["2"]["y"], 
+                avatar: buildingImageArray[iterator]["avatar"]
+            }
             dataArray.push(sanitizedBuilding);
             iterator += 1;
         }
@@ -135,7 +134,7 @@ const BuildingStack = StackNavigator({
       headerRight: (
          <TouchableOpacity
           // UPDATE ENERGYMAPVIEW IF CHANGE
-          // Navigate to comparison scree
+          // Navigate to comparison screen
           style={styles.compareButton}
           onPress={() => navigation.navigate("Comparison", {item:navigation.state.params.item.name})}>
           <Icon
@@ -196,7 +195,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomColor: '#c8c7cc',
     borderBottomWidth: 0.5,
-    width: Dimensions.get('window').width - 0, //300,
+    width: Dimensions.get('window').width,
     marginLeft: '25%',
     marginRight: '25%',
     alignSelf: 'center',
@@ -205,8 +204,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     borderColor:'#e1e8ee',
     borderWidth: 1,
-    // color: 'silver'
-    // paddingBottom: 55,
   },
   img: {
     alignSelf: 'stretch',
@@ -229,7 +226,6 @@ const styles = StyleSheet.create({
       color:'darkslategrey',
       paddingLeft: 3,
       backgroundColor: 'white',
-//      fontWeight: 'bold',
       alignSelf: 'flex-start',
   },
   image: {
@@ -248,10 +244,6 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   innerView: {
-//    borderTopColor: '#e1e8ee',
-//    borderTopWidth: 1,
-//    borderBottomColor: '#e1e8ee' ,
-//    borderBottomWidth: 1,
     backgroundColor: '#F5FCFF',
     paddingTop: '2%',
     paddingBottom: '2%',
