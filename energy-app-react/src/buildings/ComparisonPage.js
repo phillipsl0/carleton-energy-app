@@ -1,6 +1,12 @@
+/* ComparisonPage.js
+ * Written by Jesse Bolton and Martin Green for Energy App Comps, 2018
+ * Comparison between two passed in buildings, using colored views
+ * of a proportional width to display bar graphs.
+ */
+
 import React, { Component } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { Card} from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import { getAvatar } from './Buildings';
 import { GetStyle } from './../styling/Themes';
 import CurrTheme from './../styling/CurrentTheme';
@@ -21,7 +27,7 @@ class ComparisonPage extends Component {
         title: 'Comparison'
     };
 
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 
@@ -48,7 +54,7 @@ class ComparisonPage extends Component {
                     <View>
                         <Card containerStyle={[themeStyles.card, themeStyles.shadowed, styles.card]}>
                             <View>
-                                <Image style={styles.listImg} //resizeMode="cover"
+                                <Image style={styles.listImg}
                                        source={{ uri: getAvatar(this.props.navigation.state.params.building1)}} />
                                 <Text style={styles.h1text}>{this.props.navigation.state.params.building1}</Text>
                             </View>
@@ -57,7 +63,7 @@ class ComparisonPage extends Component {
                     <View>
                         <Card containerStyle={[themeStyles.card, themeStyles.flex, styles.card]}>
                             <View>
-                                <Image style={styles.listImg} //resizeMode="cover"
+                                <Image style={styles.listImg}
                                        source={{ uri: getAvatar(this.props.navigation.state.params.building2)}} />
                                 <Text style={styles.h2text}>{this.props.navigation.state.params.building2}</Text>
                             </View>
@@ -154,6 +160,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 });
-
 
 export default ComparisonPage;

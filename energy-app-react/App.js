@@ -110,7 +110,8 @@ const RootTabs = TabNavigator({
     tabBarComponent: props => {
         const backgroundColor = props.position.interpolate({
             inputRange: [0, 1, 2, 3],
-            outputRange: [tabStyle.tabColors.tab0,
+            outputRange: [
+                tabStyle.tabColors.tab0,
                 tabStyle.tabColors.tab1,
                 tabStyle.tabColors.tab2,
                 tabStyle.tabColors.tab3]
@@ -121,14 +122,14 @@ const RootTabs = TabNavigator({
                 : <TabBarTop {...props} style={{ backgroundColor: backgroundColor }} />
         );
     },
-    tabBarOptions:
-        { style: navStyle.header,
-            labelStyle: navStyle.label,
-            indicatorStyle: navStyle.indicator,
-            activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF',
-            inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90',
-            pressColor: '#DDD' // Android ripple color onPress
-        },
+    tabBarOptions: {
+        style: navStyle.header,
+        labelStyle: navStyle.label,
+        indicatorStyle: navStyle.indicator,
+        activeTintColor: Platform.OS === 'ios' ? '#0B5091' : '#FFFFFF',
+        inactiveTintColor: Platform.OS === 'ios' ? '#9E9E9E' : '#FFFFFF90',
+        pressColor: '#DDD' // Android ripple color onPress
+    },
     appStyle: {
         orientation: 'portrait',
     },
@@ -287,15 +288,6 @@ class App extends Component {
             onError={console.warn}/>
       );
     }
-
-    // if (!this.state.hasCheckedAsyncStorage) {
-    //   return( null )
-    // }
-    // Check if app has been launched for the first time
-    // console.log("Before first launch return, isFirstLaunch: ", this.state.isFirstLaunch);
-    // console.log("Before first launch return, checked Async: ", this.state.hasCheckedAsyncStorage)
-        // makes Intro screen appear
-    // if (this.state.isFirstLaunch && this.state.hasCheckedAsyncStorage) {
     
     if (this.state.isFirstLaunch) {
       return (

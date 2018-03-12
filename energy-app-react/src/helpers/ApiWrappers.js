@@ -122,6 +122,7 @@ export function getSustainabilityNews() {
     return convertRSStoJSON(newsRSS);
 }
 
+// Backup function in case Rss2JSON can't connect
 export function getSustainabilityNewsBak() {
     return news;
 }
@@ -147,15 +148,15 @@ function convertRSStoJSON(rssFeed) {
 
 
 function getRandomWind() {
-    return getSpecificRandom(500000, 1000000, 1, 1);
+    return getSpecificRandom(5000, 10000, 1, 1);
 }
 
 function getRandomSolar() {
-    return getSpecificRandom(500, 1000, 1, 1);
+    return getSpecificRandom(50, 100, 1, 1);
 }
 
 function getRandomGeothermal() {
-    return getSpecificRandom(700, 1500, 1, 1);
+    return getSpecificRandom(70, 150, 1, 1);
 }
 
 // timeStart, timeEnd are Date objects. 
@@ -1178,19 +1179,19 @@ function sortByKey(array, key) {
 }
 
 function getRandomWater() {
-    return getSpecificRandom(100000, 500000, 1, 1);
+    return getSpecificRandom(1000, 5000, 1, 1);
 }
 
 function getRandomGas() {
-    return getSpecificRandom(50000, 100000, 1, 1);
+    return getSpecificRandom(500, 1000, 1, 1);
 }
 
 function getRandomHeat() {
-    return getSpecificRandom(50000, 100000, 1, 1);
+    return getSpecificRandom(500, 1000, 1, 1);
 }
 
 function getRandomElectric() {
-    return getSpecificRandom(100000, 500000, 1, 1);
+    return getSpecificRandom(1000, 5000, 1, 1);
 }
 
 /*
